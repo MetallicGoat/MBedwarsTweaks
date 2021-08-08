@@ -1,0 +1,41 @@
+#Removes invis on specified damage causes
+#I recommend you use this in combination with the Better Invisibility plugin.
+Break-Invis:
+  Enabled: true
+  Causes:
+    - ENTITY_ATTACK
+    - BLOCK_EXPLOSION
+    - ENTITY_EXPLOSION
+
+#Prevents liquids from going outside BW arena
+#Will not affect other gamemodes
+Prevent-Liquid-Build-Up: true
+
+#Players get a lightning blot at their location of death if it is a final kill
+Final-Kill-Strike:
+  Enabled: false
+
+#Blocks that fireballs will not destroy (Overrides MBedwars' BlackList)
+FireballWhitelist:
+  Enabled: true
+  Blocks:
+    - ENDER_STONE
+    - END_STONE
+
+#Message sent to players when they purchase an item
+#Placeholders: %amount% %product%
+BuyMessage:
+  Enabled: true
+  Message: '&aYou Purchased &6%product% x%amount%'
+
+#Teirs can be configured in the gen-tiers.yml
+Gen-Tiers-Enabled: false
+
+#WARNING! If you enable this MAKE SURE MBedwars' tnt-autoignite is FALSE
+TNT:
+  Auto-Ignite: false
+  Delay: 4
+
+#Remove on use
+Empty-Buckets: true
+Empty-Potions: true
