@@ -4,12 +4,12 @@
 #Type - Type of generator that will update (Use Spigot Item Name)
 #Time - Time until gen updates (Minutes)
 #Speed - How often an item drops (Seconds)
-#Chat - Message Displayed on Gen Update (Supports Colour Codes)
+#Chat - FinalKillMessage Displayed on Gen Update (Supports Colour Codes)
 Gen-Tiers:
   Tier2_Diamond:
     Type: diamond
     Time: 6
-    Speed: 40
+    Speed: 23
     Chat: '&bDiamond Generators &ehave been upgraded to Tier &4II'
   Tier2_Emerald:
     Type: emerald
@@ -19,20 +19,10 @@ Gen-Tiers:
   Tier3_Diamond:
     Type: diamond
     Time: 18
-    Speed: 30
+    Speed: 13
     Chat: '&bDiamond Generators &ehave been upgraded to Tier &4III'
   Tier3_Emerald:
     Type: emerald
     Time: 24
     Speed: 30
     Chat: '&aEmerald Generators &ehave been upgraded to Tier &4III'
-  Tier4_Diamond:
-    Type: diamond
-    Time: 30
-    Speed: 20
-    Chat: '&bDiamond Generators &ehave been upgraded to Tier &4IV'
-  Tier4_Emerald:
-    Type: emerald
-    Time: 36
-    Speed: 20
-    Chat: '&aEmerald Generators &ehave been upgraded to Tier &4IV'

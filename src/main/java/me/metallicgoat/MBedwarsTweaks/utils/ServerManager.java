@@ -1,8 +1,11 @@
 package me.metallicgoat.MBedwarsTweaks.utils;
 
 import me.metallicgoat.MBedwarsTweaks.Main;
+import me.metallicgoat.MBedwarsTweaks.tweaks.disablegens.UnusedGens;
+import me.metallicgoat.MBedwarsTweaks.tweaks.endmsg.EndMessage;
 import me.metallicgoat.MBedwarsTweaks.tweaks.explotions.AutoIgnite;
 import me.metallicgoat.MBedwarsTweaks.tweaks.explotions.Whitelist;
+import me.metallicgoat.MBedwarsTweaks.tweaks.finalkill.FinalKillMessage;
 import me.metallicgoat.MBedwarsTweaks.tweaks.finalkill.FinalStrike;
 import me.metallicgoat.MBedwarsTweaks.tweaks.genupdater.UpdateGens;
 import me.metallicgoat.MBedwarsTweaks.tweaks.invis.BreakInvis;
@@ -48,7 +51,12 @@ public class ServerManager {
         manager.registerEvents(new UpdateGens(), plugin());
         manager.registerEvents(new WaterFlow(), plugin());
 
-        //manager.registerEvents(new endmsg(), plugin());
+        manager.registerEvents(new UnusedGens(), plugin());
+
+        manager.registerEvents(new FinalKillMessage(), plugin());
+
+
+        manager.registerEvents(new EndMessage(), plugin());
     }
 
 
@@ -71,7 +79,6 @@ public class ServerManager {
 
         File configFile = new File(plugin().getDataFolder(), ymlName);
         if (!configFile.exists()) {
-            configFile.getParentFile().mkdirs();
             plugin().saveResource(ymlName, false);
         }
 

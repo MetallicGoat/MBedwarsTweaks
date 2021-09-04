@@ -16,7 +16,7 @@ public class OnBuy implements Listener {
     public void onBuyEvent(PlayerBuyInShopEvent e) {
         Player p = e.getPlayer();
         String product = e.getItem().getDisplayName();
-        String message = ServerManager.getConfig().getString("BuyMessage.Message");
+        String message = ServerManager.getConfig().getString("BuyMessage.FinalKillMessage");
         boolean enabled = ServerManager.getConfig().getBoolean("BuyMessage.Enabled");
 
         String amount = Integer.toString(getAmount(e));
