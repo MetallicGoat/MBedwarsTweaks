@@ -47,6 +47,11 @@ BuyMessage:
 #Teirs can be configured in the gen-tiers.yml
 Gen-Tiers-Enabled: false
 
+#Placeholders:
+
+# {next-tier} {time}
+Next-Tier-Placeholder: '{next-tier} in &a{time}'
+
 
 ############### TNT AUTO IGNITE ###############
 
@@ -62,21 +67,8 @@ Empty-Potions: true
 ############### TOP KILLER MESSAGE ###############
 Top-Killer-Message-Enabled: true
 
-# 1 - we will use No-Top-Killer-FinalKillMessage to replace the line
-# 2 - we will replace only the name to No-Top-Killer-Name
-# 3 - we will remove the line completely
-No-Top-Killer-Display-Type: 3
-
-#Set No-Top-Killer-Display-Type to 1
-No-Top-Killer-Message: 'This Spot Is Empty!'
-
-#Set No-Top-Killer-Display-Type to 2
-No-Top-Killer-Name: '----------'
-
 #No Top killers FinalKillMessage
 No-Top-Killers-Message:
-  - ''
-  - 'No top killers today :/'
   - ''
 
 # PLACEHOLDERS:
