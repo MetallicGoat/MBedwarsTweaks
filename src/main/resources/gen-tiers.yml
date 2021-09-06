@@ -1,28 +1,33 @@
 #MAKE SURE Gen-Tiers are enabled in the config.yml!
 
-#Tier Names - Can literally be anything
+#ORDER IN THE WAY YOU WANT YOUR GENS TO UPDATE
+#TierName (Used in PAPI Placeholders)
 #Type - Type of generator that will update (Use Spigot Item Name)
 #Time - Time until gen updates (Minutes)
 #Speed - How often an item drops (Seconds)
 #Chat - FinalKillMessage Displayed on Gen Update (Supports Colour Codes)
 Gen-Tiers:
-  Tier2_Diamond:
+  1:
+    TierName: 'Diamond II'
     Type: diamond
     Time: 6
     Speed: 23
     Chat: '&bDiamond Generators &ehave been upgraded to Tier &4II'
-  Tier2_Emerald:
+  2:
+    TierName: 'Emerald II'
     Type: emerald
-    Time: 12
+    Time: 6
     Speed: 40
     Chat: '&aEmerald Generators &ehave been upgraded to Tier &4II'
-  Tier3_Diamond:
+  3:
+    TierName: 'Diamond III'
     Type: diamond
-    Time: 18
+    Time: 6
     Speed: 13
     Chat: '&bDiamond Generators &ehave been upgraded to Tier &4III'
-  Tier3_Emerald:
+  4:
+    TierName: 'Emerald III'
     Type: emerald
-    Time: 24
+    Time: 6
     Speed: 30
     Chat: '&aEmerald Generators &ehave been upgraded to Tier &4III'

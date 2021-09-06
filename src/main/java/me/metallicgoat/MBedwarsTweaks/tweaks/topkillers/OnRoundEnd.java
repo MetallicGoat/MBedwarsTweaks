@@ -27,8 +27,6 @@ public class OnRoundEnd implements Listener {
     private int secondKillerInt = 0;
     private int thirdKillerInt = 0;
 
-    //TODO Plugin could think one player is in multiple arenas
-
     @EventHandler
     public void onGameStart(RoundStartEvent e){
         e.getArena().getPlayers().forEach(player -> {

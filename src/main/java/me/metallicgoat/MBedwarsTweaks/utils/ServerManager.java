@@ -2,12 +2,12 @@ package me.metallicgoat.MBedwarsTweaks.utils;
 
 import me.metallicgoat.MBedwarsTweaks.Main;
 import me.metallicgoat.MBedwarsTweaks.tweaks.disablegens.UnusedGens;
-import me.metallicgoat.MBedwarsTweaks.tweaks.endmsg.EndMessage;
+import me.metallicgoat.MBedwarsTweaks.tweaks.topkillers.OnRoundEnd;
 import me.metallicgoat.MBedwarsTweaks.tweaks.explotions.AutoIgnite;
 import me.metallicgoat.MBedwarsTweaks.tweaks.explotions.Whitelist;
 import me.metallicgoat.MBedwarsTweaks.tweaks.finalkill.FinalKillMessage;
 import me.metallicgoat.MBedwarsTweaks.tweaks.finalkill.FinalStrike;
-import me.metallicgoat.MBedwarsTweaks.tweaks.genupdater.UpdateGens;
+import me.metallicgoat.MBedwarsTweaks.tweaks.genupdater.GenTiers;
 import me.metallicgoat.MBedwarsTweaks.tweaks.invis.BreakInvis;
 import me.metallicgoat.MBedwarsTweaks.tweaks.shopmessage.OnBuy;
 import me.metallicgoat.MBedwarsTweaks.tweaks.useditems.EmptyBucket;
@@ -48,7 +48,7 @@ public class ServerManager {
         manager.registerEvents(new OnBuy(), plugin());
         manager.registerEvents(new Whitelist(), plugin());
         manager.registerEvents(new AutoIgnite(), plugin());
-        manager.registerEvents(new UpdateGens(), plugin());
+        manager.registerEvents(new GenTiers(), plugin());
         manager.registerEvents(new WaterFlow(), plugin());
 
         manager.registerEvents(new UnusedGens(), plugin());
@@ -56,7 +56,7 @@ public class ServerManager {
         manager.registerEvents(new FinalKillMessage(), plugin());
 
 
-        manager.registerEvents(new EndMessage(), plugin());
+        manager.registerEvents(new OnRoundEnd(), plugin());
     }
 
 
