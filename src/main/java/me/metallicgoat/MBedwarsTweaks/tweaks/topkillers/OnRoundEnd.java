@@ -129,7 +129,7 @@ public class OnRoundEnd implements Listener {
             broadcast(arena, formattedList);
             formattedList.clear();
         }else{
-            broadcast(arena, ServerManager.getConfig().getStringList("No-Top-Killers-FinalKillMessage"));
+            broadcast(arena, ServerManager.getConfig().getStringList("No-Top-Killers-Message"));
         }
     }
 
