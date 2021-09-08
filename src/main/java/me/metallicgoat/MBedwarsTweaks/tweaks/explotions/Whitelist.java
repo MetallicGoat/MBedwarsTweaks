@@ -1,6 +1,5 @@
 package me.metallicgoat.MBedwarsTweaks.tweaks.explotions;
 
-import me.metallicgoat.MBedwarsTweaks.Main;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;

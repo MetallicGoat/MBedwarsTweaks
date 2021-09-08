@@ -1,6 +1,5 @@
 package me.metallicgoat.MBedwarsTweaks;
 
-import de.marcely.bedwars.api.BedwarsAPI;
 import me.metallicgoat.MBedwarsTweaks.tweaks.genupdater.GenTiers;
 import me.metallicgoat.MBedwarsTweaks.utils.Metrics;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;

@@ -2,7 +2,6 @@ package me.metallicgoat.MBedwarsTweaks.tweaks.waterflow;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
-import me.metallicgoat.MBedwarsTweaks.Main;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

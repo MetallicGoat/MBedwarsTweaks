@@ -13,6 +13,7 @@ import me.metallicgoat.MBedwarsTweaks.tweaks.shopmessage.OnBuy;
 import me.metallicgoat.MBedwarsTweaks.tweaks.useditems.EmptyBucket;
 import me.metallicgoat.MBedwarsTweaks.tweaks.useditems.EmptyPotion;
 import me.metallicgoat.MBedwarsTweaks.tweaks.waterflow.WaterFlow;
+import me.metallicgoat.MBedwarsTweaks.utils.configupdater.ConfigUpdater;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

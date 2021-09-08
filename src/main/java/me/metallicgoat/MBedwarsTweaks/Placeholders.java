@@ -54,7 +54,6 @@ public class Placeholders extends PlaceholderExpansion {
         return null;
     }
 
-
     private static Main plugin(){
         return Main.getInstance();
     }
