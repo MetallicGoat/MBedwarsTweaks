@@ -130,6 +130,7 @@ public class OnRoundEnd implements Listener {
             broadcast(arena, formattedList);
             formattedList.clear();
         }else{
+            //TODO fix spaces
             broadcast(arena, ServerManager.getConfig().getStringList("No-Top-Killers-Message"));
         }
     }

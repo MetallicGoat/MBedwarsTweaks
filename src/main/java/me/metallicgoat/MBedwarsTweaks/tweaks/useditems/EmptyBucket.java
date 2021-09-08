@@ -21,7 +21,8 @@ public class EmptyBucket implements Listener {
         boolean enabled = ServerManager.getConfig().getBoolean("Empty-Buckets");
         if(enabled) {
             if (arena != null) {
-                Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(plugin(), () -> {
+                Bukkit.getServer().getScheduler().runTaskLater(plugin(), () -> {
+                    //Added isCancelled Check because of WaterFlow
                     if(!e.isCancelled()){
                         p.setItemInHand(new ItemStack(Material.AIR));
                     }

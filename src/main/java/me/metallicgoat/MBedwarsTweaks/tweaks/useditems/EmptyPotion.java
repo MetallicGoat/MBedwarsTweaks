@@ -21,9 +21,9 @@ public class EmptyPotion implements Listener {
         boolean enabled = ServerManager.getConfig().getBoolean("Empty-Potions");
         if(enabled) {
             if (arena != null) {
-                if (e.getItem() == null) return;
                 if (e.getItem().getType().equals(Material.POTION)) {
-                    Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(plugin(), () -> p.setItemInHand(new ItemStack(Material.AIR)), 1L);
+                    //1.8 does not have an off hand
+                    Bukkit.getServer().getScheduler().runTaskLater(plugin(), () -> p.setItemInHand(new ItemStack(Material.AIR)), 1L);
                 }
             }
         }
