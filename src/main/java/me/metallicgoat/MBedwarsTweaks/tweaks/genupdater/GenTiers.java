@@ -1,13 +1,8 @@
 package me.metallicgoat.MBedwarsTweaks.tweaks.genupdater;
 
-import de.marcely.bedwars.api.BedwarsAPI;
-import de.marcely.bedwars.api.BedwarsAddon;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
-import de.marcely.bedwars.api.event.player.PlayerOpenShopEvent;
-import de.marcely.bedwars.api.game.shop.BuyGroup;
-import de.marcely.bedwars.api.game.shop.layout.ShopLayout;
 import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.api.game.spawner.SpawnerDurationModifier;
 import me.metallicgoat.MBedwarsTweaks.Main;
@@ -19,7 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class GenTiers implements Listener {
