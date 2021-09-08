@@ -51,6 +51,8 @@ public class ServerManager {
         manager.registerEvents(new GenTiers(), plugin());
         manager.registerEvents(new WaterFlow(), plugin());
 
+        //manager.registerEvents(new test(), plugin());
+
         manager.registerEvents(new UnusedGens(), plugin());
 
         manager.registerEvents(new FinalKillMessage(), plugin());

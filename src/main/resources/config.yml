@@ -4,21 +4,9 @@
 #Will not affect other gamemodes
 Prevent-Liquid-Build-Up: true
 
-############### DISABLE EMPTY BASE GENERATORS ###############
-
-#Disable generators in empty bases
-#Range = distance from team spawn to spawner
-Disable-Unused-Gens:
-  Enabled: false
-  Range: 6
-  Gen-Types:
-    - 'IRON_INGOT'
-    - 'GOLD_INGOT'
-
 ############### Final Kill ###############
 
-#Final Kill FinalKillMessage:
-#COMMING IN THE NEXT VERSION OF MBEDWARS (Beta 7)
+#Adds FINAL KILL to the end of a message if the kill is Final
 Final-Kill-Message: false
 
 #Players get a lightning blot at their location of death if it is a final kill
@@ -41,6 +29,17 @@ FireballWhitelist:
 BuyMessage:
   Enabled: true
   Message: '&aYou Purchased &6%product% x%amount%'
+
+############### DISABLE EMPTY BASE GENERATORS ###############
+
+#Disable generators in empty bases
+#Range = distance from team spawn to spawner
+Disable-Unused-Gens:
+  Enabled: false
+  Range: 6
+  Gen-Types:
+    - 'IRON_INGOT'
+    - 'GOLD_INGOT'
 
 ############### GEN TIERS ###############
 

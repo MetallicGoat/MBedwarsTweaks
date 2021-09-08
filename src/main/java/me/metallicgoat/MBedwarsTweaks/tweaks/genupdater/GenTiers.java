@@ -1,10 +1,13 @@
 package me.metallicgoat.MBedwarsTweaks.tweaks.genupdater;
 
 import de.marcely.bedwars.api.BedwarsAPI;
+import de.marcely.bedwars.api.BedwarsAddon;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
+import de.marcely.bedwars.api.event.player.PlayerOpenShopEvent;
 import de.marcely.bedwars.api.game.shop.BuyGroup;
+import de.marcely.bedwars.api.game.shop.layout.ShopLayout;
 import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.api.game.spawner.SpawnerDurationModifier;
 import me.metallicgoat.MBedwarsTweaks.Main;
@@ -67,7 +70,7 @@ public class GenTiers implements Listener {
                     for (Spawner s : arena.getSpawners()) {
                         if (getItemType(s).equalsIgnoreCase(spawnerType)) {
                             s.addDropDurationModifier("GEN_TIER_UPDATE", plugin(), SpawnerDurationModifier.Operation.SET, speed);
-                            //s.setOverridingHologramLines(new String[]{"{spawnercolor}{spawner} \n Test \n &fspawning in &7{time} &fseconds!"});
+                            //s.setOverridingHologramLines(new String[]{"{spawner}", "Tier 1", "&fspawning in &7{time} &fseconds!"});
                             //System.out.println(Arrays.toString(s.getOverridingHologramLines()));
                         }
                     }

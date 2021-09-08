@@ -91,6 +91,14 @@ public class OnRoundEnd implements Listener {
         List<String> formattedList = new ArrayList<>();
 
         if (firstKiller != null) {
+
+            if(secondKiller == null){
+                secondKiller = "";
+            }
+            if(thirdKiller == null){
+                thirdKiller = "";
+            }
+
             for (String s : ServerManager.getConfig().getStringList("Top-Killer-Message")) {
 
                 if(s != null) {
@@ -98,20 +106,13 @@ public class OnRoundEnd implements Listener {
                     String complete;
 
                     if (s.contains("%Killer-2-Name%")) {
-                        if (secondKiller != null) {
+                        if (secondKiller.equals("")) {
                             continue;
                         }
                     }else if (s.contains("%Killer-3-Name%")) {
-                        if (thirdKiller != null) {
+                        if (thirdKiller.equals("")) {
                             continue;
                         }
-                    }
-
-                    if(secondKiller == null){
-                        secondKiller = "";
-                    }
-                    if(thirdKiller == null){
-                        thirdKiller = "";
                     }
 
                     complete = s
@@ -135,10 +136,12 @@ public class OnRoundEnd implements Listener {
 
 
     private void broadcast(Arena arena, List<String> message){
-        message.forEach(s -> {
-            if(s != null && !s.equals(""))
-                arena.broadcast(ChatColor.translateAlternateColorCodes('&', s));
-        });
+        if(message != null) {
+            message.forEach(s -> {
+                if (s != null)
+                    arena.broadcast(ChatColor.translateAlternateColorCodes('&', s));
+            });
+        }
     }
 }
 
