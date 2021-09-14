@@ -24,9 +24,9 @@ FireballWhitelist:
 
 ############### BUY-MESSAGE ###############
 
-#FinalKillMessage sent to players when they purchase an item
-#Placeholders: %amount% %product%
-BuyMessage:
+#Message sent to players when they purchase an item
+#Placeholders: {amount} {product}
+Buy-Message:
   Enabled: true
   Message: '&aYou Purchased &6%product% x%amount%'
 
@@ -43,8 +43,15 @@ Disable-Unused-Gens:
 
 ############### GEN TIERS ###############
 
+#WILL BE CHANGED SIGNIFICANTLY
+
 #Teirs can be configured in the gen-tiers.yml
 Gen-Tiers-Enabled: false
+
+#Adds 'Tier I' to spawners listed
+Base-Tier-Spawner-Title:
+  - 'EMERALD'
+  - 'DIAMOND'
 
 #Placeholders:
 

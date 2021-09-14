@@ -130,14 +130,19 @@ public class OnRoundEnd implements Listener {
             broadcast(arena, formattedList);
             formattedList.clear();
         }else{
-            //TODO fix spaces
-            broadcast(arena, ServerManager.getConfig().getStringList("No-Top-Killers-Message"));
+            List<String> noKillerMessage = ServerManager.getConfig().getStringList("No-Top-Killers-Message");
+            broadcast(arena, noKillerMessage);
         }
     }
 
 
     private void broadcast(Arena arena, List<String> message){
         if(message != null) {
+            if(message.size() == 1){
+                if (message.get(0).equals("")) {
+                    message.remove(0);
+                }
+            }
             message.forEach(s -> {
                 if (s != null)
                     arena.broadcast(ChatColor.translateAlternateColorCodes('&', s));
@@ -146,7 +151,7 @@ public class OnRoundEnd implements Listener {
     }
 }
 
-//it's bad, but leaned a bunch from it, so ill keep it as a memorial
+//it's bad, but leaned a bunch from it, so ill keep it as reminder of how much time I wasted
 
                     /*
                     int type = ServerManager.getConfig().getInt("No-Top-Killer-Display-Type");

@@ -1,5 +1,6 @@
 package me.metallicgoat.MBedwarsTweaks.tweaks.genupdater;
 
+import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
@@ -15,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class GenTiers implements Listener {
 
@@ -27,8 +29,16 @@ public class GenTiers implements Listener {
 
         boolean enabled = plugin().getConfig().getBoolean("Gen-Tiers-Enabled");
         ConfigurationSection sect = ServerManager.getTiersConfig().getConfigurationSection("Gen-Tiers");
-        if(enabled) {
-            assert sect != null;
+        if(enabled && sect != null) {
+            List<String> tierOneSpawners = ServerManager.getConfig().getStringList("Base-Tier-Spawner-Title");
+
+            arena.getSpawners().forEach(spawner -> {
+                if(tierOneSpawners.contains(getItemType(spawner))) {
+                    spawner.setOverridingHologramLines(new String[]{"{spawner}", "&cTier I", "&eSpawning in &c{time} &eseconds!"});
+                }
+            });
+
+
             if (sect.contains(Integer.toString(1))) {
                 scheduleTier(arena, 1);
             }
@@ -44,6 +54,7 @@ public class GenTiers implements Listener {
         if(sect.contains(Integer.toString(key))) {
 
             final String tierName = ServerManager.getTiersConfig().getString("Gen-Tiers." + key + ".TierName");
+            final String tierLevel = ServerManager.getTiersConfig().getString("Gen-Tiers." + key + ".TierLevel");
             final long time = ServerManager.getTiersConfig().getLong("Gen-Tiers." + key + ".Time");
             final long speed = ServerManager.getTiersConfig().getLong("Gen-Tiers." + key + ".Speed");
             final String spawnerType = ServerManager.getTiersConfig().getString("Gen-Tiers." + key + ".Type");
@@ -59,13 +70,14 @@ public class GenTiers implements Listener {
 
             scheduler.scheduleSyncDelayedTask(plugin(), () -> {
 
+
                 if (arena.getStatus() == ArenaStatus.RUNNING) {
                     scheduleTier(arena, newKey);
                     for (Spawner s : arena.getSpawners()) {
                         if (getItemType(s).equalsIgnoreCase(spawnerType)) {
                             s.addDropDurationModifier("GEN_TIER_UPDATE", plugin(), SpawnerDurationModifier.Operation.SET, speed);
-                            //s.setOverridingHologramLines(new String[]{"{spawner}", "Tier 1", "&fspawning in &7{time} &fseconds!"});
-                            //System.out.println(Arrays.toString(s.getOverridingHologramLines()));
+
+                            s.setOverridingHologramLines(new String[]{"{spawner}", "&c" + tierLevel, "&espawning in &c{time} &eseconds!"});
                         }
                     }
                     arena.getPlayers().forEach(p -> {
@@ -85,11 +97,16 @@ public class GenTiers implements Listener {
             if(!timeToNextUpdate.isEmpty()){
                 timeToNextUpdate.forEach((arena, integer) -> {
                     if(arena.getStatus() == ArenaStatus.RUNNING){
-                        timeToNextUpdate.replace(arena, integer, integer - 5);
+                        timeToNextUpdate.replace(arena, integer, integer - 20);
                     }
                 });
             }
-        }, 0L, 5L);
+            BedwarsAPI.getGameAPI().getArenas().forEach(arena -> {
+                if(arena.getStatus() == ArenaStatus.RUNNING){
+                    arena.updateScoreboard();
+                }
+            });
+        }, 0L, 20L);
     }
 
     private String getItemType(Spawner s){

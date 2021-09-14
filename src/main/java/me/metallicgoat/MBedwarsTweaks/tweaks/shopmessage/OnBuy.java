@@ -3,6 +3,7 @@ package me.metallicgoat.MBedwarsTweaks.tweaks.shopmessage;
 import de.marcely.bedwars.api.event.player.PlayerBuyInShopEvent;
 import de.marcely.bedwars.api.game.shop.product.ItemShopProduct;
 import de.marcely.bedwars.api.game.shop.product.ShopProduct;
+import de.marcely.bedwars.api.message.Message;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -16,15 +17,16 @@ public class OnBuy implements Listener {
     public void onBuyEvent(PlayerBuyInShopEvent e) {
         Player p = e.getPlayer();
         String product = e.getItem().getDisplayName();
-        String message = ServerManager.getConfig().getString("BuyMessage.Message");
-        boolean enabled = ServerManager.getConfig().getBoolean("BuyMessage.Enabled");
+        String message = ServerManager.getConfig().getString("Buy-Message.Message");
+        boolean enabled = ServerManager.getConfig().getBoolean("Buy-Message.Enabled");
 
         String amount = Integer.toString(getAmount(e));
-        String placeholdersInMessage = message.replace("%product%", product)
-                .replace("%amount%", amount);
-        String fullyFormattedMessage = ChatColor.translateAlternateColorCodes('&', placeholdersInMessage);
-        if(e.getProblems().isEmpty()) {
-            if(enabled) {
+
+        if(enabled && message != null) {
+            if(e.getProblems().isEmpty()) {
+                String placeholdersInMessage = Message.build(message).placeholder("product", product)
+                        .placeholder("amount", amount).done();
+                String fullyFormattedMessage = ChatColor.translateAlternateColorCodes('&', placeholdersInMessage);
                 p.sendMessage(fullyFormattedMessage);
             }
         }
