@@ -1,4 +1,4 @@
-package me.metallicgoat.MBedwarsTweaks.tweaks.shopmessage;
+package me.metallicgoat.MBedwarsTweaks.tweaks.messages;
 
 import de.marcely.bedwars.api.event.player.PlayerBuyInShopEvent;
 import de.marcely.bedwars.api.game.shop.product.ItemShopProduct;
@@ -11,7 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-public class OnBuy implements Listener {
+public class BuyMessage implements Listener {
 
     @EventHandler
     public void onBuyEvent(PlayerBuyInShopEvent e) {

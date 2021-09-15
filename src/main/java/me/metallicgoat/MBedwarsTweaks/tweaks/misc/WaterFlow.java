@@ -1,4 +1,4 @@
-package me.metallicgoat.MBedwarsTweaks.tweaks.waterflow;
+package me.metallicgoat.MBedwarsTweaks.tweaks.misc;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;

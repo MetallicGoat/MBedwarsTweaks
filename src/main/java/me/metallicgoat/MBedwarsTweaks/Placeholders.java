@@ -5,7 +5,7 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.message.Message;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import me.metallicgoat.MBedwarsTweaks.tweaks.genupdater.GenTiers;
+import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.GenTiers;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;

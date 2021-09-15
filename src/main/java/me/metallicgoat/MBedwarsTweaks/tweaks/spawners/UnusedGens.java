@@ -1,4 +1,4 @@
-package me.metallicgoat.MBedwarsTweaks.tweaks.disablegens;
+package me.metallicgoat.MBedwarsTweaks.tweaks.spawners;
 
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;

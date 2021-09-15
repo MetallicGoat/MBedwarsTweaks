@@ -1,4 +1,4 @@
-package me.metallicgoat.MBedwarsTweaks.tweaks.topkillers;
+package me.metallicgoat.MBedwarsTweaks.tweaks.messages;
 
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class OnRoundEnd implements Listener {
+public class TopKillers implements Listener {
 
     private final HashMap<Player, Arena> playerArenaHashMap = new HashMap<>();
     private final HashMap<Player, Integer> scoreHashMap = new HashMap<>();
@@ -156,7 +156,7 @@ public class OnRoundEnd implements Listener {
                     /*
                     int type = ServerManager.getConfig().getInt("No-Top-Killer-Display-Type");
                     if (type == 1) {
-                        String noTopKiller = ServerManager.getConfig().getString("No-Top-Killer-FinalKillMessage");
+                        String noTopKiller = ServerManager.getConfig().getString("No-Top-Killer-FinalKill");
                         if (s.contains("%Killer-1-Name%")) {
                             s = s.replace("%Killer-1-Name%", firstKiller);
                         }else if (s.contains("%Killer-2-Name%")) {
@@ -206,7 +206,7 @@ public class OnRoundEnd implements Listener {
                         //ONLY
                     }
 # THE CONFIG PART
-# 1 - we will use No-Top-Killer-FinalKillMessage to replace the line
+# 1 - we will use No-Top-Killer-FinalKill to replace the line
 # 2 - we will replace only the name to No-Top-Killer-Name
 # 3 - we will remove the line completely
 No-Top-Killer-Display-Type: 3

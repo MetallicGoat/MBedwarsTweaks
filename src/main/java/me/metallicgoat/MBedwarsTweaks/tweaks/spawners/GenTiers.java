@@ -1,4 +1,4 @@
-package me.metallicgoat.MBedwarsTweaks.tweaks.genupdater;
+package me.metallicgoat.MBedwarsTweaks.tweaks.spawners;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;

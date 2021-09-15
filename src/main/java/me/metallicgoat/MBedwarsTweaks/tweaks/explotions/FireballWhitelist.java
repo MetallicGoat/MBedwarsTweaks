@@ -10,16 +10,17 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Whitelist implements Listener {
+public class FireballWhitelist implements Listener {
 
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent e) {
-
-        if (e.isCancelled()) return;
-        if(e.getEntityType() == EntityType.FIREBALL && ServerManager.getConfig().getBoolean("FireballWhitelist.Enabled")) {
+        if (e.isCancelled())
+            return;
+        if (e.getEntityType() == EntityType.FIREBALL && ServerManager.getConfig().getBoolean("FireballWhitelist.Enabled")) {
             List<Block> blockListCopy = new ArrayList<>(e.blockList());
             for (Block block : blockListCopy) {
-                if (ServerManager.getConfig().getStringList("FireballWhitelist.Blocks").contains(block.getType().name())) e.blockList().remove(block);
+                if (ServerManager.getConfig().getStringList("FireballWhitelist.Blocks").contains(block.getType().name()))
+                    e.blockList().remove(block);
             }
         }
     }

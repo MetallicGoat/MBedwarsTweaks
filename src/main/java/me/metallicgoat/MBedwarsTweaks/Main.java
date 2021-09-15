@@ -1,6 +1,6 @@
 package me.metallicgoat.MBedwarsTweaks;
 
-import me.metallicgoat.MBedwarsTweaks.tweaks.genupdater.GenTiers;
+import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.GenTiers;
 import me.metallicgoat.MBedwarsTweaks.utils.Metrics;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import org.bukkit.plugin.PluginDescriptionFile;

@@ -22,7 +22,8 @@ public class AutoIgnite implements Listener {
             }
         }, 1L);
     }
-    private static Main plugin(){
+
+    private static Main plugin() {
         return Main.getInstance();
     }
 }

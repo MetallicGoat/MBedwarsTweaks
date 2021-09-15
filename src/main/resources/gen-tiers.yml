@@ -7,7 +7,7 @@
 # Type - Type of generator that will update (Use Spigot Item Name)
 # Time - Time until gen updates (Minutes)
 # Speed - How often an item drops (Seconds)
-# Chat - FinalKillMessage Displayed on Gen Update (Supports Colour Codes)
+# Chat - FinalKill Displayed on Gen Update (Supports Colour Codes)
 Gen-Tiers:
   1:
     TierName: 'Diamond II'

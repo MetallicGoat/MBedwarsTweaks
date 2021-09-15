@@ -73,7 +73,7 @@ Empty-Potions: true
 ############### TOP KILLER MESSAGE ###############
 Top-Killer-Message-Enabled: true
 
-#No Top killers FinalKillMessage
+#No Top killers FinalKill
 No-Top-Killers-Message:
   - ''
 

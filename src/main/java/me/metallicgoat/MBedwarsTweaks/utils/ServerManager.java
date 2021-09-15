@@ -1,18 +1,18 @@
 package me.metallicgoat.MBedwarsTweaks.utils;
 
 import me.metallicgoat.MBedwarsTweaks.Main;
-import me.metallicgoat.MBedwarsTweaks.tweaks.disablegens.UnusedGens;
-import me.metallicgoat.MBedwarsTweaks.tweaks.topkillers.OnRoundEnd;
+import me.metallicgoat.MBedwarsTweaks.tweaks.messages.FinalKill;
+import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.UnusedGens;
+import me.metallicgoat.MBedwarsTweaks.tweaks.messages.TopKillers;
 import me.metallicgoat.MBedwarsTweaks.tweaks.explotions.AutoIgnite;
-import me.metallicgoat.MBedwarsTweaks.tweaks.explotions.Whitelist;
-import me.metallicgoat.MBedwarsTweaks.tweaks.finalkill.FinalKillMessage;
-import me.metallicgoat.MBedwarsTweaks.tweaks.finalkill.FinalStrike;
-import me.metallicgoat.MBedwarsTweaks.tweaks.genupdater.GenTiers;
-import me.metallicgoat.MBedwarsTweaks.tweaks.invis.BreakInvis;
-import me.metallicgoat.MBedwarsTweaks.tweaks.shopmessage.OnBuy;
-import me.metallicgoat.MBedwarsTweaks.tweaks.useditems.EmptyBucket;
-import me.metallicgoat.MBedwarsTweaks.tweaks.useditems.EmptyPotion;
-import me.metallicgoat.MBedwarsTweaks.tweaks.waterflow.WaterFlow;
+import me.metallicgoat.MBedwarsTweaks.tweaks.explotions.FireballWhitelist;
+import me.metallicgoat.MBedwarsTweaks.tweaks.misc.FinalStrike;
+import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.GenTiers;
+import me.metallicgoat.MBedwarsTweaks.tweaks.misc.BreakInvis;
+import me.metallicgoat.MBedwarsTweaks.tweaks.messages.BuyMessage;
+import me.metallicgoat.MBedwarsTweaks.tweaks.misc.EmptyBucket;
+import me.metallicgoat.MBedwarsTweaks.tweaks.misc.EmptyPotion;
+import me.metallicgoat.MBedwarsTweaks.tweaks.misc.WaterFlow;
 import me.metallicgoat.MBedwarsTweaks.utils.configupdater.ConfigUpdater;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -46,8 +46,8 @@ public class ServerManager {
         manager.registerEvents(new EmptyPotion(), plugin());
         manager.registerEvents(new BreakInvis(), plugin());
         manager.registerEvents(new FinalStrike(), plugin());
-        manager.registerEvents(new OnBuy(), plugin());
-        manager.registerEvents(new Whitelist(), plugin());
+        manager.registerEvents(new BuyMessage(), plugin());
+        manager.registerEvents(new FireballWhitelist(), plugin());
         manager.registerEvents(new AutoIgnite(), plugin());
         manager.registerEvents(new GenTiers(), plugin());
         manager.registerEvents(new WaterFlow(), plugin());
@@ -56,10 +56,10 @@ public class ServerManager {
 
         manager.registerEvents(new UnusedGens(), plugin());
 
-        manager.registerEvents(new FinalKillMessage(), plugin());
+        manager.registerEvents(new FinalKill(), plugin());
 
 
-        manager.registerEvents(new OnRoundEnd(), plugin());
+        manager.registerEvents(new TopKillers(), plugin());
     }
 
 
