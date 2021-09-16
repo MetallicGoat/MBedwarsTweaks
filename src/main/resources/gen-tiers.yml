@@ -1,7 +1,8 @@
 # MAKE SURE Gen-Tiers are enabled in the config.yml!
 
 # ORDER IN THE WAY YOU WANT YOUR GENS TO UPDATE
-# Eg:  1, 2, 3, 4, 5....
+# Tier section namee doesnt matter as long as it is unique
+# With the exception to 'bed-break', and 'game-over'
 
 # TierName (Used in PAPI Placeholders)
 # Type - Type of generator that will update (Use Spigot Item Name)
@@ -12,28 +13,35 @@ Gen-Tiers:
   1:
     TierName: 'Diamond II'
     TierLevel: 'Tier II'
-    Type: diamond
+    Type: 'diamond'
     Time: 6
     Speed: 23
     Chat: '&bDiamond Generators &ehave been upgraded to Tier &4II'
   2:
     TierName: 'Emerald II'
     TierLevel: 'Tier II'
-    Type: emerald
+    Type: 'emerald'
     Time: 6
     Speed: 40
     Chat: '&aEmerald Generators &ehave been upgraded to Tier &4II'
   3:
     TierName: 'Diamond III'
     TierLevel: 'Tier III'
-    Type: diamond
+    Type: 'diamond'
     Time: 6
     Speed: 13
     Chat: '&bDiamond Generators &ehave been upgraded to Tier &4III'
   4:
     TierName: 'Emerald III'
     TierLevel: 'Tier III'
-    Type: emerald
+    Type: 'emerald'
     Time: 6
     Speed: 30
     Chat: '&aEmerald Generators &ehave been upgraded to Tier &4III'
+
+  bed-break:
+    TierName: 'Bed gone in'
+    Time: 7
+  game-over:
+    TierName: 'Game over in'
+    Time: 10

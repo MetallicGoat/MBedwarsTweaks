@@ -6,6 +6,7 @@ import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.api.game.spawner.SpawnerDurationModifier;
+import de.marcely.bedwars.api.message.Message;
 import me.metallicgoat.MBedwarsTweaks.Main;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import org.bukkit.ChatColor;
@@ -15,8 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class GenTiers implements Listener {
 
@@ -34,14 +34,11 @@ public class GenTiers implements Listener {
 
             arena.getSpawners().forEach(spawner -> {
                 if(tierOneSpawners.contains(getItemType(spawner))) {
-                    spawner.setOverridingHologramLines(new String[]{"{spawner}", "&cTier I", "&eSpawning in &c{time} &eseconds!"});
+                    spawner.setOverridingHologramLines(new String[]{"&eTier &cI", "&l{spawner}", "&eSpawning in &c{time} &eseconds!"});
                 }
             });
 
-
-            if (sect.contains(Integer.toString(1))) {
-                scheduleTier(arena, 1);
-            }
+            scheduleTier(arena, 0);
         }
     }
 
@@ -49,45 +46,57 @@ public class GenTiers implements Listener {
         BukkitScheduler scheduler = plugin().getServer().getScheduler();
 
         ConfigurationSection sect = ServerManager.getTiersConfig().getConfigurationSection("Gen-Tiers");
-
         assert sect != null;
-        if(sect.contains(Integer.toString(key))) {
 
-            final String tierName = ServerManager.getTiersConfig().getString("Gen-Tiers." + key + ".TierName");
-            final String tierLevel = ServerManager.getTiersConfig().getString("Gen-Tiers." + key + ".TierLevel");
-            final long time = ServerManager.getTiersConfig().getLong("Gen-Tiers." + key + ".Time");
-            final long speed = ServerManager.getTiersConfig().getLong("Gen-Tiers." + key + ".Speed");
-            final String spawnerType = ServerManager.getTiersConfig().getString("Gen-Tiers." + key + ".Type");
-            final String chat = ServerManager.getTiersConfig().getString("Gen-Tiers." + key + ".Chat");
+        String[] orderedList = sect.getKeys(false).toArray(new String[0]);
+
+        if(orderedList.length < key){
+            return;
+        }
+
+        String section = orderedList[key];
+
+        if(sect.contains(section)) {
+
+            final String tierName = ServerManager.getTiersConfig().getString("Gen-Tiers." + section + ".TierName");
+            final String tierLevel = ServerManager.getTiersConfig().getString("Gen-Tiers." + section + ".TierLevel");
+            final long time = ServerManager.getTiersConfig().getLong("Gen-Tiers." + section + ".Time");
+            final long speed = ServerManager.getTiersConfig().getLong("Gen-Tiers." + section + ".Speed");
+            final String spawnerType = ServerManager.getTiersConfig().getString("Gen-Tiers." + section + ".Type");
+            final String chat = ServerManager.getTiersConfig().getString("Gen-Tiers." + section + ".Chat");
 
             int newKey = key + 1;
 
+            // Update Placeholder
             nextTierMap.remove(arena);
             nextTierMap.put(arena, tierName);
 
             timeToNextUpdate.remove(arena);
             timeToNextUpdate.put(arena, time * 20 * 60);
 
-            scheduler.scheduleSyncDelayedTask(plugin(), () -> {
+            // Print Tier Message
+            arena.broadcast(Message.build(chat));
 
+            //TODO game-over
 
-                if (arena.getStatus() == ArenaStatus.RUNNING) {
-                    scheduleTier(arena, newKey);
-                    for (Spawner s : arena.getSpawners()) {
-                        if (getItemType(s).equalsIgnoreCase(spawnerType)) {
-                            s.addDropDurationModifier("GEN_TIER_UPDATE", plugin(), SpawnerDurationModifier.Operation.SET, speed);
+            if(section.equalsIgnoreCase("bed-break")){
+                ScheduleBedBreak.scheduleBreak(time * 20 * 60, arena);
+            }else{
+                scheduler.scheduleSyncDelayedTask(plugin(), () -> {
+                    if (arena.getStatus() == ArenaStatus.RUNNING) {
+                        scheduleTier(arena, newKey);
+                        for (Spawner s : arena.getSpawners()) {
+                            if (getItemType(s).equalsIgnoreCase(spawnerType)) {
+                                s.addDropDurationModifier("GEN_TIER_UPDATE", plugin(), SpawnerDurationModifier.Operation.SET, speed);
 
-                            s.setOverridingHologramLines(new String[]{"{spawner}", "&c" + tierLevel, "&espawning in &c{time} &eseconds!"});
+                                s.setOverridingHologramLines(new String[]{"&c&l" + tierLevel, "&l{spawner}", "&espawning in &c{time} &eseconds!"});
+                            }
                         }
+                    } else {
+                        nextTierMap.remove(arena);
                     }
-                    arena.getPlayers().forEach(p -> {
-                        assert chat != null;
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', chat));
-                    });
-                } else {
-                    nextTierMap.remove(arena);
-                }
-            }, time * 20 * 60);
+                }, time * 20 * 60);
+            }
         }
     }
 
@@ -124,7 +133,15 @@ public class GenTiers implements Listener {
         int minutes = (timeoutSeconds / 60) % 60;
         int seconds = timeoutSeconds % 60;
 
-        return minutes + ":" + seconds;
+        if(seconds > 0) {
+            if (seconds < 10) {
+                return minutes + ":0" + seconds;
+            } else {
+                return minutes + ":" + seconds;
+            }
+        }else{
+            return "0:00";
+        }
     }
 
     private static Main plugin(){

@@ -59,6 +59,26 @@ Base-Tier-Spawner-Title:
 Next-Tier-Placeholder: '{next-tier} in &a{time}'
 
 
+############### BED BREAK ###############
+
+#Message displayed when any bed is broken (to everyone in the arena)
+Player-Destroy-Message:
+  - ''
+  - '&f&lBED DESTRUCTION > {team-color}{team-name} Bed &7was destroyed by {destroyer-color}{destroyer-name}'
+  - ''
+
+#Chat message displayed on Auto-Bed-Break
+Auto-Destroy-Message:
+  - ''
+  - '&c&lALL BEDS HAVE BEEN DESTROYED'
+  - ''
+
+#Title displayed to a player when his bed gets destroyed
+#This replaces MBedwars' message, and only gets sent to the player with no bed
+Notification:
+  Big-Title: '&cBED DESTROYED'
+  Small-Title: '&fYou will no longer respawn!'
+
 ############### TNT AUTO IGNITE ###############
 
 #WARNING!!! If you enable this MAKE SURE MBedwars' tnt-autoignite is FALSE
