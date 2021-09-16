@@ -12,35 +12,35 @@
 Gen-Tiers:
   1:
     TierName: 'Diamond II'
-    TierLevel: 'Tier II'
+    TierLevel: '&eTier &cII'
     Type: 'diamond'
     Time: 6
     Speed: 23
     Chat: '&bDiamond Generators &ehave been upgraded to Tier &4II'
   2:
     TierName: 'Emerald II'
-    TierLevel: 'Tier II'
+    TierLevel: '&eTier &cII'
     Type: 'emerald'
     Time: 6
     Speed: 40
     Chat: '&aEmerald Generators &ehave been upgraded to Tier &4II'
   3:
     TierName: 'Diamond III'
-    TierLevel: 'Tier III'
+    TierLevel: '&eTier &cIII'
     Type: 'diamond'
     Time: 6
     Speed: 13
     Chat: '&bDiamond Generators &ehave been upgraded to Tier &4III'
   4:
     TierName: 'Emerald III'
-    TierLevel: 'Tier III'
+    TierLevel: '&eTier &cIII'
     Type: 'emerald'
     Time: 6
     Speed: 30
     Chat: '&aEmerald Generators &ehave been upgraded to Tier &4III'
   bed-break:
-    TierName: 'Bed gone in'
+    TierName: 'Bed gone'
     Time: 7
   game-over:
-    TierName: 'Game over in'
+    TierName: 'Game over'
     Time: 10

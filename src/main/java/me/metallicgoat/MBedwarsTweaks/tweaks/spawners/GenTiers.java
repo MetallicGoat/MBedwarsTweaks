@@ -34,7 +34,7 @@ public class GenTiers implements Listener {
 
             arena.getSpawners().forEach(spawner -> {
                 if(tierOneSpawners.contains(getItemType(spawner))) {
-                    spawner.setOverridingHologramLines(new String[]{"&eTier &cI", "&l{spawner}", "&eSpawning in &c{time} &eseconds!"});
+                    spawner.setOverridingHologramLines(new String[]{"&eTier &cI", "{spawner}", "&eSpawning in &c{time} &eseconds!"});
                 }
             });
 
@@ -74,28 +74,34 @@ public class GenTiers implements Listener {
             timeToNextUpdate.remove(arena);
             timeToNextUpdate.put(arena, time * 20 * 60);
 
-            // Print Tier Message
-            arena.broadcast(Message.build(chat));
+            //TODO game-over (beta 8?) TEST!
 
-            //TODO game-over
-
-            if(section.equalsIgnoreCase("bed-break")){
-                ScheduleBedBreak.scheduleBreak(time * 20 * 60, arena);
-            }else{
-                scheduler.scheduleSyncDelayedTask(plugin(), () -> {
+            if(!section.equalsIgnoreCase("game-over")) {
+                if (section.equalsIgnoreCase("bed-break")) {
                     if (arena.getStatus() == ArenaStatus.RUNNING) {
+                        //arena.broadcast(Message.build(chat));
+                        ScheduleBedBreak.scheduleBreak(time * 20 * 60, arena);
                         scheduleTier(arena, newKey);
-                        for (Spawner s : arena.getSpawners()) {
-                            if (getItemType(s).equalsIgnoreCase(spawnerType)) {
-                                s.addDropDurationModifier("GEN_TIER_UPDATE", plugin(), SpawnerDurationModifier.Operation.SET, speed);
-
-                                s.setOverridingHologramLines(new String[]{"&c&l" + tierLevel, "&l{spawner}", "&espawning in &c{time} &eseconds!"});
-                            }
-                        }
-                    } else {
-                        nextTierMap.remove(arena);
                     }
-                }, time * 20 * 60);
+                } else {
+                    scheduler.scheduleSyncDelayedTask(plugin(), () -> {
+                        if (arena.getStatus() == ArenaStatus.RUNNING) {
+
+                            arena.broadcast(Message.build(chat));
+
+                            scheduleTier(arena, newKey);
+                            for (Spawner s : arena.getSpawners()) {
+                                if (getItemType(s).equalsIgnoreCase(spawnerType)) {
+                                    s.addDropDurationModifier("GEN_TIER_UPDATE", plugin(), SpawnerDurationModifier.Operation.SET, speed);
+
+                                    s.setOverridingHologramLines(new String[]{tierLevel, "{spawner}", "&eSpawning in &c{time} &eseconds!"});
+                                }
+                            }
+                        } else {
+                            nextTierMap.remove(arena);
+                        }
+                    }, time * 20 * 60);
+                }
             }
         }
     }
