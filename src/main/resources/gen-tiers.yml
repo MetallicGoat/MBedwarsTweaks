@@ -38,7 +38,6 @@ Gen-Tiers:
     Time: 6
     Speed: 30
     Chat: '&aEmerald Generators &ehave been upgraded to Tier &4III'
-
   bed-break:
     TierName: 'Bed gone in'
     Time: 7
