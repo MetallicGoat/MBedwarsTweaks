@@ -29,22 +29,18 @@ public class ScheduleBedBreak implements Listener {
     }
 
     //Sets all beds to be destroyed at a specified time
-    public static void scheduleBreak(Long time, Arena arena){
-        BukkitScheduler scheduler = plugin().getServer().getScheduler();
-        scheduler.scheduleSyncDelayedTask(plugin(), () -> {
-            for (Team team : arena.getEnabledTeams()) {
-                if (!arena.isBedDestroyed(team)) {
-                    arena.destroyBedNaturally(team, "Auto-Break", false);
-                    Location bedLoc = arena.getBedLocation(team).toLocation(arena.getGameWorld());
-                    bedLoc.getBlock().setType(Material.AIR);
-                    sendBedBreakMessage(arena, team, bedLoc, null);
-                }
+    public static void breakArenaBeds(Arena arena){
+        for (Team team : arena.getEnabledTeams()) {
+            if (!arena.isBedDestroyed(team)) {
+                arena.destroyBedNaturally(team, "Auto-Break", false);
+                Location bedLoc = arena.getBedLocation(team).toLocation(arena.getGameWorld());
+                bedLoc.getBlock().setType(Material.AIR);
+                sendBedBreakMessage(arena, team, bedLoc, null);
             }
-            for (String s : plugin().getConfig().getStringList("Auto-Destroy-Message")) {
-                arena.broadcast(Message.build(s).done());
-            }
-
-        }, time);
+        }
+        for (String s : plugin().getConfig().getStringList("Auto-Destroy-Message")) {
+            arena.broadcast(Message.build(s).done());
+        }
     }
 
     //Message that gets sent when a bed gets destroyed

@@ -9,7 +9,6 @@ import de.marcely.bedwars.api.game.spawner.SpawnerDurationModifier;
 import de.marcely.bedwars.api.message.Message;
 import me.metallicgoat.MBedwarsTweaks.Main;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -81,7 +80,7 @@ public class GenTiers implements Listener {
                         if (arena.getStatus() == ArenaStatus.RUNNING) {
                             scheduleTier(arena, newKey);
 
-                            ScheduleBedBreak.scheduleBreak(time * 20 * 60, arena);
+                            ScheduleBedBreak.breakArenaBeds(arena);
                         }
                     }, time * 20 * 60);
 
