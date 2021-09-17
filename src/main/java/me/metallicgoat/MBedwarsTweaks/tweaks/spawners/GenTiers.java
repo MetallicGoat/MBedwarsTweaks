@@ -74,22 +74,23 @@ public class GenTiers implements Listener {
             timeToNextUpdate.remove(arena);
             timeToNextUpdate.put(arena, time * 20 * 60);
 
-            //TODO game-over (beta 8?) TEST!
-
             if(!section.equalsIgnoreCase("game-over")) {
                 if (section.equalsIgnoreCase("bed-break")) {
-                    if (arena.getStatus() == ArenaStatus.RUNNING) {
-                        //arena.broadcast(Message.build(chat));
-                        ScheduleBedBreak.scheduleBreak(time * 20 * 60, arena);
-                        scheduleTier(arena, newKey);
-                    }
+                    scheduler.scheduleSyncDelayedTask(plugin(), () -> {
+                        //stay in scheduler
+                        if (arena.getStatus() == ArenaStatus.RUNNING) {
+                            scheduleTier(arena, newKey);
+
+                            ScheduleBedBreak.scheduleBreak(time * 20 * 60, arena);
+                        }
+                    }, time * 20 * 60);
+
                 } else {
                     scheduler.scheduleSyncDelayedTask(plugin(), () -> {
                         if (arena.getStatus() == ArenaStatus.RUNNING) {
-
+                            scheduleTier(arena, newKey);
                             arena.broadcast(Message.build(chat));
 
-                            scheduleTier(arena, newKey);
                             for (Spawner s : arena.getSpawners()) {
                                 if (getItemType(s).equalsIgnoreCase(spawnerType)) {
                                     s.addDropDurationModifier("GEN_TIER_UPDATE", plugin(), SpawnerDurationModifier.Operation.SET, speed);

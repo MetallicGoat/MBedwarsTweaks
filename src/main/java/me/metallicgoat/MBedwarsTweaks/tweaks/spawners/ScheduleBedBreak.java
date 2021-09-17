@@ -10,11 +10,12 @@ import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.Objects;
 
-public class ScheduleBedBreak {
+public class ScheduleBedBreak implements Listener {
 
     @EventHandler
     public void onBedBreak(ArenaBedBreakEvent e){

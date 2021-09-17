@@ -2,6 +2,7 @@ package me.metallicgoat.MBedwarsTweaks.utils;
 
 import me.metallicgoat.MBedwarsTweaks.Main;
 import me.metallicgoat.MBedwarsTweaks.tweaks.messages.FinalKill;
+import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.ScheduleBedBreak;
 import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.UnusedGens;
 import me.metallicgoat.MBedwarsTweaks.tweaks.messages.TopKillers;
 import me.metallicgoat.MBedwarsTweaks.tweaks.explotions.AutoIgnite;
@@ -55,6 +56,7 @@ public class ServerManager {
         //manager.registerEvents(new test(), plugin());
 
         manager.registerEvents(new UnusedGens(), plugin());
+        manager.registerEvents(new ScheduleBedBreak(), plugin());
 
         manager.registerEvents(new FinalKill(), plugin());
 
