@@ -7,9 +7,11 @@ Prevent-Liquid-Build-Up: true
 ############### HEIGHT CAP ###############
 
 #Add a height cap for specific MBedwars arenas
-#Add like 'arenaName:70'
+#Add height cap like 'arenaName:70'
+#To disable the message, set to ''
 Height-Cap:
   Enabled: false
+  Message: '&cYou cannot build any higher'
   Arenas:
     - ''
 
