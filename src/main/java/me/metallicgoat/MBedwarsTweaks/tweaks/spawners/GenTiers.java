@@ -29,14 +29,13 @@ public class GenTiers implements Listener {
         boolean enabled = plugin().getConfig().getBoolean("Gen-Tiers-Enabled");
         ConfigurationSection sect = ServerManager.getTiersConfig().getConfigurationSection("Gen-Tiers");
         if(enabled && sect != null) {
-            List<String> tierOneSpawners = ServerManager.getConfig().getStringList("Base-Tier-Spawner-Title");
-
+            List<String> tierOneSpawners = ServerManager.getConfig().getStringList("Tier-One-Titles.Spawners");
+            String tierLevel = ServerManager.getConfig().getString("Tier-One-Titles.Tier-Name");
             arena.getSpawners().forEach(spawner -> {
                 if(tierOneSpawners.contains(getItemType(spawner))) {
-                    spawner.setOverridingHologramLines(new String[]{"&eTier &cI", "{spawner}", "&eSpawning in &c{time} &eseconds!"});
+                    spawner.setOverridingHologramLines(formatHoloTiles(tierLevel).toArray(new String[0]));
                 }
             });
-
             scheduleTier(arena, 0);
         }
     }
@@ -93,7 +92,7 @@ public class GenTiers implements Listener {
                                 if (getItemType(s).equalsIgnoreCase(spawnerType)) {
                                     s.addDropDurationModifier("GEN_TIER_UPDATE", plugin(), SpawnerDurationModifier.Operation.SET, speed);
 
-                                    s.setOverridingHologramLines(new String[]{tierLevel, "{spawner}", "&eSpawning in &c{time} &eseconds!"});
+                                    s.setOverridingHologramLines(formatHoloTiles(tierLevel).toArray(new String[0]));
                                 }
                             }
                         } else {
@@ -147,6 +146,15 @@ public class GenTiers implements Listener {
         }else{
             return "0:00";
         }
+    }
+
+    private List<String> formatHoloTiles(String tier){
+        List<String> formatted = new ArrayList<>();
+        ServerManager.getConfig().getStringList("Spawner-Title").forEach(s -> {
+            String formattedString = s.replace("{tier}", tier);
+            formatted.add(formattedString);
+        });
+        return formatted;
     }
 
     private static Main plugin(){

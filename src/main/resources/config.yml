@@ -54,21 +54,26 @@ Disable-Unused-Gens:
 
 ############### GEN TIERS ###############
 
-#WILL BE CHANGED SIGNIFICANTLY
-
 #Teirs can be configured in the gen-tiers.yml
 Gen-Tiers-Enabled: false
 
 #Adds 'Tier I' to spawners listed
-Base-Tier-Spawner-Title:
-  - 'EMERALD'
-  - 'DIAMOND'
+Tier-One-Titles:
+  Tier-Name: '&eTier &cI'
+  Spawners:
+    - 'EMERALD'
+    - 'DIAMOND'
 
-#Placeholders:
+#Message shown above spawners
+# {spawner} {time} {tier}
+Spawner-Title:
+  - '{tier}'
+  - '{spawner}'
+  - '&eSpawning in &c{time} &eseconds!'
 
+#PAPI Placeholder:
 # {next-tier} {time}
 Next-Tier-Placeholder: '{next-tier} in &a{time}'
-
 
 ############### BED BREAK ###############
 
