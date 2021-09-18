@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class TopKillers implements Listener {
 
-    private final HashMap<Player, Arena> playerArenaHashMap = new HashMap<>();
+    private final HashMap<Arena, Collection<Player>> playerArenaHashMap = new HashMap<>();
     private final HashMap<Player, Integer> scoreHashMap = new HashMap<>();
 
     private String firstKiller = null;
@@ -29,10 +29,8 @@ public class TopKillers implements Listener {
 
     @EventHandler
     public void onGameStart(RoundStartEvent e){
-        e.getArena().getPlayers().forEach(player -> {
-            playerArenaHashMap.put(player, e.getArena());
-            scoreHashMap.put(player, 0);
-        });
+        playerArenaHashMap.put(e.getArena(), e.getArena().getPlayers());
+        e.getArena().getPlayers().forEach(player -> scoreHashMap.put(player, 0));
     }
 
     @EventHandler
@@ -51,10 +49,10 @@ public class TopKillers implements Listener {
 
             HashMap<Player, Integer> arenaScoreHashMap = new HashMap<>();
 
-            playerArenaHashMap.forEach((player, arena) -> {
-                if(arena == e.getArena()){
-                    arenaScoreHashMap.put(player, scoreHashMap.get(player));
-                }
+            playerArenaHashMap.get(e.getArena()).forEach(player -> {
+                int playerKills = scoreHashMap.get(player);
+                arenaScoreHashMap.put(player, playerKills);
+                scoreHashMap.remove(player);
             });
 
             List<Player> top3 = arenaScoreHashMap.entrySet().stream().sorted(Map.Entry.<Player, Integer>comparingByValue().reversed()).limit(3).map(Map.Entry::getKey).collect(Collectors.toList());
@@ -76,10 +74,7 @@ public class TopKillers implements Listener {
 
             printMessage(e.getArena());
 
-            arenaScoreHashMap.forEach((player, integer) -> {
-                scoreHashMap.remove(player);
-                playerArenaHashMap.remove(player);
-            });
+            playerArenaHashMap.remove(e.getArena());
 
             arenaScoreHashMap.clear();
 
@@ -150,71 +145,3 @@ public class TopKillers implements Listener {
         }
     }
 }
-
-//it's bad, but leaned a bunch from it, so ill keep it as reminder of how much time I wasted
-
-                    /*
-                    int type = ServerManager.getConfig().getInt("No-Top-Killer-Display-Type");
-                    if (type == 1) {
-                        String noTopKiller = ServerManager.getConfig().getString("No-Top-Killer-FinalKill");
-                        if (s.contains("%Killer-1-Name%")) {
-                            s = s.replace("%Killer-1-Name%", firstKiller);
-                        }else if (s.contains("%Killer-2-Name%")) {
-                            if (secondKiller != null) {
-                                s = s.replace("%Killer-2-Name%", secondKiller);
-                            } else {
-                                s = noTopKiller;
-                            }
-                        } else if (s.contains("%Killer-3-Name%")) {
-                            if (thirdKiller != null) {
-                                s = s.replace("%Killer-3-Name%", thirdKiller);
-                            } else {
-                                s = noTopKiller;
-                            }
-                        }
-
-                        assert s != null;
-                        complete = s
-                                .replace("%Killer-1-Amount%", String.valueOf(firstKillerInt))
-                                .replace("%Killer-2-Amount%", String.valueOf(secondKillerInt))
-                                .replace("%Killer-3-Amount%", String.valueOf(thirdKillerInt));
-
-                    } else if (type == 2) {
-                        String noTopKiller = ServerManager.getConfig().getString("No-Top-Killer-Name");
-
-                        if (noTopKiller != null) {
-                            if (firstKiller == null) {
-                                firstKiller = noTopKiller;
-                            }
-                            if (secondKiller == null) {
-                                secondKiller = noTopKiller;
-                            }
-                            if (thirdKiller == null) {
-                                thirdKiller = noTopKiller;
-                            }
-                        }
-
-                        complete = s
-                                .replace("%Killer-1-Amount%", String.valueOf(firstKillerInt))
-                                .replace("%Killer-2-Amount%", String.valueOf(secondKillerInt))
-                                .replace("%Killer-3-Amount%", String.valueOf(thirdKillerInt))
-                                .replace("%Killer-1-Name%", firstKiller)
-                                .replace("%Killer-2-Name%", secondKiller)
-                                .replace("%Killer-3-Name%", thirdKiller);
-
-                    } else if (type == 3) {
-                        //ONLY
-                    }
-# THE CONFIG PART
-# 1 - we will use No-Top-Killer-FinalKill to replace the line
-# 2 - we will replace only the name to No-Top-Killer-Name
-# 3 - we will remove the line completely
-No-Top-Killer-Display-Type: 3
-
-#Set No-Top-Killer-Display-Type to 1
-No-Top-Killer-Message: 'This Spot Is Empty!'
-
-#Set No-Top-Killer-Display-Type to 2
-No-Top-Killer-Name: '----------'
-
-                     */

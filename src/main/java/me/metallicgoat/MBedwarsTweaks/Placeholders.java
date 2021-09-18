@@ -36,7 +36,7 @@ public class Placeholders extends PlaceholderExpansion {
         if(ServerManager.getConfig().getBoolean("Gen-Tiers-Enabled")) {
             if (params.equalsIgnoreCase("next-tier")) {
                 Player player1 = Bukkit.getPlayer(player.getUniqueId());
-                Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
+                Arena arena = ((arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1)) != null) ? arena : BedwarsAPI.getGameAPI().getArenaBySpectator(player1);
                 if (arena != null && arena.getStatus() == ArenaStatus.RUNNING) {
 
                     String nextTierName = GenTiers.nextTierMap.get(arena);
@@ -46,7 +46,6 @@ public class Placeholders extends PlaceholderExpansion {
                             .placeholder("next-tier", nextTierName)
                             .placeholder("time", nextTierTime)
                             .done();
-
                 }
                 return "---";
             }

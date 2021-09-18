@@ -79,7 +79,6 @@ public class GenTiers implements Listener {
                         //stay in scheduler
                         if (arena.getStatus() == ArenaStatus.RUNNING) {
                             scheduleTier(arena, newKey);
-
                             ScheduleBedBreak.breakArenaBeds(arena);
                         }
                     }, time * 20 * 60);
@@ -140,7 +139,7 @@ public class GenTiers implements Listener {
         int seconds = timeoutSeconds % 60;
 
         if(seconds > 0) {
-            if (seconds < 10) {
+            if (minutes > 0 && seconds < 10) {
                 return minutes + ":0" + seconds;
             } else {
                 return minutes + ":" + seconds;

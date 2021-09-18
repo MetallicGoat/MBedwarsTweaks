@@ -4,7 +4,16 @@
 #Will not affect other gamemodes
 Prevent-Liquid-Build-Up: true
 
-############### Final Kill ###############
+############### HEIGHT CAP ###############
+
+#Add a height cap for specific MBedwars arenas
+#Add like 'arenaName:70'
+Height-Cap:
+  Enabled: false
+  Arenas:
+    - ''
+
+############### FINAL KILL ###############
 
 #Adds FINAL KILL to the end of a message if the kill is Final
 Final-Kill-Message: false
@@ -28,7 +37,7 @@ FireballWhitelist:
 #Placeholders: {amount} {product}
 Buy-Message:
   Enabled: true
-  Message: '&aYou Purchased &6%product% x%amount%'
+  Message: '&aYou Purchased &6{product} x{amount}'
 
 ############### DISABLE EMPTY BASE GENERATORS ###############
 
