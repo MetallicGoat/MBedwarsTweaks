@@ -65,10 +65,10 @@ Tier-One-Titles:
     - 'DIAMOND'
 
 #Message shown above spawners
-# {spawner} {time} {tier}
+# {spawner} {spawner-color} {time} {tier}
 Spawner-Title:
   - '{tier}'
-  - '{spawner}'
+  - '{spawner-color}{spawner}'
   - '&eSpawning in &c{time} &eseconds!'
 
 #PAPI Placeholder:

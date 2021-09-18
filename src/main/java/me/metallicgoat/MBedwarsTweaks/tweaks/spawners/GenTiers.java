@@ -33,7 +33,7 @@ public class GenTiers implements Listener {
             String tierLevel = ServerManager.getConfig().getString("Tier-One-Titles.Tier-Name");
             arena.getSpawners().forEach(spawner -> {
                 if(tierOneSpawners.contains(getItemType(spawner))) {
-                    spawner.setOverridingHologramLines(formatHoloTiles(tierLevel).toArray(new String[0]));
+                    spawner.setOverridingHologramLines(formatHoloTiles(tierLevel, spawner).toArray(new String[0]));
                 }
             });
             scheduleTier(arena, 0);
@@ -92,7 +92,7 @@ public class GenTiers implements Listener {
                                 if (getItemType(s).equalsIgnoreCase(spawnerType)) {
                                     s.addDropDurationModifier("GEN_TIER_UPDATE", plugin(), SpawnerDurationModifier.Operation.SET, speed);
 
-                                    s.setOverridingHologramLines(formatHoloTiles(tierLevel).toArray(new String[0]));
+                                    s.setOverridingHologramLines(formatHoloTiles(tierLevel, s).toArray(new String[0]));
                                 }
                             }
                         } else {
@@ -148,10 +148,15 @@ public class GenTiers implements Listener {
         }
     }
 
-    private List<String> formatHoloTiles(String tier){
+    private List<String> formatHoloTiles(String tier, Spawner spawner){
+        String spawnerName = spawner.getDropType().getConfigName();
+        String colorCode = "&" + spawnerName.charAt(1);
+        String strippedSpawnerName = spawnerName.substring(2);
         List<String> formatted = new ArrayList<>();
         ServerManager.getConfig().getStringList("Spawner-Title").forEach(s -> {
-            String formattedString = s.replace("{tier}", tier);
+            String formattedString = s.replace("{tier}", tier)
+                    .replace("{spawner-color}", colorCode)
+                    .replace("{spawner}", strippedSpawnerName);
             formatted.add(formattedString);
         });
         return formatted;
