@@ -46,6 +46,7 @@ public class ScheduleBedBreak implements Listener {
     private static void sendBedBreakMessage(Arena arena, Team team, Player destroyer){
         Main plugin = Main.getInstance();
         for(Player p : arena.getPlayersInTeam(team)){
+            String sound = ServerManager.getConfig().getString("Bed-Destroy-Sound");
             String bigTitle = ServerManager.getConfig().getString("Notification.Big-Title");
             String smallTitle = ServerManager.getConfig().getString("Notification.Small-Title");
 
@@ -56,7 +57,7 @@ public class ScheduleBedBreak implements Listener {
                     ChatColor.translateAlternateColorCodes('&', smallTitle),
                     60, 15, 15);
 
-            XSound.ENTITY_ENDER_DRAGON_GROWL.play(p);
+            XSound.valueOf(sound).play(p);
         }
         if(destroyer != null) {
             for (String message : plugin.getConfig().getStringList("Player-Destroy-Message")) {

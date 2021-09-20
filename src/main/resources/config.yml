@@ -89,6 +89,9 @@ Auto-Destroy-Message:
   - '&c&lALL BEDS HAVE BEEN DESTROYED'
   - ''
 
+# https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
+Bed-Destroy-Sound: 'ENTITY_ENDER_DRAGON_GROWL'
+
 #Title displayed to a player when his bed gets destroyed
 #This replaces MBedwars' message, and only gets sent to the player with no bed
 Notification:
