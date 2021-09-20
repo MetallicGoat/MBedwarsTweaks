@@ -1,6 +1,7 @@
 package me.metallicgoat.MBedwarsTweaks.utils;
 
 import me.metallicgoat.MBedwarsTweaks.Main;
+import me.metallicgoat.MBedwarsTweaks.tweaks.advancedswords.DowngradeTools;
 import me.metallicgoat.MBedwarsTweaks.tweaks.messages.FinalKill;
 import me.metallicgoat.MBedwarsTweaks.tweaks.misc.*;
 import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.ScheduleBedBreak;
@@ -56,9 +57,9 @@ public class ServerManager {
         manager.registerEvents(new ScheduleBedBreak(), plugin());
 
         manager.registerEvents(new FinalKill(), plugin());
-
-
         manager.registerEvents(new TopKillers(), plugin());
+
+        //manager.registerEvents(new DowngradeTools(), plugin());
     }
 
 
