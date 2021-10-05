@@ -42,11 +42,21 @@ public class Placeholders extends PlaceholderExpansion {
                     String nextTierName = GenTiers.nextTierMap.get(arena);
                     String nextTierTime = GenTiers.timeLeft(arena);
 
-                    return Message.build(ServerManager.getConfig().getString("Next-Tier-Placeholder"))
-                            .placeholder("next-tier", nextTierName)
-                            .placeholder("time", nextTierTime)
-                            .done();
-
+                    switch (arena.getStatus()) {
+                        case LOBBY:
+                            return "Game is still in Lobby";
+                        case END_LOBBY:
+                            return "Game Ended";
+                        case STOPPED:
+                            return "Game Stopped";
+                        case RESETTING:
+                            return "Game Resetting";
+                        case RUNNING:
+                            return Message.build(ServerManager.getConfig().getString("Next-Tier-Placeholder"))
+                                    .placeholder("next-tier", nextTierName)
+                                    .placeholder("time", nextTierTime)
+                                    .done();
+                    }
                 }
                 return "---";
             }
