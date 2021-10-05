@@ -47,7 +47,7 @@ public class Placeholders extends PlaceholderExpansion {
                             .placeholder("time", nextTierTime)
                             .done();
                 }
-                return "---";
+                return "Game Ended";
             }
         }
         return null;
