@@ -37,7 +37,7 @@ public class Placeholders extends PlaceholderExpansion {
             if (params.equalsIgnoreCase("next-tier")) {
                 Player player1 = Bukkit.getPlayer(player.getUniqueId());
                 Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
-                if (arena != null && arena.getStatus() == ArenaStatus.RUNNING) {
+                if (arena != null) {
 
                     String nextTierName = GenTiers.nextTierMap.get(arena);
                     String nextTierTime = GenTiers.timeLeft(arena);
