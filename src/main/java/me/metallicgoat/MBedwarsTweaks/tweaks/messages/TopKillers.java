@@ -72,7 +72,7 @@ public class TopKillers implements Listener {
                 i.getAndIncrement();
             });
 
-            printMessage(e.getArena());
+            printMessage(e);
 
             playerArenaHashMap.remove(e.getArena());
 
@@ -82,7 +82,7 @@ public class TopKillers implements Listener {
         }
     }
 
-    private void printMessage(Arena arena) {
+    private void printMessage(RoundEndEvent event) {
         List<String> formattedList = new ArrayList<>();
 
         if (firstKiller != null) {
@@ -111,6 +111,10 @@ public class TopKillers implements Listener {
                     }
 
                     complete = s
+                            .replace("%Winner-Members%", event.getWinners().stream().map(Player::getName).collect(Collectors.joining(", ")))
+                            .replace("%Winner-Members-Colored%", event.getWinnerTeam().getChatColor()+event.getWinners().stream().map(Player::getName).collect(Collectors.joining(ChatColor.WHITE+", "+event.getWinnerTeam().getChatColor())))
+                            .replace("%Winner-Team-Name%", event.getWinnerTeam().getDisplayName())
+                            .replace("%Winner-Team-Color%", event.getWinnerTeam().getChatColor().toString())
                             .replace("%Killer-1-Name%", firstKiller)
                             .replace("%Killer-2-Name%", secondKiller)
                             .replace("%Killer-3-Name%", thirdKiller)
@@ -122,11 +126,11 @@ public class TopKillers implements Listener {
 
                 }
             }
-            broadcast(arena, formattedList);
+            broadcast(event.getArena(), formattedList);
             formattedList.clear();
         }else{
             List<String> noKillerMessage = ServerManager.getConfig().getStringList("No-Top-Killers-Message");
-            broadcast(arena, noKillerMessage);
+            broadcast(event.getArena(), noKillerMessage);
         }
     }
 
