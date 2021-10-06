@@ -36,18 +36,30 @@ public class Placeholders extends PlaceholderExpansion {
         if(ServerManager.getConfig().getBoolean("Gen-Tiers-Enabled")) {
             if (params.equalsIgnoreCase("next-tier")) {
                 Player player1 = Bukkit.getPlayer(player.getUniqueId());
-                Arena arena = ((arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1)) != null) ? arena : BedwarsAPI.getGameAPI().getArenaBySpectator(player1);
-                if (arena != null && arena.getStatus() == ArenaStatus.RUNNING) {
+
+                Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
+                if (arena != null) {
 
                     String nextTierName = GenTiers.nextTierMap.get(arena);
                     String nextTierTime = GenTiers.timeLeft(arena);
 
-                    return Message.build(ServerManager.getConfig().getString("Next-Tier-Placeholder"))
-                            .placeholder("next-tier", nextTierName)
-                            .placeholder("time", nextTierTime)
-                            .done();
+                    switch (arena.getStatus()) {
+                        case LOBBY:
+                            return "Game is still in Lobby";
+                        case END_LOBBY:
+                            return "Game Ended";
+                        case STOPPED:
+                            return "Game Stopped";
+                        case RESETTING:
+                            return "Game Resetting";
+                        case RUNNING:
+                            return Message.build(ServerManager.getConfig().getString("Next-Tier-Placeholder"))
+                                    .placeholder("next-tier", nextTierName)
+                                    .placeholder("time", nextTierTime)
+                                    .done();
+                    }
                 }
-                return "Game Ended";
+                return "---";
             }
         }
         return null;
