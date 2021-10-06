@@ -1,18 +1,16 @@
 package me.metallicgoat.MBedwarsTweaks.utils;
 
 import me.metallicgoat.MBedwarsTweaks.Main;
+import me.metallicgoat.MBedwarsTweaks.tweaks.advancedswords.DowngradeTools;
 import me.metallicgoat.MBedwarsTweaks.tweaks.messages.FinalKill;
+import me.metallicgoat.MBedwarsTweaks.tweaks.misc.*;
+import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.ScheduleBedBreak;
 import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.UnusedGens;
 import me.metallicgoat.MBedwarsTweaks.tweaks.messages.TopKillers;
 import me.metallicgoat.MBedwarsTweaks.tweaks.explotions.AutoIgnite;
 import me.metallicgoat.MBedwarsTweaks.tweaks.explotions.FireballWhitelist;
-import me.metallicgoat.MBedwarsTweaks.tweaks.misc.FinalStrike;
 import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.GenTiers;
-import me.metallicgoat.MBedwarsTweaks.tweaks.misc.BreakInvis;
 import me.metallicgoat.MBedwarsTweaks.tweaks.messages.BuyMessage;
-import me.metallicgoat.MBedwarsTweaks.tweaks.misc.EmptyBucket;
-import me.metallicgoat.MBedwarsTweaks.tweaks.misc.EmptyPotion;
-import me.metallicgoat.MBedwarsTweaks.tweaks.misc.WaterFlow;
 import me.metallicgoat.MBedwarsTweaks.utils.configupdater.ConfigUpdater;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -51,15 +49,17 @@ public class ServerManager {
         manager.registerEvents(new AutoIgnite(), plugin());
         manager.registerEvents(new GenTiers(), plugin());
         manager.registerEvents(new WaterFlow(), plugin());
+        manager.registerEvents(new HeightCap(), plugin());
 
         //manager.registerEvents(new test(), plugin());
 
         manager.registerEvents(new UnusedGens(), plugin());
+        manager.registerEvents(new ScheduleBedBreak(), plugin());
 
         manager.registerEvents(new FinalKill(), plugin());
-
-
         manager.registerEvents(new TopKillers(), plugin());
+
+        //manager.registerEvents(new DowngradeTools(), plugin());
     }
 
 

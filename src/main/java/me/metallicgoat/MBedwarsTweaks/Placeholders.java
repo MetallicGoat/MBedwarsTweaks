@@ -36,6 +36,7 @@ public class Placeholders extends PlaceholderExpansion {
         if(ServerManager.getConfig().getBoolean("Gen-Tiers-Enabled")) {
             if (params.equalsIgnoreCase("next-tier")) {
                 Player player1 = Bukkit.getPlayer(player.getUniqueId());
+
                 Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
                 if (arena != null) {
 

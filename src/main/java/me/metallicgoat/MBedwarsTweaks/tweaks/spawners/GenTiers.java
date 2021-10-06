@@ -9,7 +9,6 @@ import de.marcely.bedwars.api.game.spawner.SpawnerDurationModifier;
 import de.marcely.bedwars.api.message.Message;
 import me.metallicgoat.MBedwarsTweaks.Main;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,14 +29,13 @@ public class GenTiers implements Listener {
         boolean enabled = plugin().getConfig().getBoolean("Gen-Tiers-Enabled");
         ConfigurationSection sect = ServerManager.getTiersConfig().getConfigurationSection("Gen-Tiers");
         if(enabled && sect != null) {
-            List<String> tierOneSpawners = ServerManager.getConfig().getStringList("Base-Tier-Spawner-Title");
-
+            List<String> tierOneSpawners = ServerManager.getConfig().getStringList("Tier-One-Titles.Spawners");
+            String tierLevel = ServerManager.getConfig().getString("Tier-One-Titles.Tier-Name");
             arena.getSpawners().forEach(spawner -> {
                 if(tierOneSpawners.contains(getItemType(spawner))) {
-                    spawner.setOverridingHologramLines(new String[]{"&eTier &cI", "{spawner}", "&eSpawning in &c{time} &eseconds!"});
+                    spawner.setOverridingHologramLines(formatHoloTiles(tierLevel, spawner).toArray(new String[0]));
                 }
             });
-
             scheduleTier(arena, 0);
         }
     }
@@ -74,27 +72,27 @@ public class GenTiers implements Listener {
             timeToNextUpdate.remove(arena);
             timeToNextUpdate.put(arena, time * 20 * 60);
 
-            //TODO game-over (beta 8?) TEST!
-
             if(!section.equalsIgnoreCase("game-over")) {
                 if (section.equalsIgnoreCase("bed-break")) {
-                    if (arena.getStatus() == ArenaStatus.RUNNING) {
-                        //arena.broadcast(Message.build(chat));
-                        ScheduleBedBreak.scheduleBreak(time * 20 * 60, arena);
-                        scheduleTier(arena, newKey);
-                    }
+                    scheduler.scheduleSyncDelayedTask(plugin(), () -> {
+                        //stay in scheduler
+                        if (arena.getStatus() == ArenaStatus.RUNNING) {
+                            scheduleTier(arena, newKey);
+                            ScheduleBedBreak.breakArenaBeds(arena);
+                        }
+                    }, time * 20 * 60);
+
                 } else {
                     scheduler.scheduleSyncDelayedTask(plugin(), () -> {
                         if (arena.getStatus() == ArenaStatus.RUNNING) {
-
+                            scheduleTier(arena, newKey);
                             arena.broadcast(Message.build(chat));
 
-                            scheduleTier(arena, newKey);
                             for (Spawner s : arena.getSpawners()) {
                                 if (getItemType(s).equalsIgnoreCase(spawnerType)) {
                                     s.addDropDurationModifier("GEN_TIER_UPDATE", plugin(), SpawnerDurationModifier.Operation.SET, speed);
 
-                                    s.setOverridingHologramLines(new String[]{tierLevel, "{spawner}", "&eSpawning in &c{time} &eseconds!"});
+                                    s.setOverridingHologramLines(formatHoloTiles(tierLevel, s).toArray(new String[0]));
                                 }
                             }
                         } else {
@@ -140,7 +138,7 @@ public class GenTiers implements Listener {
         int seconds = timeoutSeconds % 60;
 
         if(seconds > 0) {
-            if (seconds < 10) {
+            if (minutes > 0 && seconds < 10) {
                 return minutes + ":0" + seconds;
             } else {
                 return minutes + ":" + seconds;
@@ -148,6 +146,20 @@ public class GenTiers implements Listener {
         }else{
             return "0:00";
         }
+    }
+
+    private List<String> formatHoloTiles(String tier, Spawner spawner){
+        String spawnerName = spawner.getDropType().getConfigName();
+        String colorCode = "&" + spawnerName.charAt(1);
+        String strippedSpawnerName = spawnerName.substring(2);
+        List<String> formatted = new ArrayList<>();
+        ServerManager.getConfig().getStringList("Spawner-Title").forEach(s -> {
+            String formattedString = s.replace("{tier}", tier)
+                    .replace("{spawner-color}", colorCode)
+                    .replace("{spawner}", strippedSpawnerName);
+            formatted.add(formattedString);
+        });
+        return formatted;
     }
 
     private static Main plugin(){

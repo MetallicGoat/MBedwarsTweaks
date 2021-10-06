@@ -4,7 +4,25 @@
 #Will not affect other gamemodes
 Prevent-Liquid-Build-Up: true
 
-############### Final Kill ###############
+############### HEIGHT CAP ###############
+
+#Add a height cap for specific MBedwars arenas
+#Add height cap like 'arenaName:70'
+#To disable the message, set to ''
+Height-Cap:
+  Enabled: false
+  Message: '&cYou cannot build any higher'
+  Arenas:
+    - ''
+
+############### DEGRADED BUY-GROUPS ###############
+
+Degraded-BuyGroups:
+  Enabled: true
+  Names:
+    - 'pickaxe'
+
+############### FINAL KILL ###############
 
 #Adds FINAL KILL to the end of a message if the kill is Final
 Final-Kill-Message: false
@@ -28,7 +46,7 @@ FireballWhitelist:
 #Placeholders: {amount} {product}
 Buy-Message:
   Enabled: true
-  Message: '&aYou Purchased &6%product% x%amount%'
+  Message: '&aYou Purchased &6{product} x{amount}'
 
 ############### DISABLE EMPTY BASE GENERATORS ###############
 
@@ -43,21 +61,26 @@ Disable-Unused-Gens:
 
 ############### GEN TIERS ###############
 
-#WILL BE CHANGED SIGNIFICANTLY
-
 #Teirs can be configured in the gen-tiers.yml
 Gen-Tiers-Enabled: false
 
 #Adds 'Tier I' to spawners listed
-Base-Tier-Spawner-Title:
-  - 'EMERALD'
-  - 'DIAMOND'
+Tier-One-Titles:
+  Tier-Name: '&eTier &cI'
+  Spawners:
+    - 'EMERALD'
+    - 'DIAMOND'
 
-#Placeholders:
+#Message shown above spawners
+# {spawner} {spawner-color} {time} {tier}
+Spawner-Title:
+  - '{tier}'
+  - '{spawner-color}{spawner}'
+  - '&eSpawning in &c{time} &eseconds!'
 
+#PAPI Placeholder:
 # {next-tier} {time}
 Next-Tier-Placeholder: '{next-tier} in &a{time}'
-
 
 ############### BED BREAK ###############
 
@@ -72,6 +95,9 @@ Auto-Destroy-Message:
   - ''
   - '&c&lALL BEDS HAVE BEEN DESTROYED'
   - ''
+
+# https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
+Bed-Destroy-Sound: 'ENTITY_ENDER_DRAGON_GROWL'
 
 #Title displayed to a player when his bed gets destroyed
 #This replaces MBedwars' message, and only gets sent to the player with no bed
