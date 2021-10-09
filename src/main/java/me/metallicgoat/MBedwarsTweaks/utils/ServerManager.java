@@ -10,7 +10,7 @@ import me.metallicgoat.MBedwarsTweaks.tweaks.explotions.AutoIgnite;
 import me.metallicgoat.MBedwarsTweaks.tweaks.explotions.FireballWhitelist;
 import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.GenTiers;
 import me.metallicgoat.MBedwarsTweaks.tweaks.messages.BuyMessage;
-import me.metallicgoat.MBedwarsTweaks.tweaks.FriendlyVillagers;
+import me.metallicgoat.MBedwarsTweaks.tweaks.misc.FriendlyVillagers;
 import me.metallicgoat.MBedwarsTweaks.utils.configupdater.ConfigUpdater;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -59,7 +59,7 @@ public class ServerManager {
         manager.registerEvents(new FinalKill(), plugin());
         manager.registerEvents(new TopKillers(), plugin());
 
-        //manager.registerEvents(new DowngradeTools(), plugin());
+        manager.registerEvents(new PermanentEffects(), plugin());
     }
 
 

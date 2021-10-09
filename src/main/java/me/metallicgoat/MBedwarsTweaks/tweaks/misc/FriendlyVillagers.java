@@ -1,7 +1,6 @@
-package me.metallicgoat.MBedwarsTweaks.tweaks;
+package me.metallicgoat.MBedwarsTweaks.tweaks.misc;
 
 import de.marcely.bedwars.api.BedwarsAPI;
-import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.world.hologram.HologramEntity;
@@ -49,11 +48,13 @@ public class FriendlyVillagers implements Listener {
 
     private void startLooking(){
 
+        //For each active world
         task = Bukkit.getScheduler().runTaskTimer(plugin(), () -> worlds.forEach(world -> {
 
+            //Get all villagers in the world
             Collection<HologramEntity> entity = BedwarsAPI.getWorldStorage(world).getHolograms();
 
-
+            //For each villager
             entity.forEach(hologramEntity -> {
                 //Get players in range of villager
                 Collection<Player> players = Arrays.asList(hologramEntity.getSeeingPlayers());
@@ -66,10 +67,10 @@ public class FriendlyVillagers implements Listener {
                     //Final location
                     Location moveTo = hologramEntity.getLocation().setDirection(lookAt.getLocation().subtract(hologramEntity.getLocation()).toVector());
 
-                    //Smooth Look
+                    //Smooth Look (Interpolation)
                     float currentYaw = hologramEntity.getLocation().getYaw();
                     float targetYaw = moveTo.getYaw();
-                    float newYaw = currentYaw + (targetYaw - currentYaw)/2;
+                    float newYaw = currentYaw + (targetYaw - currentYaw)/4;
 
                     //Actually move villager
                     Location location = new Location(moveTo.getWorld(), moveTo.getX(), moveTo.getY(), moveTo.getZ(), newYaw, moveTo.getPitch());

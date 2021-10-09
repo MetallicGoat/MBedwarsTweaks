@@ -1,7 +1,6 @@
 package me.metallicgoat.MBedwarsTweaks;
 
 import de.marcely.bedwars.api.BedwarsAPI;
-import me.metallicgoat.MBedwarsTweaks.tweaks.FriendlyVillagers;
 import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.GenTiers;
 import me.metallicgoat.MBedwarsTweaks.utils.Metrics;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;

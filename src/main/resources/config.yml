@@ -148,3 +148,9 @@ Break-Invis:
     - ENTITY_ATTACK
     - BLOCK_EXPLOSION
     - ENTITY_EXPLOSION
+
+############### Permanent Potion Effects ###############
+
+#ArenaName:PotionEffectName
+Permanent-Effects:
+  - 'Ruins:NIGHT_VISION'
