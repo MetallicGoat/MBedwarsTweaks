@@ -1,7 +1,6 @@
 package me.metallicgoat.MBedwarsTweaks.utils;
 
 import me.metallicgoat.MBedwarsTweaks.Main;
-import me.metallicgoat.MBedwarsTweaks.tweaks.advancedswords.DowngradeTools;
 import me.metallicgoat.MBedwarsTweaks.tweaks.messages.FinalKill;
 import me.metallicgoat.MBedwarsTweaks.tweaks.misc.*;
 import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.ScheduleBedBreak;
@@ -11,6 +10,7 @@ import me.metallicgoat.MBedwarsTweaks.tweaks.explotions.AutoIgnite;
 import me.metallicgoat.MBedwarsTweaks.tweaks.explotions.FireballWhitelist;
 import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.GenTiers;
 import me.metallicgoat.MBedwarsTweaks.tweaks.messages.BuyMessage;
+import me.metallicgoat.MBedwarsTweaks.tweaks.FriendlyVillagers;
 import me.metallicgoat.MBedwarsTweaks.utils.configupdater.ConfigUpdater;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -51,7 +51,7 @@ public class ServerManager {
         manager.registerEvents(new WaterFlow(), plugin());
         manager.registerEvents(new HeightCap(), plugin());
 
-        //manager.registerEvents(new test(), plugin());
+        manager.registerEvents(new FriendlyVillagers(), plugin());
 
         manager.registerEvents(new UnusedGens(), plugin());
         manager.registerEvents(new ScheduleBedBreak(), plugin());
