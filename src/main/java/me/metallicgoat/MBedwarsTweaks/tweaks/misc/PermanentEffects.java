@@ -30,16 +30,26 @@ public class PermanentEffects implements Listener {
 
         for(String arenaPotion:ServerManager.getConfig().getStringList("Permanent-Effects")){
             String[] arenaPotionSplit = arenaPotion.split(":");
-            if(arenaName.equalsIgnoreCase(arenaPotionSplit[0])){
+            if(arenaName.equalsIgnoreCase(arenaPotionSplit[0]) || arenaPotionSplit[0].equalsIgnoreCase("ALL-ARENAS")){
                 Optional<XPotion> potion = XPotion.matchXPotion(arenaPotionSplit[1]);
+
+                int amplifier = tryParseInt(arenaPotionSplit[2]);
 
                 if(potion.isPresent() && potion.get().parsePotionEffectType() != null) {
                     PotionEffectType potionEffectType = potion.get().parsePotionEffectType();
                     if(potionEffectType != null) {
-                        player.addPotionEffect((new PotionEffect(potionEffectType, Integer.MAX_VALUE, 10)));
+                        player.addPotionEffect((new PotionEffect(potionEffectType, Integer.MAX_VALUE, amplifier)));
                     }
                 }
             }
+        }
+    }
+
+    public int tryParseInt(String value) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return 1;
         }
     }
 }

@@ -48,7 +48,7 @@ public class FriendlyVillagers implements Listener {
 
     private void startLooking(){
 
-        //For each active world
+        //For each active world (Every Tick)
         task = Bukkit.getScheduler().runTaskTimer(plugin(), () -> worlds.forEach(world -> {
 
             //Get all villagers in the world

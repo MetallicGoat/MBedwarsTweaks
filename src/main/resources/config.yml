@@ -151,6 +151,7 @@ Break-Invis:
 
 ############### Permanent Potion Effects ###############
 
-#ArenaName:PotionEffectName
+#ArenaName:PotionEffectName:amplifier
+#All arenas = ALL-ARENAS
 Permanent-Effects:
   - 'Ruins:NIGHT_VISION'
