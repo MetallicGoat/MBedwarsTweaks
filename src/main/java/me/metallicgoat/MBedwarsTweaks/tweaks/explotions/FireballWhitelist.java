@@ -16,8 +16,10 @@ public class FireballWhitelist implements Listener {
     public void onEntityExplode(EntityExplodeEvent e) {
         if (e.isCancelled())
             return;
+        //Check if explosion is a fireball
         if (e.getEntityType() == EntityType.FIREBALL && ServerManager.getConfig().getBoolean("FireballWhitelist.Enabled")) {
             List<Block> blockListCopy = new ArrayList<>(e.blockList());
+            //Prevent blocks in config from being destroyed
             for (Block block : blockListCopy) {
                 if (ServerManager.getConfig().getStringList("FireballWhitelist.Blocks").contains(block.getType().name()))
                     e.blockList().remove(block);

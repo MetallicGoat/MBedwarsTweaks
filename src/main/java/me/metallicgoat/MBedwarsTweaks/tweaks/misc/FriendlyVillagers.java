@@ -77,8 +77,8 @@ public class FriendlyVillagers implements Listener {
                     float newYaw = currentYaw + (targetYaw - currentYaw)/4;
 
                     //Actually move villager
-                    Location location = new Location(moveTo.getWorld(), moveTo.getX(), moveTo.getY(), moveTo.getZ(), newYaw, moveTo.getPitch());
-                    hologramEntity.teleport(location);
+                    moveTo.setYaw(newYaw);
+                    hologramEntity.teleport(moveTo);
                 }
             });
         }), 0L, 1);

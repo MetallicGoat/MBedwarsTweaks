@@ -18,9 +18,8 @@ public class WaterFlow implements Listener {
         Collection<Arena> toArena = BedwarsAPI.getGameAPI().getArenaByLocation(e.getToBlock().getLocation());
         Collection<Arena> fromArena = BedwarsAPI.getGameAPI().getArenaByLocation(e.getBlock().getLocation());
 
-        assert toArena != null;
-        assert fromArena != null;
-        if(ServerManager.getConfig().getBoolean("Prevent-Liquid-Build-Up")) {
+        if(toArena != null && fromArena != null &&
+                ServerManager.getConfig().getBoolean("Prevent-Liquid-Build-Up")) {
             if (toArena.isEmpty() && !fromArena.isEmpty()) {
                 e.setCancelled(true);
             }
@@ -33,8 +32,7 @@ public class WaterFlow implements Listener {
         Arena a = BedwarsAPI.getGameAPI().getArenaByPlayer(p);
         if(a != null){
             Collection<Arena> placed = BedwarsAPI.getGameAPI().getArenaByLocation(e.getBlockClicked().getRelative(e.getBlockFace()).getLocation());
-            assert placed != null;
-            if(placed.isEmpty()){
+            if(placed != null && placed.isEmpty()){
                 e.setCancelled(true);
             }
         }
