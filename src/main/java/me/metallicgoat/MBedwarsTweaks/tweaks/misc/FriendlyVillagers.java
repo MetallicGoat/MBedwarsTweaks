@@ -62,15 +62,14 @@ public class FriendlyVillagers implements Listener {
             //For each villager
             entity.forEach(hologramEntity -> {
                 //Get players in range of villager
-                Collection<Player> players = Arrays.asList(hologramEntity.getSeeingPlayers());
+                Player[] playersArray = hologramEntity.getSeeingPlayers();
 
-                if(!players.isEmpty()){
-
+                if(playersArray.length > 0){
                     //Get the closest player
-                    Player lookAt = Collections.min(players, Comparator.comparingDouble(p -> p.getLocation().distanceSquared(hologramEntity.getLocation())));
+                    Player lookAtPlayer = Arrays.stream(playersArray).min(Comparator.comparingDouble(p -> p.getLocation().distanceSquared(hologramEntity.getLocation()))).get();
 
                     //Final location
-                    Location moveTo = hologramEntity.getLocation().setDirection(lookAt.getLocation().subtract(hologramEntity.getLocation()).toVector());
+                    Location moveTo = hologramEntity.getLocation().setDirection(lookAtPlayer.getLocation().subtract(hologramEntity.getLocation()).toVector());
 
                     //Smooth Look (Interpolation)
                     float currentYaw = hologramEntity.getLocation().getYaw();
@@ -80,8 +79,6 @@ public class FriendlyVillagers implements Listener {
                     //Actually move villager
                     Location location = new Location(moveTo.getWorld(), moveTo.getX(), moveTo.getY(), moveTo.getZ(), newYaw, moveTo.getPitch());
                     hologramEntity.teleport(location);
-
-
                 }
             });
         }), 0L, 1);
