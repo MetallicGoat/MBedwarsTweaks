@@ -5,6 +5,7 @@ import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.world.hologram.HologramEntity;
 import me.metallicgoat.MBedwarsTweaks.Main;
+import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -23,25 +24,29 @@ public class FriendlyVillagers implements Listener {
 
     @EventHandler
     public void onRoundStart(RoundStartEvent e){
-        World world = e.getArena().getGameWorld();
-        if(world != null && !worlds.contains(world)){
-            worlds.add(world);
-        }
-        if(!isRunning && !worlds.isEmpty()){
-            startLooking();
-            isRunning = true;
+        if(ServerManager.getConfig().getBoolean("Friendly-Villagers")) {
+            World world = e.getArena().getGameWorld();
+            if (world != null && !worlds.contains(world)) {
+                worlds.add(world);
+            }
+            if (!isRunning && !worlds.isEmpty()) {
+                startLooking();
+                isRunning = true;
+            }
         }
     }
 
     @EventHandler
     public void onRoundEnd(RoundEndEvent e){
-        World world = e.getArena().getGameWorld();
-        if(world != null){
-            worlds.remove(world);
-        }
-        if (worlds.isEmpty()) {
-            task.cancel();
-            isRunning = false;
+        if(ServerManager.getConfig().getBoolean("Friendly-Villagers")) {
+            World world = e.getArena().getGameWorld();
+            if (world != null) {
+                worlds.remove(world);
+            }
+            if (worlds.isEmpty()) {
+                task.cancel();
+                isRunning = false;
+            }
         }
     }
 

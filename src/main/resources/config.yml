@@ -155,3 +155,9 @@ Break-Invis:
 #All arenas = ALL-ARENAS
 Permanent-Effects:
   - 'Ruins:NIGHT_VISION'
+
+############### Friendly Villagers ###############
+
+#If this is enabled, MBedwars dealers/upgrade-dealers
+#will look at the closest players
+Friendly-Villagers: true
