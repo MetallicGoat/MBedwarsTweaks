@@ -114,12 +114,14 @@ public class GenTiers implements Listener {
                     }
                 });
             }
+        }, 0L, 20L);
+        scheduler.runTaskTimer(plugin(),() -> {
             BedwarsAPI.getGameAPI().getArenas().forEach(arena -> {
                 if(arena.getStatus() == ArenaStatus.RUNNING){
                     arena.updateScoreboard();
                 }
             });
-        }, 0L, 20L);
+        }, 0L, 100L);
     }
 
     private String getItemType(Spawner s){

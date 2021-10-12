@@ -112,10 +112,10 @@ public class TopKillers implements Listener {
                     }
 
                     complete = s
-                            .replace("%Winner-Members%", event.getWinners().stream().map(Player::getName).collect(Collectors.joining(", ")))
-                            .replace("%Winner-Members-Colored%", event.getWinnerTeam().getChatColor()+event.getWinners().stream().map(Player::getName).collect(Collectors.joining(ChatColor.WHITE+", "+event.getWinnerTeam().getChatColor())))
-                            .replace("%Winner-Team-Name%", event.getWinnerTeam().getDisplayName())
-                            .replace("%Winner-Team-Color%", event.getWinnerTeam().getChatColor().toString())
+                            .replace("%Winner-Members%", !event.getWinners().isEmpty() ? event.getWinners().stream().map(Player::getName).collect(Collectors.joining(", ")) : "")
+                            .replace("%Winner-Members-Colored%", !event.getWinners().isEmpty() ? event.getWinnerTeam().getChatColor()+event.getWinners().stream().map(Player::getName).collect(Collectors.joining(ChatColor.WHITE+", "+event.getWinnerTeam().getChatColor())) : "")
+                            .replace("%Winner-Team-Name%", !event.getWinners().isEmpty() ? event.getWinnerTeam().getDisplayName() : "")
+                            .replace("%Winner-Team-Color%", !event.getWinners().isEmpty() ? event.getWinnerTeam().getChatColor().toString() : "")
                             .replace("%Killer-1-Name%", firstKiller)
                             .replace("%Killer-2-Name%", secondKiller)
                             .replace("%Killer-3-Name%", thirdKiller)

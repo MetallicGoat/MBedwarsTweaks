@@ -161,3 +161,12 @@ Permanent-Effects:
 #If this is enabled, MBedwars dealers/upgrade-dealers
 #will look at the closest players
 Friendly-Villagers: true
+
+############### Shorten-Countdown ###############
+
+#Shortens lobby time to a specified value
+#if arena filled over a certain percent
+Shorten-Countdown:
+  Enabled: false
+  Minimum-Percent-Filled: 80
+  Shorten-Time-To: 10
