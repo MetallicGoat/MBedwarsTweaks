@@ -24,7 +24,7 @@ Degraded-BuyGroups:
 
 ############### FINAL KILL ###############
 
-#Adds FINAL KILL to the end of a message if the kill is Final
+#Adds FINAL KILL to the end of a message if the kill is final
 Final-Kill-Message: false
 
 #Players get a lightning blot at their location of death if it is a final kill
@@ -59,7 +59,7 @@ Disable-Unused-Gens:
     - 'IRON_INGOT'
     - 'GOLD_INGOT'
 
-############### GEN TIERS ###############
+############### GEN TIERS [BETA] ###############
 
 #Teirs can be configured in the gen-tiers.yml
 Gen-Tiers-Enabled: false
@@ -120,7 +120,7 @@ TNT:
 Empty-Buckets: true
 Empty-Potions: true
 
-############### TOP KILLER MESSAGE ###############
+############### TOP KILLER MESSAGE [BETA] ###############
 Top-Killer-Message-Enabled: true
 
 #No Top killers FinalKill
@@ -153,20 +153,22 @@ Break-Invis:
     - BLOCK_EXPLOSION
     - ENTITY_EXPLOSION
 
-############### Permanent Potion Effects ###############
+############### Permanent Potion Effects [BETA] ###############
 
 #ArenaName:PotionEffectName:amplifier
+#Default amplifier is 1
 #All arenas = ALL-ARENAS
 Permanent-Effects:
   - 'Ruins:NIGHT_VISION'
 
-############### Friendly Villagers ###############
+############### Friendly Villagers [BETA] ###############
 
 #If this is enabled, MBedwars dealers/upgrade-dealers
 #will look at the closest players
-Friendly-Villagers: true
+#WARNING: Villagers positions may not reset to normal
+Friendly-Villagers: false
 
-############### Shorten-Countdown ###############
+############### Shorten-Countdown [BETA] ###############
 
 #Shortens lobby time to a specified value
 #if arena filled over a certain percent
