@@ -60,6 +60,7 @@ public class ServerManager {
         manager.registerEvents(new TopKillers(), plugin());
 
         manager.registerEvents(new PermanentEffects(), plugin());
+        manager.registerEvents(new ShortenCountdown(), plugin());
     }
 
 
