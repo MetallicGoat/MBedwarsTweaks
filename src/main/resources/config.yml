@@ -64,6 +64,10 @@ Disable-Unused-Gens:
 #Teirs can be configured in the gen-tiers.yml
 Gen-Tiers-Enabled: false
 
+#If set to true, the papi placeholders on the
+#Scoreboard will update every 5 seconds
+Scoreboard-Updating: false
+
 #Adds 'Tier I' to spawners listed
 Tier-One-Titles:
   Tier-Name: '&eTier &cI'

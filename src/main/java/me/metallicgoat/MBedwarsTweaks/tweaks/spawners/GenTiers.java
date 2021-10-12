@@ -107,21 +107,19 @@ public class GenTiers implements Listener {
     public static void startUpdatingTime(){
         BukkitScheduler scheduler = plugin().getServer().getScheduler();
         scheduler.runTaskTimer(plugin(),() -> {
-            if(!timeToNextUpdate.isEmpty()){
-                timeToNextUpdate.forEach((arena, integer) -> {
-                    if(arena.getStatus() == ArenaStatus.RUNNING){
-                        timeToNextUpdate.replace(arena, integer, integer - 20);
-                    }
-                });
+            if(ServerManager.getConfig().getBoolean("Scoreboard-Updating")) {
+                if (!timeToNextUpdate.isEmpty()) {
+                    timeToNextUpdate.forEach((arena, integer) -> {
+                        if (arena.getStatus() == ArenaStatus.RUNNING) {
+                            timeToNextUpdate.replace(arena, integer, integer - 20);
+                            if (((integer - 20) / 20) % 5 == 0) {
+                                arena.updateScoreboard();
+                            }
+                        }
+                    });
+                }
             }
         }, 0L, 20L);
-        scheduler.runTaskTimer(plugin(),() -> {
-            BedwarsAPI.getGameAPI().getArenas().forEach(arena -> {
-                if(arena.getStatus() == ArenaStatus.RUNNING){
-                    arena.updateScoreboard();
-                }
-            });
-        }, 0L, 100L);
     }
 
     private String getItemType(Spawner s){
