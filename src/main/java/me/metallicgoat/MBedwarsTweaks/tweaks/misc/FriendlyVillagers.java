@@ -38,14 +38,15 @@ public class FriendlyVillagers implements Listener {
 
     @EventHandler
     public void onRoundEnd(RoundEndEvent e){
-        if(ServerManager.getConfig().getBoolean("Friendly-Villagers")) {
-            World world = e.getArena().getGameWorld();
-            if (world != null) {
+        World world = e.getArena().getGameWorld();
+        if(world != null) {
+            BedwarsAPI.getWorldStorage(world).getHolograms().forEach(hologramEntity -> hologramEntity.teleport(hologramEntity.getSpawnLocation()));
+            if (ServerManager.getConfig().getBoolean("Friendly-Villagers")) {
                 worlds.remove(world);
-            }
-            if (worlds.isEmpty()) {
-                task.cancel();
-                isRunning = false;
+                if (worlds.isEmpty()) {
+                    task.cancel();
+                    isRunning = false;
+                }
             }
         }
     }

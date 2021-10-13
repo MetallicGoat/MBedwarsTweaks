@@ -22,9 +22,10 @@ Degraded-BuyGroups:
   Names:
     - 'pickaxe'
 
-############### FINAL KILL ###############
+############### FINAL KILL [BETA] ###############
 
 #Adds FINAL KILL to the end of a message if the kill is final
+#WARNING: May cause an error. We are looking into a fix, please report any errors in our discord
 Final-Kill-Message: false
 
 #Players get a lightning blot at their location of death if it is a final kill
@@ -165,7 +166,6 @@ Permanent-Effects:
 
 #If this is enabled, MBedwars dealers/upgrade-dealers
 #will look at the closest players
-#WARNING: Villagers positions may not reset to normal
 Friendly-Villagers: false
 
 ############### Shorten-Countdown [BETA] ###############
