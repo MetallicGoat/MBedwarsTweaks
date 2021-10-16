@@ -15,7 +15,7 @@ Height-Cap:
   Arenas:
     - ''
 
-############### DEGRADED BUY-GROUPS ###############
+############### DEGRADED BUY-GROUPS [COMING SOON] ###############
 
 Degraded-BuyGroups:
   Enabled: true
@@ -83,7 +83,7 @@ Spawner-Title:
   - '{spawner-color}{spawner}'
   - '&eSpawning in &c{time} &eseconds!'
 
-#PAPI Placeholder:
+#PAPI Placeholder: %tweaks_next-tier%
 # {next-tier} {time}
 Next-Tier-Placeholder: '{next-tier} in &a{time}'
 
@@ -109,6 +109,17 @@ Bed-Destroy-Sound: 'ENTITY_ENDER_DRAGON_GROWL'
 Notification:
   Big-Title: '&cBED DESTROYED'
   Small-Title: '&fYou will no longer respawn!'
+
+############### TEAM ELIMINATE ###############
+
+Team-Eliminate-Message-Enabled: true
+
+#Message displayed when any team is eliminated (to everyone in the arena)
+Team-Eliminate-Message:
+  - ''
+  - '&f&lTEAM ELIMINATED > {team-color}{team-name} Team &chas been eliminated!'
+  - ''
+
 
 ############### TNT AUTO IGNITE ###############
 

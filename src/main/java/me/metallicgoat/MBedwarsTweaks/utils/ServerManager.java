@@ -2,6 +2,7 @@ package me.metallicgoat.MBedwarsTweaks.utils;
 
 import me.metallicgoat.MBedwarsTweaks.Main;
 import me.metallicgoat.MBedwarsTweaks.tweaks.messages.FinalKill;
+import me.metallicgoat.MBedwarsTweaks.tweaks.messages.TeamEliminate;
 import me.metallicgoat.MBedwarsTweaks.tweaks.misc.*;
 import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.ScheduleBedBreak;
 import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.UnusedGens;
@@ -50,6 +51,7 @@ public class ServerManager {
         manager.registerEvents(new GenTiers(), plugin());
         manager.registerEvents(new WaterFlow(), plugin());
         manager.registerEvents(new HeightCap(), plugin());
+        manager.registerEvents(new TeamEliminate(), plugin());
 
         manager.registerEvents(new FriendlyVillagers(), plugin());
 
