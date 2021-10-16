@@ -11,6 +11,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
+
 public class UnusedGens implements Listener {
 
     @EventHandler
@@ -38,8 +40,9 @@ public class UnusedGens implements Listener {
     }
 
     private boolean isDisableType(Spawner spawner){
+        List<String> genTypes = ServerManager.getConfig().getStringList("Disable-Unused-Gens.Gen-Types");
         for(ItemStack itemStack:spawner.getDropType().getDroppingMaterials()){
-            if(ServerManager.getConfig().getStringList("Disable-Unused-Gens.Gen-Types").contains(itemStack.getType().name())){
+            if(genTypes.contains(itemStack.getType().name())){
                 return true;
             }
         }

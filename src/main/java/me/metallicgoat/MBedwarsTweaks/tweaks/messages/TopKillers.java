@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 
 public class TopKillers implements Listener {
 
+    //TODO: Rewrite
+
     private final HashMap<Arena, Collection<Player>> playerArenaHashMap = new HashMap<>();
     private final HashMap<Player, Integer> scoreHashMap = new HashMap<>();
 

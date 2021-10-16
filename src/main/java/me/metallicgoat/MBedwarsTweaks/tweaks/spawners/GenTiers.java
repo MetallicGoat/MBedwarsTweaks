@@ -19,6 +19,8 @@ import java.util.*;
 
 public class GenTiers implements Listener {
 
+    //TODO: Rewrite
+
     public static HashMap<Arena, String> nextTierMap = new HashMap<>();
     public static HashMap<Arena, Long> timeToNextUpdate = new HashMap<>();
 
