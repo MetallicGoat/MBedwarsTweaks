@@ -1,10 +1,17 @@
 package me.metallicgoat.MBedwarsTweaks.tweaks.advancedswords;
 
+import de.marcely.bedwars.api.game.shop.ShopItem;
+import de.marcely.bedwars.api.game.shop.product.ItemShopProduct;
+import de.marcely.bedwars.api.game.shop.product.ShopProduct;
+import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
+import org.bukkit.ChatColor;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ToolSwordHelper {
+
     public static int getSwordLevel(String tool){
         if(tool.contains("WOOD")){
             return 1;
@@ -21,6 +28,32 @@ public class ToolSwordHelper {
         }else{
             return 0;
         }
+    }
+
+    public static boolean doesShopProductContain(ShopItem shopItem, String material){
+        for (ShopProduct rawProduct : shopItem.getProducts()) {
+            if (rawProduct instanceof ItemShopProduct) {
+                final ItemStack[] is = ((ItemShopProduct) rawProduct).getItemStacks();
+                for (ItemStack item : is) {
+                    if (item.getType().name().contains(material) &&
+                            isNotToIgnore(ChatColor.stripColor(shopItem.getDisplayName()))) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean isNotToIgnore(String name){
+        AtomicBoolean isNotToIgnore = new AtomicBoolean(true);
+        ServerManager.getSwordsToolsConfig().getStringList("Do-Not-Effect").forEach(s -> {
+            String formatted = ChatColor.translateAlternateColorCodes('&', s);
+            if(formatted.equals(name) && !s.equals("")){
+                isNotToIgnore.set(false);
+            }
+        });
+        return isNotToIgnore.get();
     }
 
     public static boolean doesInventoryContain(PlayerInventory playerInventory, String material){

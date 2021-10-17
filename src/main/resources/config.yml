@@ -65,6 +65,9 @@ Disable-Unused-Gens:
 #Teirs can be configured in the gen-tiers.yml
 Gen-Tiers-Enabled: false
 
+#Override MBedwars Holo's
+Gen-Tiers-Holos-Enabled: true
+
 #If set to true, the papi placeholders on the
 #Scoreboard will update every 5 seconds
 Scoreboard-Updating: false

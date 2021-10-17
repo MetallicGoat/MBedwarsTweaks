@@ -1,9 +1,11 @@
 package me.metallicgoat.MBedwarsTweaks.tweaks.spawners;
 
 import de.marcely.bedwars.api.BedwarsAPI;
+import de.marcely.bedwars.api.arena.AddPlayerIssue;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
+import de.marcely.bedwars.api.event.player.PlayerJoinArenaEvent;
 import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.api.game.spawner.SpawnerDurationModifier;
 import de.marcely.bedwars.api.message.Message;
@@ -33,11 +35,13 @@ public class GenTiers implements Listener {
         if(enabled && sect != null) {
             List<String> tierOneSpawners = ServerManager.getConfig().getStringList("Tier-One-Titles.Spawners");
             String tierLevel = ServerManager.getConfig().getString("Tier-One-Titles.Tier-Name");
-            arena.getSpawners().forEach(spawner -> {
-                if(tierOneSpawners.contains(getItemType(spawner))) {
-                    spawner.setOverridingHologramLines(formatHoloTiles(tierLevel, spawner).toArray(new String[0]));
-                }
-            });
+            if (ServerManager.getConfig().getBoolean("Gen-Tiers-Holos-Enabled")) {
+                arena.getSpawners().forEach(spawner -> {
+                    if (tierOneSpawners.contains(getItemType(spawner))) {
+                        spawner.setOverridingHologramLines(formatHoloTiles(tierLevel, spawner).toArray(new String[0]));
+                    }
+                });
+            }
             scheduleTier(arena, 0);
         }
     }
@@ -92,8 +96,9 @@ public class GenTiers implements Listener {
 
                             for (Spawner s : arena.getSpawners()) {
                                 if (getItemType(s).equalsIgnoreCase(spawnerType)) {
-                                    s.addDropDurationModifier("GEN_TIER_UPDATE", plugin(), SpawnerDurationModifier.Operation.SET, speed);
-
+                                    if (ServerManager.getConfig().getBoolean("Gen-Tiers-Holos-Enabled")) {
+                                        s.addDropDurationModifier("GEN_TIER_UPDATE", plugin(), SpawnerDurationModifier.Operation.SET, speed);
+                                    }
                                     s.setOverridingHologramLines(formatHoloTiles(tierLevel, s).toArray(new String[0]));
                                 }
                             }

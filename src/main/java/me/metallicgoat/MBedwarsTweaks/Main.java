@@ -31,14 +31,8 @@ public class Main extends JavaPlugin {
 
         BedwarsAPI.onReady(() -> {
             GenTiers.startUpdatingTime();
-            //FriendlyVillagers.startLooking();
-
             new Placeholders().register();
         });
-
-
-
-
     }
 
     public static Main getInstance() {

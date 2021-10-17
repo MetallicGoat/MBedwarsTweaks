@@ -20,6 +20,12 @@ public class DowngradeTools implements Listener {
     private final HashMap<Arena, Collection<Player>> playerArenaHashMap = new HashMap<>();
     private final HashMap<Player, Integer> scoreHashMap = new HashMap<>();
 
+
+
+
+
+
+
     @EventHandler
     public void onGameStart(RoundStartEvent e){
         playerArenaHashMap.put(e.getArena(), e.getArena().getPlayers());

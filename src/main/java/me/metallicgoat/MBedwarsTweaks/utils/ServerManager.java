@@ -26,6 +26,8 @@ public class ServerManager {
 
     private static FileConfiguration tiersConfig;
 
+    private static FileConfiguration swordsToolsConfig;
+
     public static FileConfiguration getConfig(){
         return plugin().getConfig();
     }
@@ -34,9 +36,14 @@ public class ServerManager {
         return tiersConfig;
     }
 
+    public static FileConfiguration getSwordsToolsConfig(){
+        return swordsToolsConfig;
+    }
+
     public static void loadConfigs() {
         loadDefaultConfig();
         loadTiersConfig();
+        loadSwordsToolsConfig();
     }
 
     public static void registerEvents(){
@@ -97,6 +104,28 @@ public class ServerManager {
         tiersConfig = new YamlConfiguration();
         try {
             tiersConfig.load(configFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void loadSwordsToolsConfig(){
+        String ymlName = "swords-tools.yml";
+
+        File configFile = new File(plugin().getDataFolder(), ymlName);
+        if (!configFile.exists()) {
+            plugin().saveResource(ymlName, false);
+        }
+
+        try {
+            ConfigUpdater.update(plugin(), ymlName, configFile, Collections.singletonList("Nothing"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        swordsToolsConfig = new YamlConfiguration();
+        try {
+            swordsToolsConfig.load(configFile);
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
