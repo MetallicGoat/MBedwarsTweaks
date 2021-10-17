@@ -15,13 +15,6 @@ Height-Cap:
   Arenas:
     - ''
 
-############### DEGRADED BUY-GROUPS [COMING SOON] ###############
-
-Degraded-BuyGroups:
-  Enabled: true
-  Names:
-    - 'pickaxe'
-
 ############### FINAL KILL [BETA] ###############
 
 #Adds FINAL KILL to the end of a message if the kill is final

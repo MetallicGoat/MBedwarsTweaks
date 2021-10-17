@@ -5,6 +5,7 @@ import de.marcely.bedwars.api.game.shop.product.ItemShopProduct;
 import de.marcely.bedwars.api.game.shop.product.ShopProduct;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -12,21 +13,37 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ToolSwordHelper {
 
-    public static int getSwordLevel(String tool){
-        if(tool.contains("WOOD")){
+    public static int getSwordToolLevel(Material tool){
+
+        String toolName = tool.name();
+
+        if(toolName.contains("WOOD")){
             return 1;
-        }else if(tool.contains("STONE")){
+        }else if(toolName.contains("STONE")){
             return 2;
-        }else if(tool.contains("IRON")){
+        }else if(toolName.contains("IRON")){
             return 3;
-        }else if(tool.contains("GOLD")){
+        }else if(toolName.contains("GOLD")){
             return 4;
-        }else if(tool.contains("DIAMOND")){
+        }else if(toolName.contains("DIAMOND")){
             return 5;
-        }else if(tool.contains("NETHERITE")){
+        }else if(toolName.contains("NETHERITE")){
             return 6;
         }else{
             return 0;
+        }
+    }
+
+    public static String getMaterialFromLevel(int level){
+
+        switch (level){
+            case 1: return "WOOD";
+            case 2: return "STONE";
+            case 3: return "IRON";
+            case 4: return "GOLD";
+            case 5: return "DIAMOND";
+            case 6: return "NETHERITE";
+            default: return "AIR";
         }
     }
 
@@ -43,6 +60,21 @@ public class ToolSwordHelper {
             }
         }
         return false;
+    }
+
+    public static Material getToolInShopProduct(ShopItem shopItem){
+        for (ShopProduct rawProduct : shopItem.getProducts()) {
+            if (rawProduct instanceof ItemShopProduct) {
+                final ItemStack[] is = ((ItemShopProduct) rawProduct).getItemStacks();
+                for (ItemStack item : is) {
+                    if (item.getType().name().contains("AXE") &&
+                            isNotToIgnore(ChatColor.stripColor(shopItem.getDisplayName()))) {
+                        return item.getType();
+                    }
+                }
+            }
+        }
+        return Material.AIR;
     }
 
     public static boolean isNotToIgnore(String name){
