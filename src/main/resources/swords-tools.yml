@@ -47,7 +47,6 @@ Ordered-Sword-Buy:
   Enabled: false
   Problem: 'You already have the same, or higher tier'
 
-
 #Advanced-Tool-Replacement must be true
 #When you die with a tool, you will get one tier lower when you respawn
 Degraded-Tool-BuyGroups:
@@ -63,6 +62,9 @@ Degraded-Tool-BuyGroups:
     - 'IRON'
     - 'DIAMOND'
 
+#If you add your sword to a chest, and have no other sword
+#You will be given a wooden sword
+Always-Sword: true
 
 #Players will always have a sword if this is enabled
 #Gives you a Wooden Sword if no sword is detected
@@ -73,7 +75,9 @@ Advanced-Sword-Drop:
     - 'IRON_SWORD'
     - 'DIAMOND_SWORD'
 
-#Removes a Wooden-Sword if you buy a better sword#If 'all-type' is set to TRUE, ALL sword types will get replaced.
+#Removes a Wooden-Sword if you buy a better sword
+#If 'all-type' is set to TRUE, ALL sword types will get replaced.
+#Otherwise, only wooden swords will get replaced (Like Hypixel)
 Replace-Sword-On-Buy:
   Enabled: true
   All-Type: false

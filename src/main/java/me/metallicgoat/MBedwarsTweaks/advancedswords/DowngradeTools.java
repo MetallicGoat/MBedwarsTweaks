@@ -1,4 +1,4 @@
-package me.metallicgoat.MBedwarsTweaks.tweaks.advancedswords;
+package me.metallicgoat.MBedwarsTweaks.advancedswords;
 
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.event.player.PlayerBuyInShopEvent;

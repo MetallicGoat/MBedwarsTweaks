@@ -1,7 +1,7 @@
 package me.metallicgoat.MBedwarsTweaks.utils;
 
 import me.metallicgoat.MBedwarsTweaks.Main;
-import me.metallicgoat.MBedwarsTweaks.tweaks.advancedswords.DowngradeTools;
+import me.metallicgoat.MBedwarsTweaks.advancedswords.*;
 import me.metallicgoat.MBedwarsTweaks.tweaks.messages.FinalKill;
 import me.metallicgoat.MBedwarsTweaks.tweaks.messages.TeamEliminate;
 import me.metallicgoat.MBedwarsTweaks.tweaks.misc.*;
@@ -49,29 +49,44 @@ public class ServerManager {
 
     public static void registerEvents(){
         PluginManager manager = plugin().getServer().getPluginManager();
-        manager.registerEvents(new EmptyBucket(), plugin());
-        manager.registerEvents(new EmptyPotion(), plugin());
-        manager.registerEvents(new BreakInvis(), plugin());
-        manager.registerEvents(new FinalStrike(), plugin());
-        manager.registerEvents(new BuyMessage(), plugin());
-        manager.registerEvents(new FireballWhitelist(), plugin());
+
+        //Tweaks - explosions
         manager.registerEvents(new AutoIgnite(), plugin());
-        manager.registerEvents(new GenTiers(), plugin());
-        manager.registerEvents(new WaterFlow(), plugin());
-        manager.registerEvents(new HeightCap(), plugin());
-        manager.registerEvents(new TeamEliminate(), plugin());
+        manager.registerEvents(new FireballWhitelist(), plugin());
 
-        manager.registerEvents(new FriendlyVillagers(), plugin());
-
-        manager.registerEvents(new UnusedGens(), plugin());
-        manager.registerEvents(new DowngradeTools(), plugin());
-        manager.registerEvents(new ScheduleBedBreak(), plugin());
-
+        //Tweaks - messages
+        manager.registerEvents(new BuyMessage(), plugin());
         manager.registerEvents(new FinalKill(), plugin());
+        manager.registerEvents(new TeamEliminate(), plugin());
         manager.registerEvents(new TopKillers(), plugin());
 
+        //Tweaks - misc
+        manager.registerEvents(new BreakInvis(), plugin());
+        manager.registerEvents(new EmptyBucket(), plugin());
+        manager.registerEvents(new EmptyPotion(), plugin());
+        manager.registerEvents(new FinalStrike(), plugin());
+        manager.registerEvents(new FriendlyVillagers(), plugin());
+        manager.registerEvents(new HeightCap(), plugin());
         manager.registerEvents(new PermanentEffects(), plugin());
         manager.registerEvents(new ShortenCountdown(), plugin());
+        manager.registerEvents(new WaterFlow(), plugin());
+
+        //Tweaks - spawners
+        manager.registerEvents(new GenTiers(), plugin());
+        manager.registerEvents(new ScheduleBedBreak(), plugin());
+        manager.registerEvents(new UnusedGens(), plugin());
+
+
+        //Advanced Swords
+        manager.registerEvents(new AlwaysSword(), plugin());
+        manager.registerEvents(new AntiChest(), plugin());
+        manager.registerEvents(new AntiDrop(), plugin());
+        manager.registerEvents(new DowngradeTools(), plugin());
+        manager.registerEvents(new OrderedSwordBuy(), plugin());
+        manager.registerEvents(new ReplaceSwordOnBuy(), plugin());
+        manager.registerEvents(new SwordDrop(), plugin());
+        manager.registerEvents(new ToolBuy(), plugin());
+
     }
 
 

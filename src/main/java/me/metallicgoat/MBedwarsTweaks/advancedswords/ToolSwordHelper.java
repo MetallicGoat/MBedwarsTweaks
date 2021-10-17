@@ -1,4 +1,4 @@
-package me.metallicgoat.MBedwarsTweaks.tweaks.advancedswords;
+package me.metallicgoat.MBedwarsTweaks.advancedswords;
 
 import de.marcely.bedwars.api.game.shop.ShopItem;
 import de.marcely.bedwars.api.game.shop.product.ItemShopProduct;
@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -35,7 +36,6 @@ public class ToolSwordHelper {
     }
 
     public static String getMaterialFromLevel(int level){
-
         switch (level){
             case 1: return "WOOD";
             case 2: return "STONE";
@@ -75,6 +75,19 @@ public class ToolSwordHelper {
             }
         }
         return Material.AIR;
+    }
+
+    public static boolean isNotToIgnore(ItemStack itemStack){
+        ItemMeta meta = itemStack.getItemMeta();
+        AtomicBoolean isNotToIgnore = new AtomicBoolean(true);
+        if(meta != null) {
+            ServerManager.getSwordsToolsConfig().getStringList("Do-Not-Effect").forEach(s -> {
+                if(s.equals(ChatColor.stripColor(meta.getDisplayName())) && !s.equals("")) {
+                    isNotToIgnore.set(false);
+                }
+            });
+        }
+        return isNotToIgnore.get();
     }
 
     public static boolean isNotToIgnore(String name){
