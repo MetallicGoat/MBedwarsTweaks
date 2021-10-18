@@ -1,6 +1,7 @@
 package me.metallicgoat.MBedwarsTweaks;
 
 import de.marcely.bedwars.api.BedwarsAPI;
+import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.message.Message;
@@ -62,7 +63,51 @@ public class Placeholders extends PlaceholderExpansion {
                 return "---";
             }
         }
+
+        //Player Count of All Arenas
+        if(params.equalsIgnoreCase("allplayers")) {
+            return getPlayerAmount();
+        }
+
+        //Player Count of All Arenas in Lobby
+        if(params.equalsIgnoreCase("players-lobby")) {
+            return getPlayerAmount(ArenaStatus.LOBBY);
+        }
+
+        //Player Count of All Arenas Running
+        if(params.equalsIgnoreCase("players-ingame")) {
+            return getPlayerAmount(ArenaStatus.RUNNING);
+        }
+
+        //Player Count of All Arenas in EndLobby
+        if(params.equalsIgnoreCase("players-endlobby")) {
+            return getPlayerAmount(ArenaStatus.END_LOBBY);
+        }
         return null;
+    }
+
+    private String getPlayerAmount(ArenaStatus status) {
+        int count = 0;
+
+        //Iterate through every arena
+        for (Arena arena : GameAPI.get().getArenas()) {
+            if(arena.getStatus() == status) {
+                count += (ServerManager.getConfig().getBoolean("Player-Count-Placeholder-Count-Spectators") ? arena.getPlayers().size() + arena.getSpectators().size() : arena.getPlayers().size());
+            }
+        }
+
+        return Integer.toString(count);
+    }
+
+    private String getPlayerAmount() {
+        int count = 0;
+
+        //Iterate through every arena
+        for (Arena arena : GameAPI.get().getArenas()) {
+            count += (ServerManager.getConfig().getBoolean("Player-Count-Placeholder-Count-Spectators") ? arena.getPlayers().size() + arena.getSpectators().size() : arena.getPlayers().size());
+        }
+
+        return Integer.toString(count);
     }
 
     private static Main plugin(){

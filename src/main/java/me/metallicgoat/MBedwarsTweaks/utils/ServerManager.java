@@ -44,7 +44,7 @@ public class ServerManager {
     public static void loadConfigs() {
         loadDefaultConfig();
         loadTiersConfig();
-        loadSwordsToolsConfig();
+        //loadSwordsToolsConfig();
     }
 
     public static void registerEvents(){
@@ -78,6 +78,7 @@ public class ServerManager {
 
 
         //Advanced Swords
+        /*
         manager.registerEvents(new AlwaysSword(), plugin());
         manager.registerEvents(new AntiChest(), plugin());
         manager.registerEvents(new AntiDrop(), plugin());
@@ -86,6 +87,7 @@ public class ServerManager {
         manager.registerEvents(new ReplaceSwordOnBuy(), plugin());
         manager.registerEvents(new SwordDrop(), plugin());
         manager.registerEvents(new ToolBuy(), plugin());
+         */
 
     }
 
