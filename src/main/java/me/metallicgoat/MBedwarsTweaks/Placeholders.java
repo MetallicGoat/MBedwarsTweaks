@@ -66,57 +66,49 @@ public class Placeholders extends PlaceholderExpansion {
 
         //Player Count of All Arenas
         if(params.equalsIgnoreCase("allplayers")) {
-            Integer count = 0;
-
-            //Iterate through every arena
-            for (Arena arena : GameAPI.get().getArenas()) {
-                count += arena.getPlayers().size();
-            }
-
-            return count.toString();
+            return getPlayerAmount();
         }
 
         //Player Count of All Arenas in Lobby
         if(params.equalsIgnoreCase("players-lobby")) {
-            Integer count = 0;
-
-            //Iterate through every arena
-            for (Arena arena : GameAPI.get().getArenas()) {
-                if(arena.getStatus().equals(ArenaStatus.LOBBY)) {
-                    count += arena.getPlayers().size();
-                }
-            }
-
-            return count.toString();
+            return getPlayerAmount(ArenaStatus.LOBBY);
         }
 
         //Player Count of All Arenas Running
         if(params.equalsIgnoreCase("players-ingame")) {
-            Integer count = 0;
-
-            //Iterate through every arena
-            for (Arena arena : GameAPI.get().getArenas()) {
-                if(arena.getStatus().equals(ArenaStatus.RUNNING)) {
-                    count += arena.getPlayers().size();
-                }
-            }
-            return count.toString();
+            return getPlayerAmount(ArenaStatus.RUNNING);
         }
 
         //Player Count of All Arenas in EndLobby
         if(params.equalsIgnoreCase("players-endlobby")) {
-            Integer count = 0;
-
-            //Iterate through every arena
-            for (Arena arena : GameAPI.get().getArenas()) {
-                if(arena.getStatus().equals(ArenaStatus.END_LOBBY)) {
-                    count += arena.getPlayers().size();
-                }
-            }
-            return count.toString();
+            return getPlayerAmount(ArenaStatus.END_LOBBY);
         }
 
         return null;
+    }
+
+    private String getPlayerAmount(ArenaStatus status) {
+        Integer count = 0;
+
+        //Iterate through every arena
+        for (Arena arena : GameAPI.get().getArenas()) {
+            if(arena.getStatus().equals(status)) {
+                count += arena.getPlayers().size();
+            }
+        }
+
+        return count.toString();
+    }
+
+    private String getPlayerAmount() {
+        Integer count = 0;
+
+        //Iterate through every arena
+        for (Arena arena : GameAPI.get().getArenas()) {
+            count += arena.getPlayers().size();
+        }
+
+        return count.toString();
     }
 
     private static Main plugin(){
