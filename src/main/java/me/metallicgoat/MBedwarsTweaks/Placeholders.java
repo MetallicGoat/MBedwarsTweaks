@@ -1,6 +1,7 @@
 package me.metallicgoat.MBedwarsTweaks;
 
 import de.marcely.bedwars.api.BedwarsAPI;
+import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.message.Message;
@@ -62,6 +63,59 @@ public class Placeholders extends PlaceholderExpansion {
                 return "---";
             }
         }
+
+        //Player Count of All Arenas
+        if(params.equalsIgnoreCase("allplayers")) {
+            Integer count = 0;
+
+            //Iterate through every arena
+            for (Arena arena : GameAPI.get().getArenas()) {
+                count += arena.getPlayers().size();
+            }
+
+            return count.toString();
+        }
+
+        //Player Count of All Arenas in Lobby
+        if(params.equalsIgnoreCase("players-lobby")) {
+            Integer count = 0;
+
+            //Iterate through every arena
+            for (Arena arena : GameAPI.get().getArenas()) {
+                if(arena.getStatus().equals(ArenaStatus.LOBBY)) {
+                    count += arena.getPlayers().size();
+                }
+            }
+
+            return count.toString();
+        }
+
+        //Player Count of All Arenas Running
+        if(params.equalsIgnoreCase("players-ingame")) {
+            Integer count = 0;
+
+            //Iterate through every arena
+            for (Arena arena : GameAPI.get().getArenas()) {
+                if(arena.getStatus().equals(ArenaStatus.RUNNING)) {
+                    count += arena.getPlayers().size();
+                }
+            }
+            return count.toString();
+        }
+
+        //Player Count of All Arenas in EndLobby
+        if(params.equalsIgnoreCase("players-endlobby")) {
+            Integer count = 0;
+
+            //Iterate through every arena
+            for (Arena arena : GameAPI.get().getArenas()) {
+                if(arena.getStatus().equals(ArenaStatus.END_LOBBY)) {
+                    count += arena.getPlayers().size();
+                }
+            }
+            return count.toString();
+        }
+
         return null;
     }
 

@@ -38,7 +38,7 @@
         <dependency>
             <groupId>de.marcely.bedwars</groupId>
             <artifactId>API</artifactId>
-            <version>5.0-Beta7</version>
+            <version>5.0.1</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
