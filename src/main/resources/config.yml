@@ -148,3 +148,9 @@ Break-Invis:
     - ENTITY_ATTACK
     - BLOCK_EXPLOSION
     - ENTITY_EXPLOSION
+
+
+############### PLAYER COUNT PLACEHOLDER ###############
+
+#Whether to count Spectators for the Player Count Placeholders
+player-count-placeholder-count-spectators: true

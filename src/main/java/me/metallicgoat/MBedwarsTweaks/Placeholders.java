@@ -93,10 +93,7 @@ public class Placeholders extends PlaceholderExpansion {
         //Iterate through every arena
         for (Arena arena : GameAPI.get().getArenas()) {
             if(arena.getStatus() == status) {
-                for (Player player : arena.getPlayers()) {
-                    count += arena.getPlayers().size();
-                }
-                count += arena.getPlayers().size();
+                count += (ServerManager.getConfig().getBoolean("player-count-placeholder-count-spectators") ? arena.getPlayers().size() + arena.getSpectators().size() : arena.getPlayers().size());
             }
         }
 
