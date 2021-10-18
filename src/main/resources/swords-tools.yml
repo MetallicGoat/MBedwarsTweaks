@@ -1,66 +1,70 @@
 #Items that cannot be placed inside chests
 Anti-Chest:
-  - 'WOOD_SWORD'
-  - 'WOODEN_SWORD'
-  - 'WOOD_PICKAXE'
-  - 'WOODEN_PICKAXE'
-  - 'IRON_PICKAXE'
-  - 'GOLD_PICKAXE'
-  - 'DIAMOND_PICKAXE'
-  - 'WOOD_AXE'
-  - 'WOODEN_AXE'
-  - 'STONE_AXE'
-  - 'IRON_AXE'
-  - 'DIAMOND_AXE'
-  - 'SHEARS'
+  - WOOD_SWORD
+  - WOODEN_SWORD
+  - WOOD_PICKAXE
+  - WOODEN_PICKAXE
+  - IRON_PICKAXE
+  - GOLD_PICKAXE
+  - DIAMOND_PICKAXE
+  - WOOD_AXE
+  - WOODEN_AXE
+  - STONE_AXE
+  - IRON_AXE
+  - DIAMOND_AXE
+  - SHEARS
 
 #Items that cannot be dropped on the ground
 Anti-Drop:
   Enabled: true
   List:
-    - 'WOOD_SWORD'
-    - 'WOODEN_SWORD'
-    - 'WOOD_PICKAXE'
-    - 'WOODEN_PICKAXE'
-    - 'IRON_PICKAXE'
-    - 'GOLD_PICKAXE'
-    - 'GOLDEN_PICKAXE'
-    - 'DIAMOND_PICKAXE'
-    - 'WOOD_AXE'
-    - 'WOODEN_AXE'
-    - 'STONE_AXE'
-    - 'IRON_AXE'
-    - 'GOLD_AXE'
-    - 'GOLDEN_AXE'
-    - 'DIAMOND_AXE'
-    - 'SHEARS'
+    - WOOD_SWORD
+    - WOODEN_SWORD
+    - WOOD_PICKAXE
+    - WOODEN_PICKAXE
+    - IRON_PICKAXE
+    - GOLD_PICKAXE
+    - GOLDEN_PICKAXE
+    - DIAMOND_PICKAXE
+    - WOOD_AXE
+    - WOODEN_AXE
+    - STONE_AXE
+    - IRON_AXE
+    - GOLD_AXE
+    - GOLDEN_AXE
+    - DIAMOND_AXE
+    - SHEARS
+
+
+Tools-Sold:
+  Pickaxe-Types:
+    - WOOD
+    - IRON
+    - GOLD
+    - DIAMOND
+  Axe-Types:
+    - WOOD
+    - STONE
+    - IRON
+    - DIAMOND
 
 #With this feature enabled players can only have one tool of a specific type at a time
 #Players will not be able to downgrade their tool if the is enabled
 #(Tool Mechanics like Hypixel)
 Advanced-Tool-Replacement:
   Enabled: true
-  Problem: 'You already have the same, or higher tier'
+  Force-Ordered: true
+  Problem: You already have the same, or higher tier
+  Force-Ordered-Problem: You need to have a previous tier first
 
 #Prevents players from buying multiple of the same swords, or lower tier swords
 Ordered-Sword-Buy:
   Enabled: false
-  Problem: 'You already have the same, or higher tier'
+  Problem: You already have the same, or higher tier
 
 #Advanced-Tool-Replacement must be true
 #When you die with a tool, you will get one tier lower when you respawn
-Degraded-Tool-BuyGroups:
-  Enabled: true
-  Pickaxe-Types:
-    - 'WOOD'
-    - 'IRON'
-    - 'GOLD'
-    - 'DIAMOND'
-  Axe-Types:
-    - 'WOOD'
-    - 'STONE'
-    - 'IRON'
-    - 'DIAMOND'
+Degraded-Tool-BuyGroups: true
 
 #If you add your sword to a chest, and have no other sword
 #You will be given a wooden sword
@@ -71,9 +75,9 @@ Always-Sword: true
 Advanced-Sword-Drop:
   Enabled: true
   List:
-    - 'STONE_SWORD'
-    - 'IRON_SWORD'
-    - 'DIAMOND_SWORD'
+    - STONE_SWORD
+    - IRON_SWORD
+    - DIAMOND_SWORD
 
 #Removes a Wooden-Sword if you buy a better sword
 #If 'all-type' is set to TRUE, ALL sword types will get replaced.
