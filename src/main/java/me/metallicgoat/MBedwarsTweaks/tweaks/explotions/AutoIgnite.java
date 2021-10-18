@@ -12,9 +12,13 @@ import org.bukkit.event.block.BlockPlaceEvent;
 public class AutoIgnite implements Listener {
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
+        //One tick later
         Bukkit.getServer().getScheduler().runTaskLater(plugin(), () -> {
+            //Check if its tnt
             if (e.getBlock().getType() == Material.TNT) {
+                //Check if auto ignite is enabled
                 if (ServerManager.getConfig().getBoolean("TNT.Auto-Ignite")) {
+                    //add new tnt with custom fuse time
                     e.getBlockPlaced().setType(Material.AIR);
                     TNTPrimed tnt = e.getPlayer().getWorld().spawn(e.getBlockPlaced().getLocation().add(.5, 0, .5), TNTPrimed.class);
                     tnt.setFuseTicks(ServerManager.getConfig().getInt("TNT.Delay") * 20);

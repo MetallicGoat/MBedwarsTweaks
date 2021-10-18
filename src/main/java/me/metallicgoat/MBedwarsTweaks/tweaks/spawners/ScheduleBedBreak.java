@@ -7,14 +7,11 @@ import de.marcely.bedwars.api.event.arena.ArenaBedBreakEvent;
 import de.marcely.bedwars.api.message.Message;
 import me.metallicgoat.MBedwarsTweaks.Main;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
-import me.metallicgoat.MBedwarsTweaks.utils.XSound;
+import me.metallicgoat.MBedwarsTweaks.utils.XSeries.XSound;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.scheduler.BukkitScheduler;
-
-import java.util.Objects;
 
 public class ScheduleBedBreak implements Listener {
 
@@ -29,6 +26,7 @@ public class ScheduleBedBreak implements Listener {
 
     //Sets all beds to be destroyed at a specified time
     public static void breakArenaBeds(Arena arena){
+        //Break all beds in an arena
         for (Team team : arena.getEnabledTeams()) {
             if (!arena.isBedDestroyed(team)) {
                 arena.destroyBedNaturally(team, "Auto-Break", false);
@@ -37,6 +35,7 @@ public class ScheduleBedBreak implements Listener {
                 sendBedBreakMessage(arena, team, null);
             }
         }
+        //Broadcast Message
         for (String s : plugin().getConfig().getStringList("Auto-Destroy-Message")) {
             arena.broadcast(Message.build(s).done());
         }
@@ -44,30 +43,42 @@ public class ScheduleBedBreak implements Listener {
 
     //Message that gets sent when a bed gets destroyed
     private static void sendBedBreakMessage(Arena arena, Team team, Player destroyer){
-        Main plugin = Main.getInstance();
-        for(Player p : arena.getPlayersInTeam(team)){
-            String sound = ServerManager.getConfig().getString("Bed-Destroy-Sound");
-            String bigTitle = ServerManager.getConfig().getString("Notification.Big-Title");
-            String smallTitle = ServerManager.getConfig().getString("Notification.Small-Title");
+        String sound = ServerManager.getConfig().getString("Bed-Destroy-Sound");
+        String bigTitle = ServerManager.getConfig().getString("Notification.Big-Title");
+        String smallTitle = ServerManager.getConfig().getString("Notification.Small-Title");
 
+        //Send sound/title to victim team
+        for(Player p : arena.getPlayersInTeam(team)){
             assert bigTitle != null;
             assert smallTitle != null;
             BedwarsAPI.getNMSHelper().showTitle(p,
                     ChatColor.translateAlternateColorCodes('&', bigTitle),
                     ChatColor.translateAlternateColorCodes('&', smallTitle),
                     60, 15, 15);
-
-            XSound.valueOf(sound).play(p);
+            if(sound != null && !sound.equals("")) {
+                XSound.valueOf(sound).play(p);
+            }
         }
+
+        //Send public message
         if(destroyer != null) {
-            for (String message : plugin.getConfig().getStringList("Player-Destroy-Message")) {
+
+            //Send sound to destroyer
+            if(sound != null && !sound.equals("")) {
+                XSound.valueOf(sound).play(destroyer);
+            }
+
+            //Send public message
+            for (String message : ServerManager.getConfig().getStringList("Player-Destroy-Message")) {
                 String teamName = team.getDisplayName();
-                String playerName = destroyer.getName();
+                String playerName = BedwarsAPI.getHelper().getPlayerDisplayName(destroyer);
+                String destroyerColor = arena.getPlayerTeam(destroyer) != null ? "&" + arena.getPlayerTeam(destroyer).getChatColor().getChar() : "";
+
                 String messageFormatted = Message.build(message)
                         .placeholder("team-name", teamName)
                         .placeholder("destroyer-name", playerName)
                         .placeholder("team-color", "&" + team.getChatColor().getChar())
-                        .placeholder("destroyer-color", "&" + arena.getPlayerTeam(destroyer).getChatColor().getChar())
+                        .placeholder("destroyer-color", destroyerColor)
                         .done();
                 arena.broadcast(messageFormatted);
             }

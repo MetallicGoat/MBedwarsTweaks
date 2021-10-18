@@ -1,6 +1,5 @@
 package me.metallicgoat.MBedwarsTweaks.utils.configupdater;
 
-
 import com.google.common.base.Preconditions;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -42,7 +41,7 @@ public class ConfigUpdater {
             } else {
                 for (Map.Entry<String, String> entry : ignoredSectionsValues.entrySet()) {
                     if (entry.getKey().equals(fullKey)) {
-                        writer.write(entry.getValue());
+                        writer.write(entry.getValue() + "\n");
                         continue keyLoop;
                     } else if (KeyBuilder.isSubKeyOf(entry.getKey(), fullKey, SEPARATOR)) {
                         continue keyLoop;

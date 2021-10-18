@@ -1,5 +1,6 @@
 package me.metallicgoat.MBedwarsTweaks;
 
+import de.marcely.bedwars.api.BedwarsAPI;
 import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.GenTiers;
 import me.metallicgoat.MBedwarsTweaks.utils.Metrics;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
@@ -28,9 +29,10 @@ public class Main extends JavaPlugin {
                 "------------------------------"
         );
 
-        GenTiers.startUpdatingTime();
-
-        new Placeholders().register();
+        BedwarsAPI.onReady(() -> {
+            GenTiers.startUpdatingTime();
+            new Placeholders().register();
+        });
     }
 
     public static Main getInstance() {

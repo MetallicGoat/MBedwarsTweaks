@@ -1,4 +1,4 @@
-package me.metallicgoat.MBedwarsTweaks.utils;
+package me.metallicgoat.MBedwarsTweaks.utils.XSeries;
 
 /*
  * The MIT License (MIT)

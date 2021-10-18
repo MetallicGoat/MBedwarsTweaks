@@ -1,0 +1,89 @@
+#Items that cannot be placed inside chests
+Anti-Chest:
+  - 'WOOD_SWORD'
+  - 'WOODEN_SWORD'
+  - 'WOOD_PICKAXE'
+  - 'WOODEN_PICKAXE'
+  - 'IRON_PICKAXE'
+  - 'GOLD_PICKAXE'
+  - 'DIAMOND_PICKAXE'
+  - 'WOOD_AXE'
+  - 'WOODEN_AXE'
+  - 'STONE_AXE'
+  - 'IRON_AXE'
+  - 'DIAMOND_AXE'
+  - 'SHEARS'
+
+#Items that cannot be dropped on the ground
+Anti-Drop:
+  Enabled: true
+  List:
+    - 'WOOD_SWORD'
+    - 'WOODEN_SWORD'
+    - 'WOOD_PICKAXE'
+    - 'WOODEN_PICKAXE'
+    - 'IRON_PICKAXE'
+    - 'GOLD_PICKAXE'
+    - 'GOLDEN_PICKAXE'
+    - 'DIAMOND_PICKAXE'
+    - 'WOOD_AXE'
+    - 'WOODEN_AXE'
+    - 'STONE_AXE'
+    - 'IRON_AXE'
+    - 'GOLD_AXE'
+    - 'GOLDEN_AXE'
+    - 'DIAMOND_AXE'
+    - 'SHEARS'
+
+#With this feature enabled players can only have one tool of a specific type at a time
+#Players will not be able to downgrade their tool if the is enabled
+#(Tool Mechanics like Hypixel)
+Advanced-Tool-Replacement:
+  Enabled: true
+  Problem: 'You already have the same, or higher tier'
+
+#Prevents players from buying multiple of the same swords, or lower tier swords
+Ordered-Sword-Buy:
+  Enabled: false
+  Problem: 'You already have the same, or higher tier'
+
+#Advanced-Tool-Replacement must be true
+#When you die with a tool, you will get one tier lower when you respawn
+Degraded-Tool-BuyGroups:
+  Enabled: true
+  Pickaxe-Types:
+    - 'WOOD'
+    - 'IRON'
+    - 'GOLD'
+    - 'DIAMOND'
+  Axe-Types:
+    - 'WOOD'
+    - 'STONE'
+    - 'IRON'
+    - 'DIAMOND'
+
+#If you add your sword to a chest, and have no other sword
+#You will be given a wooden sword
+Always-Sword: true
+
+#Players will always have a sword if this is enabled
+#Gives you a Wooden Sword if no sword is detected
+Advanced-Sword-Drop:
+  Enabled: true
+  List:
+    - 'STONE_SWORD'
+    - 'IRON_SWORD'
+    - 'DIAMOND_SWORD'
+
+#Removes a Wooden-Sword if you buy a better sword
+#If 'all-type' is set to TRUE, ALL sword types will get replaced.
+#Otherwise, only wooden swords will get replaced (Like Hypixel)
+Replace-Sword-On-Buy:
+  Enabled: true
+  All-Type: false
+
+#Add Items here that you do not want to be effected by Advanced Swords and Tools
+#For example, A CUSTOM special item that is Golden Sword
+#ADD ITEMS BY THEIR DISPLAY NAME (DO NOT include color codes)
+Do-Not-Effect:
+  - ''

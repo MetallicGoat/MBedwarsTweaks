@@ -1,8 +1,9 @@
 package me.metallicgoat.MBedwarsTweaks.utils;
 
 import me.metallicgoat.MBedwarsTweaks.Main;
-import me.metallicgoat.MBedwarsTweaks.tweaks.advancedswords.DowngradeTools;
+import me.metallicgoat.MBedwarsTweaks.advancedswords.*;
 import me.metallicgoat.MBedwarsTweaks.tweaks.messages.FinalKill;
+import me.metallicgoat.MBedwarsTweaks.tweaks.messages.TeamEliminate;
 import me.metallicgoat.MBedwarsTweaks.tweaks.misc.*;
 import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.ScheduleBedBreak;
 import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.UnusedGens;
@@ -11,6 +12,7 @@ import me.metallicgoat.MBedwarsTweaks.tweaks.explotions.AutoIgnite;
 import me.metallicgoat.MBedwarsTweaks.tweaks.explotions.FireballWhitelist;
 import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.GenTiers;
 import me.metallicgoat.MBedwarsTweaks.tweaks.messages.BuyMessage;
+import me.metallicgoat.MBedwarsTweaks.tweaks.misc.FriendlyVillagers;
 import me.metallicgoat.MBedwarsTweaks.utils.configupdater.ConfigUpdater;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -25,6 +27,8 @@ public class ServerManager {
 
     private static FileConfiguration tiersConfig;
 
+    private static FileConfiguration swordsToolsConfig;
+
     public static FileConfiguration getConfig(){
         return plugin().getConfig();
     }
@@ -33,33 +37,56 @@ public class ServerManager {
         return tiersConfig;
     }
 
+    public static FileConfiguration getSwordsToolsConfig(){
+        return swordsToolsConfig;
+    }
+
     public static void loadConfigs() {
         loadDefaultConfig();
         loadTiersConfig();
+        loadSwordsToolsConfig();
     }
 
     public static void registerEvents(){
         PluginManager manager = plugin().getServer().getPluginManager();
-        manager.registerEvents(new EmptyBucket(), plugin());
-        manager.registerEvents(new EmptyPotion(), plugin());
-        manager.registerEvents(new BreakInvis(), plugin());
-        manager.registerEvents(new FinalStrike(), plugin());
-        manager.registerEvents(new BuyMessage(), plugin());
-        manager.registerEvents(new FireballWhitelist(), plugin());
+
+        //Tweaks - explosions
         manager.registerEvents(new AutoIgnite(), plugin());
-        manager.registerEvents(new GenTiers(), plugin());
-        manager.registerEvents(new WaterFlow(), plugin());
-        manager.registerEvents(new HeightCap(), plugin());
+        manager.registerEvents(new FireballWhitelist(), plugin());
 
-        //manager.registerEvents(new test(), plugin());
-
-        manager.registerEvents(new UnusedGens(), plugin());
-        manager.registerEvents(new ScheduleBedBreak(), plugin());
-
+        //Tweaks - messages
+        manager.registerEvents(new BuyMessage(), plugin());
         manager.registerEvents(new FinalKill(), plugin());
+        manager.registerEvents(new TeamEliminate(), plugin());
         manager.registerEvents(new TopKillers(), plugin());
 
-        //manager.registerEvents(new DowngradeTools(), plugin());
+        //Tweaks - misc
+        manager.registerEvents(new BreakInvis(), plugin());
+        manager.registerEvents(new EmptyBucket(), plugin());
+        manager.registerEvents(new EmptyPotion(), plugin());
+        manager.registerEvents(new FinalStrike(), plugin());
+        manager.registerEvents(new FriendlyVillagers(), plugin());
+        manager.registerEvents(new HeightCap(), plugin());
+        manager.registerEvents(new PermanentEffects(), plugin());
+        manager.registerEvents(new ShortenCountdown(), plugin());
+        manager.registerEvents(new WaterFlow(), plugin());
+
+        //Tweaks - spawners
+        manager.registerEvents(new GenTiers(), plugin());
+        manager.registerEvents(new ScheduleBedBreak(), plugin());
+        manager.registerEvents(new UnusedGens(), plugin());
+
+
+        //Advanced Swords
+        manager.registerEvents(new AlwaysSword(), plugin());
+        manager.registerEvents(new AntiChest(), plugin());
+        manager.registerEvents(new AntiDrop(), plugin());
+        manager.registerEvents(new DowngradeTools(), plugin());
+        manager.registerEvents(new OrderedSwordBuy(), plugin());
+        manager.registerEvents(new ReplaceSwordOnBuy(), plugin());
+        manager.registerEvents(new SwordDrop(), plugin());
+        manager.registerEvents(new ToolBuy(), plugin());
+
     }
 
 
@@ -94,6 +121,28 @@ public class ServerManager {
         tiersConfig = new YamlConfiguration();
         try {
             tiersConfig.load(configFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void loadSwordsToolsConfig(){
+        String ymlName = "swords-tools.yml";
+
+        File configFile = new File(plugin().getDataFolder(), ymlName);
+        if (!configFile.exists()) {
+            plugin().saveResource(ymlName, false);
+        }
+
+        try {
+            ConfigUpdater.update(plugin(), ymlName, configFile, Collections.singletonList("Nothing"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        swordsToolsConfig = new YamlConfiguration();
+        try {
+            swordsToolsConfig.load(configFile);
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
