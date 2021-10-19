@@ -33,15 +33,15 @@ public class DowngradeTools implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.HIGH)
     public void onShopBuy(PlayerBuyInShopEvent e){
 
         ShopItem shopItem = e.getItem();
 
         //Check if enabled, and using advanced tool replacement
-        if(ServerManager.getSwordsToolsConfig().getBoolean("Degraded-Tool-BuyGroups.Enabled")
+        if(ServerManager.getSwordsToolsConfig().getBoolean("Degraded-Tool-BuyGroups")
                 && ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Sword-Drop.Enabled")
-                && e.getProblems().isEmpty() && e.isTakingPayments()){
+                && e.getProblems().isEmpty()){
             if(ToolSwordHelper.doesShopProductContain(shopItem, "AXE")){
 
                 //Get tool level

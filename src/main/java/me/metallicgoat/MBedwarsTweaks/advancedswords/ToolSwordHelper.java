@@ -104,7 +104,8 @@ public class ToolSwordHelper {
     public static boolean doesInventoryContain(PlayerInventory playerInventory, String material){
         for(ItemStack itemStack:playerInventory){
             if(itemStack != null) {
-                if (itemStack.getType().name().contains(material)) {
+                if (itemStack.getType().name().contains(material)
+                        && isNotToIgnore(itemStack.getItemMeta() != null ? itemStack.getItemMeta().getDisplayName():"NOTHING")) {
                     return true;
                 }
             }

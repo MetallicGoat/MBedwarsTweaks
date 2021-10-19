@@ -58,58 +58,61 @@ public class ToolBuy implements Listener {
 
     private boolean isPurchasable(PlayerBuyInShopEvent e,ItemStack product, PlayerInventory pi){
 
-        boolean pickaxe = product.getType().name().contains("PICKAXE");
-        ItemStack tool = null;
-
-        if(pi.contains(product.getType())){
+        //Same Type
+        if(ToolSwordHelper.doesInventoryContain(pi, product.getType().name())){
             addShopProblem(e, toolBuyProblem());
             return false;
         }
 
         //First tier
-        if((!ToolSwordHelper.doesInventoryContain(pi, "PICKAXE") && product.getType().name().contains("PICKAXE"))
-                || (!ToolSwordHelper.doesInventoryContain(pi, "AXE") && product.getType().name().contains("AXE"))) {
-            if (forceOrderedBuy() && ToolSwordHelper.getSwordToolLevel(product.getType()) > 1) {
+        if(forceOrderedBuy()
+                && ((!ToolSwordHelper.doesInventoryContain(pi, "PICKAXE") && product.getType().name().contains("PICKAXE"))
+                || (!ToolSwordHelper.doesInventoryContain(pi, "_AXE") && product.getType().name().contains("_AXE")))) {
+
+            if (ToolSwordHelper.getSwordToolLevel(product.getType()) > 1) {
                 addShopProblem(e, forceOrderedToolBuyProblem());
                 return false;
             }
         }
 
-        //check inventory for tool
+        boolean isProductPickaxe = product.getType().name().contains("PICKAXE");
+
         for(ItemStack itemStack:pi){
             if(itemStack != null) {
-                if ((itemStack.getType().name().contains("PICKAXE") && pickaxe)
-                        || (itemStack.getType().name().contains("AXE") && !pickaxe)) {
-                    tool = itemStack;
-                    break;
-                }
-            }
-        }
+                if (itemStack.getType().name().contains("AXE")
+                        && ((itemStack.getType().name().contains("PICKAXE") && isProductPickaxe)
+                        || (!itemStack.getType().name().contains("PICKAXE") && !isProductPickaxe))
+                        && ToolSwordHelper.isNotToIgnore(itemStack.getItemMeta() != null ? itemStack.getItemMeta().getDisplayName():"NOTHING")) {
 
-        if(tool != null) {
-            //Buying lower tier
-            if (ToolSwordHelper.getSwordToolLevel(tool.getType()) > ToolSwordHelper.getSwordToolLevel(product.getType())) {
-                addShopProblem(e, toolBuyProblem());
-                return false;
-            }
+                    boolean isCurrentPickaxe = itemStack.getType().name().contains("PICKAXE");
 
-            //Skipping tier
-            if (forceOrderedBuy()){
-                int currentLevel = ToolSwordHelper.getSwordToolLevel(tool.getType());
-
-                if(pickaxe && tool.getType().name().contains("PICKAXE")) {
-                    while(!ServerManager.getSwordsToolsConfig().getStringList("Tools-Sold.Pickaxe-Types").contains(ToolSwordHelper.getMaterialFromLevel(currentLevel + 1))){
-                        currentLevel++;
+                    //Buying lower tier (Current lower than new)
+                    if (((isProductPickaxe && isCurrentPickaxe)
+                            || (!isProductPickaxe && !isCurrentPickaxe))
+                            && ToolSwordHelper.getSwordToolLevel(itemStack.getType()) > ToolSwordHelper.getSwordToolLevel(product.getType())) {
+                        addShopProblem(e, toolBuyProblem());
+                        return false;
                     }
-                }else if(!pickaxe && !tool.getType().name().contains("PICKAXE")){
-                    while(!ServerManager.getSwordsToolsConfig().getStringList("Tools-Sold.Axe-Types").contains(ToolSwordHelper.getMaterialFromLevel(currentLevel + 1))){
-                        currentLevel++;
-                    }
-                }
 
-                if (ToolSwordHelper.getSwordToolLevel(product.getType()) - currentLevel > 1) {
-                    addShopProblem(e, forceOrderedToolBuyProblem());
-                    return false;
+                    //Skipping tier
+                    if (forceOrderedBuy()){
+                        int currentLevel = ToolSwordHelper.getSwordToolLevel(itemStack.getType());
+
+                        if(isCurrentPickaxe && isProductPickaxe) {
+                            while(!ServerManager.getSwordsToolsConfig().getStringList("Tools-Sold.Pickaxe-Types").contains(ToolSwordHelper.getMaterialFromLevel(currentLevel + 1))){
+                                currentLevel++;
+                            }
+                        }else if(!isCurrentPickaxe && !isProductPickaxe){
+                            while(!ServerManager.getSwordsToolsConfig().getStringList("Tools-Sold.Axe-Types").contains(ToolSwordHelper.getMaterialFromLevel(currentLevel + 1))){
+                                currentLevel++;
+                            }
+                        }
+
+                        if (ToolSwordHelper.getSwordToolLevel(product.getType()) - currentLevel > 1) {
+                            addShopProblem(e, forceOrderedToolBuyProblem());
+                            return false;
+                        }
+                    }
                 }
             }
         }
