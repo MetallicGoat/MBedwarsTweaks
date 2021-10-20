@@ -151,6 +151,35 @@ Break-Invis:
 
 
 ############### PLAYER COUNT PLACEHOLDER ###############
+#Made by LeNinjaHD, added in 1.0.0
 
 #Whether to count Spectators for the Player Count Placeholders
 player-count-placeholder-count-spectators: true
+
+############### BedDestoryEffects ###############
+#Made by LeNinjaHD, added in ???
+
+# NONE - None
+# FIREWORK - Firework
+bed-destroy-effect: FIREWORK
+
+### FIREWORK CUSTOMISATION ###
+
+#RGB Color
+firework-color-red: 255
+firework-color-green: 255
+firework-color-blue: 255
+
+#Types:
+#CREEPER - Creeper Face
+#BALL - Ball
+#BALL_LARGE - Large Ball
+#BURST - Burst
+#STAR - Star
+firework-type: "STAR"
+
+#Firework Trail
+firework-trail: true
+
+#Duration Until Firework will detonate in ticks (20 ticks = 1 sec)
+firework-duration: 20
