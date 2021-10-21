@@ -83,16 +83,6 @@ public class Placeholders extends PlaceholderExpansion {
         if(params.equalsIgnoreCase("players-endlobby")) {
             return getPlayerAmount(ArenaStatus.END_LOBBY);
         }
-
-        if(params.equalsIgnoreCase("bed-destroy-effect")) {
-            return ServerManager.getConfig().getString("bed-destroy-effect");
-        }
-
-        //BETA FEATURE
-        if(params.startsWith("config_") && ServerManager.getConfig().getBoolean("beta")) {
-            String[] array = params.split("_");
-            return ServerManager.getConfig().getString(array[1]);
-        }
         return null;
     }
 
