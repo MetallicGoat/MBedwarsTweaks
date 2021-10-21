@@ -97,27 +97,27 @@ public class Placeholders extends PlaceholderExpansion {
     }
 
     private String getPlayerAmount(ArenaStatus status) {
-        Integer count = 0;
+        int count = 0;
 
         //Iterate through every arena
         for (Arena arena : GameAPI.get().getArenas()) {
             if(arena.getStatus() == status) {
-                count += (ServerManager.getConfig().getBoolean("player-count-placeholder-count-spectators") ? arena.getPlayers().size() + arena.getSpectators().size() : arena.getPlayers().size());
+                count += (ServerManager.getConfig().getBoolean("Player-Count-Placeholder-Count-Spectators") ? arena.getPlayers().size() + arena.getSpectators().size() : arena.getPlayers().size());
             }
         }
 
-        return count.toString();
+        return Integer.toString(count);
     }
 
     private String getPlayerAmount() {
-        Integer count = 0;
+        int count = 0;
 
         //Iterate through every arena
         for (Arena arena : GameAPI.get().getArenas()) {
-            count += arena.getPlayers().size();
+            count += (ServerManager.getConfig().getBoolean("Player-Count-Placeholder-Count-Spectators") ? arena.getPlayers().size() + arena.getSpectators().size() : arena.getPlayers().size());
         }
 
-        return count.toString();
+        return Integer.toString(count);
     }
 
     private static Main plugin(){

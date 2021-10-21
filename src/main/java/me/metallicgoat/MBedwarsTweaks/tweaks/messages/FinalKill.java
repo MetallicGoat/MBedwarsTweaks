@@ -19,8 +19,9 @@ public class FinalKill implements Listener {
         if(enabled) {
             if (arena != null) {
                 Team team = arena.getPlayerTeam(p);
-                if(arena.isBedDestroyed(team) && e.getDeathMessage().done(false).isEmpty()){
-                    String message = e.getDeathMessage().done(false) + " &b&lFINAL KILL!";
+                String message = e.getDeathMessage().done(false);
+                if(arena.isBedDestroyed(team) && !message.isEmpty()){
+                    message += " &b&lFINAL KILL!";
                     e.setDeathMessage(Message.build(message));
                 }
             }

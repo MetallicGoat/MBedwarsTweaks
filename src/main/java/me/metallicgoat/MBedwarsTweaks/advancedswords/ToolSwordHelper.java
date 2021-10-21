@@ -102,12 +102,14 @@ public class ToolSwordHelper {
     }
 
     public static boolean doesInventoryContain(PlayerInventory playerInventory, String material){
-        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
-        playerInventory.forEach(itemStack -> {
-            if(itemStack.getType().name().contains(material)){
-                atomicBoolean.set(true);
+        for(ItemStack itemStack:playerInventory){
+            if(itemStack != null) {
+                if (itemStack.getType().name().contains(material)
+                        && isNotToIgnore(itemStack.getItemMeta() != null ? itemStack.getItemMeta().getDisplayName():"NOTHING")) {
+                    return true;
+                }
             }
-        });
-        return atomicBoolean.get();
+        }
+        return false;
     }
 }

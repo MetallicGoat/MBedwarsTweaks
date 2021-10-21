@@ -10,6 +10,7 @@ import me.metallicgoat.MBedwarsTweaks.utils.XSeries.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -21,6 +22,8 @@ public class DowngradeTools implements Listener {
     private final HashMap<Player, Integer> playerAxe = new HashMap<>();
     private final HashMap<Player, Integer> playerPickaxe = new HashMap<>();
 
+    //TODO check priority (Check Problems)
+
     @EventHandler
     public void onGameStart(RoundStartEvent e){
         //reset tool level on round start
@@ -30,13 +33,15 @@ public class DowngradeTools implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.HIGH)
     public void onShopBuy(PlayerBuyInShopEvent e){
+
         ShopItem shopItem = e.getItem();
 
         //Check if enabled, and using advanced tool replacement
-        if(ServerManager.getSwordsToolsConfig().getBoolean("Degraded-Tool-BuyGroups.Enabled")
-                && ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Sword-Drop.Enabled")){
+        if(ServerManager.getSwordsToolsConfig().getBoolean("Degraded-Tool-BuyGroups")
+                && ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Sword-Drop.Enabled")
+                && e.getProblems().isEmpty()){
             if(ToolSwordHelper.doesShopProductContain(shopItem, "AXE")){
 
                 //Get tool level
@@ -56,14 +61,14 @@ public class DowngradeTools implements Listener {
     @EventHandler
     public void onRespawn(PlayerIngameRespawnEvent e) {
         Player player = e.getPlayer();
-        if(ServerManager.getSwordsToolsConfig().getBoolean("Degraded-Tool-BuyGroups.Enabled")
+        if(ServerManager.getSwordsToolsConfig().getBoolean("Degraded-Tool-BuyGroups")
                 && ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Sword-Drop.Enabled")) {
 
             //reduce player pickaxe by one if necessary
             if (playerPickaxe.get(player) > 1) {
                 int currentLevel = playerPickaxe.get(player) - 1;
                 //Check to make sure tool is offered
-                while (!ServerManager.getSwordsToolsConfig().getStringList("Degraded-Tool-BuyGroups.Pickaxe-Types").contains(ToolSwordHelper.getMaterialFromLevel(currentLevel))
+                while (!ServerManager.getSwordsToolsConfig().getStringList("Tools-Sold.Pickaxe-Types").contains(ToolSwordHelper.getMaterialFromLevel(currentLevel))
                         && currentLevel >= 1) {
                     currentLevel--;
                 }
@@ -73,7 +78,7 @@ public class DowngradeTools implements Listener {
             if (playerAxe.get(player) > 1) {
                 int currentLevel = playerAxe.get(player) - 1;
                 //Check to make sure tool is offered
-                while (!ServerManager.getSwordsToolsConfig().getStringList("Degraded-Tool-BuyGroups.Axe-Types").contains(ToolSwordHelper.getMaterialFromLevel(currentLevel))
+                while (!ServerManager.getSwordsToolsConfig().getStringList("Tools-Sold.Axe-Types").contains(ToolSwordHelper.getMaterialFromLevel(currentLevel))
                         && currentLevel >= 1) {
                     currentLevel--;
                 }

@@ -14,9 +14,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 public class ToolBuy implements Listener {
+
     @EventHandler
     public void onToolBuy(PlayerBuyInShopEvent e){
         Player p = e.getPlayer();
@@ -28,9 +27,7 @@ public class ToolBuy implements Listener {
                     for (ItemStack item : is) {
                         if (item.getType().name().contains("AXE") &&
                                 ToolSwordHelper.isNotToIgnore(item)) {
-                            if (!isPurchasable(item, pi)) {
-                                addShopProblem(e);
-                            } else {
+                            if (isPurchasable(e, item, pi)) {
                                 if (e.getProblems().isEmpty()) {
                                     clearOld(item.getType(), p);
                                 }
@@ -46,11 +43,11 @@ public class ToolBuy implements Listener {
         boolean pickaxe = tool.name().contains("PICKAXE");
         p.getInventory().forEach(itemStack -> {
             if(itemStack != null && itemStack.getType().name().contains("AXE")){
-                if(itemStack.getType().name().contains("PICK")){
+                if(itemStack.getType().name().contains("PICKAXE") && pickaxe){
                     if(ToolSwordHelper.getSwordToolLevel(tool) > ToolSwordHelper.getSwordToolLevel(itemStack.getType())){
                         p.getInventory().remove(itemStack.getType());
                     }
-                }else if(!pickaxe){
+                }else if(!itemStack.getType().name().contains("PICKAXE") && !pickaxe){
                     if(ToolSwordHelper.getSwordToolLevel(tool) > ToolSwordHelper.getSwordToolLevel(itemStack.getType())){
                         p.getInventory().remove(itemStack.getType());
                     }
@@ -59,34 +56,71 @@ public class ToolBuy implements Listener {
         });
     }
 
-    private boolean isPurchasable(ItemStack product, PlayerInventory pi){
-        boolean pickaxe = product.getType().name().contains("PICKAXE");
-        AtomicBoolean purchasable = new AtomicBoolean(true);
+    private boolean isPurchasable(PlayerBuyInShopEvent e,ItemStack product, PlayerInventory pi){
 
-        if(pi.contains(product.getType())){
+        //Same Type
+        if(ToolSwordHelper.doesInventoryContain(pi, product.getType().name())){
+            addShopProblem(e, toolBuyProblem());
             return false;
         }
-        pi.forEach(itemStack -> {
+
+        //First tier
+        if(forceOrderedBuy()
+                && ((!ToolSwordHelper.doesInventoryContain(pi, "PICKAXE") && product.getType().name().contains("PICKAXE"))
+                || (!ToolSwordHelper.doesInventoryContain(pi, "_AXE") && product.getType().name().contains("_AXE")))) {
+
+            if (ToolSwordHelper.getSwordToolLevel(product.getType()) > 1) {
+                addShopProblem(e, forceOrderedToolBuyProblem());
+                return false;
+            }
+        }
+
+        boolean isProductPickaxe = product.getType().name().contains("PICKAXE");
+
+        for(ItemStack itemStack:pi){
             if(itemStack != null) {
-                if (itemStack.getType().name().contains("AXE")) {
-                    if (itemStack.getType().name().contains("PICKAXE") && pickaxe) {
-                        if (ToolSwordHelper.getSwordToolLevel(itemStack.getType()) > ToolSwordHelper.getSwordToolLevel(product.getType())) {
-                            purchasable.set(false);
+                if (itemStack.getType().name().contains("AXE")
+                        && ((itemStack.getType().name().contains("PICKAXE") && isProductPickaxe)
+                        || (!itemStack.getType().name().contains("PICKAXE") && !isProductPickaxe))
+                        && ToolSwordHelper.isNotToIgnore(itemStack.getItemMeta() != null ? itemStack.getItemMeta().getDisplayName():"NOTHING")) {
+
+                    boolean isCurrentPickaxe = itemStack.getType().name().contains("PICKAXE");
+
+                    //Buying lower tier (Current lower than new)
+                    if (((isProductPickaxe && isCurrentPickaxe)
+                            || (!isProductPickaxe && !isCurrentPickaxe))
+                            && ToolSwordHelper.getSwordToolLevel(itemStack.getType()) > ToolSwordHelper.getSwordToolLevel(product.getType())) {
+                        addShopProblem(e, toolBuyProblem());
+                        return false;
+                    }
+
+                    //Skipping tier
+                    if (forceOrderedBuy()){
+                        int currentLevel = ToolSwordHelper.getSwordToolLevel(itemStack.getType());
+
+                        if(isCurrentPickaxe && isProductPickaxe) {
+                            while(!ServerManager.getSwordsToolsConfig().getStringList("Tools-Sold.Pickaxe-Types").contains(ToolSwordHelper.getMaterialFromLevel(currentLevel + 1))){
+                                currentLevel++;
+                            }
+                        }else if(!isCurrentPickaxe && !isProductPickaxe){
+                            while(!ServerManager.getSwordsToolsConfig().getStringList("Tools-Sold.Axe-Types").contains(ToolSwordHelper.getMaterialFromLevel(currentLevel + 1))){
+                                currentLevel++;
+                            }
                         }
-                    } else if (!itemStack.getType().name().contains("PICKAXE") && !pickaxe) {
-                        if (ToolSwordHelper.getSwordToolLevel(itemStack.getType()) > ToolSwordHelper.getSwordToolLevel(product.getType())) {
-                            purchasable.set(false);
+
+                        if (ToolSwordHelper.getSwordToolLevel(product.getType()) - currentLevel > 1) {
+                            addShopProblem(e, forceOrderedToolBuyProblem());
+                            return false;
                         }
                     }
                 }
             }
-        });
-
-        return purchasable.get();
+        }
+        return true;
     }
 
 
-    private void addShopProblem(PlayerBuyInShopEvent e){
+    private void addShopProblem(PlayerBuyInShopEvent e, String problem){
         e.addProblem(new PlayerBuyInShopEvent.Problem() {
             @Override
             public Plugin getPlugin() {
@@ -95,7 +129,7 @@ public class ToolBuy implements Listener {
 
             @Override
             public void handleNotification(PlayerBuyInShopEvent e) {
-                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', toolBuyProblem()));
+                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', problem));
             }
         });
     }
@@ -104,7 +138,15 @@ public class ToolBuy implements Listener {
         return ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Tool-Replacement.Enabled");
     }
 
+    private boolean forceOrderedBuy() {
+        return ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Tool-Replacement.Force-Ordered");
+    }
+
     private String toolBuyProblem() {
         return ServerManager.getSwordsToolsConfig().getString("Advanced-Tool-Replacement.Problem");
+    }
+
+    private String forceOrderedToolBuyProblem() {
+        return ServerManager.getSwordsToolsConfig().getString("Advanced-Tool-Replacement.Force-Ordered-Problem");
     }
 }

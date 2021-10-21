@@ -188,3 +188,14 @@ firework-duration: 20
 
 #Enable Beta Features
 beta: false
+
+#Shortens lobby time to a specified value
+#if arena filled over a certain percent
+Shorten-Countdown:
+  Enabled: false
+  Minimum-Percent-Filled: 80
+  Shorten-Time-To: 10
+
+############### PLAYER COUNT PLACEHOLDER ###############
+#Whether to count Spectators for the Player Count Placeholders
+Player-Count-Placeholder-Count-Spectators: true
