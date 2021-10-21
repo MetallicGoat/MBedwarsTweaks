@@ -2,6 +2,7 @@ package me.metallicgoat.MBedwarsTweaks.utils;
 
 import me.metallicgoat.MBedwarsTweaks.Main;
 import me.metallicgoat.MBedwarsTweaks.advancedswords.*;
+import me.metallicgoat.MBedwarsTweaks.beddestoryeffects.BedDestoryListener;
 import me.metallicgoat.MBedwarsTweaks.tweaks.messages.FinalKill;
 import me.metallicgoat.MBedwarsTweaks.tweaks.messages.TeamEliminate;
 import me.metallicgoat.MBedwarsTweaks.tweaks.misc.*;
@@ -87,6 +88,8 @@ public class ServerManager {
         manager.registerEvents(new SwordDrop(), plugin());
         manager.registerEvents(new ToolBuy(), plugin());
 
+        //BedDestoryEffects
+        manager.registerEvents(new BedDestoryListener(), plugin());
 
     }
 

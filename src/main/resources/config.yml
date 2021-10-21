@@ -15,10 +15,16 @@ Height-Cap:
   Arenas:
     - ''
 
-############### FINAL KILL [BETA] ###############
+############### DEGRADED BUY-GROUPS ###############
 
-#Adds FINAL KILL to the end of a message if the kill is final
-#WARNING: May cause an error. We are looking into a fix, please report any errors in our discord
+Degraded-BuyGroups:
+  Enabled: true
+  Names:
+    - 'pickaxe'
+
+############### FINAL KILL ###############
+
+#Adds FINAL KILL to the end of a message if the kill is Final
 Final-Kill-Message: false
 
 #Players get a lightning blot at their location of death if it is a final kill
@@ -53,17 +59,10 @@ Disable-Unused-Gens:
     - 'IRON_INGOT'
     - 'GOLD_INGOT'
 
-############### GEN TIERS [BETA] ###############
+############### GEN TIERS ###############
 
 #Teirs can be configured in the gen-tiers.yml
 Gen-Tiers-Enabled: false
-
-#Override MBedwars Holo's
-Gen-Tiers-Holos-Enabled: true
-
-#If set to true, the papi placeholders on the
-#Scoreboard will update every 5 seconds
-Scoreboard-Updating: false
 
 #Adds 'Tier I' to spawners listed
 Tier-One-Titles:
@@ -79,7 +78,7 @@ Spawner-Title:
   - '{spawner-color}{spawner}'
   - '&eSpawning in &c{time} &eseconds!'
 
-#PAPI Placeholder: %tweaks_next-tier%
+#PAPI Placeholder:
 # {next-tier} {time}
 Next-Tier-Placeholder: '{next-tier} in &a{time}'
 
@@ -106,17 +105,6 @@ Notification:
   Big-Title: '&cBED DESTROYED'
   Small-Title: '&fYou will no longer respawn!'
 
-############### TEAM ELIMINATE ###############
-
-Team-Eliminate-Message-Enabled: true
-
-#Message displayed when any team is eliminated (to everyone in the arena)
-Team-Eliminate-Message:
-  - ''
-  - '&f&lTEAM ELIMINATED > {team-color}{team-name} Team &chas been eliminated!'
-  - ''
-
-
 ############### TNT AUTO IGNITE ###############
 
 #WARNING!!! If you enable this MAKE SURE MBedwars' tnt-autoignite is FALSE
@@ -128,7 +116,7 @@ TNT:
 Empty-Buckets: true
 Empty-Potions: true
 
-############### TOP KILLER MESSAGE [BETA] ###############
+############### TOP KILLER MESSAGE ###############
 Top-Killer-Message-Enabled: true
 
 #No Top killers FinalKill
@@ -161,21 +149,45 @@ Break-Invis:
     - BLOCK_EXPLOSION
     - ENTITY_EXPLOSION
 
-############### Permanent Potion Effects [BETA] ###############
 
-#ArenaName:PotionEffectName:amplifier
-#Default amplifier is 1
-#All arenas = ALL-ARENAS
-Permanent-Effects:
-  - 'Ruins:NIGHT_VISION'
+############### PLAYER COUNT PLACEHOLDER ###############
+#Made by LeNinjaHD, added in 1.0.0
 
-############### Friendly Villagers [BETA] ###############
+#Whether to count Spectators for the Player Count Placeholders
+player-count-placeholder-count-spectators: true
 
-#If this is enabled, MBedwars dealers/upgrade-dealers
-#will look at the closest players
-Friendly-Villagers: false
+############### BedDestoryEffects ###############
+#Made by LeNinjaHD, added in ???
 
-############### Shorten-Countdown [BETA] ###############
+# NONE - None
+# FIREWORK - Firework
+bed-destroy-effect: FIREWORK
+
+### FIREWORK CUSTOMISATION ###
+
+#RGB Color
+firework-color-red: 255
+firework-color-green: 255
+firework-color-blue: 255
+
+#Types:
+#CREEPER - Creeper Face
+#BALL - Ball
+#BALL_LARGE - Large Ball
+#BURST - Burst
+#STAR - Star
+firework-type: "STAR"
+
+#Firework Trail
+firework-trail: true
+
+#Duration Until Firework will detonate in ticks (20 ticks = 1 sec)
+firework-duration: 20
+
+############### Beta ###############
+
+#Enable Beta Features
+beta: false
 
 #Shortens lobby time to a specified value
 #if arena filled over a certain percent

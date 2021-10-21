@@ -4,6 +4,7 @@ import de.marcely.bedwars.api.BedwarsAPI;
 import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.GenTiers;
 import me.metallicgoat.MBedwarsTweaks.utils.Metrics;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -29,10 +30,17 @@ public class Main extends JavaPlugin {
                 "------------------------------"
         );
 
-        BedwarsAPI.onReady(() -> {
-            GenTiers.startUpdatingTime();
-            new Placeholders().register();
-        });
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
+            log("PlaceholderAPI Was not Found! Placeholders wont work!");
+            BedwarsAPI.onReady(() -> GenTiers.startUpdatingTime());
+        } else {
+            BedwarsAPI.onReady(() -> {
+                GenTiers.startUpdatingTime();
+                new Placeholders().register();
+            });
+        }
+
+
     }
 
     public static Main getInstance() {
