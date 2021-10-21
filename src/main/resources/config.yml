@@ -183,3 +183,8 @@ firework-trail: true
 
 #Duration Until Firework will detonate in ticks (20 ticks = 1 sec)
 firework-duration: 20
+
+############### Beta ###############
+
+#Enable Beta Features
+beta: false
