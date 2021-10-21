@@ -8,13 +8,17 @@ import me.metallicgoat.MBedwarsTweaks.Main;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import me.metallicgoat.MBedwarsTweaks.utils.XSeries.XMaterial;
 import org.bukkit.Bukkit;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Optional;
 
 public class DowngradeTools implements Listener {
@@ -93,12 +97,59 @@ public class DowngradeTools implements Listener {
                 //Check to make sure player has pickaxe
                 if (!pickaxe.equals("AIR")) {
                     Optional<XMaterial> material = XMaterial.matchXMaterial(pickaxe + "_PICKAXE");
-                    material.ifPresent(XMaterial -> player.getInventory().addItem(XMaterial.parseItem()));
+                    if(material.isPresent()){
+                        /*
+                        ItemStack itemStack = new ItemStack(Objects.requireNonNull(material.get().parseItem()));
+
+                        ItemMeta itemMeta = itemStack.getItemMeta();
+                        assert itemMeta != null;
+                        itemMeta.setUnbreakable(true);
+                        itemStack.setItemMeta(itemMeta);
+
+                        Enchantment enchantment = XEnchantment.DIG_SPEED.parseEnchantment();
+
+                        //For Ralphie
+                        assert enchantment != null;
+                        switch(playerPickaxe.get(player)){
+                            case 1:
+                            case 3: itemMeta.addEnchant(enchantment, 1, true); break;
+                            case 4: itemMeta.addEnchant(enchantment, 2, true); break;
+                            case 5: itemMeta.addEnchant(enchantment, 3, true); break;
+                        }
+
+                         */
+
+                        player.getInventory().addItem(material.get().parseItem());
+                    }
                 }
                 //Check to make sure player has axe
                 if (!axe.equals("AIR")) {
                     Optional<XMaterial> material = XMaterial.matchXMaterial(axe + "_AXE");
-                    material.ifPresent(XMaterial -> player.getInventory().addItem(XMaterial.parseItem()));
+                    if(material.isPresent()){
+                        /*
+                        ItemStack itemStack = new ItemStack(Objects.requireNonNull(material.get().parseItem()));
+
+                        ItemMeta itemMeta = itemStack.getItemMeta();
+                        assert itemMeta != null;
+                        itemMeta.setUnbreakable(true);
+
+                        Enchantment enchantment = XEnchantment.DIG_SPEED.parseEnchantment();
+
+                        //For Ralphie
+                        assert enchantment != null;
+                        switch(playerAxe.get(player)){
+                            case 1:
+                            case 2: itemMeta.addEnchant(enchantment, 1, true); break;
+                            case 3: itemMeta.addEnchant(enchantment, 2, true); break;
+                            case 5: itemMeta.addEnchant(enchantment, 3, true); break;
+                        }
+
+                        itemStack.setItemMeta(itemMeta);
+
+                         */
+
+                        player.getInventory().addItem(material.get().parseItem());
+                    }
                 }
             }, 2L);
         }
