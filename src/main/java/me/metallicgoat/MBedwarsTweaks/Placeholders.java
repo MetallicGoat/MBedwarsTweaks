@@ -109,8 +109,4 @@ public class Placeholders extends PlaceholderExpansion {
 
         return Integer.toString(count);
     }
-
-    private static Main plugin(){
-        return Main.getInstance();
-    }
 }

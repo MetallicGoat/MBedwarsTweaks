@@ -78,6 +78,7 @@ public class DowngradeTools implements Listener {
                 }
                 playerPickaxe.replace(player, currentLevel);
             }
+
             //reduce player axe by one if necessary
             if (playerAxe.get(player) > 1) {
                 int currentLevel = playerAxe.get(player) - 1;

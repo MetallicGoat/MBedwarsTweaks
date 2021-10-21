@@ -108,9 +108,10 @@ Notification:
 
 ############### TEAM ELIMINATE ###############
 
+#Message displayed when any team is eliminated (to everyone in the arena)
 Team-Eliminate-Message-Enabled: true
 
-#Message displayed when any team is eliminated (to everyone in the arena)
+#Placeholders: {team-color} {team-name}
 Team-Eliminate-Message:
   - ''
   - '&f&lTEAM ELIMINATED > {team-color}{team-name} Team &chas been eliminated!'
@@ -125,10 +126,12 @@ TNT:
   Delay: 4
 
 ############### REMOVE ON USE ###############
+
 Empty-Buckets: true
 Empty-Potions: true
 
 ############### TOP KILLER MESSAGE [BETA] ###############
+
 Top-Killer-Message-Enabled: true
 
 #No Top killers FinalKill
@@ -157,11 +160,11 @@ Top-Killer-Message:
 Break-Invis:
   Enabled: true
   Causes:
-    - ENTITY_ATTACK
-    - BLOCK_EXPLOSION
-    - ENTITY_EXPLOSION
+    - 'ENTITY_ATTACK'
+    - 'BLOCK_EXPLOSION'
+    - 'ENTITY_EXPLOSION'
 
-############### Permanent Potion Effects [BETA] ###############
+############### PERMANENT POTION EFFECTS [BETA] ###############
 
 #ArenaName:PotionEffectName:amplifier
 #Default amplifier is 1
@@ -169,13 +172,13 @@ Break-Invis:
 Permanent-Effects:
   - 'Ruins:NIGHT_VISION'
 
-############### Friendly Villagers [BETA] ###############
+############### FRIENDLY VILLAGERS [BETA] ###############
 
 #If this is enabled, MBedwars dealers/upgrade-dealers
 #will look at the closest players
 Friendly-Villagers: false
 
-############### Shorten-Countdown [BETA] ###############
+############### SHORTEN COUNTDOWN [BETA] ###############
 
 #Shortens lobby time to a specified value
 #if arena filled over a certain percent
@@ -185,5 +188,33 @@ Shorten-Countdown:
   Shorten-Time-To: 10
 
 ############### PLAYER COUNT PLACEHOLDER ###############
+
 #Whether to count Spectators for the Player Count Placeholders
 Player-Count-Placeholder-Count-Spectators: true
+
+############### BED DESTROY EFFECTS [BETA] ###############
+
+# NONE - None
+# FIREWORK - Firework
+bed-destroy-effect: 'NONE'
+
+#-----> FIREWORK CUSTOMISATION
+
+#RGB Color
+firework-color-red: 255
+firework-color-green: 255
+firework-color-blue: 255
+
+#Types:
+#CREEPER - Creeper Face
+#BALL - Ball
+#BALL_LARGE - Large Ball
+#BURST - Burst
+#STAR - Star
+firework-type: "STAR"
+
+#Firework Trail
+firework-trail: true
+
+#Duration Until Firework will detonate in ticks (20 ticks = 1 sec)
+firework-duration: 20
