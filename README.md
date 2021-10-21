@@ -1,29 +1,29 @@
 
 # MBedwarsTweaks
-Tweks & Features for MBedWars
+Tweaks & Features for MBedWars
 
-[**Support**](https://discord.gg/RC2mtdcEdD)
+[**Discord Support**](https://discord.gg/RC2mtdcEdD)
 
 **Features**
 
  1. AdvancedSwords (Upgrades, AntiDrop and much more)
- 2. Automatic Igniton of TNT
- 3. Fireball Block Whitelist
- 4. Buy Message
- 5. Final Kill Message
- 6. Team Eliminated Message
- 7. Top Killers Message
- 8. Heigth Cap Message 
- 9. Villagers Look at You
- 10. Permanent Effects
- 11. Waterflow Fix
- 12. Spawner Upgrades
- 13. Scheudule Bed Break
+ 2. Gen-Tiers (With Placeholder!)
+ 3. Configurable Ignition time of TNT
+ 4. Fireball Block Whitelist
+ 5. Buy Message
+ 6. Final Kill Message
+ 7. Team Eliminated Message
+ 8. Top Killers Message
+ 9. Height Cap Message 
+ 10. Villagers Look at You
+ 11. Permanent Effects
+ 12. Waterflow Fix
+ 13. Schedule Bed Break
  14. Disable unused Gens
- 15. And More!
+ 15. Bed Break Effects
+ 16. And More!
 
 **Example Configuration**
- 
 
     ############### PREVENT WATER BUILDUP ###############
     
