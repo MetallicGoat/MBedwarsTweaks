@@ -31,9 +31,10 @@ public class Main extends JavaPlugin {
         );
 
         BedwarsAPI.onReady(() -> {
-            if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
-                log("PlaceholderAPI Was not Found! Placeholders wont work!");
+            if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
                 new Placeholders().register();
+            }else{
+                log("PlaceholderAPI Was not Found! Placeholders wont work!");
             }
             GenTiers.startUpdatingTime();
         });
