@@ -3,6 +3,9 @@ package me.metallicgoat.MBedwarsTweaks.tweaks.misc;
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
+import de.marcely.bedwars.api.world.WorldStorage;
+import de.marcely.bedwars.api.world.hologram.HologramController;
+import de.marcely.bedwars.api.world.hologram.HologramControllerType;
 import de.marcely.bedwars.api.world.hologram.HologramEntity;
 import me.metallicgoat.MBedwarsTweaks.Main;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
@@ -40,12 +43,20 @@ public class FriendlyVillagers implements Listener {
     public void onRoundEnd(RoundEndEvent e){
         World world = e.getArena().getGameWorld();
         if(world != null) {
-            BedwarsAPI.getWorldStorage(world).getHolograms().forEach(hologramEntity -> hologramEntity.teleport(hologramEntity.getSpawnLocation()));
-            if (ServerManager.getConfig().getBoolean("Friendly-Villagers")) {
-                worlds.remove(world);
-                if (worlds.isEmpty()) {
-                    task.cancel();
-                    isRunning = false;
+            WorldStorage worldStorage = BedwarsAPI.getWorldStorage(world);
+            if(worldStorage != null) {
+                worldStorage.getHolograms().forEach(hologramEntity -> {
+                    if (hologramEntity.getControllerType() == HologramControllerType.DEALER
+                            || hologramEntity.getControllerType() == HologramControllerType.UPGRADE_DEALER) {
+                        hologramEntity.teleport(hologramEntity.getSpawnLocation());
+                    }
+                });
+                if (ServerManager.getConfig().getBoolean("Friendly-Villagers")) {
+                    worlds.remove(world);
+                    if (worlds.isEmpty()) {
+                        task.cancel();
+                        isRunning = false;
+                    }
                 }
             }
         }
@@ -57,31 +68,41 @@ public class FriendlyVillagers implements Listener {
         //For each active world (Every Tick)
         task = Bukkit.getScheduler().runTaskTimer(plugin(), () -> worlds.forEach(world -> {
 
-            //Get all villagers in the world
-            Collection<HologramEntity> entity = BedwarsAPI.getWorldStorage(world).getHolograms();
+            WorldStorage worldStorage = BedwarsAPI.getWorldStorage(world);
 
-            //For each villager
-            entity.forEach(hologramEntity -> {
-                //Get players in range of villager
-                Player[] playersArray = hologramEntity.getSeeingPlayers();
+            if(worldStorage != null) {
 
-                if(playersArray.length > 0){
-                    //Get the closest player
-                    Player lookAtPlayer = Arrays.stream(playersArray).min(Comparator.comparingDouble(p -> p.getLocation().distanceSquared(hologramEntity.getLocation()))).get();
+                //Get all villagers in the world
+                Collection<HologramEntity> entity = worldStorage.getHolograms();
 
-                    //Final location
-                    Location moveTo = hologramEntity.getLocation().setDirection(lookAtPlayer.getLocation().subtract(hologramEntity.getLocation()).toVector());
+                //For each villager
+                entity.forEach(hologramEntity -> {
 
-                    //Smooth Look (Interpolation)
-                    float currentYaw = hologramEntity.getLocation().getYaw();
-                    float targetYaw = moveTo.getYaw();
-                    float newYaw = currentYaw + (targetYaw - currentYaw)/4;
+                    if(hologramEntity.getControllerType() == HologramControllerType.DEALER
+                            || hologramEntity.getControllerType() == HologramControllerType.UPGRADE_DEALER) {
 
-                    //Actually move villager
-                    moveTo.setYaw(newYaw);
-                    hologramEntity.teleport(moveTo);
-                }
-            });
+                        //Get players in range of villager
+                        Player[] playersArray = hologramEntity.getSeeingPlayers();
+
+                        if (playersArray.length > 0) {
+                            //Get the closest player
+                            Player lookAtPlayer = Arrays.stream(playersArray).min(Comparator.comparingDouble(p -> p.getLocation().distanceSquared(hologramEntity.getLocation()))).get();
+
+                            //Final location
+                            Location moveTo = hologramEntity.getLocation().setDirection(lookAtPlayer.getLocation().subtract(hologramEntity.getLocation()).toVector());
+
+                            //Smooth Look (Interpolation)
+                            float currentYaw = hologramEntity.getLocation().getYaw();
+                            float targetYaw = moveTo.getYaw();
+                            float newYaw = currentYaw + (targetYaw - currentYaw) / 4;
+
+                            //Actually move villager
+                            moveTo.setYaw(newYaw);
+                            hologramEntity.teleport(moveTo);
+                        }
+                    }
+                });
+            }
         }), 0L, 1);
 
     }

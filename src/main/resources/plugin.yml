@@ -3,4 +3,5 @@ name: MBedwarsTweaks
 author: MetallicGoat
 main: me.metallicgoat.MBedwarsTweaks.Main
 description: Tweaks and Features for MBedwars
+api-version: 1.13
 depend: [MBedwars]
