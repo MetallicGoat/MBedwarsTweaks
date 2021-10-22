@@ -53,7 +53,7 @@ public class TopKillers implements Listener {
             HashMap<Player, Integer> arenaScoreHashMap = new HashMap<>();
 
             playerArenaHashMap.get(e.getArena()).forEach(player -> {
-                int playerKills = scoreHashMap.get(player);
+                int playerKills = scoreHashMap.getOrDefault(player, 0);
                 arenaScoreHashMap.put(player, playerKills);
                 scoreHashMap.remove(player);
             });
