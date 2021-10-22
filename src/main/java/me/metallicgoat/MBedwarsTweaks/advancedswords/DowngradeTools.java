@@ -6,6 +6,7 @@ import de.marcely.bedwars.api.event.player.PlayerIngameRespawnEvent;
 import de.marcely.bedwars.api.game.shop.ShopItem;
 import me.metallicgoat.MBedwarsTweaks.Main;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
+import me.metallicgoat.MBedwarsTweaks.utils.XSeries.XEnchantment;
 import me.metallicgoat.MBedwarsTweaks.utils.XSeries.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
@@ -99,13 +100,15 @@ public class DowngradeTools implements Listener {
                 if (!pickaxe.equals("AIR")) {
                     Optional<XMaterial> material = XMaterial.matchXMaterial(pickaxe + "_PICKAXE");
                     if(material.isPresent()){
+
                         /*
+
                         ItemStack itemStack = new ItemStack(Objects.requireNonNull(material.get().parseItem()));
 
                         ItemMeta itemMeta = itemStack.getItemMeta();
                         assert itemMeta != null;
                         itemMeta.setUnbreakable(true);
-                        itemStack.setItemMeta(itemMeta);
+
 
                         Enchantment enchantment = XEnchantment.DIG_SPEED.parseEnchantment();
 
@@ -117,6 +120,7 @@ public class DowngradeTools implements Listener {
                             case 4: itemMeta.addEnchant(enchantment, 2, true); break;
                             case 5: itemMeta.addEnchant(enchantment, 3, true); break;
                         }
+                        itemStack.setItemMeta(itemMeta);
 
                          */
 
@@ -148,6 +152,7 @@ public class DowngradeTools implements Listener {
                         itemStack.setItemMeta(itemMeta);
 
                          */
+
 
                         player.getInventory().addItem(material.get().parseItem());
                     }
