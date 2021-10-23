@@ -6,20 +6,15 @@ import de.marcely.bedwars.api.event.player.PlayerIngameRespawnEvent;
 import de.marcely.bedwars.api.game.shop.ShopItem;
 import me.metallicgoat.MBedwarsTweaks.Main;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
-import me.metallicgoat.MBedwarsTweaks.utils.XSeries.XEnchantment;
 import me.metallicgoat.MBedwarsTweaks.utils.XSeries.XMaterial;
 import org.bukkit.Bukkit;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Optional;
 
 public class DowngradeTools implements Listener {

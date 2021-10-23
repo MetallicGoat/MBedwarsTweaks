@@ -2,17 +2,11 @@ package me.metallicgoat.MBedwarsTweaks.utils;
 
 import me.metallicgoat.MBedwarsTweaks.Main;
 import me.metallicgoat.MBedwarsTweaks.advancedswords.*;
-import me.metallicgoat.MBedwarsTweaks.tweaks.messages.FinalKill;
-import me.metallicgoat.MBedwarsTweaks.tweaks.messages.TeamEliminate;
+import me.metallicgoat.MBedwarsTweaks.bedbreakeffects.*;
+import me.metallicgoat.MBedwarsTweaks.tweaks.explotions.*;
+import me.metallicgoat.MBedwarsTweaks.tweaks.messages.*;
 import me.metallicgoat.MBedwarsTweaks.tweaks.misc.*;
-import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.ScheduleBedBreak;
-import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.UnusedGens;
-import me.metallicgoat.MBedwarsTweaks.tweaks.messages.TopKillers;
-import me.metallicgoat.MBedwarsTweaks.tweaks.explotions.AutoIgnite;
-import me.metallicgoat.MBedwarsTweaks.tweaks.explotions.FireballWhitelist;
-import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.GenTiers;
-import me.metallicgoat.MBedwarsTweaks.tweaks.messages.BuyMessage;
-import me.metallicgoat.MBedwarsTweaks.tweaks.misc.FriendlyVillagers;
+import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.*;
 import me.metallicgoat.MBedwarsTweaks.utils.configupdater.ConfigUpdater;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -81,11 +75,14 @@ public class ServerManager {
         manager.registerEvents(new AlwaysSword(), plugin());
         manager.registerEvents(new AntiChest(), plugin());
         manager.registerEvents(new AntiDrop(), plugin());
-        manager.registerEvents(new DowngradeTools(), plugin());
+        manager.registerEvents(new DowngradeToolsV2(), plugin());
         manager.registerEvents(new OrderedSwordBuy(), plugin());
         manager.registerEvents(new ReplaceSwordOnBuy(), plugin());
         manager.registerEvents(new SwordDrop(), plugin());
         manager.registerEvents(new ToolBuy(), plugin());
+
+        //Break Effects
+        manager.registerEvents(new BedDestroyListener(), plugin());
 
 
     }
