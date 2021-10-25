@@ -18,12 +18,9 @@ public class DowngradeToolsV2 implements Listener {
         Arena arena = e.getArena();
 
         Collection<BuyGroup> buyGroups = BedwarsAPI.getGameAPI().getBuyGroups();
-        System.out.println("test1");
         for(BuyGroup buyGroup : buyGroups){
-            System.out.println("group " + buyGroup.getName());
             if(buyGroup.getName().equals("pickaxe")){
                 int level = arena.getBuyGroupLevel(player, buyGroup);
-                System.out.println("level " + level);
                 if(level > 1){
                     arena.setBuyGroupLevel(player, buyGroup, level - 1);
                 }
