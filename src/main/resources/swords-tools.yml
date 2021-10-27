@@ -57,14 +57,15 @@ Advanced-Tool-Replacement:
   Problem: You already have the same, or higher tier
   Force-Ordered-Problem: You need to have a previous tier first
 
+#Advanced-Tool-Replacement must be true
+#When you die with a tool, you will get one tier lower when you respawn
+#Buy-group names are 'axe', and 'pickaxe'
+Degraded-Tool-BuyGroups: true
+
 #Prevents players from buying multiple of the same swords, or lower tier swords
 Ordered-Sword-Buy:
   Enabled: false
   Problem: You already have the same, or higher tier
-
-#Advanced-Tool-Replacement must be true
-#When you die with a tool, you will get one tier lower when you respawn
-Degraded-Tool-BuyGroups: true
 
 #If you add your sword to a chest, and have no other sword
 #You will be given a wooden sword

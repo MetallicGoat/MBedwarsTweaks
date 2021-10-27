@@ -75,7 +75,7 @@ public class ServerManager {
         manager.registerEvents(new AlwaysSword(), plugin());
         manager.registerEvents(new AntiChest(), plugin());
         manager.registerEvents(new AntiDrop(), plugin());
-        manager.registerEvents(new DowngradeToolsV2(), plugin());
+        manager.registerEvents(new DowngradeTools(), plugin());
         manager.registerEvents(new OrderedSwordBuy(), plugin());
         manager.registerEvents(new ReplaceSwordOnBuy(), plugin());
         manager.registerEvents(new SwordDrop(), plugin());
