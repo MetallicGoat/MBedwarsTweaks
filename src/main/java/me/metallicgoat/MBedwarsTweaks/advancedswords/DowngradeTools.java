@@ -27,7 +27,7 @@ public class DowngradeTools implements Listener {
     @EventHandler
     public void onStart(RoundStartEvent e){
         if(ServerManager.getSwordsToolsConfig().getBoolean("Degraded-Tool-BuyGroups")
-                && ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Tool-Replacement")) {
+                && ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Tool-Replacement.Enabled")) {
             for (Player player : e.getArena().getPlayers()) {
                 pickaxeHashMap.put(player, 0);
                 axeHashMap.put(player, 0);
@@ -38,7 +38,7 @@ public class DowngradeTools implements Listener {
     @EventHandler
     public void onRespawn(PlayerIngameRespawnEvent e){
         if(ServerManager.getSwordsToolsConfig().getBoolean("Degraded-Tool-BuyGroups")
-                && ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Tool-Replacement")) {
+                && ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Tool-Replacement.Enabled")) {
             Player player = e.getPlayer();
             Arena arena = e.getArena();
             Collection<BuyGroup> buyGroups = BedwarsAPI.getGameAPI().getBuyGroups();
@@ -63,7 +63,7 @@ public class DowngradeTools implements Listener {
     @EventHandler
     public void onRespawn(PlayerIngameDeathEvent e){
         if(ServerManager.getSwordsToolsConfig().getBoolean("Degraded-Tool-BuyGroups")
-                && ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Tool-Replacement")) {
+                && ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Tool-Replacement.Enabled")) {
             Player player = e.getPlayer();
             Arena arena = e.getArena();
 
