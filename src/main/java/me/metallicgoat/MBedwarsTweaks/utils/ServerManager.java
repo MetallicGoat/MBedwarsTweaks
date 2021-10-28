@@ -79,7 +79,7 @@ public class ServerManager {
         manager.registerEvents(new OrderedSwordBuy(), plugin());
         manager.registerEvents(new ReplaceSwordOnBuy(), plugin());
         manager.registerEvents(new SwordDrop(), plugin());
-        manager.registerEvents(new ToolBuy(), plugin());
+        manager.registerEvents(new ToolBuyV2(), plugin());
 
         //Break Effects
         manager.registerEvents(new BedDestroyListener(), plugin());

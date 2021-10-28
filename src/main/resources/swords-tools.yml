@@ -35,7 +35,7 @@ Anti-Drop:
     - DIAMOND_AXE
     - SHEARS
 
-
+#Obsolete as of 10/27/2021. Will be removed shortly
 Tools-Sold:
   Pickaxe-Types:
     - WOOD
@@ -50,14 +50,15 @@ Tools-Sold:
 
 #With this feature enabled players can only have one tool of a specific type at a time
 #Players will not be able to downgrade their tool if the is enabled
-#(Tool Mechanics like Hypixel)
+#If force ordered is true, you must buy every tier in order
+#Buy-group names are 'axe', and 'pickaxe'
 Advanced-Tool-Replacement:
   Enabled: true
   Force-Ordered: true
   Problem: You already have the same, or higher tier
   Force-Ordered-Problem: You need to have a previous tier first
 
-#Advanced-Tool-Replacement must be true
+#Advanced-Tool-Replacement MUST be enabled
 #When you die with a tool, you will get one tier lower when you respawn
 #Buy-group names are 'axe', and 'pickaxe'
 Degraded-Tool-BuyGroups: true
