@@ -3,6 +3,7 @@ package me.metallicgoat.MBedwarsTweaks.advancedswords;
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
+import de.marcely.bedwars.api.event.player.PlayerBuyInShopEvent;
 import de.marcely.bedwars.api.event.player.PlayerIngameDeathEvent;
 import de.marcely.bedwars.api.event.player.PlayerIngameRespawnEvent;
 import de.marcely.bedwars.api.game.shop.BuyGroup;
@@ -57,6 +58,32 @@ public class DowngradeTools implements Listener {
                             break;
                         }
                     }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void levelOneBuy(PlayerBuyInShopEvent e) {
+        Player p = e.getPlayer();
+
+        //If enabled, and item has buy-group
+        if(e.getProblems().isEmpty() && e.getItem().hasBuyGroup() &&
+                ServerManager.getSwordsToolsConfig().getBoolean("Degraded-Tool-BuyGroups")
+                && ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Tool-Replacement.Enabled")){
+
+            BuyGroup group = e.getItem().getBuyGroup();
+            int level = e.getItem().getBuyGroupLevel();
+
+            assert group != null;
+            //if proper buy-group
+            if(level == 1 && (group.getName().equalsIgnoreCase("axe")
+                    || group.getName().equalsIgnoreCase("pickaxe"))) {
+
+                if(group.getName().equalsIgnoreCase("pickaxe")){
+                    pickaxeHashMap.put(p, 1);
+                }else{
+                    axeHashMap.put(p, 1);
                 }
             }
         }
