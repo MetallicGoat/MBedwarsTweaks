@@ -17,7 +17,6 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class DowngradeTools implements Listener {
 
@@ -47,13 +46,16 @@ public class DowngradeTools implements Listener {
                 if (buyGroupName.equalsIgnoreCase("pickaxe")
                         || buyGroup.getName().equalsIgnoreCase("axe")) {
                     int level = buyGroupName.equalsIgnoreCase("pickaxe") ? pickaxeHashMap.get(player) : axeHashMap.get(player);
-                    for (ShopItem item : Objects.requireNonNull(buyGroup.getItems(level))) {
-                        BukkitScheduler scheduler = Bukkit.getScheduler();
-                        scheduler.runTaskLater(Main.getInstance(), () -> item.getProducts().forEach(shopProduct -> {
-                            arena.setBuyGroupLevel(player, buyGroup, level);
-                            shopProduct.give(e.getPlayer(), e.getArena().getPlayerTeam(player), e.getArena(), 1);
-                        }), 1L);
-                        break;
+                    Collection<? extends ShopItem> shopItems = buyGroup.getItems(level);
+                    if(shopItems != null) {
+                        for (ShopItem item : shopItems) {
+                            BukkitScheduler scheduler = Bukkit.getScheduler();
+                            scheduler.runTaskLater(Main.getInstance(), () -> item.getProducts().forEach(shopProduct -> {
+                                arena.setBuyGroupLevel(player, buyGroup, level);
+                                shopProduct.give(e.getPlayer(), e.getArena().getPlayerTeam(player), e.getArena(), 1);
+                            }), 1L);
+                            break;
+                        }
                     }
                 }
             }
