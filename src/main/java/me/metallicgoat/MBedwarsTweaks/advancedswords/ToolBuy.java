@@ -20,8 +20,9 @@ public class ToolBuy implements Listener {
         Arena arena = e.getArena();
 
         //If enabled, and item has buy-group
-        if(e.getItem().hasBuyGroup() &&
-                ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Tool-Replacement.Enabled")){
+        if(e.getItem().hasBuyGroup()
+                && ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Tool-Replacement.Enabled")
+                && e.getProblems().isEmpty()){
 
             BuyGroup group = e.getItem().getBuyGroup();
 
