@@ -144,13 +144,17 @@ public class GenTiers implements Listener {
         int minutes = (timeoutSeconds / 60) % 60;
         int seconds = timeoutSeconds % 60;
 
+        System.out.println(minutes + ":" + seconds);
+
         if(minutes > 0 && seconds > 0) {
             if (seconds < 10) {
                 return minutes + ":0" + seconds;
             } else {
                 return minutes + ":" + seconds;
             }
-        }else{
+        }else if(seconds == 0 && minutes > 0 ) {
+            return minutes + ":00";
+        } else {
             return "0:00";
         }
     }
