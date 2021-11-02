@@ -35,19 +35,6 @@ Anti-Drop:
     - DIAMOND_AXE
     - SHEARS
 
-#Obsolete as of 10/27/2021. Will be removed shortly
-Tools-Sold:
-  Pickaxe-Types:
-    - WOOD
-    - IRON
-    - GOLD
-    - DIAMOND
-  Axe-Types:
-    - WOOD
-    - STONE
-    - IRON
-    - DIAMOND
-
 #With this feature enabled players can only have one tool of a specific type at a time
 #Players will not be able to downgrade their tool if the is enabled
 #If force ordered is true, you must buy every tier in order
