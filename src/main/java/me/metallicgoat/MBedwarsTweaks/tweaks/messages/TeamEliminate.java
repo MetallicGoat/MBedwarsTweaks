@@ -2,7 +2,6 @@ package me.metallicgoat.MBedwarsTweaks.tweaks.messages;
 
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
-import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.event.arena.TeamEliminateEvent;
 import de.marcely.bedwars.api.message.Message;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
