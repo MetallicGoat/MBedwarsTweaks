@@ -1,6 +1,5 @@
 package me.metallicgoat.MBedwarsTweaks.tweaks.messages;
 
-import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
@@ -12,23 +11,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class TopKillers implements Listener {
 
-    //TODO: Rewrite
 
     private final HashMap<Arena, Collection<Player>> playerArenaHashMap = new HashMap<>();
     private final HashMap<Player, Integer> scoreHashMap = new HashMap<>();
-
-    private String firstKiller = null;
-    private String secondKiller = null;
-    private String thirdKiller = null;
-
-    private int firstKillerInt = 0;
-    private int secondKillerInt = 0;
-    private int thirdKillerInt = 0;
 
     @EventHandler
     public void onGameStart(RoundStartEvent e){
@@ -47,7 +36,6 @@ public class TopKillers implements Listener {
 
     @EventHandler
     public void onGameOver(RoundEndEvent e) {
-
         if (ServerManager.getConfig().getBoolean("Top-Killer-Message-Enabled")) {
 
             HashMap<Player, Integer> arenaScoreHashMap = new HashMap<>();
@@ -58,44 +46,49 @@ public class TopKillers implements Listener {
                 scoreHashMap.remove(player);
             });
 
-            List<Player> top3 = arenaScoreHashMap.entrySet().stream().sorted(Map.Entry.<Player, Integer>comparingByValue().reversed()).limit(3).map(Map.Entry::getKey).collect(Collectors.toList());
-
-            AtomicInteger i = new AtomicInteger(1);
-            top3.forEach(p -> {
-                if (i.get() == 1 && arenaScoreHashMap.get(p) != 0) {
-                    firstKiller = BedwarsAPI.getHelper().getPlayerDisplayName(p);
-                    firstKillerInt = arenaScoreHashMap.get(p);
-                }else if(i.get() == 2 && arenaScoreHashMap.get(p) != 0) {
-                    secondKiller = BedwarsAPI.getHelper().getPlayerDisplayName(p);
-                    secondKillerInt = arenaScoreHashMap.get(p);
-                }else if(i.get() == 3 && arenaScoreHashMap.get(p) != 0) {
-                    thirdKiller = BedwarsAPI.getHelper().getPlayerDisplayName(p);
-                    thirdKillerInt = arenaScoreHashMap.get(p);
-                }
-                i.getAndIncrement();
-            });
-
-            printMessage(e);
-
+            printMessage(e, sortHashMapByValue(arenaScoreHashMap));
             playerArenaHashMap.remove(e.getArena());
-
-            arenaScoreHashMap.clear();
-
-
         }
     }
+    public static HashMap<Player, Integer> sortHashMapByValue(HashMap<Player, Integer> hm) {
+        // creating list from elements of HashMap
+        List<Map.Entry<Player, Integer>> list = new LinkedList<>(hm.entrySet());
+        // sorting list (Reverse order)
+        list.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
+        HashMap<Player, Integer> ha = new LinkedHashMap<>();
+        for(Map.Entry<Player, Integer> me : list) {
+            ha.put(me.getKey(), me.getValue());
+        }
+        return ha;
+    }
 
-    private void printMessage(RoundEndEvent event) {
+    private void printMessage(RoundEndEvent event, Map<Player, Integer> playerIntegerMap) {
+
+        String firstKiller = null, secondKiller = null, thirdKiller = null;
+        int firstKillerInt = 0, secondKillerInt = 0, thirdKillerInt = 0;
+
+        int i = 1;
+        for(Map.Entry<Player, Integer> map : playerIntegerMap.entrySet()) {
+            switch (i){
+                case 1:
+                    firstKiller = map.getKey().getDisplayName();
+                    firstKillerInt = map.getValue();
+                    break;
+                case 2:
+                    secondKiller = map.getKey().getDisplayName();
+                    secondKillerInt = map.getValue();
+                    break;
+                case 3:
+                    thirdKiller = map.getKey().getDisplayName();
+                    thirdKillerInt = map.getValue();
+                    break;
+            }
+            i++;
+        }
+
         List<String> formattedList = new ArrayList<>();
 
         if (firstKiller != null) {
-
-            if(secondKiller == null){
-                secondKiller = "";
-            }
-            if(thirdKiller == null){
-                thirdKiller = "";
-            }
 
             for (String s : ServerManager.getConfig().getStringList("Top-Killer-Message")) {
 
@@ -104,23 +97,23 @@ public class TopKillers implements Listener {
                     String complete;
 
                     if (s.contains("%Killer-2-Name%")) {
-                        if (secondKiller.equals("")) {
+                        if (secondKiller == null) {
                             continue;
                         }
                     }else if (s.contains("%Killer-3-Name%")) {
-                        if (thirdKiller.equals("")) {
+                        if (thirdKiller == null) {
                             continue;
                         }
                     }
 
                     complete = s
                             .replace("%Winner-Members%", !event.getWinners().isEmpty() ? event.getWinners().stream().map(Player::getName).collect(Collectors.joining(", ")) : "")
-                            .replace("%Winner-Members-Colored%", !event.getWinners().isEmpty() ? event.getWinnerTeam().getChatColor()+event.getWinners().stream().map(Player::getName).collect(Collectors.joining(ChatColor.WHITE+", "+event.getWinnerTeam().getChatColor())) : "")
-                            .replace("%Winner-Team-Name%", !event.getWinners().isEmpty() ? event.getWinnerTeam().getDisplayName() : "")
+                            .replace("%Winner-Members-Colored%", event.getWinnerTeam() != null ? event.getWinnerTeam().getChatColor()+event.getWinners().stream().map(Player::getName).collect(Collectors.joining(ChatColor.WHITE+", "+event.getWinnerTeam().getChatColor())) : "")
+                            .replace("%Winner-Team-Name%", event.getWinnerTeam() != null ? event.getWinnerTeam().getDisplayName() : "")
                             .replace("%Winner-Team-Color%", !event.getWinners().isEmpty() ? event.getWinnerTeam().getChatColor().toString() : "")
                             .replace("%Killer-1-Name%", firstKiller)
-                            .replace("%Killer-2-Name%", secondKiller)
-                            .replace("%Killer-3-Name%", thirdKiller)
+                            .replace("%Killer-2-Name%", secondKiller != null ? secondKiller:"")
+                            .replace("%Killer-3-Name%", thirdKiller != null ? thirdKiller:"")
                             .replace("%Killer-1-Amount%", String.valueOf(firstKillerInt))
                             .replace("%Killer-2-Amount%", String.valueOf(secondKillerInt))
                             .replace("%Killer-3-Amount%", String.valueOf(thirdKillerInt));

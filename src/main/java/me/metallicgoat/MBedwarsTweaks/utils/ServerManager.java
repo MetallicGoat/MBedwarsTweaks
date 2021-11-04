@@ -53,7 +53,7 @@ public class ServerManager {
         manager.registerEvents(new BuyMessage(), plugin());
         manager.registerEvents(new FinalKill(), plugin());
         manager.registerEvents(new TeamEliminate(), plugin());
-        manager.registerEvents(new TopKillersV2(), plugin());
+        manager.registerEvents(new TopKillers(), plugin());
 
         //Tweaks - misc
         manager.registerEvents(new BreakInvis(), plugin());
