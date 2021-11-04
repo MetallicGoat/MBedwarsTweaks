@@ -1,11 +1,8 @@
 package me.metallicgoat.MBedwarsTweaks.tweaks.spawners;
 
-import de.marcely.bedwars.api.BedwarsAPI;
-import de.marcely.bedwars.api.arena.AddPlayerIssue;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
-import de.marcely.bedwars.api.event.player.PlayerJoinArenaEvent;
 import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.api.game.spawner.SpawnerDurationModifier;
 import de.marcely.bedwars.api.message.Message;
@@ -20,8 +17,6 @@ import org.bukkit.scheduler.BukkitScheduler;
 import java.util.*;
 
 public class GenTiers implements Listener {
-
-    //TODO: Rewrite
 
     public static HashMap<Arena, String> nextTierMap = new HashMap<>();
     public static HashMap<Arena, Long> timeToNextUpdate = new HashMap<>();
