@@ -35,32 +35,6 @@ public class ToolSwordHelper {
         }
     }
 
-    public static String getMaterialFromLevel(int level){
-        switch (level){
-            case 1: return "WOOD";
-            case 2: return "STONE";
-            case 3: return "IRON";
-            case 4: return "GOLD";
-            case 5: return "DIAMOND";
-            case 6: return "NETHERITE";
-            default: return "AIR";
-        }
-    }
-
-    public static boolean doesShopProductContain(ShopItem shopItem, String material){
-        for (ShopProduct rawProduct : shopItem.getProducts()) {
-            if (rawProduct instanceof ItemShopProduct) {
-                final ItemStack[] is = ((ItemShopProduct) rawProduct).getItemStacks();
-                for (ItemStack item : is) {
-                    if (item.getType().name().contains(material) &&
-                            isNotToIgnore(ChatColor.stripColor(shopItem.getDisplayName()))) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
 
     public static Material getToolInShopProduct(ShopItem shopItem){
         for (ShopProduct rawProduct : shopItem.getProducts()) {
