@@ -178,6 +178,16 @@ Permanent-Effects:
 #will look at the closest players
 Friendly-Villagers: false
 
+############### PAPI PLACEHOLDERS ###############
+
+#%tweaks_arena-mode%
+PAPI-Mode-Placeholder:
+  #TeamNumber:PlayerNumber:ModeName
+  - '8:2:Duos'
+  - '8:1:Solos'
+  - '4:3:Trios'
+  - '4:4:Quads'
+
 ############### SHORTEN COUNTDOWN [BETA] ###############
 
 #Shortens lobby time to a specified value

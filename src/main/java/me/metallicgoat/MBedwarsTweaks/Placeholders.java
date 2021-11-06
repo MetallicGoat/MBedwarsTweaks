@@ -64,6 +64,29 @@ public class Placeholders extends PlaceholderExpansion {
             }
         }
 
+        if (params.equalsIgnoreCase("arena-mode")) {
+            Player player1 = Bukkit.getPlayer(player.getUniqueId());
+
+            Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
+            if (arena != null) {
+                int teamsAmount = arena.getEnabledTeams().size();
+                int playersPerTeam = arena.getPlayersPerTeam();
+                for(String modeGroup : ServerManager.getConfig().getStringList("PAPI-Mode-Placeholder")){
+                    String[] splitModeGroup = modeGroup.split(":");
+                    try{
+                        int groupTeams = Integer.parseInt(splitModeGroup[0]);
+                        int groupPlayerPerTeam = Integer.parseInt(splitModeGroup[1]);
+                        if(teamsAmount == groupTeams && playersPerTeam == groupPlayerPerTeam){
+                            return splitModeGroup[2];
+                        }
+                    }catch (NumberFormatException ignored){
+
+                    }
+                }
+            }
+            return "---";
+        }
+
         //Player Count of All Arenas
         if(params.equalsIgnoreCase("allplayers")) {
             return getPlayerAmount();
