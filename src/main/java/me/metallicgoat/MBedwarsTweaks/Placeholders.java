@@ -33,86 +33,73 @@ public class Placeholders extends PlaceholderExpansion {
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String params) {
 
-        //Gen Tiers
-        if(ServerManager.getConfig().getBoolean("Gen-Tiers-Enabled")) {
-            if (params.equalsIgnoreCase("next-tier")) {
-                Player player1 = Bukkit.getPlayer(player.getUniqueId());
+        Player player1 = Bukkit.getPlayer(player.getUniqueId());
 
-                Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
-                if (arena != null) {
+        switch (params.toLowerCase()){
+            case "next-tier":
+                //Gen Tiers
+                if(ServerManager.getConfig().getBoolean("Gen-Tiers-Enabled")) {
 
-                    String nextTierName = GenTiers.nextTierMap.get(arena);
-                    String nextTierTime = GenTiers.timeLeft(arena);
+                    Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
+                    if (arena != null) {
 
-                    switch (arena.getStatus()) {
-                        case LOBBY:
-                            return "Game is still in Lobby";
-                        case END_LOBBY:
-                            return "Game Ended";
-                        case STOPPED:
-                            return "Game Stopped";
-                        case RESETTING:
-                            return "Game Resetting";
-                        case RUNNING:
-                            return Message.build(ServerManager.getConfig().getString("Next-Tier-Placeholder"))
-                                    .placeholder("next-tier", nextTierName)
-                                    .placeholder("time", nextTierTime)
-                                    .done();
+                        String nextTierName = GenTiers.nextTierMap.get(arena);
+                        String nextTierTime = GenTiers.timeLeft(arena);
+
+                        switch (arena.getStatus()) {
+                            case LOBBY:
+                                return "Game is still in Lobby";
+                            case END_LOBBY:
+                                return "Game Ended";
+                            case STOPPED:
+                                return "Game Stopped";
+                            case RESETTING:
+                                return "Game Resetting";
+                            case RUNNING:
+                                return Message.build(ServerManager.getConfig().getString("Next-Tier-Placeholder"))
+                                        .placeholder("next-tier", nextTierName)
+                                        .placeholder("time", nextTierTime)
+                                        .done();
+                        }
                     }
                 }
                 return "---";
-            }
-        }
 
-        if (params.equalsIgnoreCase("arena-mode")) {
-            Player player1 = Bukkit.getPlayer(player.getUniqueId());
+            //Arena mode placeholder (eg. Solo, Duos)
+            case "arena-mode":
+                Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
+                if (arena != null) {
+                    int teamsAmount = arena.getEnabledTeams().size();
+                    int playersPerTeam = arena.getPlayersPerTeam();
+                    for(String modeGroup : ServerManager.getConfig().getStringList("PAPI-Mode-Placeholder")){
+                        String[] splitModeGroup = modeGroup.split(":");
+                        try{
+                            int groupTeams = Integer.parseInt(splitModeGroup[0]);
+                            int groupPlayerPerTeam = Integer.parseInt(splitModeGroup[1]);
+                            if(teamsAmount == groupTeams && playersPerTeam == groupPlayerPerTeam){
+                                return splitModeGroup[2];
+                            }
+                        }catch (NumberFormatException ignored){
 
-            Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
-            if (arena != null) {
-                int teamsAmount = arena.getEnabledTeams().size();
-                int playersPerTeam = arena.getPlayersPerTeam();
-                for(String modeGroup : ServerManager.getConfig().getStringList("PAPI-Mode-Placeholder")){
-                    String[] splitModeGroup = modeGroup.split(":");
-                    try{
-                        int groupTeams = Integer.parseInt(splitModeGroup[0]);
-                        int groupPlayerPerTeam = Integer.parseInt(splitModeGroup[1]);
-                        if(teamsAmount == groupTeams && playersPerTeam == groupPlayerPerTeam){
-                            return splitModeGroup[2];
                         }
-                    }catch (NumberFormatException ignored){
-
                     }
                 }
-            }
-            return "---";
-        }
+                return "---";
 
-        //Player Count of All Arenas
-        if(params.equalsIgnoreCase("allplayers")) {
-            return getPlayerAmount();
-        }
+            //Player count placeholders
+            case "allplayers": return getPlayerAmount();
+            case "players-ingame": return getPlayerAmount(ArenaStatus.RUNNING);
+            case "players-lobby": return getPlayerAmount(ArenaStatus.LOBBY);
+            case "players-endlobby": return getPlayerAmount(ArenaStatus.END_LOBBY);
 
-        //Player Count of All Arenas in Lobby
-        if(params.equalsIgnoreCase("players-lobby")) {
-            return getPlayerAmount(ArenaStatus.LOBBY);
+            default: return null;
         }
-
-        //Player Count of All Arenas Running
-        if(params.equalsIgnoreCase("players-ingame")) {
-            return getPlayerAmount(ArenaStatus.RUNNING);
-        }
-
-        //Player Count of All Arenas in EndLobby
-        if(params.equalsIgnoreCase("players-endlobby")) {
-            return getPlayerAmount(ArenaStatus.END_LOBBY);
-        }
-        return null;
     }
 
     private String getPlayerAmount(ArenaStatus status) {
         int count = 0;
 
-        //Iterate through every arena
+        //Iterate through every arena and check arena status
         for (Arena arena : GameAPI.get().getArenas()) {
             if(arena.getStatus() == status) {
                 count += (ServerManager.getConfig().getBoolean("Player-Count-Placeholder-Count-Spectators") ? arena.getPlayers().size() + arena.getSpectators().size() : arena.getPlayers().size());
