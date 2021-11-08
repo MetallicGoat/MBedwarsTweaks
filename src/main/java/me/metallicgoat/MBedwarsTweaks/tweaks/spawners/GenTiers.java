@@ -2,6 +2,7 @@ package me.metallicgoat.MBedwarsTweaks.tweaks.spawners;
 
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
+import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.api.game.spawner.SpawnerDurationModifier;
@@ -13,13 +14,17 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 
 public class GenTiers implements Listener {
 
+    //TODO: Rewrite
+
     public static HashMap<Arena, String> nextTierMap = new HashMap<>();
     public static HashMap<Arena, Long> timeToNextUpdate = new HashMap<>();
+    public static HashMap<Arena, BukkitTask> tasksToKill = new HashMap<>();
 
     @EventHandler
     public void onGameStart(RoundStartEvent e){
@@ -38,6 +43,15 @@ public class GenTiers implements Listener {
                 });
             }
             scheduleTier(arena, 0);
+        }
+    }
+
+    @EventHandler
+    public void onGameStop(RoundEndEvent event){
+        BukkitTask task = tasksToKill.get(event.getArena());
+        if(task != null) {
+            task.cancel();
+            tasksToKill.remove(event.getArena());
         }
     }
 
@@ -74,17 +88,21 @@ public class GenTiers implements Listener {
             timeToNextUpdate.put(arena, time * 20 * 60);
 
             if(!section.equalsIgnoreCase("game-over")) {
+                BukkitTask task = tasksToKill.get(arena);
+                if(task != null)
+                    task.cancel();
+
                 if (section.equalsIgnoreCase("bed-break")) {
-                    scheduler.scheduleSyncDelayedTask(plugin(), () -> {
+                    tasksToKill.put(arena, scheduler.runTaskLater(plugin(), () -> {
                         //stay in scheduler
                         if (arena.getStatus() == ArenaStatus.RUNNING) {
                             scheduleTier(arena, newKey);
                             ScheduleBedBreak.breakArenaBeds(arena);
                         }
-                    }, time * 20 * 60);
+                    }, time * 20 * 60));
 
                 } else {
-                    scheduler.scheduleSyncDelayedTask(plugin(), () -> {
+                    tasksToKill.put(arena, scheduler.runTaskLater(plugin(), () -> {
                         if (arena.getStatus() == ArenaStatus.RUNNING) {
                             scheduleTier(arena, newKey);
                             arena.broadcast(Message.build(chat));
@@ -100,7 +118,7 @@ public class GenTiers implements Listener {
                         } else {
                             nextTierMap.remove(arena);
                         }
-                    }, time * 20 * 60);
+                    }, time * 20 * 60));
                 }
             }
         }
