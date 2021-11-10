@@ -271,7 +271,7 @@ firework-duration: 20
 # Speed - How often an item drops (Seconds)
 # Chat - FinalKill Displayed on Gen Update (Supports Colour Codes)
 Gen-Tiers:
-  1:
+  1: 
     TierName: 'Diamond II'
     TierLevel: '&eTier &cII'
     Type: 'diamond'
