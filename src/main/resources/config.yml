@@ -228,3 +228,8 @@ firework-trail: true
 
 #Duration Until Firework will detonate in ticks (20 ticks = 1 sec)
 firework-duration: 20
+
+############### BYPASS PLAYER LIMIT ###############
+#If enabled you still join the server even if the Player Limit is reached.
+
+Bypass-PlayerLimit: false
