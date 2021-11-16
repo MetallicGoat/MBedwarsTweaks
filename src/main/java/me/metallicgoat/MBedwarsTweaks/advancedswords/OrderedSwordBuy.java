@@ -54,22 +54,20 @@ public class OrderedSwordBuy implements Listener {
     }
 
     private boolean isPurchasable(ItemStack product, PlayerInventory pi){
-        AtomicBoolean purchasable = new AtomicBoolean(true);
-
         if(pi.contains(product.getType())){
             return false;
         }
-        pi.forEach(itemStack -> {
+
+        for(ItemStack itemStack:pi){
             if(itemStack != null) {
                 if (itemStack.getType().name().contains("SWORD")) {
                     if (ToolSwordHelper.getSwordToolLevel(itemStack.getType()) > ToolSwordHelper.getSwordToolLevel(product.getType())) {
-                        purchasable.set(false);
+                        return false;
                     }
                 }
             }
-        });
-
-        return purchasable.get();
+        }
+        return true;
     }
 
 
