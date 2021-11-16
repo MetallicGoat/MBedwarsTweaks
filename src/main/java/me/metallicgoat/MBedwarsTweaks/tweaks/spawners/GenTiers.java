@@ -126,13 +126,15 @@ public class GenTiers implements Listener {
 
     public static void startUpdatingTime(){
         BukkitScheduler scheduler = plugin().getServer().getScheduler();
+        boolean scoreBoardUpdating = ServerManager.getConfig().getBoolean("Scoreboard-Updating");
+        int scoreBoardUpdatingInterval = ServerManager.getConfig().getInt("Scoreboard-Updating-Interval");
         scheduler.runTaskTimer(plugin(),() -> {
-            if(ServerManager.getConfig().getBoolean("Scoreboard-Updating")) {
+            if(scoreBoardUpdating) {
                 if (!timeToNextUpdate.isEmpty()) {
                     timeToNextUpdate.forEach((arena, integer) -> {
                         if (arena.getStatus() == ArenaStatus.RUNNING) {
                             timeToNextUpdate.replace(arena, integer, integer - 20);
-                            if (((integer - 20) / 20) % 5 == 0) {
+                            if (((integer - 20) / 20) % scoreBoardUpdatingInterval == 0) {
                                 arena.updateScoreboard();
                             }
                         }

@@ -62,8 +62,11 @@ Gen-Tiers-Enabled: false
 Gen-Tiers-Holos-Enabled: true
 
 #If set to true, the papi placeholders on the
-#Scoreboard will update every 5 seconds
 Scoreboard-Updating: false
+
+#Scoreboard will update every X amount of seconds
+#WARNING: Setting this value lower than 5 may cause scoreboard flicker
+Scoreboard-Updating-Interval: 5
 
 #Adds 'Tier I' to spawners listed
 Tier-One-Titles:
