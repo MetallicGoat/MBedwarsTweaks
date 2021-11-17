@@ -39,7 +39,6 @@ public class Main extends JavaPlugin {
                 log("PlaceholderAPI Was not Found! Placeholders wont work!");
             }
             GenTiersV2.section = ServerManager.getTiersConfig().getConfigurationSection("Gen-Tiers");
-            GenTiersV2.startUpdatingTime();
         });
     }
 

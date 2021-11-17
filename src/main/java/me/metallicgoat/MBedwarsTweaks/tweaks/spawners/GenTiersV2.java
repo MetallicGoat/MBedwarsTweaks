@@ -1,5 +1,6 @@
 package me.metallicgoat.MBedwarsTweaks.tweaks.spawners;
 
+import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
@@ -20,11 +21,14 @@ import java.util.*;
 
 public class GenTiersV2 implements Listener {
 
+    //TODO: Actually end game
+
     public static ConfigurationSection section;
 
     public static HashMap<Arena, String> nextTierMap = new HashMap<>();
     public static HashMap<Arena, Long> timeToNextUpdate = new HashMap<>();
-    public static HashMap<Arena, BukkitTask> tasksToKill = new HashMap<>();
+    private final HashMap<Arena, BukkitTask> tasksToKill = new HashMap<>();
+    private BukkitTask placeHolderTask = null;
 
     @EventHandler
     public void onGameStart(RoundStartEvent e){
@@ -32,6 +36,11 @@ public class GenTiersV2 implements Listener {
         boolean enabled = plugin().getConfig().getBoolean("Gen-Tiers-Enabled");
 
         if(enabled) {
+            //Start updating placeholders
+            if(placeHolderTask != null){
+                placeHolderTask = startUpdatingTime();
+            }
+
             List<String> tierOneSpawners = ServerManager.getConfig().getStringList("Tier-One-Titles.Spawners");
             String tierLevel = ServerManager.getConfig().getString("Tier-One-Titles.Tier-Name");
             if (ServerManager.getConfig().getBoolean("Gen-Tiers-Holos-Enabled")) {
@@ -53,6 +62,19 @@ public class GenTiersV2 implements Listener {
         if(task != null) {
             task.cancel();
             tasksToKill.remove(event.getArena());
+        }
+
+        //Dont kill task if
+        for(Arena arena:BedwarsAPI.getGameAPI().getArenas()){
+            if(arena.getStatus() == ArenaStatus.RUNNING){
+                return;
+            }
+        }
+
+        //Kill task
+        if(placeHolderTask != null){
+            placeHolderTask.cancel();
+            placeHolderTask = null;
         }
     }
 
@@ -124,12 +146,12 @@ public class GenTiersV2 implements Listener {
         }
     }
 
-    //TODO rewrite
-    public static void startUpdatingTime(){
+    private static BukkitTask startUpdatingTime(){
         BukkitScheduler scheduler = plugin().getServer().getScheduler();
         boolean scoreBoardUpdating = ServerManager.getConfig().getBoolean("Scoreboard-Updating");
         int scoreBoardUpdatingInterval = ServerManager.getConfig().getInt("Scoreboard-Updating-Interval");
-        scheduler.runTaskTimer(plugin(),() -> {
+
+        return scheduler.runTaskTimer(plugin(),() -> {
             if(scoreBoardUpdating) {
                 if (!timeToNextUpdate.isEmpty()) {
                     timeToNextUpdate.forEach((arena, integer) -> {
