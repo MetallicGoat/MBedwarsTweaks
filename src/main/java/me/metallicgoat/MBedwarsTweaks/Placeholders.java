@@ -7,7 +7,6 @@ import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.message.Message;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.GenTiers;
-import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.GenTiersV2;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -44,8 +43,8 @@ public class Placeholders extends PlaceholderExpansion {
                     Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
                     if (arena != null) {
 
-                        String nextTierName = GenTiersV2.nextTierMap.get(arena);
-                        String nextTierTime = GenTiersV2.timeLeft(arena);
+                        String nextTierName = GenTiers.nextTierMap.get(arena);
+                        String nextTierTime = GenTiers.timeLeft(arena);
 
                         switch (arena.getStatus()) {
                             case LOBBY:

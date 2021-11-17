@@ -68,7 +68,7 @@ public class ServerManager {
         manager.registerEvents(new PlayerLimitBypass(), plugin());
 
         //Tweaks - spawners
-        manager.registerEvents(new GenTiersV2(), plugin());
+        manager.registerEvents(new GenTiers(), plugin());
         manager.registerEvents(new ScheduleBedBreak(), plugin());
         manager.registerEvents(new UnusedGens(), plugin());
 
