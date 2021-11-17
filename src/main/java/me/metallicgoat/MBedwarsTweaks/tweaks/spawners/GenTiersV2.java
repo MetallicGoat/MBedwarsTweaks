@@ -153,7 +153,7 @@ public class GenTiersV2 implements Listener {
         int minutes = (timeoutSeconds / 60) % 60;
         int seconds = timeoutSeconds % 60;
 
-        if(minutes > 0 && seconds > 0) {
+        if(minutes + seconds > 0) {
             if (seconds < 10) {
                 return minutes + ":0" + seconds;
             } else {
