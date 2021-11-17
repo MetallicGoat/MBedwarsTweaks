@@ -135,6 +135,7 @@ public class GenTiers implements Listener {
                         if (arena.getStatus() == ArenaStatus.RUNNING) {
                             timeToNextUpdate.replace(arena, integer, integer - 20);
                             if (((integer - 20) / 20) % scoreBoardUpdatingInterval == 0) {
+                                System.out.println(integer);
                                 arena.updateScoreboard();
                             }
                         }
