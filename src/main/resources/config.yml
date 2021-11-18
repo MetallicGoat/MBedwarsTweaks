@@ -17,7 +17,7 @@ Height-Cap:
 
 ############### ACTION BAR ###############
 
-#MBedwars ActionBar Message MUST be disabled
+#You may want to DISABLE MBedwars's team name actionbar in the config.cm2
 Action-Bar-Enabled: false
 
 #Supports PAPI Placeholders

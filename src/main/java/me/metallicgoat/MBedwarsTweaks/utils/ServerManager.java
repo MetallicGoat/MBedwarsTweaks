@@ -56,6 +56,7 @@ public class ServerManager {
         manager.registerEvents(new TopKillers(), plugin());
 
         //Tweaks - misc
+        manager.registerEvents(new ActionBar(), plugin());
         manager.registerEvents(new BreakInvis(), plugin());
         manager.registerEvents(new EmptyBucket(), plugin());
         manager.registerEvents(new EmptyPotion(), plugin());
@@ -63,9 +64,9 @@ public class ServerManager {
         manager.registerEvents(new FriendlyVillagers(), plugin());
         manager.registerEvents(new HeightCap(), plugin());
         manager.registerEvents(new PermanentEffects(), plugin());
+        manager.registerEvents(new PlayerLimitBypass(), plugin());
         manager.registerEvents(new ShortenCountdown(), plugin());
         manager.registerEvents(new WaterFlow(), plugin());
-        manager.registerEvents(new PlayerLimitBypass(), plugin());
 
         //Tweaks - spawners
         manager.registerEvents(new GenTiers(), plugin());
