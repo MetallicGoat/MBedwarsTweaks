@@ -37,7 +37,7 @@ public class GenTiers implements Listener {
 
         if(enabled) {
             //Start updating placeholders
-            if(placeHolderTask != null){
+            if(placeHolderTask == null){
                 placeHolderTask = startUpdatingTime();
             }
 
