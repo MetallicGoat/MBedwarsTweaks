@@ -4,7 +4,7 @@ import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
-import de.marcely.bedwars.api.event.arena.RoundStartEvent;
+import de.marcely.bedwars.api.event.player.PlayerJoinArenaEvent;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.metallicgoat.MBedwarsTweaks.Main;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
@@ -20,7 +20,7 @@ public class ActionBar implements Listener {
     private BukkitTask actionBarTask = null;
 
     @EventHandler
-    public void onGameStart(RoundStartEvent e){
+    public void onGameStart(PlayerJoinArenaEvent e){
         boolean enabled = ServerManager.getConfig().getBoolean("Action-Bar-Enabled");
         if(enabled && Main.papiEnabled) {
             //Start updating ActionBar
@@ -36,7 +36,7 @@ public class ActionBar implements Listener {
         if(enabled && Main.papiEnabled) {
             //Dont kill task if
             for (Arena arena : BedwarsAPI.getGameAPI().getArenas()) {
-                if (arena.getStatus() == ArenaStatus.RUNNING) {
+                if (arena.getPlayers().isEmpty()) {
                     return;
                 }
             }
@@ -50,16 +50,16 @@ public class ActionBar implements Listener {
 
     private static BukkitTask startUpdatingTime(){
         BukkitScheduler scheduler = plugin().getServer().getScheduler();
+        String actionBarText = ServerManager.getConfig().getString("Action-Bar-Message");
+        boolean enabledInLobby = ServerManager.getConfig().getBoolean("Action-Bar-Enabled-In-Lobby");
 
         return scheduler.runTaskTimer(plugin(),() -> {
 
             for(Arena arena:BedwarsAPI.getGameAPI().getArenas()){
-                if(arena.getStatus() == ArenaStatus.RUNNING){
+                if((arena.getStatus() == ArenaStatus.RUNNING) || (arena.getStatus() == ArenaStatus.LOBBY && enabledInLobby)){
                     for(Player player:arena.getPlayers()){
-                        String actionBarText = ServerManager.getConfig().getString("Action-Bar-Message");
                         if(actionBarText != null) {
-                            actionBarText = PlaceholderAPI.setPlaceholders(player, actionBarText);
-                            BedwarsAPI.getNMSHelper().showActionbar(player, actionBarText);
+                            BedwarsAPI.getNMSHelper().showActionbar(player, PlaceholderAPI.setPlaceholders(player, actionBarText));
                         }
                     }
                 }

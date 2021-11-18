@@ -20,6 +20,9 @@ Height-Cap:
 #You may want to DISABLE MBedwars's team name actionbar in the config.cm2
 Action-Bar-Enabled: false
 
+#Action-Bar-Enabled must be true
+Action-Bar-Enabled-In-Lobby: true
+
 #Supports PAPI Placeholders
 Action-Bar-Message: "%tweaks_next-tier%"
 
