@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Main extends JavaPlugin {
 
     private static Main instance;
+    public static boolean papiEnabled = false;
 
     public void onEnable() {
         int pluginId = 11928;
@@ -33,6 +34,7 @@ public class Main extends JavaPlugin {
         BedwarsAPI.onReady(() -> {
             if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
                 new Placeholders().register();
+                papiEnabled = true;
             }else{
                 log("PlaceholderAPI Was not Found! Placeholders wont work!");
             }

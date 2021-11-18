@@ -15,6 +15,14 @@ Height-Cap:
   Arenas:
     - ''
 
+############### ACTION BAR ###############
+
+#MBedwars ActionBar Message MUST be disabled
+Action-Bar-Enabled: false
+
+#Supports PAPI Placeholders
+Action-Bar-Message: "%tweaks_next-tier%"
+
 ############### FINAL KILL [BETA] ###############
 
 #Adds FINAL KILL to the end of a message if the kill is final
@@ -233,6 +241,6 @@ firework-trail: true
 firework-duration: 20
 
 ############### BYPASS PLAYER LIMIT ###############
-#If enabled you still join the server even if the Player Limit is reached.
 
+#If enabled you still join the server even if the Player Limit is reached.
 Bypass-PlayerLimit: false
