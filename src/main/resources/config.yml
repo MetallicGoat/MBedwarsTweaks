@@ -97,6 +97,10 @@ Spawner-Title:
 # {next-tier} {time}
 Next-Tier-Placeholder: '{next-tier} in &a{time}'
 
+Next-Tier-Placeholder-Lobby-Starting: "&fStarting in &a{time}s"
+
+Next-Tier-Placeholder-Lobby-Waiting: "&fWaiting..."
+
 ############### BED BREAK ###############
 
 #Message displayed when any bed is broken (to everyone in the arena)

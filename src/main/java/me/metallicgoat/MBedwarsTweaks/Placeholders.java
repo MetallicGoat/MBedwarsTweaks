@@ -43,12 +43,16 @@ public class Placeholders extends PlaceholderExpansion {
                     Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
                     if (arena != null) {
 
-                        String nextTierName = GenTiers.nextTierMap.get(arena);
-                        String nextTierTime = GenTiers.timeLeft(arena);
-
                         switch (arena.getStatus()) {
                             case LOBBY:
-                                return "Game is still in Lobby";
+                                int time = (int) arena.getLobbyTimeRemaining();
+                                if(time > 0){
+                                    //Waiting
+                                    return Message.build(ServerManager.getConfig().getString("Next-Tier-Placeholder-Lobby-Starting")).placeholder("time", time).done();
+                                }else{
+                                    //Starting
+                                    return Message.build(ServerManager.getConfig().getString("Next-Tier-Placeholder-Lobby-Waiting")).done();
+                                }
                             case END_LOBBY:
                                 return "Game Ended";
                             case STOPPED:
@@ -56,6 +60,9 @@ public class Placeholders extends PlaceholderExpansion {
                             case RESETTING:
                                 return "Game Resetting";
                             case RUNNING:
+                                String nextTierName = GenTiers.nextTierMap.get(arena);
+                                String nextTierTime = GenTiers.timeLeft(arena);
+
                                 return Message.build(ServerManager.getConfig().getString("Next-Tier-Placeholder"))
                                         .placeholder("next-tier", nextTierName)
                                         .placeholder("time", nextTierTime)
