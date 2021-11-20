@@ -37,7 +37,7 @@ public class Placeholders extends PlaceholderExpansion {
 
         switch (params.toLowerCase()){
             case "next-tier":
-                //Gen Tiers
+                //Gen Tiers With countdown
                 if(ServerManager.getConfig().getBoolean("Gen-Tiers-Enabled")) {
 
                     Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
@@ -71,7 +71,16 @@ public class Placeholders extends PlaceholderExpansion {
                     }
                 }
                 return "---";
-
+            //Next tier name
+            case "next-tier-name":
+                if(ServerManager.getConfig().getBoolean("Gen-Tiers-Enabled")) {
+                    Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
+                    if (arena != null && arena.getStatus() == ArenaStatus.RUNNING) {
+                        String nextTierName = GenTiers.nextTierMap.get(arena);
+                        return Message.build(nextTierName).done();
+                    }
+                }
+                return "---";
             //Arena mode placeholder (eg. Solo, Duos)
             case "arena-mode":
                 Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
