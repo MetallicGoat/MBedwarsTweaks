@@ -176,7 +176,7 @@ public class GenTiers implements Listener {
     }
 
     //Format time for placeholder
-    public static String timeLeft(Arena arena) {
+    public static String[] timeLeft(Arena arena) {
 
         int timeoutTicks = Math.toIntExact(timeToNextUpdate.get(arena));
         int timeoutSeconds = (timeoutTicks / 20);
@@ -186,14 +186,14 @@ public class GenTiers implements Listener {
 
         if(minutes + seconds > 0) {
             if (seconds < 10) {
-                return minutes + ":0" + seconds;
+                return new String[]{String.valueOf(minutes), "0" + seconds};
             } else {
-                return minutes + ":" + seconds;
+                return new String[]{String.valueOf(minutes), String.valueOf(seconds)};
             }
         }else if(seconds == 0 && minutes > 0 ) {
-            return minutes + ":00";
+            return new String[]{String.valueOf(minutes), "00"};
         } else {
-            return "0:00";
+            return new String[]{"0", "00"};
         }
     }
 

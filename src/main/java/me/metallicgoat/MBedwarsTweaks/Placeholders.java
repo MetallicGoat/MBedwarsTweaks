@@ -61,11 +61,17 @@ public class Placeholders extends PlaceholderExpansion {
                                 return "Game Resetting";
                             case RUNNING:
                                 String nextTierName = GenTiers.nextTierMap.get(arena);
-                                String nextTierTime = GenTiers.timeLeft(arena);
+                                String[] nextTierTime = GenTiers.timeLeft(arena);
+                                String minutes = nextTierTime[0];
+                                String seconds = nextTierTime[1];
+                                //Old format
+                                String fullTime = minutes + ":" + seconds;
 
                                 return Message.build(ServerManager.getConfig().getString("Next-Tier-Placeholder"))
                                         .placeholder("next-tier", nextTierName)
-                                        .placeholder("time", nextTierTime)
+                                        .placeholder("time", fullTime)
+                                        .placeholder("min", minutes)
+                                        .placeholder("sec", seconds)
                                         .done();
                         }
                     }
