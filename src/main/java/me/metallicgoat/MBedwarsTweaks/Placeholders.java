@@ -114,15 +114,6 @@ public class Placeholders extends PlaceholderExpansion {
             case "players-lobby": return getPlayerAmount(ArenaStatus.LOBBY);
             case "players-endlobby": return getPlayerAmount(ArenaStatus.END_LOBBY);
         }
-
-        if(params.toLowerCase().startsWith("arena-status-")){
-            String arenaName = params.replace("arena-status-", "");
-            Arena arena = BedwarsAPI.getGameAPI().getArenaByName(arenaName);
-            if(arena != null) {
-                return arena.getStatus().toString();
-            }
-        }
-
         return null;
     }
 
