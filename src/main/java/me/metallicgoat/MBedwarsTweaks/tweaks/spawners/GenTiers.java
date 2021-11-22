@@ -152,17 +152,18 @@ public class GenTiers implements Listener {
         int scoreBoardUpdatingInterval = ServerManager.getConfig().getInt("Scoreboard-Updating-Interval");
 
         return scheduler.runTaskTimer(plugin(),() -> {
-            if(scoreBoardUpdating) {
-                if (!timeToNextUpdate.isEmpty()) {
-                    timeToNextUpdate.forEach((arena, integer) -> {
-                        if (arena.getStatus() == ArenaStatus.RUNNING) {
-                            timeToNextUpdate.replace(arena, integer, integer - 20);
-                            if (((integer - 20) / 20) % scoreBoardUpdatingInterval == 0) {
+
+            if (!timeToNextUpdate.isEmpty()) {
+                timeToNextUpdate.forEach((arena, integer) -> {
+                    if (arena.getStatus() == ArenaStatus.RUNNING) {
+                        timeToNextUpdate.replace(arena, integer, integer - 20);
+                        if (((integer - 20) / 20) % scoreBoardUpdatingInterval == 0) {
+                            if(scoreBoardUpdating) {
                                 arena.updateScoreboard();
                             }
                         }
-                    });
-                }
+                    }
+                });
             }
         }, 0L, 20L);
     }
