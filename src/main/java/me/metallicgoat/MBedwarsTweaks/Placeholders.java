@@ -4,6 +4,7 @@ import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
+import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.message.Message;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.metallicgoat.MBedwarsTweaks.tweaks.spawners.GenTiers;
@@ -12,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
 
 public class Placeholders extends PlaceholderExpansion {
 
@@ -114,6 +116,34 @@ public class Placeholders extends PlaceholderExpansion {
             case "players-lobby": return getPlayerAmount(ArenaStatus.LOBBY);
             case "players-endlobby": return getPlayerAmount(ArenaStatus.END_LOBBY);
         }
+        if(params.toLowerCase().startsWith("team-status-")){
+            String output;
+            Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
+            String teamName = params.replace("team-status-", "");
+
+            if(arena != null && (arena.getStatus() == ArenaStatus.RUNNING || arena.getStatus() == ArenaStatus.END_LOBBY)){
+                Team playerTeam = arena.getPlayerTeam(player1);
+                Team scoreTeam = Team.getByName(teamName);
+
+                if(playerTeam == null || scoreTeam == null)
+                    return null;
+                int playerAmount = arena.getPlayersInTeam(scoreTeam).size();
+
+                if(!arena.isBedDestroyed(scoreTeam)){
+                    output = "✓";
+                }else if(arena.getPlayersInTeam(scoreTeam).isEmpty()){
+                    output = "X";
+                }else{
+                    output = String.valueOf(playerAmount);
+                }
+
+                if(scoreTeam == playerTeam){
+                    output += " You";
+                }
+                return output;
+            }
+        }
+
         return null;
     }
 
