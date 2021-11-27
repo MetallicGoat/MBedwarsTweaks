@@ -4,17 +4,6 @@
 #Will not affect other gamemodes
 Prevent-Liquid-Build-Up: true
 
-############### HEIGHT CAP ###############
-
-#Add a height cap for specific MBedwars arenas
-#Add height cap like 'arenaName:70'
-#To disable the message, set to ''
-Height-Cap:
-  Enabled: false
-  Message: '&cYou cannot build any higher'
-  Arenas:
-    - ''
-
 ############### ACTION BAR ###############
 
 #You may want to DISABLE MBedwars's team name actionbar in the config.cm2
@@ -30,7 +19,7 @@ Action-Bar-Message: "%tweaks_next-tier%"
 
 #Adds FINAL KILL to the end of a message if the kill is final
 #WARNING: May cause an error. We are looking into a fix, please report any errors in our discord
-Final-Kill-Message: false
+Final-Kill-Message: true
 
 #Players get a lightning blot at their location of death if it is a final kill
 Final-Kill-Strike:
@@ -44,14 +33,6 @@ FireballWhitelist:
   Blocks:
     - ENDER_STONE
     - END_STONE
-
-############### BUY-MESSAGE ###############
-
-#Message sent to players when they purchase an item
-#Placeholders: {amount} {product}
-Buy-Message:
-  Enabled: true
-  Message: '&aYou Purchased &6{product} x{amount}'
 
 ############### DISABLE EMPTY BASE GENERATORS ###############
 
@@ -138,15 +119,10 @@ Team-Eliminate-Message:
 
 ############### TNT AUTO IGNITE ###############
 
-#WARNING!!! If you enable this MAKE SURE MBedwars' tnt-autoignite is FALSE
+#!!!WARNING!!! If you enable this MAKE SURE MBedwars' tnt-autoignite is FALSE
 TNT:
   Auto-Ignite: false
   Delay: 4
-
-############### REMOVE ON USE ###############
-
-Empty-Buckets: true
-Empty-Potions: true
 
 ############### TOP KILLER MESSAGE [BETA] ###############
 
@@ -170,7 +146,41 @@ Top-Killer-Message:
   - '&a&l-------------------------------'
 
 
-############### REMOVE INVIS ON DAMAGE ###############
+############### PAPI PLACEHOLDERS ###############
+
+#%tweaks_arena-mode%
+PAPI-Mode-Placeholder:
+  #TeamNumber:PlayerNumber:ModeName
+  - '8:2:Duos'
+  - '8:1:Solos'
+  - '4:3:Trios'
+  - '4:4:Quads'
+
+#Whether to count Spectators for the Player Count Placeholders
+Player-Count-Placeholder-Count-Spectators: true
+
+############### HEIGHT CAP ###############
+
+#Add a height cap for specific MBedwars arenas
+#Add height cap like 'arenaName:70'
+#To disable the message, set to ''
+Height-Cap:
+  Enabled: false
+  Message: '&cYou cannot build any higher'
+  Arenas:
+    - ''
+
+############### MISCELLANEOUS ###############
+
+#If enabled you still join a server even if the Player Limit is reached.
+Bypass-PlayerLimit: false
+
+#Shortens lobby time to a specified value
+#if arena filled over a certain percent
+Shorten-Countdown:
+  Enabled: false
+  Minimum-Percent-Filled: 80
+  Shorten-Time-To: 10
 
 #Removes invis on specified damage causes
 #I recommend you use this in combination with the Better Invisibility plugin.
@@ -182,7 +192,9 @@ Break-Invis:
     - 'BLOCK_EXPLOSION'
     - 'ENTITY_EXPLOSION'
 
-############### PERMANENT POTION EFFECTS [BETA] ###############
+#If this is enabled, MBedwars dealers/upgrade-dealers
+#will look at the closest players
+Friendly-Villagers: false
 
 #ArenaName:PotionEffectName:amplifier
 #Default amplifier is 1
@@ -190,35 +202,15 @@ Break-Invis:
 Permanent-Effects:
   - 'Ruins:NIGHT_VISION'
 
-############### FRIENDLY VILLAGERS [BETA] ###############
+#Message sent to players when they purchase an item
+#Placeholders: {amount} {product}
+Buy-Message:
+  Enabled: true
+  Message: '&aYou Purchased &6{product} x{amount}'
 
-#If this is enabled, MBedwars dealers/upgrade-dealers
-#will look at the closest players
-Friendly-Villagers: false
-
-############### PAPI PLACEHOLDERS ###############
-
-#%tweaks_arena-mode%
-PAPI-Mode-Placeholder:
-  #TeamNumber:PlayerNumber:ModeName
-  - '8:2:Duos'
-  - '8:1:Solos'
-  - '4:3:Trios'
-  - '4:4:Quads'
-
-############### SHORTEN COUNTDOWN [BETA] ###############
-
-#Shortens lobby time to a specified value
-#if arena filled over a certain percent
-Shorten-Countdown:
-  Enabled: false
-  Minimum-Percent-Filled: 80
-  Shorten-Time-To: 10
-
-############### PLAYER COUNT PLACEHOLDER ###############
-
-#Whether to count Spectators for the Player Count Placeholders
-Player-Count-Placeholder-Count-Spectators: true
+#Remove on use
+Empty-Buckets: true
+Empty-Potions: true
 
 ############### BED DESTROY EFFECTS [BETA] ###############
 
@@ -246,8 +238,3 @@ firework-trail: true
 
 #Duration Until Firework will detonate in ticks (20 ticks = 1 sec)
 firework-duration: 20
-
-############### BYPASS PLAYER LIMIT ###############
-
-#If enabled you still join the server even if the Player Limit is reached.
-Bypass-PlayerLimit: false
