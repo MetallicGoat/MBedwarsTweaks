@@ -127,20 +127,21 @@ public class Placeholders extends PlaceholderExpansion {
 
                 if(playerTeam == null || scoreTeam == null)
                     return null;
+
                 int playerAmount = arena.getPlayersInTeam(scoreTeam).size();
 
                 if(!arena.isBedDestroyed(scoreTeam)){
-                    output = "✓";
+                    output = ServerManager.getConfig().getString("Team-Status-Placeholder.Has-Bed");
                 }else if(arena.getPlayersInTeam(scoreTeam).isEmpty()){
-                    output = "X";
+                    output = ServerManager.getConfig().getString("Team-Status-Placeholder.Team-Dead");
                 }else{
-                    output = String.valueOf(playerAmount);
+                    output = String.valueOf(playerAmount);ServerManager.getConfig().getString("Team-Status-Placeholder.No-Bed");
                 }
 
                 if(scoreTeam == playerTeam){
-                    output += " You";
+                    output += ServerManager.getConfig().getString("Team-Status-Placeholder.Your-Team");
                 }
-                return output;
+                return Message.build(output).placeholder("{player-amount}", playerAmount).done();
             }
         }
 

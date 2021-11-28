@@ -159,6 +159,14 @@ PAPI-Mode-Placeholder:
 #Whether to count Spectators for the Player Count Placeholders
 Player-Count-Placeholder-Count-Spectators: true
 
+#%tweaks_team-status-{name}%
+#To be used on the scoreboard
+Team-Status-Placeholder:
+  Your-Team: " &7You"
+  Has-Bed: "&a✔"
+  No-Bed: "&a{player-amount}"
+  Team-Dead: "&c✘"
+
 ############### HEIGHT CAP ###############
 
 #Add a height cap for specific MBedwars arenas
