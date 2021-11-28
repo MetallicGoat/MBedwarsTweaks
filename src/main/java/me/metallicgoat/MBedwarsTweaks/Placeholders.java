@@ -116,6 +116,7 @@ public class Placeholders extends PlaceholderExpansion {
             case "players-lobby": return getPlayerAmount(ArenaStatus.LOBBY);
             case "players-endlobby": return getPlayerAmount(ArenaStatus.END_LOBBY);
         }
+        //Team status placeholder, to be used on scoreboard
         if(params.toLowerCase().startsWith("team-status-")){
             String output;
             Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
@@ -135,16 +136,15 @@ public class Placeholders extends PlaceholderExpansion {
                 }else if(arena.getPlayersInTeam(scoreTeam).isEmpty()){
                     output = ServerManager.getConfig().getString("Team-Status-Placeholder.Team-Dead");
                 }else{
-                    output = String.valueOf(playerAmount);ServerManager.getConfig().getString("Team-Status-Placeholder.No-Bed");
+                    output = ServerManager.getConfig().getString("Team-Status-Placeholder.No-Bed");
                 }
 
                 if(scoreTeam == playerTeam){
                     output += ServerManager.getConfig().getString("Team-Status-Placeholder.Your-Team");
                 }
-                return Message.build(output).placeholder("{player-amount}", playerAmount).done();
+                return Message.build(output).placeholder("player-amount", playerAmount).done();
             }
         }
-
         return null;
     }
 
