@@ -15,7 +15,7 @@ Action-Bar-Enabled-In-Lobby: true
 #Supports PAPI Placeholders
 Action-Bar-Message: "%tweaks_next-tier%"
 
-############### FINAL KILL [BETA] ###############
+############### FINAL KILL ###############
 
 #Adds FINAL KILL to the end of a message if the kill is final
 #WARNING: May cause an error. We are looking into a fix, please report any errors in our discord
@@ -53,13 +53,6 @@ Gen-Tiers-Enabled: false
 #Override MBedwars Holo's
 Gen-Tiers-Holos-Enabled: true
 
-#If set to true, the papi placeholders on the
-Scoreboard-Updating: false
-
-#Scoreboard will update every X amount of seconds
-#WARNING: Setting this value lower than 5 may cause scoreboard flicker
-Scoreboard-Updating-Interval: 5
-
 #Adds 'Tier I' to spawners listed
 Tier-One-Titles:
   Tier-Name: '&eTier &cI'
@@ -73,14 +66,6 @@ Spawner-Title:
   - '{tier}'
   - '{spawner-color}{spawner}'
   - '&eSpawning in &c{time} &eseconds!'
-
-#PAPI Placeholder: %tweaks_next-tier%
-# {next-tier} {time} {sec} {min}
-Next-Tier-Placeholder: '{next-tier} in &a{time}'
-
-Next-Tier-Placeholder-Lobby-Starting: "&fStarting in &a{time}s"
-
-Next-Tier-Placeholder-Lobby-Waiting: "&fWaiting..."
 
 ############### BED BREAK ###############
 
@@ -116,7 +101,6 @@ Team-Eliminate-Message:
   - '&f&lTEAM ELIMINATED > {team-color}{team-name} Team &chas been eliminated!'
   - ''
 
-
 ############### TNT AUTO IGNITE ###############
 
 #!!!WARNING!!! If you enable this MAKE SURE MBedwars' tnt-autoignite is FALSE
@@ -126,9 +110,10 @@ TNT:
 
 ############### TOP KILLER MESSAGE [BETA] ###############
 
+#Displayed at the end of a game to congratulate yop killers
 Top-Killer-Message-Enabled: true
 
-#No Top killers FinalKill
+#Displayed if there are no top killers
 No-Top-Killers-Message:
   - ''
 
@@ -148,7 +133,13 @@ Top-Killer-Message:
 
 ############### PAPI PLACEHOLDERS ###############
 
-#%tweaks_arena-mode%
+#PAPI Placeholder: %tweaks_next-tier%
+# {next-tier} {time} {sec} {min}
+Next-Tier-Placeholder: '{next-tier} in &a{time}'
+Next-Tier-Placeholder-Lobby-Starting: "&fStarting in &a{time}s"
+Next-Tier-Placeholder-Lobby-Waiting: "&fWaiting..."
+
+#PAPI Placeholder: %tweaks_arena-mode%
 PAPI-Mode-Placeholder:
   #TeamNumber:PlayerNumber:ModeName
   - '8:2:Duos'
@@ -159,13 +150,21 @@ PAPI-Mode-Placeholder:
 #Whether to count Spectators for the Player Count Placeholders
 Player-Count-Placeholder-Count-Spectators: true
 
-#%tweaks_team-status-{name}%
-#To be used on the scoreboard
+#PAPI Placeholder: %tweaks_team-status-{name}%
+#To be used on the scoreboard as is above
 Team-Status-Placeholder:
   Your-Team: " &7You"
   Has-Bed: "&a✔"
   No-Bed: "&a{player-amount}"
   Team-Dead: "&c✘"
+
+#If set to true, the scoreboard will be force updated to refresh PAPI placeholders
+#WARNING: Force updating the MBedwars scoreboard may cause scoreboard flicker
+Scoreboard-Updating: false
+
+#Scoreboard will update every X amount of seconds
+#Recommended keeping at 5 or 10 seconds
+Scoreboard-Updating-Interval: 10
 
 ############### HEIGHT CAP ###############
 
@@ -201,7 +200,7 @@ Break-Invis:
     - 'ENTITY_EXPLOSION'
 
 #If this is enabled, MBedwars dealers/upgrade-dealers
-#will look at the closest players
+#Will look at the closest players
 Friendly-Villagers: false
 
 #ArenaName:PotionEffectName:amplifier
@@ -216,7 +215,7 @@ Buy-Message:
   Enabled: true
   Message: '&aYou Purchased &6{product} x{amount}'
 
-#Remove on use
+#Remove items on use
 Empty-Buckets: true
 Empty-Potions: true
 
