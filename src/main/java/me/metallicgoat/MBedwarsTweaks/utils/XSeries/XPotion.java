@@ -1,5 +1,3 @@
-package me.metallicgoat.MBedwarsTweaks.utils.XSeries;
-
 /*
  * The MIT License (MIT)
  *
@@ -21,6 +19,7 @@ package me.metallicgoat.MBedwarsTweaks.utils.XSeries;
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+package me.metallicgoat.MBedwarsTweaks.utils.XSeries;
 
 import com.google.common.base.Strings;
 import org.apache.commons.lang.StringUtils;
@@ -405,7 +404,7 @@ public enum XPotion {
     }
 
     /**
-     * In most cases your should be using {@link #name()} instead.
+     * In most cases you should be using {@link #name()} instead.
      *
      * @return a friendly readable string name.
      */
@@ -415,7 +414,7 @@ public enum XPotion {
     }
 
     /**
-     * Used for datas that need to be accessed during enum initilization.
+     * Used for data that need to be accessed during enum initialization.
      *
      * @since 2.0.0
      */

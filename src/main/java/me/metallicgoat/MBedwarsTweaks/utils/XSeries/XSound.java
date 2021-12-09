@@ -1,5 +1,3 @@
-package me.metallicgoat.MBedwarsTweaks.utils.XSeries;
-
 /*
  * The MIT License (MIT)
  *
@@ -21,6 +19,7 @@ package me.metallicgoat.MBedwarsTweaks.utils.XSeries;
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+package me.metallicgoat.MBedwarsTweaks.utils.XSeries;
 
 import com.google.common.base.Enums;
 import com.google.common.base.Strings;
@@ -58,7 +57,7 @@ import java.util.concurrent.CompletableFuture;
  * play command: https://minecraft.gamepedia.com/Commands/play
  *
  * @author Crypto Morin
- * @version 7.0.0
+ * @version 7.0.1
  * @see Sound
  */
 public enum XSound {
@@ -279,6 +278,7 @@ public enum XSound {
     BLOCK_GRAVEL_PLACE,
     BLOCK_GRAVEL_STEP("STEP_GRAVEL"),
     BLOCK_GRINDSTONE_USE,
+    BLOCK_GROWING_PLANT_CROP,
     BLOCK_HANGING_ROOTS_BREAK,
     BLOCK_HANGING_ROOTS_FALL,
     BLOCK_HANGING_ROOTS_HIT,
@@ -1192,6 +1192,9 @@ public enum XSound {
     ITEM_BUCKET_FILL_FISH,
     ITEM_BUCKET_FILL_LAVA,
     ITEM_BUCKET_FILL_POWDER_SNOW,
+    ITEM_BUNDLE_DROP_CONTENTS,
+    ITEM_BUNDLE_INSERT,
+    ITEM_BUNDLE_REMOVE_ONE,
     ITEM_CHORUS_FRUIT_TELEPORT,
     ITEM_CROP_PLANT,
     ITEM_CROSSBOW_HIT,
@@ -1237,6 +1240,7 @@ public enum XSound {
     MUSIC_DISC_FAR("RECORD_FAR"),
     MUSIC_DISC_MALL("RECORD_MALL"),
     MUSIC_DISC_MELLOHI("RECORD_MELLOHI"),
+    MUSIC_DISC_OTHERSIDE,
     MUSIC_DISC_PIGSTEP,
     MUSIC_DISC_STAL("RECORD_STAL"),
     MUSIC_DISC_STRAD("RECORD_STRAD"),
@@ -1251,6 +1255,14 @@ public enum XSound {
     MUSIC_NETHER_NETHER_WASTES,
     MUSIC_NETHER_SOUL_SAND_VALLEY,
     MUSIC_NETHER_WARPED_FOREST,
+    MUSIC_OVERWORLD_DRIPSTONE_CAVES,
+    MUSIC_OVERWORLD_FROZEN_PEAKS,
+    MUSIC_OVERWORLD_GROVE,
+    MUSIC_OVERWORLD_JAGGED_PEAKS,
+    MUSIC_OVERWORLD_LUSH_CAVES,
+    MUSIC_OVERWORLD_MEADOW,
+    MUSIC_OVERWORLD_SNOWY_SLOPES,
+    MUSIC_OVERWORLD_STONY_PEAKS,
     MUSIC_UNDER_WATER,
     PARTICLE_SOUL_ESCAPE,
     UI_BUTTON_CLICK("CLICK"),
@@ -1680,7 +1692,7 @@ public enum XSound {
     }
 
     /**
-     * Used for datas that need to be accessed during enum initilization.
+     * Used for data that need to be accessed during enum initialization.
      *
      * @since 5.0.0
      */
@@ -1742,7 +1754,7 @@ public enum XSound {
         }
 
         /**
-         * Plays the sound with the given options and updating the players location.
+         * Plays the sound with the given options and updating the player's location.
          *
          * @since 3.0.0
          */
@@ -1754,7 +1766,7 @@ public enum XSound {
         /**
          * Plays the sound with the updated location.
          *
-         * @param updatedLocation the upated location.
+         * @param updatedLocation the updated location.
          *
          * @since 3.0.0
          */
@@ -1765,4 +1777,3 @@ public enum XSound {
         }
     }
 }
-
