@@ -14,13 +14,18 @@ import java.util.Collection;
 
 public class WaterFlow implements Listener {
 
+    private final boolean enabled = ServerManager.getConfig().getBoolean("Prevent-Liquid-Build-Up");
+
     @EventHandler
     public void onFlow(BlockFromToEvent e){
+
+        if(!enabled)
+            return;
+
         Collection<Arena> toArena = BedwarsAPI.getGameAPI().getArenaByLocation(e.getToBlock().getLocation());
         Collection<Arena> fromArena = BedwarsAPI.getGameAPI().getArenaByLocation(e.getBlock().getLocation());
 
-        if(toArena != null && fromArena != null &&
-                ServerManager.getConfig().getBoolean("Prevent-Liquid-Build-Up")) {
+        if(toArena != null && fromArena != null) {
             //Check if water is moving from a location in an arena to outside an arena
             if (toArena.isEmpty() && !fromArena.isEmpty()) {
                 e.setCancelled(true);
@@ -30,7 +35,7 @@ public class WaterFlow implements Listener {
                 //For all possible arenas
                 fromArena.forEach(arena -> {
                     //Check if we can place block at position
-                    if(!arena.canPlaceBlockAt(e.getBlock().getLocation())){
+                    if(!arena.canPlaceBlockAt(e.getToBlock().getLocation())){
                         e.setCancelled(true);
                     }
                 });
@@ -43,16 +48,18 @@ public class WaterFlow implements Listener {
         Player p = e.getPlayer();
         Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(p);
         Location location = e.getBlockClicked().getRelative(e.getBlockFace()).getLocation();
-        if(arena != null){
-            Collection<Arena> placed = BedwarsAPI.getGameAPI().getArenaByLocation(location);
-            //Check if block is inside arena
-            if(placed != null && placed.isEmpty()){
-                e.setCancelled(true);
-            }
-            //check if block is placeable at location
-            if(!arena.canPlaceBlockAt(location)){
-                e.setCancelled(true);
-            }
+
+        if(!enabled || arena == null)
+            return;
+
+        Collection<Arena> placed = BedwarsAPI.getGameAPI().getArenaByLocation(location);
+        //Check if block is inside arena
+        if(placed != null && placed.isEmpty()){
+            e.setCancelled(true);
+        }
+        //check if block is placeable at location
+        if(!arena.canPlaceBlockAt(location)){
+            e.setCancelled(true);
         }
     }
 }
