@@ -66,6 +66,7 @@ public class ServerManager {
         manager.registerEvents(new PermanentEffects(), plugin());
         manager.registerEvents(new PlayerLimitBypass(), plugin());
         manager.registerEvents(new ShortenCountdown(), plugin());
+        manager.registerEvents(new SpongeParticles(), plugin());
         manager.registerEvents(new WaterFlow(), plugin());
 
         //Tweaks - spawners
