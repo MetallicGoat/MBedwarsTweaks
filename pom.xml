@@ -6,7 +6,7 @@
 
     <groupId>me.metallicgoat</groupId>
     <artifactId>TweaksAndFeatures</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.0-R1</version>
 
     <repositories>
         <repository>
@@ -26,7 +26,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.17.1-R0.1-SNAPSHOT</version>
+            <version>1.18.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -39,7 +39,7 @@
         <dependency>
             <groupId>de.marcely.bedwars</groupId>
             <artifactId>API</artifactId>
-            <version>5.0.3</version>
+            <version>5.0.4</version>
         </dependency>
 
         <dependency>
