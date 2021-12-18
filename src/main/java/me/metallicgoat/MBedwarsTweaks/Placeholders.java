@@ -35,14 +35,13 @@ public class Placeholders extends PlaceholderExpansion {
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String params) {
 
-        Player player1 = Bukkit.getPlayer(player.getUniqueId());
+        final Player player1 = Bukkit.getPlayer(player.getUniqueId());
+        final Arena arena = BedwarsAPI.getGameAPI().getSpectatingPlayers().contains(player1) ? BedwarsAPI.getGameAPI().getArenaBySpectator(player1):BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
 
         switch (params.toLowerCase()){
             case "next-tier":
                 //Gen Tiers With countdown
                 if(ServerManager.getConfig().getBoolean("Gen-Tiers-Enabled")) {
-
-                    Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
                     if (arena != null) {
 
                         switch (arena.getStatus()) {
@@ -82,7 +81,6 @@ public class Placeholders extends PlaceholderExpansion {
             //Next tier name
             case "next-tier-name":
                 if(ServerManager.getConfig().getBoolean("Gen-Tiers-Enabled")) {
-                    Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
                     if (arena != null && arena.getStatus() == ArenaStatus.RUNNING) {
                         String nextTierName = GenTiers.nextTierMap.get(arena);
                         return Message.build(nextTierName).done();
@@ -91,7 +89,6 @@ public class Placeholders extends PlaceholderExpansion {
                 return "---";
             //Arena mode placeholder (eg. Solo, Duos)
             case "arena-mode":
-                Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
                 if (arena != null) {
                     int teamsAmount = arena.getEnabledTeams().size();
                     int playersPerTeam = arena.getPlayersPerTeam();
@@ -119,7 +116,6 @@ public class Placeholders extends PlaceholderExpansion {
         //Team status placeholder, to be used on scoreboard
         if(params.toLowerCase().startsWith("team-status-")){
             String output;
-            Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
             String teamName = params.replace("team-status-", "");
 
             if(arena != null && (arena.getStatus() == ArenaStatus.RUNNING || arena.getStatus() == ArenaStatus.END_LOBBY)){
