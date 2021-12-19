@@ -179,6 +179,11 @@ Height-Cap:
 
 ############### MISCELLANEOUS ###############
 
+#Pervents player from opening a bases' chest if bases team is still alive
+Lock-Team-Chest: false
+Team-Chest-Distance: 8
+Prevent-Chest-Open-Message: '&cYou cannot open this chest until {team} &chas been eliminated.'
+
 #If enabled you still join a server even if the Player Limit is reached.
 Bypass-PlayerLimit: false
 

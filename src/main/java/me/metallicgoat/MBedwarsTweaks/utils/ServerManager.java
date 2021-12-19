@@ -63,6 +63,7 @@ public class ServerManager {
         manager.registerEvents(new FinalStrike(), plugin());
         manager.registerEvents(new FriendlyVillagers(), plugin());
         manager.registerEvents(new HeightCap(), plugin());
+        manager.registerEvents(new LockTeamChest(), plugin());
         manager.registerEvents(new PermanentEffects(), plugin());
         manager.registerEvents(new PlayerLimitBypass(), plugin());
         manager.registerEvents(new ShortenCountdown(), plugin());
