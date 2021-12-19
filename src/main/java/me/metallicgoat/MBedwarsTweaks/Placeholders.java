@@ -107,6 +107,28 @@ public class Placeholders extends PlaceholderExpansion {
                 }
                 return "---";
 
+            //Amount of players currently on team
+            case "player-team-current-size":
+                if(arena != null){
+                    Team team = arena.getPlayerTeam(player1);
+                    if(team != null){
+                        return Integer.toString(arena.getPlayersInTeam(team).size());
+                    }
+                }
+
+            //Status of current team
+            case "player-team-status":
+                if(arena != null){
+                    Team team = arena.getPlayerTeam(player1);
+                    if(team != null){
+                        if(arena.isBedDestroyed(team)){
+                            return "Bed-Destroyed";
+                        }else{
+                            return "Active";
+                        }
+                    }
+                }
+
             //Player count placeholders
             case "allplayers": return getPlayerAmount();
             case "players-ingame": return getPlayerAmount(ArenaStatus.RUNNING);
