@@ -144,7 +144,7 @@ public class Placeholders extends PlaceholderExpansion {
                 Team playerTeam = arena.getPlayerTeam(player1);
                 Team scoreTeam = Team.getByName(teamName);
 
-                if(playerTeam == null || scoreTeam == null)
+                if(scoreTeam == null)
                     return null;
 
                 int playerAmount = arena.getPlayersInTeam(scoreTeam).size();
@@ -157,7 +157,7 @@ public class Placeholders extends PlaceholderExpansion {
                     output = ServerManager.getConfig().getString("Team-Status-Placeholder.No-Bed");
                 }
 
-                if(scoreTeam == playerTeam){
+                if(playerTeam != null && scoreTeam == playerTeam){
                     output += ServerManager.getConfig().getString("Team-Status-Placeholder.Your-Team");
                 }
                 return Message.build(output).placeholder("player-amount", playerAmount).done();
