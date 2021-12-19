@@ -49,17 +49,17 @@ public class Placeholders extends PlaceholderExpansion {
                                 int time = (int) arena.getLobbyTimeRemaining();
                                 if(time > 0){
                                     //Waiting
-                                    return Message.build(ServerManager.getConfig().getString("Next-Tier-Placeholder-Lobby-Starting")).placeholder("time", time).done();
+                                    return Message.build(ServerManager.getConfig().getString("Next-Tier-PAPI-Placeholder.Lobby-Starting")).placeholder("time", time).done();
                                 }else{
                                     //Starting
-                                    return Message.build(ServerManager.getConfig().getString("Next-Tier-Placeholder-Lobby-Waiting")).done();
+                                    return Message.build(ServerManager.getConfig().getString("Next-Tier-PAPI-Placeholder.Lobby-Waiting")).done();
                                 }
                             case END_LOBBY:
-                                return "Game Ended";
+                                return Message.build(ServerManager.getConfig().getString("Next-Tier-PAPI-Placeholder.End-Lobby")).done();
                             case STOPPED:
-                                return "Game Stopped";
+                                return Message.build(ServerManager.getConfig().getString("Next-Tier-PAPI-Placeholder.Stopped")).done();
                             case RESETTING:
-                                return "Game Resetting";
+                                return Message.build(ServerManager.getConfig().getString("Next-Tier-PAPI-Placeholder.Resetting")).done();
                             case RUNNING:
                                 String nextTierName = GenTiers.nextTierMap.get(arena);
                                 String[] nextTierTime = GenTiers.timeLeft(arena);
@@ -68,7 +68,7 @@ public class Placeholders extends PlaceholderExpansion {
                                 //Old format
                                 String fullTime = minutes + ":" + seconds;
 
-                                return Message.build(ServerManager.getConfig().getString("Next-Tier-Placeholder"))
+                                return Message.build(ServerManager.getConfig().getString("Next-Tier-PAPI-Placeholder.Running"))
                                         .placeholder("next-tier", nextTierName)
                                         .placeholder("time", fullTime)
                                         .placeholder("min", minutes)
