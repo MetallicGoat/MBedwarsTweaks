@@ -11,6 +11,7 @@ Action-Bar-Enabled: false
 
 #Action-Bar-Enabled must be true
 Action-Bar-Enabled-In-Lobby: true
+Action-Bar-Enabled-In-Game: true
 
 #Supports PAPI Placeholders
 Action-Bar-Message: "%tweaks_next-tier%"

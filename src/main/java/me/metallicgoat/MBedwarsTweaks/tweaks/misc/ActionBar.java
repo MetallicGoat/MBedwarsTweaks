@@ -52,11 +52,12 @@ public class ActionBar implements Listener {
         BukkitScheduler scheduler = plugin().getServer().getScheduler();
         String actionBarText = ServerManager.getConfig().getString("Action-Bar-Message");
         boolean enabledInLobby = ServerManager.getConfig().getBoolean("Action-Bar-Enabled-In-Lobby");
+        boolean enabledInGame = ServerManager.getConfig().getBoolean("Action-Bar-Enabled-In-Game");
 
         return scheduler.runTaskTimer(plugin(),() -> {
 
             for(Arena arena:BedwarsAPI.getGameAPI().getArenas()){
-                if((arena.getStatus() == ArenaStatus.RUNNING) || (arena.getStatus() == ArenaStatus.LOBBY && enabledInLobby)){
+                if((arena.getStatus() == ArenaStatus.RUNNING && enabledInGame) || (arena.getStatus() == ArenaStatus.LOBBY && enabledInLobby)){
                     for(Player player:arena.getPlayers()){
                         if(actionBarText != null) {
                             BedwarsAPI.getNMSHelper().showActionbar(player, PlaceholderAPI.setPlaceholders(player, actionBarText));
