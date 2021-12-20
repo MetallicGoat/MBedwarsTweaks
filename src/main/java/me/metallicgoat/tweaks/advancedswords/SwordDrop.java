@@ -21,12 +21,13 @@ public class SwordDrop implements Listener {
 
     @EventHandler
     public void giveSwordOnDrop(PlayerDropItemEvent e){
-        Player p = e.getPlayer();
-        Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(p);
-        PlayerInventory pi = p.getInventory();
-        if(enabled()) {
+        final Player p = e.getPlayer();
+        final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(p);
+        final PlayerInventory pi = p.getInventory();
+
+        if(ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Sword-Drop.Enabled")) {
             if (arena != null && arena.getStatus() == ArenaStatus.RUNNING) {
-                ItemStack is = new ItemStack(Objects.requireNonNull(XMaterial.WOODEN_SWORD.parseItem()));
+                final ItemStack is = new ItemStack(Objects.requireNonNull(XMaterial.WOODEN_SWORD.parseItem()));
                 if (e.getItemDrop().getItemStack().getType() == XMaterial.WOODEN_SWORD.parseMaterial()) {
                     e.setCancelled(true);
                 }
@@ -50,13 +51,14 @@ public class SwordDrop implements Listener {
 
     @EventHandler
     public void replaceSwordOnCollect(PlayerPickupItemEvent e){
-        Player p = e.getPlayer();
-        Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(p);
-        PlayerInventory pi = p.getInventory();
-        ItemStack sword = e.getItem().getItemStack();
-        if(enabled()) {
+        final Player p = e.getPlayer();
+        final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(p);
+        final PlayerInventory pi = p.getInventory();
+        final ItemStack sword = e.getItem().getItemStack();
+
+        if(ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Sword-Drop.Enabled")) {
             if(arena != null) {
-                if(swordList().contains(sword.getType().name()) &&
+                if(ServerManager.getSwordsToolsConfig().getStringList("Advanced-Sword-Drop.List").contains(sword.getType().name()) &&
                         ToolSwordHelper.isNotToIgnore(sword)) {
                     assert XMaterial.WOODEN_SWORD.parseMaterial() != null;
                     if(pi.contains(XMaterial.WOODEN_SWORD.parseMaterial())) {
@@ -80,12 +82,5 @@ public class SwordDrop implements Listener {
                 }
         }
         return count;
-    }
-
-    private boolean enabled() {
-        return ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Sword-Drop.Enabled");
-    }
-    private List<String> swordList() {
-        return ServerManager.getSwordsToolsConfig().getStringList("Advanced-Sword-Drop.List");
     }
 }

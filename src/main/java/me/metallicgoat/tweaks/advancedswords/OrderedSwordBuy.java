@@ -19,7 +19,7 @@ public class OrderedSwordBuy implements Listener {
     public void onSwordBuy(PlayerBuyInShopEvent e){
         Player p = e.getPlayer();
         PlayerInventory pi = p.getInventory();
-        if(swordBuy()) {
+        if(ServerManager.getSwordsToolsConfig().getBoolean("Ordered-Sword-Buy.Enabled")) {
             for (ShopProduct rawProduct : e.getItem().getProducts()) {
                 if (rawProduct instanceof ItemShopProduct) {
                     final ItemStack[] is = ((ItemShopProduct) rawProduct).getItemStacks();
@@ -81,10 +81,6 @@ public class OrderedSwordBuy implements Listener {
                 e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', getOrderedSwordBuyProblem()));
             }
         });
-    }
-
-    private boolean swordBuy() {
-        return ServerManager.getSwordsToolsConfig().getBoolean("Ordered-Sword-Buy.Enabled");
     }
 
     private String getOrderedSwordBuyProblem() {

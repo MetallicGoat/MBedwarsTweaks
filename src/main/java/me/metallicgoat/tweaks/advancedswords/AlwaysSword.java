@@ -19,6 +19,8 @@ import java.util.Objects;
 
 public class AlwaysSword implements Listener {
 
+    private static final MBedwarsTweaks plugin = MBedwarsTweaks.getInstance();
+
     @EventHandler
     public void onClick(InventoryClickEvent e) {
 
@@ -27,9 +29,9 @@ public class AlwaysSword implements Listener {
         final Player p = (Player) e.getWhoClicked();
         Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(p);
 
-        if (arena != null && enabled()) {
+        if (arena != null && ServerManager.getSwordsToolsConfig().getBoolean("Always-Sword")) {
             if(p.getGameMode() != GameMode.SPECTATOR && arena.getStatus() == ArenaStatus.RUNNING) {
-                Bukkit.getServer().getScheduler().runTaskLater((plugin()), () -> {
+                Bukkit.getServer().getScheduler().runTaskLater((plugin), () -> {
                     final Inventory pi = p.getInventory();
                     final int i = getSwords(p);
                     //TODO: OPTIMIZE
@@ -88,13 +90,5 @@ public class AlwaysSword implements Listener {
             }
         }
         return false;
-    }
-
-    private static MBedwarsTweaks plugin(){
-        return MBedwarsTweaks.getInstance();
-    }
-
-    private boolean enabled() {
-        return ServerManager.getSwordsToolsConfig().getBoolean("Always-Sword");
     }
 }

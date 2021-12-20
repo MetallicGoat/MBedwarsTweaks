@@ -14,9 +14,13 @@ import org.bukkit.inventory.PlayerInventory;
 public class ReplaceSwordOnBuy implements Listener {
     @EventHandler
     public void onSwordBuy(PlayerBuyInShopEvent e){
-        Player p = e.getPlayer();
-        PlayerInventory pi = p.getInventory();
-        if(e.getProblems().isEmpty() && replace()){
+
+        final Player p = e.getPlayer();
+        final PlayerInventory pi = p.getInventory();
+        final boolean enabled = ServerManager.getSwordsToolsConfig().getBoolean("Replace-Sword-On-Buy.Enabled");
+        final boolean allType = ServerManager.getSwordsToolsConfig().getBoolean("Replace-Sword-On-Buy.All-Type");
+
+        if(e.getProblems().isEmpty() && enabled){
             // Checks if player bought a sword
             for(ShopProduct rawProduct:e.getItem().getProducts()){
                 if(rawProduct instanceof ItemShopProduct){
@@ -24,7 +28,7 @@ public class ReplaceSwordOnBuy implements Listener {
                     for(ItemStack item:is){
                         if(item.getType().name().endsWith("SWORD") && ToolSwordHelper.isNotToIgnore(e.getItem().getDisplayName())){
                             //Clear Wooden Swords
-                            if(allType()){
+                            if(allType){
                                 pi.forEach(itemStack -> {
                                     if(itemStack != null) {
                                         if (itemStack.getType().name().contains("SWORD")) {
@@ -42,11 +46,5 @@ public class ReplaceSwordOnBuy implements Listener {
                 }
             }
         }
-    }
-    private boolean replace() {
-        return ServerManager.getSwordsToolsConfig().getBoolean("Replace-Sword-On-Buy.Enabled");
-    }
-    private boolean allType() {
-        return ServerManager.getSwordsToolsConfig().getBoolean("Replace-Sword-On-Buy.All-Type");
     }
 }

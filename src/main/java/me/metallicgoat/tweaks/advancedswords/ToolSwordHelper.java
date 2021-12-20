@@ -10,8 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 public class ToolSwordHelper {
 
     public static int getSwordToolLevel(Material tool){
@@ -53,26 +51,26 @@ public class ToolSwordHelper {
 
     public static boolean isNotToIgnore(ItemStack itemStack){
         ItemMeta meta = itemStack.getItemMeta();
-        AtomicBoolean isNotToIgnore = new AtomicBoolean(true);
+        boolean isNotToIgnore = true;
         if(meta != null) {
-            ServerManager.getSwordsToolsConfig().getStringList("Do-Not-Effect").forEach(s -> {
+            for(String s : ServerManager.getSwordsToolsConfig().getStringList("Do-Not-Effect")){
                 if(s.equals(ChatColor.stripColor(meta.getDisplayName())) && !s.equals("")) {
-                    isNotToIgnore.set(false);
+                    isNotToIgnore = false;
                 }
-            });
+            }
         }
-        return isNotToIgnore.get();
+        return isNotToIgnore;
     }
 
     public static boolean isNotToIgnore(String name){
-        AtomicBoolean isNotToIgnore = new AtomicBoolean(true);
-        ServerManager.getSwordsToolsConfig().getStringList("Do-Not-Effect").forEach(s -> {
+        boolean isNotToIgnore = true;
+        for (String s : ServerManager.getSwordsToolsConfig().getStringList("Do-Not-Effect")){
             String formatted = ChatColor.translateAlternateColorCodes('&', s);
             if(formatted.equals(name) && !s.equals("")){
-                isNotToIgnore.set(false);
+                isNotToIgnore = false;
             }
-        });
-        return isNotToIgnore.get();
+        }
+        return isNotToIgnore;
     }
 
     public static boolean doesInventoryContain(PlayerInventory playerInventory, String material){
