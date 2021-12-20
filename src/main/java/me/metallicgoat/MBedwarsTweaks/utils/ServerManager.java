@@ -16,15 +16,16 @@ import org.bukkit.plugin.PluginManager;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 public class ServerManager {
 
+    public static FileConfiguration defaultConfig;
     private static FileConfiguration tiersConfig;
-
     private static FileConfiguration swordsToolsConfig;
 
     public static FileConfiguration getConfig(){
-        return plugin().getConfig();
+        return defaultConfig;
     }
 
     public static FileConfiguration getTiersConfig(){
@@ -36,9 +37,14 @@ public class ServerManager {
     }
 
     public static void loadConfigs() {
-        loadDefaultConfig();
-        loadTiersConfig();
-        loadSwordsToolsConfig();
+        defaultConfig = loadCustomConfig("config.yml", Collections.singletonList("Nothing"));
+        tiersConfig = loadCustomConfig("gen-tiers.yml", Collections.singletonList("Gen-Tiers"));
+        swordsToolsConfig = loadCustomConfig("swords-tools.yml", Collections.singletonList("Nothing"));
+    }
+
+    public static void reload(){
+        defaultConfig = reloadConfig("config.yml");
+        swordsToolsConfig = reloadConfig("swords-tools.yml");
     }
 
     public static void registerEvents(){
@@ -88,67 +94,41 @@ public class ServerManager {
 
         //Break Effects
         manager.registerEvents(new BedDestroyListener(), plugin());
-
-
     }
 
-
-
-    private static void loadDefaultConfig(){
-        plugin().saveDefaultConfig();
-        File configFile = new File(plugin().getDataFolder(), "config.yml");
-
-        try {
-            ConfigUpdater.update(plugin(), "config.yml", configFile, Collections.singletonList("nothing"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        plugin().reloadConfig();
-    }
-
-    private static void loadTiersConfig(){
-        String ymlName = "gen-tiers.yml";
-
+    private static YamlConfiguration loadCustomConfig(String ymlName, List<String> ignore){
+        //Save file
         File configFile = new File(plugin().getDataFolder(), ymlName);
         if (!configFile.exists()) {
             plugin().saveResource(ymlName, false);
         }
 
+        //Run config updater
         try {
-            ConfigUpdater.update(plugin(), ymlName, configFile, Collections.singletonList("Gen-Tiers"));
+            ConfigUpdater.update(plugin(), ymlName, configFile, ignore);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        tiersConfig = new YamlConfiguration();
+        //Load config
+        YamlConfiguration configuration = new YamlConfiguration();
         try {
-            tiersConfig.load(configFile);
+            configuration.load(configFile);
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
+        return configuration;
     }
 
-    private static void loadSwordsToolsConfig(){
-        String ymlName = "swords-tools.yml";
-
+    private static YamlConfiguration reloadConfig(String ymlName){
         File configFile = new File(plugin().getDataFolder(), ymlName);
-        if (!configFile.exists()) {
-            plugin().saveResource(ymlName, false);
-        }
-
+        YamlConfiguration config = new YamlConfiguration();
         try {
-            ConfigUpdater.update(plugin(), ymlName, configFile, Collections.singletonList("Nothing"));
-        } catch (IOException e) {
-            e.printStackTrace();
+            config.load(configFile);
+        } catch (IOException | InvalidConfigurationException ex) {
+            ex.printStackTrace();
         }
-
-        swordsToolsConfig = new YamlConfiguration();
-        try {
-            swordsToolsConfig.load(configFile);
-        } catch (IOException | InvalidConfigurationException e) {
-            e.printStackTrace();
-        }
+        return config;
     }
 
     public static Main plugin(){
