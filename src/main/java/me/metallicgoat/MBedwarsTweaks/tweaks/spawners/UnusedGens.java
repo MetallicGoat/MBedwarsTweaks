@@ -4,7 +4,7 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.api.game.spawner.SpawnerDurationModifier;
-import me.metallicgoat.MBedwarsTweaks.Main;
+import me.metallicgoat.MBedwarsTweaks.MBedwarsTweaks;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
@@ -49,7 +49,7 @@ public class UnusedGens implements Listener {
         return false;
     }
 
-    private static Main plugin(){
-        return Main.getInstance();
+    private static MBedwarsTweaks plugin(){
+        return MBedwarsTweaks.getInstance();
     }
 }

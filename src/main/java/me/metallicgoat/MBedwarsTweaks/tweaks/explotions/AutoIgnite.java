@@ -1,6 +1,6 @@
 package me.metallicgoat.MBedwarsTweaks.tweaks.explotions;
 
-import me.metallicgoat.MBedwarsTweaks.Main;
+import me.metallicgoat.MBedwarsTweaks.MBedwarsTweaks;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -27,7 +27,7 @@ public class AutoIgnite implements Listener {
         }, 1L);
     }
 
-    private static Main plugin() {
-        return Main.getInstance();
+    private static MBedwarsTweaks plugin() {
+        return MBedwarsTweaks.getInstance();
     }
 }

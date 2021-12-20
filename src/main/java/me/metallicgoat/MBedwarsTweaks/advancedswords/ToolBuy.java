@@ -3,7 +3,7 @@ package me.metallicgoat.MBedwarsTweaks.advancedswords;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.event.player.PlayerBuyInShopEvent;
 import de.marcely.bedwars.api.game.shop.BuyGroup;
-import me.metallicgoat.MBedwarsTweaks.Main;
+import me.metallicgoat.MBedwarsTweaks.MBedwarsTweaks;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -83,7 +83,7 @@ public class ToolBuy implements Listener {
         e.addProblem(new PlayerBuyInShopEvent.Problem() {
             @Override
             public Plugin getPlugin() {
-                return Main.getInstance();
+                return MBedwarsTweaks.getInstance();
             }
 
             @Override

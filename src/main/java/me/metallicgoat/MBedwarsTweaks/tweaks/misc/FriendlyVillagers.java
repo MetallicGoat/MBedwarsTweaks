@@ -6,7 +6,7 @@ import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.world.WorldStorage;
 import de.marcely.bedwars.api.world.hologram.HologramControllerType;
 import de.marcely.bedwars.api.world.hologram.HologramEntity;
-import me.metallicgoat.MBedwarsTweaks.Main;
+import me.metallicgoat.MBedwarsTweaks.MBedwarsTweaks;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -107,7 +107,7 @@ public class FriendlyVillagers implements Listener {
         }), 0L, 1);
 
     }
-    private static Main plugin(){
-        return Main.getInstance();
+    private static MBedwarsTweaks plugin(){
+        return MBedwarsTweaks.getInstance();
     }
 }

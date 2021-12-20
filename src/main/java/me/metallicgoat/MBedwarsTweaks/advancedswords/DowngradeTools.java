@@ -8,7 +8,7 @@ import de.marcely.bedwars.api.event.player.PlayerIngameDeathEvent;
 import de.marcely.bedwars.api.event.player.PlayerIngameRespawnEvent;
 import de.marcely.bedwars.api.game.shop.BuyGroup;
 import de.marcely.bedwars.api.game.shop.ShopItem;
-import me.metallicgoat.MBedwarsTweaks.Main;
+import me.metallicgoat.MBedwarsTweaks.MBedwarsTweaks;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -51,7 +51,7 @@ public class DowngradeTools implements Listener {
                     if(shopItems != null) {
                         for (ShopItem item : shopItems) {
                             BukkitScheduler scheduler = Bukkit.getScheduler();
-                            scheduler.runTaskLater(Main.getInstance(), () -> item.getProducts().forEach(shopProduct -> {
+                            scheduler.runTaskLater(MBedwarsTweaks.getInstance(), () -> item.getProducts().forEach(shopProduct -> {
                                 arena.setBuyGroupLevel(player, buyGroup, level);
                                 shopProduct.give(e.getPlayer(), e.getArena().getPlayerTeam(player), e.getArena(), 1);
                             }), 1L);

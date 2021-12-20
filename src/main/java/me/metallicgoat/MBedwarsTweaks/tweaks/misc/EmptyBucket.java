@@ -2,7 +2,7 @@ package me.metallicgoat.MBedwarsTweaks.tweaks.misc;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
-import me.metallicgoat.MBedwarsTweaks.Main;
+import me.metallicgoat.MBedwarsTweaks.MBedwarsTweaks;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -30,7 +30,7 @@ public class EmptyBucket implements Listener {
             }
         }
     }
-    private static Main plugin(){
-        return Main.getInstance();
+    private static MBedwarsTweaks plugin(){
+        return MBedwarsTweaks.getInstance();
     }
 }

@@ -6,7 +6,7 @@ import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.event.player.PlayerJoinArenaEvent;
 import me.clip.placeholderapi.PlaceholderAPI;
-import me.metallicgoat.MBedwarsTweaks.Main;
+import me.metallicgoat.MBedwarsTweaks.MBedwarsTweaks;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,7 +22,7 @@ public class ActionBar implements Listener {
     @EventHandler
     public void onGameStart(PlayerJoinArenaEvent e){
         boolean enabled = ServerManager.getConfig().getBoolean("Action-Bar-Enabled");
-        if(enabled && Main.papiEnabled) {
+        if(enabled && MBedwarsTweaks.papiEnabled) {
             //Start updating ActionBar
             if(actionBarTask == null){
                 actionBarTask = startUpdatingTime();
@@ -33,7 +33,7 @@ public class ActionBar implements Listener {
     @EventHandler
     public void onGameStop(RoundEndEvent event){
         boolean enabled = ServerManager.getConfig().getBoolean("Action-Bar-Enabled");
-        if(enabled && Main.papiEnabled) {
+        if(enabled && MBedwarsTweaks.papiEnabled) {
             //Dont kill task if
             for (Arena arena : BedwarsAPI.getGameAPI().getArenas()) {
                 if (arena.getPlayers().isEmpty()) {
@@ -68,7 +68,7 @@ public class ActionBar implements Listener {
         }, 0L, 20L);
     }
 
-    private static Main plugin(){
-        return Main.getInstance();
+    private static MBedwarsTweaks plugin(){
+        return MBedwarsTweaks.getInstance();
     }
 }

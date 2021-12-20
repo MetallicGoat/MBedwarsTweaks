@@ -3,7 +3,7 @@ package me.metallicgoat.MBedwarsTweaks.advancedswords;
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
-import me.metallicgoat.MBedwarsTweaks.Main;
+import me.metallicgoat.MBedwarsTweaks.MBedwarsTweaks;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import me.metallicgoat.MBedwarsTweaks.utils.XSeries.XMaterial;
 import org.bukkit.Bukkit;
@@ -26,7 +26,6 @@ public class AlwaysSword implements Listener {
 
         final Player p = (Player) e.getWhoClicked();
         Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(p);
-
 
         if (arena != null && enabled()) {
             if(p.getGameMode() != GameMode.SPECTATOR && arena.getStatus() == ArenaStatus.RUNNING) {
@@ -91,8 +90,8 @@ public class AlwaysSword implements Listener {
         return false;
     }
 
-    private static Main plugin(){
-        return Main.getInstance();
+    private static MBedwarsTweaks plugin(){
+        return MBedwarsTweaks.getInstance();
     }
 
     private boolean enabled() {

@@ -3,7 +3,7 @@ package me.metallicgoat.MBedwarsTweaks.tweaks.misc;
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.tools.VarParticle;
-import me.metallicgoat.MBedwarsTweaks.Main;
+import me.metallicgoat.MBedwarsTweaks.MBedwarsTweaks;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -29,7 +29,7 @@ public class SpongeParticles implements Listener {
         if (!block.getType().equals(Material.SPONGE) || world == null)
             return;
 
-        new SpongeParticleTask(block).runTaskTimer(Main.getInstance(), 0L, 10L);
+        new SpongeParticleTask(block).runTaskTimer(MBedwarsTweaks.getInstance(), 0L, 10L);
     }
 }
 class SpongeParticleTask extends BukkitRunnable{

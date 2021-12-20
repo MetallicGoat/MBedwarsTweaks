@@ -6,3 +6,7 @@ description: Tweaks and Features for MBedwars
 api-version: 1.13
 depend: [MBedwars]
 softdepend: [PlaceholderAPI]
+commands:
+  MBedwarsTweaks:
+    usage: /<command>
+    permission: mbedwars-tweaks.admin

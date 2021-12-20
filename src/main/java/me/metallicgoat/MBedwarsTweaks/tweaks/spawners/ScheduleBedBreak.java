@@ -5,7 +5,7 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.arena.ArenaBedBreakEvent;
 import de.marcely.bedwars.api.message.Message;
-import me.metallicgoat.MBedwarsTweaks.Main;
+import me.metallicgoat.MBedwarsTweaks.MBedwarsTweaks;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import me.metallicgoat.MBedwarsTweaks.utils.XSeries.XSound;
 import org.bukkit.*;
@@ -85,7 +85,7 @@ public class ScheduleBedBreak implements Listener {
         }
     }
 
-    private static Main plugin(){
-        return Main.getInstance();
+    private static MBedwarsTweaks plugin(){
+        return MBedwarsTweaks.getInstance();
     }
 }

@@ -8,9 +8,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Main extends JavaPlugin {
+public class MBedwarsTweaks extends JavaPlugin {
 
-    private static Main instance;
+    private static MBedwarsTweaks instance;
     public static boolean papiEnabled = false;
 
     public void onEnable() {
@@ -18,8 +18,7 @@ public class Main extends JavaPlugin {
         Metrics metrics = new Metrics(this, pluginId);
 
         instance = this;
-        ServerManager.loadConfigs();
-        ServerManager.registerEvents();
+        ServerManager.load();
 
         PluginDescriptionFile pdf = this.getDescription();
 
@@ -42,10 +41,9 @@ public class Main extends JavaPlugin {
         });
     }
 
-    public static Main getInstance() {
+    public static MBedwarsTweaks getInstance() {
         return instance;
     }
-
 
     private void log(String ...args) {
         for(String s : args)

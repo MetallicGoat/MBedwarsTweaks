@@ -3,7 +3,7 @@ package me.metallicgoat.MBedwarsTweaks.tweaks.misc;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.event.player.PlayerJoinArenaEvent;
-import me.metallicgoat.MBedwarsTweaks.Main;
+import me.metallicgoat.MBedwarsTweaks.MBedwarsTweaks;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -33,7 +33,7 @@ public class ShortenCountdown implements Listener {
         }
     }
 
-    public static Main plugin(){
-        return Main.getInstance();
+    public static MBedwarsTweaks plugin(){
+        return MBedwarsTweaks.getInstance();
     }
 }

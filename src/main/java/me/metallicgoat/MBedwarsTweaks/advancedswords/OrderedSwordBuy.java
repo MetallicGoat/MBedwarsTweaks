@@ -3,7 +3,7 @@ package me.metallicgoat.MBedwarsTweaks.advancedswords;
 import de.marcely.bedwars.api.event.player.PlayerBuyInShopEvent;
 import de.marcely.bedwars.api.game.shop.product.ItemShopProduct;
 import de.marcely.bedwars.api.game.shop.product.ShopProduct;
-import me.metallicgoat.MBedwarsTweaks.Main;
+import me.metallicgoat.MBedwarsTweaks.MBedwarsTweaks;
 import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,8 +13,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class OrderedSwordBuy implements Listener {
     @EventHandler
@@ -75,7 +73,7 @@ public class OrderedSwordBuy implements Listener {
         e.addProblem(new PlayerBuyInShopEvent.Problem() {
             @Override
             public Plugin getPlugin() {
-                return Main.getInstance();
+                return MBedwarsTweaks.getInstance();
             }
 
             @Override
