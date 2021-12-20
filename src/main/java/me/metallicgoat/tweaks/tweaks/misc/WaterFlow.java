@@ -14,16 +14,16 @@ import java.util.Collection;
 
 public class WaterFlow implements Listener {
 
-    private final boolean enabled = ServerManager.getConfig().getBoolean("Prevent-Liquid-Build-Up");
-
     @EventHandler
     public void onFlow(BlockFromToEvent e){
+
+        final boolean enabled = ServerManager.getConfig().getBoolean("Prevent-Liquid-Build-Up");
 
         if(!enabled)
             return;
 
-        Collection<Arena> toArena = BedwarsAPI.getGameAPI().getArenaByLocation(e.getToBlock().getLocation());
-        Collection<Arena> fromArena = BedwarsAPI.getGameAPI().getArenaByLocation(e.getBlock().getLocation());
+        final Collection<Arena> toArena = BedwarsAPI.getGameAPI().getArenaByLocation(e.getToBlock().getLocation());
+        final Collection<Arena> fromArena = BedwarsAPI.getGameAPI().getArenaByLocation(e.getBlock().getLocation());
 
         if(toArena != null && fromArena != null) {
             //Check if water is moving from a location in an arena to outside an arena
@@ -45,9 +45,10 @@ public class WaterFlow implements Listener {
 
     @EventHandler
     public void onLiquidPlace(PlayerBucketEmptyEvent e){
-        Player p = e.getPlayer();
-        Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(p);
-        Location location = e.getBlockClicked().getRelative(e.getBlockFace()).getLocation();
+        final boolean enabled = ServerManager.getConfig().getBoolean("Prevent-Liquid-Build-Up");
+        final Player p = e.getPlayer();
+        final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(p);
+        final Location location = e.getBlockClicked().getRelative(e.getBlockFace()).getLocation();
 
         if(!enabled || arena == null)
             return;
