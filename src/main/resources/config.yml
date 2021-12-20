@@ -229,6 +229,9 @@ Buy-Message:
 Empty-Buckets: true
 Empty-Potions: true
 
+#Sponge partials on place
+Sponge-Partials: true
+
 ############### BED DESTROY EFFECTS [BETA] ###############
 
 # NONE - None

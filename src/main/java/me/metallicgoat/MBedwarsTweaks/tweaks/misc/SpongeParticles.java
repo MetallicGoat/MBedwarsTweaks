@@ -4,6 +4,7 @@ import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.tools.VarParticle;
 import me.metallicgoat.MBedwarsTweaks.MBedwarsTweaks;
+import me.metallicgoat.MBedwarsTweaks.utils.ServerManager;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -21,12 +22,11 @@ public class SpongeParticles implements Listener {
         Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(e.getPlayer());
         Block block = e.getBlock();
 
-        if (e.isCancelled() || arena == null)
-            return;
-
-        World world = arena.getGameWorld();
-
-        if (!block.getType().equals(Material.SPONGE) || world == null)
+        if (!ServerManager.getConfig().getBoolean("Sponge-Partials") ||
+                e.isCancelled() ||
+                arena == null ||
+                arena.getGameWorld() == null ||
+                !block.getType().equals(Material.SPONGE))
             return;
 
         new SpongeParticleTask(block).runTaskTimer(MBedwarsTweaks.getInstance(), 0L, 10L);
