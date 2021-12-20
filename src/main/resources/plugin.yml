@@ -1,7 +1,7 @@
 version: 1.0.0-R2
 name: MBedwarsTweaks
 author: MetallicGoat
-main: me.metallicgoat.MBedwarsTweaks.Main
+main: me.metallicgoat.tweaks.MBedwarsTweaks
 description: Tweaks and Features for MBedwars
 api-version: 1.13
 depend: [MBedwars]
