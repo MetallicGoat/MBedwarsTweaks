@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 public class ToolBuy implements Listener {
@@ -18,16 +19,14 @@ public class ToolBuy implements Listener {
     public void onToolBuy(PlayerBuyInShopEvent e) {
         Player p = e.getPlayer();
         Arena arena = e.getArena();
+        BuyGroup group = e.getItem().getBuyGroup();
 
         //If enabled, and item has buy-group
-        if(e.getItem().hasBuyGroup()
+        if(group != null
                 && ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Tool-Replacement.Enabled")
                 && e.getProblems().isEmpty()){
 
-            BuyGroup group = e.getItem().getBuyGroup();
-
             //if proper buy-group
-            assert group != null;
             if(group.getName().equalsIgnoreCase("axe")
                     || group.getName().equalsIgnoreCase("pickaxe")) {
 
@@ -64,7 +63,7 @@ public class ToolBuy implements Listener {
 
     private void clearOld(Material tool, Player p) {
         boolean pickaxe = tool.name().contains("PICKAXE");
-        p.getInventory().forEach(itemStack -> {
+        for(ItemStack itemStack : p.getInventory()) {
             if (itemStack != null && itemStack.getType().name().contains("AXE")) {
                 if (itemStack.getType().name().contains("PICKAXE") && pickaxe) {
                     if (ToolSwordHelper.getSwordToolLevel(tool) > ToolSwordHelper.getSwordToolLevel(itemStack.getType())) {
@@ -76,7 +75,7 @@ public class ToolBuy implements Listener {
                     }
                 }
             }
-        });
+        }
     }
 
     private void addShopProblem(PlayerBuyInShopEvent e, String problem) {

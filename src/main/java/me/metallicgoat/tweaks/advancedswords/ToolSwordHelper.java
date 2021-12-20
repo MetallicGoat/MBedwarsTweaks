@@ -14,22 +14,21 @@ public class ToolSwordHelper {
 
     public static int getSwordToolLevel(Material tool){
 
-        String toolName = tool.name();
-
-        if(toolName.contains("WOOD")){
-            return 1;
-        }else if(toolName.contains("STONE")){
-            return 2;
-        }else if(toolName.contains("IRON")){
-            return 3;
-        }else if(toolName.contains("GOLD")){
-            return 4;
-        }else if(toolName.contains("DIAMOND")){
-            return 5;
-        }else if(toolName.contains("NETHERITE")){
-            return 6;
-        }else{
-            return 0;
+        switch(tool.name()){
+            case "WOOD":
+                return 1;
+            case "STONE":
+                return 2;
+            case "IRON":
+                return 3;
+            case "GOLD":
+                return 4;
+            case "DIAMOND":
+                return 5;
+            case "NETHERITE":
+                return 6;
+            default:
+                return 0;
         }
     }
 

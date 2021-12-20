@@ -41,14 +41,12 @@ public class OrderedSwordBuy implements Listener {
     }
 
     private void clearOld(Material tool, Player p){
-        p.getInventory().forEach(itemStack -> {
-            if(itemStack != null){
-                if(itemStack.getType().name().contains("SWORD")
-                        && ToolSwordHelper.getSwordToolLevel(tool) > ToolSwordHelper.getSwordToolLevel(itemStack.getType())){
-                    p.getInventory().remove(itemStack);
-                }
+        for(ItemStack itemStack : p.getInventory()){
+            if(itemStack != null && itemStack.getType().name().contains("SWORD")
+                    && ToolSwordHelper.getSwordToolLevel(tool) > ToolSwordHelper.getSwordToolLevel(itemStack.getType())){
+                p.getInventory().remove(itemStack);
             }
-        });
+        }
     }
 
     private boolean isPurchasable(ItemStack product, PlayerInventory pi){
@@ -57,12 +55,9 @@ public class OrderedSwordBuy implements Listener {
         }
 
         for(ItemStack itemStack:pi){
-            if(itemStack != null) {
-                if (itemStack.getType().name().contains("SWORD")) {
-                    if (ToolSwordHelper.getSwordToolLevel(itemStack.getType()) > ToolSwordHelper.getSwordToolLevel(product.getType())) {
-                        return false;
-                    }
-                }
+            if(itemStack != null && itemStack.getType().name().contains("SWORD") &&
+                    ToolSwordHelper.getSwordToolLevel(itemStack.getType()) > ToolSwordHelper.getSwordToolLevel(product.getType())) {
+                return false;
             }
         }
         return true;

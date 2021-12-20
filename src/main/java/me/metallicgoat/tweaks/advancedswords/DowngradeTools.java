@@ -93,8 +93,8 @@ public class DowngradeTools implements Listener {
     public void onRespawn(PlayerIngameDeathEvent e){
         if(ServerManager.getSwordsToolsConfig().getBoolean("Degraded-Tool-BuyGroups")
                 && ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Tool-Replacement.Enabled")) {
-            Player player = e.getPlayer();
-            Arena arena = e.getArena();
+            final Player player = e.getPlayer();
+            final Arena arena = e.getArena();
 
             Collection<BuyGroup> buyGroups = BedwarsAPI.getGameAPI().getBuyGroups();
             for (BuyGroup buyGroup : buyGroups) {

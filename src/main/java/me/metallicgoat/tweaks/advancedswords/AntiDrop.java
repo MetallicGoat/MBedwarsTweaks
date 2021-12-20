@@ -12,8 +12,8 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 public class AntiDrop implements Listener {
     @EventHandler
     public void onToolDrop(PlayerDropItemEvent e){
-        Player p = e.getPlayer();
-        Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(p);
+        final Player p = e.getPlayer();
+        final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(p);
         // If player is trying to dop a tool he shouldn't, cancel event
         if(arena != null && arena.getStatus() == ArenaStatus.RUNNING) {
             if (ServerManager.getSwordsToolsConfig().getBoolean("Anti-Drop.Enabled") &&

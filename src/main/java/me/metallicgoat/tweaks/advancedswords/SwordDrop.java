@@ -57,17 +57,16 @@ public class SwordDrop implements Listener {
         final ItemStack sword = e.getItem().getItemStack();
 
         if(ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Sword-Drop.Enabled")) {
-            if(arena != null) {
-                if(ServerManager.getSwordsToolsConfig().getStringList("Advanced-Sword-Drop.List").contains(sword.getType().name()) &&
-                        ToolSwordHelper.isNotToIgnore(sword)) {
-                    assert XMaterial.WOODEN_SWORD.parseMaterial() != null;
-                    if(pi.contains(XMaterial.WOODEN_SWORD.parseMaterial())) {
-                        pi.remove(XMaterial.WOODEN_SWORD.parseMaterial());
-                    }
-                    e.setCancelled(true);
-                    pi.addItem(sword);
-                    e.getItem().remove();
+            if(arena != null &&
+                    ServerManager.getSwordsToolsConfig().getStringList("Advanced-Sword-Drop.List").contains(sword.getType().name()) &&
+                    ToolSwordHelper.isNotToIgnore(sword)) {
+                assert XMaterial.WOODEN_SWORD.parseMaterial() != null;
+                if(pi.contains(XMaterial.WOODEN_SWORD.parseMaterial())) {
+                    pi.remove(XMaterial.WOODEN_SWORD.parseMaterial());
                 }
+                e.setCancelled(true);
+                pi.addItem(sword);
+                e.getItem().remove();
             }
         }
     }

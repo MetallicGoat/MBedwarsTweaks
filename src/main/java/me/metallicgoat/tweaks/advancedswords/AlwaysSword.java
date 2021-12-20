@@ -27,29 +27,19 @@ public class AlwaysSword implements Listener {
         assert XMaterial.WOODEN_SWORD.parseMaterial() != null;
 
         final Player p = (Player) e.getWhoClicked();
-        Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(p);
+        final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(p);
 
         if (arena != null && ServerManager.getSwordsToolsConfig().getBoolean("Always-Sword")) {
             if(p.getGameMode() != GameMode.SPECTATOR && arena.getStatus() == ArenaStatus.RUNNING) {
                 Bukkit.getServer().getScheduler().runTaskLater((plugin), () -> {
                     final Inventory pi = p.getInventory();
-                    final int i = getSwords(p);
-                    //TODO: OPTIMIZE
+                    final int i = getSwordsAmount(p);
                     if (i >= 2) {
-                        //if someone has an extra wood sword, remove it
-                        if (hasGoodSword(p)) {
-                            for (ItemStack s : pi.getContents()) {
-                                if (s != null && s.getType().equals(XMaterial.WOODEN_SWORD.parseMaterial()) &&
-                                        ToolSwordHelper.isNotToIgnore(s)) {
-                                    pi.remove(s);
-                                }
-                            }
-                            // If someone somehow gets two wood swords, only remove one
-                        } else {
-                            for (ItemStack s : pi.getContents()) {
-                                if (s != null && s.getType().equals(XMaterial.WOODEN_SWORD.parseMaterial()) &&
-                                        ToolSwordHelper.isNotToIgnore(s)) {
-                                    pi.remove(s);
+                        for (ItemStack itemStack : pi.getContents()) {
+                            if (itemStack != null && itemStack.getType().equals(XMaterial.WOODEN_SWORD.parseMaterial()) &&
+                                    ToolSwordHelper.isNotToIgnore(itemStack)) {
+                                pi.remove(itemStack);
+                                if(!hasBetterSword(p)) {
                                     break;
                                 }
                             }
@@ -66,7 +56,7 @@ public class AlwaysSword implements Listener {
     }
 
     // checks how many swords a player has
-    private int getSwords(Player player) {
+    private int getSwordsAmount(Player player) {
         int count = 0;
         for (ItemStack item : player.getInventory().getContents()) {
             if(item != null)
@@ -77,8 +67,7 @@ public class AlwaysSword implements Listener {
         return count;
     }
     // returns true if a player has a sword that is better than wood
-    private boolean hasGoodSword(Player player){
-
+    private boolean hasBetterSword(Player player){
         final Inventory pi = player.getInventory();
         for(ItemStack s:pi.getContents()){
             if(s != null){

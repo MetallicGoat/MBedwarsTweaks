@@ -29,13 +29,13 @@ public class ReplaceSwordOnBuy implements Listener {
                         if(item.getType().name().endsWith("SWORD") && ToolSwordHelper.isNotToIgnore(e.getItem().getDisplayName())){
                             //Clear Wooden Swords
                             if(allType){
-                                pi.forEach(itemStack -> {
+                                for(ItemStack itemStack : pi) {
                                     if(itemStack != null) {
                                         if (itemStack.getType().name().contains("SWORD")) {
                                             pi.remove(itemStack);
                                         }
                                     }
-                                });
+                                }
                             }else {
                                 assert XMaterial.WOODEN_SWORD.parseMaterial() != null;
                                 pi.remove(XMaterial.WOODEN_SWORD.parseMaterial());
