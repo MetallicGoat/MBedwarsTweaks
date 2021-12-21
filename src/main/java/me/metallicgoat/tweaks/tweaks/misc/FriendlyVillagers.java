@@ -20,8 +20,7 @@ import java.util.*;
 
 public class FriendlyVillagers implements Listener {
 
-    //TODO fix 360
-
+    private static final MBedwarsTweaks plugin = MBedwarsTweaks.getInstance();
     private BukkitTask task;
     private final List<World> worlds = new ArrayList<>();
     private boolean isRunning = false;
@@ -64,14 +63,14 @@ public class FriendlyVillagers implements Listener {
     }
 
 
-    private void startLooking(){
+    private void startLooking() {
 
         //For each active world (Every Tick)
-        task = Bukkit.getScheduler().runTaskTimer(plugin(), () -> worlds.forEach(world -> {
+        task = Bukkit.getScheduler().runTaskTimer(plugin, () -> worlds.forEach(world -> {
 
             WorldStorage worldStorage = BedwarsAPI.getWorldStorage(world);
 
-            if(worldStorage != null) {
+            if (worldStorage != null) {
 
                 //Get all villagers in the world
                 Collection<HologramEntity> entity = worldStorage.getHolograms();
@@ -79,7 +78,7 @@ public class FriendlyVillagers implements Listener {
                 //For each villager
                 entity.forEach(hologramEntity -> {
 
-                    if(hologramEntity.getControllerType() == HologramControllerType.DEALER
+                    if (hologramEntity.getControllerType() == HologramControllerType.DEALER
                             || hologramEntity.getControllerType() == HologramControllerType.UPGRADE_DEALER) {
 
                         //Get players in range of villager
@@ -93,11 +92,17 @@ public class FriendlyVillagers implements Listener {
                             Location moveTo = hologramEntity.getLocation().setDirection(lookAtPlayer.getLocation().subtract(hologramEntity.getLocation()).toVector());
 
                             //Smooth Look (Interpolation)
+                            //Time wasted so far: 2.5 fucking hours
+                            //TODO Still does not really work if there are 2 players
                             float currentYaw = hologramEntity.getLocation().getYaw();
                             float targetYaw = moveTo.getYaw();
-                            float newYaw = currentYaw + (targetYaw - currentYaw) / 4;
+                            float newYaw;
 
-                            //Actually move villager
+                            if ((Math.abs(currentYaw) + Math.abs(targetYaw)) > 353)
+                                newYaw = targetYaw;
+                            else
+                                newYaw = currentYaw + (targetYaw - currentYaw) / 4;
+
                             moveTo.setYaw(newYaw);
                             hologramEntity.teleport(moveTo);
                         }
@@ -105,9 +110,5 @@ public class FriendlyVillagers implements Listener {
                 });
             }
         }), 0L, 1);
-
-    }
-    private static MBedwarsTweaks plugin(){
-        return MBedwarsTweaks.getInstance();
     }
 }

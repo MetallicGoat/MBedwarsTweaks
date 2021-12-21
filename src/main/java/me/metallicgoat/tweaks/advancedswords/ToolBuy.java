@@ -6,7 +6,6 @@ import de.marcely.bedwars.api.game.shop.BuyGroup;
 import de.marcely.bedwars.api.message.Message;
 import me.metallicgoat.tweaks.MBedwarsTweaks;
 import me.metallicgoat.tweaks.utils.ServerManager;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
