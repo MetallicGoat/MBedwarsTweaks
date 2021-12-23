@@ -89,7 +89,7 @@ public class TopKillers implements Listener {
 
         List<String> formattedList = new ArrayList<>();
 
-        if (firstKiller != null) {
+        if (firstKiller != null && firstKillerInt != 0) {
 
             for (String s : ServerManager.getConfig().getStringList("Top-Killer-Message")) {
 
