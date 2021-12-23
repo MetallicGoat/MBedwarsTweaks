@@ -13,6 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.util.Optional;
+
 public class ScheduleBedBreak implements Listener {
 
     @EventHandler
@@ -56,7 +58,8 @@ public class ScheduleBedBreak implements Listener {
                     ChatColor.translateAlternateColorCodes('&', smallTitle),
                     60, 15, 15);
             if(sound != null && !sound.equals("")) {
-                XSound.valueOf(sound).play(p);
+                Optional<XSound> xSound = XSound.matchXSound(sound);
+                xSound.ifPresent(value -> value.play(destroyer.getLocation()));
             }
         }
 
