@@ -39,8 +39,7 @@ public class BuyMessage implements Listener {
             if(rawProduct instanceof ItemShopProduct){
                 final ItemStack[] is = ((ItemShopProduct) rawProduct).getItemStacks();
                 for(ItemStack item:is){
-                    count = item.getAmount();
-                    break;
+                    count += item.getAmount();
                 }
             }
         }
