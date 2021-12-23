@@ -17,12 +17,12 @@ public class TopKillers implements Listener {
 
     //TODO: Showing 0
 
-    private final HashMap<Arena, Collection<Player>> playerArenaHashMap = new HashMap<>();
+    private final HashMap<Arena, Collection<Player>> arenaPlayerHashMap = new HashMap<>();
     private final HashMap<Player, Integer> scoreHashMap = new HashMap<>();
 
     @EventHandler
     public void onGameStart(RoundStartEvent e){
-        playerArenaHashMap.put(e.getArena(), e.getArena().getPlayers());
+        arenaPlayerHashMap.put(e.getArena(), e.getArena().getPlayers());
         e.getArena().getPlayers().forEach(player -> scoreHashMap.put(player, 0));
     }
 
@@ -37,18 +37,22 @@ public class TopKillers implements Listener {
 
     @EventHandler
     public void onGameOver(RoundEndEvent e) {
-        if (ServerManager.getConfig().getBoolean("Top-Killer-Message-Enabled")) {
+
+        final Arena arena = e.getArena();
+
+        if (ServerManager.getConfig().getBoolean("Top-Killer-Message-Enabled")
+                 && arenaPlayerHashMap.containsKey(arena)) {
 
             HashMap<Player, Integer> arenaScoreHashMap = new HashMap<>();
 
-            playerArenaHashMap.get(e.getArena()).forEach(player -> {
+            for(Player player : arenaPlayerHashMap.get(arena)){
                 int playerKills = scoreHashMap.getOrDefault(player, 0);
                 arenaScoreHashMap.put(player, playerKills);
                 scoreHashMap.remove(player);
-            });
+            }
 
             printMessage(e, sortHashMapByValue(arenaScoreHashMap));
-            playerArenaHashMap.remove(e.getArena());
+            arenaPlayerHashMap.remove(arena);
         }
     }
     public static HashMap<Player, Integer> sortHashMapByValue(HashMap<Player, Integer> hm) {

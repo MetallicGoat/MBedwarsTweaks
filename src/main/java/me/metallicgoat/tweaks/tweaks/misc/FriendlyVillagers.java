@@ -53,7 +53,7 @@ public class FriendlyVillagers implements Listener {
                 });
                 if (ServerManager.getConfig().getBoolean("Friendly-Villagers")) {
                     worlds.remove(world);
-                    if (worlds.isEmpty()) {
+                if (worlds.isEmpty() && task != null) {
                         task.cancel();
                         isRunning = false;
                     }
