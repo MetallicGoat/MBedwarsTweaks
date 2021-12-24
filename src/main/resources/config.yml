@@ -189,6 +189,9 @@ Lock-Team-Chest: false
 Team-Chest-Distance: 8
 Prevent-Chest-Open-Message: '&cYou cannot open this chest until {team} &chas been eliminated.'
 
+#Personal Ender Chests
+Personal-Ender-Chests: false
+
 #If enabled you still join a server even if the Player Limit is reached.
 Bypass-PlayerLimit: false
 

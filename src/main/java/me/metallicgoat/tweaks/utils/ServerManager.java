@@ -77,6 +77,7 @@ public class ServerManager {
         manager.registerEvents(new HeightCap(), plugin);
         manager.registerEvents(new LockTeamChest(), plugin);
         manager.registerEvents(new PermanentEffects(), plugin);
+        manager.registerEvents(new PersonalChests(), plugin);
         manager.registerEvents(new PlayerLimitBypass(), plugin);
         manager.registerEvents(new ShortenCountdown(), plugin);
         manager.registerEvents(new SpongeParticles(), plugin);
