@@ -99,49 +99,10 @@ public class FriendlyVillagers implements Listener {
 
                         //Final location
                         Location moveTo = hologramEntity.getLocation().setDirection(lookAtPlayer.getLocation().subtract(hologramEntity.getLocation()).toVector());
-
-                        //Smooth Look (Interpolation)
-                        //Time wasted so far: 4 fucking hours
-                        float currentYaw = hologramEntity.getLocation().getYaw();
-                        float targetYaw = moveTo.getYaw();
-
-                        hologramEntity.teleport(calculateMove(moveTo, currentYaw, targetYaw));
+                        hologramEntity.teleport(moveTo);
                     }
                 }
             });
-        }), 0L, 1);
-    }
-
-    private static Location calculateMove(Location moveTo, float currentYaw, float targetYaw){
-        while (targetYaw >= 180F) {
-            targetYaw -= 360F;
-        }
-        while (targetYaw < -180F) {
-            targetYaw += 360F;
-        }
-        double adjusted = targetYaw - 40;
-        while (adjusted >= 180F) {
-            adjusted -= 360F;
-        }
-        while (adjusted < -180F) {
-            adjusted += 360F;
-        }
-        if (adjusted > currentYaw) {
-            moveTo.setYaw((float) adjusted);
-        }
-        if (adjusted != currentYaw) {
-            adjusted = targetYaw + 40;
-            while (adjusted >= 180F) {
-                adjusted -= 360F;
-            }
-            while (adjusted < -180F) {
-                adjusted += 360F;
-            }
-            if (adjusted < currentYaw) {
-                moveTo.setYaw((float) adjusted);
-            }
-        }
-        moveTo.setYaw(targetYaw);
-        return moveTo;
+        }), 0L, 4);
     }
 }
