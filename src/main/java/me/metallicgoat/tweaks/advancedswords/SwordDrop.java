@@ -74,11 +74,10 @@ public class SwordDrop implements Listener {
     private int getSwords(Player player) {
         int count = 0;
         for(ItemStack item : player.getInventory().getContents()) {
-            if(item != null)
-                if(item.getType().name().endsWith("SWORD") &&
-                        ToolSwordHelper.isNotToIgnore(item)){
-                    count++;
-                }
+            if(item != null && item.getType().name().endsWith("SWORD") &&
+                    ToolSwordHelper.isNotToIgnore(item)) {
+                count++;
+            }
         }
         return count;
     }

@@ -24,38 +24,35 @@ public class ToolBuy implements Listener {
         //If enabled, and item has buy-group
         if(group != null
                 && ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Tool-Replacement.Enabled")
-                && e.getProblems().isEmpty()){
+                && e.getProblems().isEmpty()
+                && group.getName().contains("axe")) {
 
-            //if proper buy-group
-            if(group.getName().contains("axe")) {
-
-                int currentLevel = arena.getBuyGroupLevel(p, e.getItem().getBuyGroup());
-                if(group.getName().equalsIgnoreCase("pickaxe")){
-                    if(!ToolSwordHelper.doesInventoryContain(p.getInventory(), "PICKAXE")){
-                        currentLevel = 0;
-                    }
-                }else if(group.getName().equalsIgnoreCase("axe")){
-                    if(!ToolSwordHelper.doesInventoryContain(p.getInventory(), "_AXE")){
-                        currentLevel = 0;
-                    }
+            int currentLevel = arena.getBuyGroupLevel(p, e.getItem().getBuyGroup());
+            if(group.getName().equalsIgnoreCase("pickaxe")){
+                if(!ToolSwordHelper.doesInventoryContain(p.getInventory(), "PICKAXE")){
+                    currentLevel = 0;
                 }
+            }else if(group.getName().equalsIgnoreCase("axe")){
+                if(!ToolSwordHelper.doesInventoryContain(p.getInventory(), "_AXE")){
+                    currentLevel = 0;
+                }
+            }
 
-                //If getting higher tier
-                if (e.getItem().getBuyGroupLevel() > currentLevel) {
-                    if (ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Tool-Replacement.Force-Ordered")) {
-                        //current + 1 = buying level
-                        if (e.getItem().getBuyGroupLevel() != currentLevel + 1) {
-                            addShopProblem(e, ServerManager.getSwordsToolsConfig().getString("Advanced-Tool-Replacement.Force-Ordered-Problem"));
-                        } else {
-                            clearOld(ToolSwordHelper.getToolInShopProduct(e.getItem()), p);
-                        }
+            //If getting higher tier
+            if (e.getItem().getBuyGroupLevel() > currentLevel) {
+                if (ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Tool-Replacement.Force-Ordered")) {
+                    //current + 1 = buying level
+                    if (e.getItem().getBuyGroupLevel() != currentLevel + 1) {
+                        addShopProblem(e, ServerManager.getSwordsToolsConfig().getString("Advanced-Tool-Replacement.Force-Ordered-Problem"));
                     } else {
                         clearOld(ToolSwordHelper.getToolInShopProduct(e.getItem()), p);
                     }
-                //Lower or same tier
                 } else {
-                    addShopProblem(e, ServerManager.getSwordsToolsConfig().getString("Advanced-Tool-Replacement.Problem"));
+                    clearOld(ToolSwordHelper.getToolInShopProduct(e.getItem()), p);
                 }
+            //Lower or same tier
+            } else {
+                addShopProblem(e, ServerManager.getSwordsToolsConfig().getString("Advanced-Tool-Replacement.Problem"));
             }
         }
     }

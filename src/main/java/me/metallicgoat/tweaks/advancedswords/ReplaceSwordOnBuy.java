@@ -30,13 +30,11 @@ public class ReplaceSwordOnBuy implements Listener {
                             //Clear Wooden Swords
                             if(allType){
                                 for(ItemStack itemStack : pi) {
-                                    if(itemStack != null) {
-                                        if (itemStack.getType().name().contains("SWORD")) {
+                                    if(itemStack != null && itemStack.getType().name().contains("SWORD")) {
                                             pi.remove(itemStack);
-                                        }
                                     }
                                 }
-                            }else {
+                            }else{
                                 assert XMaterial.WOODEN_SWORD.parseMaterial() != null;
                                 pi.remove(XMaterial.WOODEN_SWORD.parseMaterial());
                             }
