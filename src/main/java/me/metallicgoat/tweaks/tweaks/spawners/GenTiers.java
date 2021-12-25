@@ -21,8 +21,6 @@ import java.util.*;
 
 public class GenTiers implements Listener {
 
-    //TODO: Actually end game
-
     public static ConfigurationSection section;
 
     public static HashMap<Arena, String> nextTierMap = new HashMap<>();
@@ -111,7 +109,7 @@ public class GenTiers implements Listener {
             task.cancel();
 
         switch (group.toLowerCase()){
-            case "game-over": break;
+            case "game-over": arena.setIngameTimeRemaining((int) (time * 60)); break;
             case "bed-break":
                 tasksToKill.put(arena, scheduler.runTaskLater(plugin(), () -> {
                     if (arena.getStatus() == ArenaStatus.RUNNING) {
@@ -152,7 +150,6 @@ public class GenTiers implements Listener {
         int scoreBoardUpdatingInterval = ServerManager.getConfig().getInt("Scoreboard-Updating-Interval");
 
         return scheduler.runTaskTimer(plugin(),() -> {
-
             if (!timeToNextUpdate.isEmpty()) {
                 timeToNextUpdate.forEach((arena, integer) -> {
                     if (arena.getStatus() == ArenaStatus.RUNNING) {
@@ -216,5 +213,4 @@ public class GenTiers implements Listener {
     private static MBedwarsTweaks plugin(){
         return MBedwarsTweaks.getInstance();
     }
-
 }
