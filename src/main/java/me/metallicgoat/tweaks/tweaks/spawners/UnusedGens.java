@@ -4,6 +4,7 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.api.game.spawner.SpawnerDurationModifier;
+import de.marcely.bedwars.tools.location.XYZYP;
 import me.metallicgoat.tweaks.MBedwarsTweaks;
 import me.metallicgoat.tweaks.utils.ServerManager;
 import org.bukkit.Location;
@@ -21,8 +22,9 @@ public class UnusedGens implements Listener {
             Arena arena = e.getArena();
             arena.getEnabledTeams().forEach(team -> {
                 if (arena.getPlayersInTeam(team).size() == 0) {
-                    Location spawnPoint = arena.getTeamSpawn(team).toLocation(arena.getGameWorld());
-                    disableGens(arena, spawnPoint);
+                    XYZYP spawnPoint = arena.getTeamSpawn(team);
+                    if(spawnPoint != null)
+                        disableGens(arena, spawnPoint.toLocation(arena.getGameWorld()));
                 }
             });
         }

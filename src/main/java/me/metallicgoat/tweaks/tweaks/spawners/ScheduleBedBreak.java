@@ -5,6 +5,7 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.arena.ArenaBedBreakEvent;
 import de.marcely.bedwars.api.message.Message;
+import de.marcely.bedwars.tools.location.XYZD;
 import me.metallicgoat.tweaks.MBedwarsTweaks;
 import me.metallicgoat.tweaks.utils.ServerManager;
 import me.metallicgoat.tweaks.utils.XSeries.XSound;
@@ -30,10 +31,10 @@ public class ScheduleBedBreak implements Listener {
     public static void breakArenaBeds(Arena arena){
         //Break all beds in an arena
         for (Team team : arena.getEnabledTeams()) {
-            if (!arena.isBedDestroyed(team)) {
+            final XYZD bedLoc = arena.getBedLocation(team);
+            if (!arena.isBedDestroyed(team) && bedLoc != null) {
                 arena.destroyBedNaturally(team, "Auto-Break", false);
-                Location bedLoc = arena.getBedLocation(team).toLocation(arena.getGameWorld());
-                bedLoc.getBlock().setType(Material.AIR);
+                bedLoc.toLocation(arena.getGameWorld()).getBlock().setType(Material.AIR);
                 sendBedBreakMessage(arena, team, null);
             }
         }
@@ -45,9 +46,10 @@ public class ScheduleBedBreak implements Listener {
 
     //Message that gets sent when a bed gets destroyed
     private static void sendBedBreakMessage(Arena arena, Team team, Player destroyer){
-        String sound = ServerManager.getConfig().getString("Bed-Destroy-Sound");
-        String bigTitle = ServerManager.getConfig().getString("Notification.Big-Title");
-        String smallTitle = ServerManager.getConfig().getString("Notification.Small-Title");
+        final String sound = ServerManager.getConfig().getString("Bed-Destroy-Sound");
+        final String bigTitle = ServerManager.getConfig().getString("Notification.Big-Title");
+        final String smallTitle = ServerManager.getConfig().getString("Notification.Small-Title");
+        final XYZD location = arena.getBedLocation(team);
 
         //Send sound/title to victim team
         for(Player p : arena.getPlayersInTeam(team)){
@@ -57,9 +59,9 @@ public class ScheduleBedBreak implements Listener {
                     ChatColor.translateAlternateColorCodes('&', bigTitle),
                     ChatColor.translateAlternateColorCodes('&', smallTitle),
                     60, 15, 15);
-            if(sound != null && !sound.equals("")) {
+            if(location != null && sound != null && !sound.equals("")) {
                 Optional<XSound> xSound = XSound.matchXSound(sound);
-                xSound.ifPresent(value -> value.play(destroyer.getLocation()));
+                xSound.ifPresent(value -> value.play(location.toLocation(arena.getGameWorld())));
             }
         }
 
@@ -67,8 +69,9 @@ public class ScheduleBedBreak implements Listener {
         if(destroyer != null) {
 
             //Send sound to destroyer
-            if(sound != null && !sound.equals("")) {
-                XSound.valueOf(sound).play(destroyer);
+            if(location != null && sound != null && !sound.equals("")) {
+                Optional<XSound> xSound = XSound.matchXSound(sound);
+                xSound.ifPresent(value -> value.play(location.toLocation(arena.getGameWorld())));
             }
 
             //Send public message
