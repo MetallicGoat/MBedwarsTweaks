@@ -21,8 +21,8 @@ import java.util.HashMap;
 
 public class DowngradeTools implements Listener {
 
-    private static final HashMap<Player, Integer> pickaxeHashMap = new HashMap<>();
-    private static final HashMap<Player, Integer> axeHashMap = new HashMap<>();
+    public static final HashMap<Player, Integer> pickaxeHashMap = new HashMap<>();
+    public static final HashMap<Player, Integer> axeHashMap = new HashMap<>();
 
     @EventHandler
     public void onStart(RoundStartEvent e){

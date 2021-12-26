@@ -50,6 +50,8 @@ Advanced-Tool-Replacement:
 #Buy-group names are 'axe', and 'pickaxe'
 Degraded-Tool-BuyGroups: true
 
+#t
+
 #Prevents players from buying multiple of the same swords, or lower tier swords
 Ordered-Sword-Buy:
   Enabled: false
