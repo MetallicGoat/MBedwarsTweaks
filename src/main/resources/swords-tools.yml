@@ -50,7 +50,13 @@ Advanced-Tool-Replacement:
 #Buy-group names are 'axe', and 'pickaxe'
 Degraded-Tool-BuyGroups: true
 
-#t
+#One slot tools
+One-Slot-Tools:
+  Enabled: true
+  Slots:
+    Shears-Slot: 19
+    Pickaxe-Slot: 20
+    Axe-Slot: 21
 
 #Prevents players from buying multiple of the same swords, or lower tier swords
 Ordered-Sword-Buy:

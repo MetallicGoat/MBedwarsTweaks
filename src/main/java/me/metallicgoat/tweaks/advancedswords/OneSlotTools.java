@@ -1,18 +1,24 @@
 package me.metallicgoat.tweaks.advancedswords;
 
 import de.marcely.bedwars.api.BedwarsAPI;
+import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.event.ShopGUIPostProcessEvent;
 import de.marcely.bedwars.api.event.player.PlayerBuyInShopEvent;
-import de.marcely.bedwars.api.event.player.PlayerOpenShopEvent;
 import de.marcely.bedwars.api.game.shop.BuyGroup;
 import de.marcely.bedwars.api.game.shop.ShopItem;
 import de.marcely.bedwars.api.game.shop.ShopOpenCause;
 import de.marcely.bedwars.api.game.shop.ShopPage;
+import de.marcely.bedwars.api.game.shop.layout.ShopLayout;
+import de.marcely.bedwars.api.game.shop.product.ItemShopProduct;
+import de.marcely.bedwars.api.game.shop.product.ShopProduct;
 import de.marcely.bedwars.tools.gui.GUIItem;
 import de.marcely.bedwars.tools.gui.type.ChestGUI;
+import me.metallicgoat.tweaks.utils.ServerManager;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,35 +28,52 @@ public class OneSlotTools implements Listener {
     @EventHandler
     public void onPostProcess(ShopGUIPostProcessEvent e){
 
-        final HashMap<GUIItem, Integer> guiItemIntegerHashMap = new HashMap<>();
+        final Player player = e.getPlayer();
+        final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
 
-        if(e.getGUI() instanceof ChestGUI){
+        if(ServerManager.getSwordsToolsConfig().getBoolean("One-Slot-Tools.Enabled") &&
+                arena != null && e.getGUI() instanceof ChestGUI){
 
-            final Player player = e.getPlayer();
+            final HashMap<GUIItem, Integer> guiItemIntegerHashMap = new HashMap<>();
             final ChestGUI chestGUI = (ChestGUI) e.getGUI();
 
             for(int i = chestGUI.getSize() - 1; i > 0; i--) {
-                GUIItem item = chestGUI.getItem(i);
+                final GUIItem item = chestGUI.getItem(i);
                 if (item != null && item.getAttachement() != null) {
                     final Object attachment = item.getAttachement();
                     if(attachment instanceof ShopItem){
-                        ShopItem shopItem = (ShopItem) attachment;
-                        BuyGroup group = shopItem.getBuyGroup();
+                        final ShopItem shopItem = (ShopItem) attachment;
+                        final BuyGroup group = shopItem.getBuyGroup();
                         if(group != null && (group.getName().equalsIgnoreCase("axe")
                                 || group.getName().equalsIgnoreCase("pickaxe"))) {
 
-                            int shopCurrentLevel = shopItem.getBuyGroupLevel();
-                            int playerCurrent = getPlayerToolLevel(group, player) + 1; //next level
-                            int highestLevel = getHighestBuyGroupLevel(group);
+                            final int shopCurrentLevel = shopItem.getBuyGroupLevel();
+                            final int nextPlayerLevel = getPlayerToolLevel(group, player) + 1; // next level
+                            final int highestLevel = getHighestBuyGroupLevel(group);
 
-                            if(playerCurrent >= highestLevel || playerCurrent == shopCurrentLevel){
+                            if(((shopCurrentLevel == highestLevel) && (nextPlayerLevel >= highestLevel))
+                                    || nextPlayerLevel == shopCurrentLevel){
                                 if(group.getName().equalsIgnoreCase("axe")){
-                                    guiItemIntegerHashMap.put(item, 29);
+                                    guiItemIntegerHashMap.put(item, ServerManager.getSwordsToolsConfig().getInt("One-Slot-Tools.Slots.Axe-Slot"));
                                 }else{
-                                    guiItemIntegerHashMap.put(item, 30);
+                                    guiItemIntegerHashMap.put(item, ServerManager.getSwordsToolsConfig().getInt("One-Slot-Tools.Slots.Pickaxe-Slot"));;
                                 }
                             }
                             chestGUI.setItem((GUIItem) null, i);
+                            continue;
+                        }
+
+                        for (ShopProduct rawProduct : shopItem.getProducts()) {
+                            if (rawProduct instanceof ItemShopProduct) {
+                                final ItemStack[] is = ((ItemShopProduct) rawProduct).getItemStacks();
+                                for (ItemStack itemStack : is) {
+                                    if (itemStack.getType() == Material.SHEARS){
+                                        guiItemIntegerHashMap.put(item, ServerManager.getSwordsToolsConfig().getInt("One-Slot-Tools.Slots.Shears-Slot"));
+                                        chestGUI.setItem((GUIItem) null, i);
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -61,27 +84,17 @@ public class OneSlotTools implements Listener {
 
     @EventHandler
     public void onBuy(PlayerBuyInShopEvent e){
-        ShopPage shopPage = e.getItem().getPage();
-        if(e.getProblems().isEmpty() && isToolPage(shopPage)){
-            e.getPlayer().closeInventory();
-            BedwarsAPI.getGameAPI().openShop(e.getPlayer(), ShopOpenCause.PLUGIN);
-        }
-    }
-
-    @EventHandler
-    public void onOpen(PlayerOpenShopEvent e){
-        if(e.getCause() == ShopOpenCause.PLUGIN) {
-            for (ShopPage shopPage : BedwarsAPI.getGameAPI().getShopPages()) {
-                if (isToolPage(shopPage)) {
-                    e.setPage(shopPage);
-                }
-            }
+        final ShopPage shopPage = e.getItem().getPage();
+        final ShopLayout layout = BedwarsAPI.getGameAPI().getDefaultShopLayout();
+        if(ServerManager.getSwordsToolsConfig().getBoolean("One-Slot-Tools.Enabled") &&
+                e.getProblems().isEmpty() && isToolPage(shopPage)){
+            BedwarsAPI.getGameAPI().openShop(e.getPlayer(), layout, ShopOpenCause.PLUGIN, shopPage);
         }
     }
 
     private static boolean isToolPage(ShopPage shopPage){
         for(ShopItem item : shopPage.getItems()){
-            BuyGroup group = item.getBuyGroup();
+            final BuyGroup group = item.getBuyGroup();
             if(group != null && (group.getName().equalsIgnoreCase("axe")
                     || group.getName().equalsIgnoreCase("pickaxe"))){
                 return true;

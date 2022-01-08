@@ -26,12 +26,9 @@ public class DowngradeTools implements Listener {
 
     @EventHandler
     public void onStart(RoundStartEvent e){
-        if(ServerManager.getSwordsToolsConfig().getBoolean("Degraded-Tool-BuyGroups")
-                && ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Tool-Replacement.Enabled")) {
-            for (Player player : e.getArena().getPlayers()) {
-                pickaxeHashMap.put(player, 0);
-                axeHashMap.put(player, 0);
-            }
+        for (Player player : e.getArena().getPlayers()) {
+            pickaxeHashMap.put(player, 0);
+            axeHashMap.put(player, 0);
         }
     }
 
@@ -46,17 +43,19 @@ public class DowngradeTools implements Listener {
                 String buyGroupName = buyGroup.getName();
                 if (buyGroupName.equalsIgnoreCase("pickaxe")
                         || buyGroup.getName().equalsIgnoreCase("axe")) {
-                    int level = buyGroupName.equalsIgnoreCase("pickaxe") ? pickaxeHashMap.get(player) : axeHashMap.get(player);
-                    Collection<? extends ShopItem> shopItems = buyGroup.getItems(level);
-                    if(shopItems != null) {
-                        for (ShopItem item : shopItems) {
-                            BukkitScheduler scheduler = Bukkit.getScheduler();
-                            scheduler.runTaskLater(MBedwarsTweaks.getInstance(), () -> item.getProducts().forEach(shopProduct -> {
-                                arena.setBuyGroupLevel(player, buyGroup, level);
-                                shopProduct.give(e.getPlayer(), e.getArena().getPlayerTeam(player), e.getArena(), 1);
-                            }), 1L);
-                            break;
-                        }
+                    final int level = buyGroupName.equalsIgnoreCase("pickaxe") ? pickaxeHashMap.get(player) : axeHashMap.get(player);
+                    final Collection<? extends ShopItem> shopItems = buyGroup.getItems(level);
+
+                    if(shopItems == null)
+                        return;
+
+                    for (ShopItem item : shopItems) {
+                        BukkitScheduler scheduler = Bukkit.getScheduler();
+                        scheduler.runTaskLater(MBedwarsTweaks.getInstance(), () -> item.getProducts().forEach(shopProduct -> {
+                            arena.setBuyGroupLevel(player, buyGroup, level);
+                            shopProduct.give(e.getPlayer(), e.getArena().getPlayerTeam(player), e.getArena(), 1);
+                        }), 1L);
+                        break;
                     }
                 }
             }
@@ -68,22 +67,19 @@ public class DowngradeTools implements Listener {
         Player p = e.getPlayer();
 
         //If enabled, and item has buy-group
-        if(e.getProblems().isEmpty() && e.getItem().hasBuyGroup() &&
-                ServerManager.getSwordsToolsConfig().getBoolean("Degraded-Tool-BuyGroups")
-                && ServerManager.getSwordsToolsConfig().getBoolean("Advanced-Tool-Replacement.Enabled")){
+        if(e.getProblems().isEmpty() && e.getItem().hasBuyGroup()){
 
             BuyGroup group = e.getItem().getBuyGroup();
             int level = e.getItem().getBuyGroupLevel();
 
-            assert group != null;
             //if proper buy-group
-            if(level == 1 && (group.getName().equalsIgnoreCase("axe")
+            if((group.getName().equalsIgnoreCase("axe")
                     || group.getName().equalsIgnoreCase("pickaxe"))) {
 
                 if(group.getName().equalsIgnoreCase("pickaxe")){
-                    pickaxeHashMap.put(p, 1);
+                    pickaxeHashMap.replace(p, level);
                 }else{
-                    axeHashMap.put(p, 1);
+                    axeHashMap.replace(p, level);
                 }
             }
         }
