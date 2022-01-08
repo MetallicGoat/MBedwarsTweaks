@@ -2,10 +2,8 @@ package me.metallicgoat.tweaks.bedbreakeffects;
 
 import de.marcely.bedwars.api.event.arena.ArenaBedBreakEvent;
 import me.metallicgoat.tweaks.utils.ServerManager;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Location;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -52,17 +50,34 @@ public class BedDestroyListener implements Listener {
                             effect.with(FireworkEffect.Type.BALL);
                             break;
                     }
-
-                    Firework firework = player.getWorld().spawn(bedLocation, Firework.class);
-                    FireworkMeta meta = firework.getFireworkMeta();
-                    meta.addEffect(effect.trail(ServerManager.getConfig().getBoolean("firework-trail")).build());
-                    firework.setFireworkMeta(meta);
-                    firework.setFireTicks(ServerManager.getConfig().getInt("firework-duration"));
+                    Location spawnLocation = getAirAboveBed(bedLocation);
+                    if(spawnLocation != null) {
+                        Firework firework = player.getWorld().spawn(spawnLocation, Firework.class);
+                        FireworkMeta meta = firework.getFireworkMeta();
+                        meta.addEffect(effect.trail(ServerManager.getConfig().getBoolean("firework-trail")).build());
+                        firework.setFireworkMeta(meta);
+                        firework.setFireTicks(ServerManager.getConfig().getInt("firework-duration"));
+                    }
                     break;
                 default:
                     Bukkit.getServer().broadcastMessage("§cUNKNOWN BED EFFECT");
                     break;
             }
         }
+    }
+    private static Location getAirAboveBed(Location location){
+        Block block = location.getBlock();
+        int i = 0;
+
+        do{
+            if(block.getType() == Material.AIR)
+                return block.getLocation();
+
+            block = block.getRelative(0, 1, 0);
+            i++;
+
+        }while (block.getType() != Material.AIR && i < 7);
+
+        return null;
     }
 }
