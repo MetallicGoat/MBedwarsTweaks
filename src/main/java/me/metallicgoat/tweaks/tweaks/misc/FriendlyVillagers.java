@@ -52,12 +52,12 @@ public class FriendlyVillagers implements Listener {
         if(worldStorage == null)
             return;
 
-        worldStorage.getHolograms().forEach(hologramEntity -> {
+        for(HologramEntity hologramEntity : worldStorage.getHolograms()){
             if (hologramEntity.getControllerType() == HologramControllerType.DEALER
                     || hologramEntity.getControllerType() == HologramControllerType.UPGRADE_DEALER) {
                 hologramEntity.teleport(hologramEntity.getSpawnLocation());
             }
-        });
+        }
 
         if (!ServerManager.getConfig().getBoolean("Friendly-Villagers"))
             return;
@@ -76,33 +76,33 @@ public class FriendlyVillagers implements Listener {
         //For each active world (Every Tick)
         task = Bukkit.getScheduler().runTaskTimer(plugin, () -> worlds.forEach(world -> {
 
-            WorldStorage worldStorage = BedwarsAPI.getWorldStorage(world);
+            final WorldStorage worldStorage = BedwarsAPI.getWorldStorage(world);
 
             if (worldStorage == null)
                 return;
 
             //Get all villagers in the world
-            Collection<HologramEntity> entity = worldStorage.getHolograms();
+            final Collection<HologramEntity> entities = worldStorage.getHolograms();
 
             //For each villager
-            entity.forEach(hologramEntity -> {
+            for(HologramEntity hologramEntity : entities){
 
                 if (hologramEntity.getControllerType() == HologramControllerType.DEALER
                         || hologramEntity.getControllerType() == HologramControllerType.UPGRADE_DEALER) {
 
                     //Get players in range of villager
-                    Player[] playersArray = hologramEntity.getSeeingPlayers();
+                    final Player[] playersArray = hologramEntity.getSeeingPlayers();
 
                     if (playersArray.length > 0) {
                         //Get the closest player
-                        Player lookAtPlayer = Arrays.stream(playersArray).min(Comparator.comparingDouble(p -> p.getLocation().distanceSquared(hologramEntity.getLocation()))).get();
+                        final Player lookAtPlayer = Arrays.stream(playersArray).min(Comparator.comparingDouble(p -> p.getLocation().distanceSquared(hologramEntity.getLocation()))).get();
 
                         //Final location
                         Location moveTo = hologramEntity.getLocation().setDirection(lookAtPlayer.getLocation().subtract(hologramEntity.getLocation()).toVector());
                         hologramEntity.teleport(moveTo);
                     }
                 }
-            });
+            }
         }), 0L, 4);
     }
 }

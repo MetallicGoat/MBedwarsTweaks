@@ -13,17 +13,18 @@ import org.bukkit.event.Listener;
 public class FinalKill implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerIngameDeathEvent e){
-        Player p = e.getPlayer();
-        Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(p);
-        boolean enabled = ServerManager.getConfig().getBoolean("Final-Kill-Message");
+        final Player p = e.getPlayer();
+        final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(p);
+        final boolean enabled = ServerManager.getConfig().getBoolean("Final-Kill-Message");
         if(enabled) {
             if (arena != null) {
-                Team team = arena.getPlayerTeam(p);
-                String message = e.getDeathMessage().done(false);
-                if(arena.isBedDestroyed(team) && !message.isEmpty()){
-                    message += " &b&lFINAL KILL!";
+                final Team team = arena.getPlayerTeam(p);
+                Message message = e.getDeathMessage();
+
+                if(arena.isBedDestroyed(team) && message != null){
+                    String finalMessage = (message.done(false) + " &b&lFINAL KILL!");
+                    e.setDeathMessage(Message.build(finalMessage));
                 }
-                e.setDeathMessage(Message.build(message));
             }
         }
     }
