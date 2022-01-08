@@ -29,7 +29,7 @@ public class SpongeParticles implements Listener {
                 !block.getType().equals(Material.SPONGE))
             return;
 
-        new SpongeParticleTask(block).runTaskTimer(MBedwarsTweaks.getInstance(), 0L, 10L);
+        new SpongeParticleTask(block).runTaskTimer(MBedwarsTweaks.getInstance(), 0L, 8L);
     }
 }
 class SpongeParticleTask extends BukkitRunnable{
@@ -49,7 +49,10 @@ class SpongeParticleTask extends BukkitRunnable{
             return;
         }
         for(Location location:getParticles(block.getLocation(), radius)) {
-            VarParticle.PARTICLE_CLOUD.play(block.getWorld(), location, 1);
+            location.add(.5, .5, .5);
+            VarParticle.PARTICLE_CLOUD.play(location);
+            location.add(.15, .15, .15);
+            VarParticle.PARTICLE_CLOUD.play(location);
         }
         radius++;
     }
