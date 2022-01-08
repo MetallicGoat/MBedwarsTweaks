@@ -57,7 +57,6 @@ public class ServerManager {
         PluginManager manager = plugin.getServer().getPluginManager();
 
         //Tweaks - explosions
-        manager.registerEvents(new AutoIgnite(), plugin);
         manager.registerEvents(new FireballOutsideArena(), plugin);
         manager.registerEvents(new FireballWhitelist(), plugin);
 

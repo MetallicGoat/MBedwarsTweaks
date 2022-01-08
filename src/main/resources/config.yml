@@ -102,13 +102,6 @@ Team-Eliminate-Message:
   - '&f&lTEAM ELIMINATED > {team-color}{team-name} Team &chas been eliminated!'
   - ''
 
-############### TNT AUTO IGNITE ###############
-
-#!!!WARNING!!! If you enable this MAKE SURE MBedwars' tnt-autoignite is FALSE
-TNT:
-  Auto-Ignite: false
-  Delay: 4
-
 ############### TOP KILLER MESSAGE [BETA] ###############
 
 #Displayed at the end of a game to congratulate yop killers
