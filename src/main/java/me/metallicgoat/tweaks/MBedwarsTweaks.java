@@ -30,15 +30,21 @@ public class MBedwarsTweaks extends JavaPlugin {
                 "------------------------------"
         );
 
-        BedwarsAPI.onReady(() -> {
-            if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-                new Placeholders().register();
-                papiEnabled = true;
-            }else{
-                log("PlaceholderAPI Was not Found! Placeholders wont work!");
-            }
-            GenTiers.section = ServerManager.getTiersConfig().getConfigurationSection("Gen-Tiers");
-        });
+        if(Bukkit.getServer().getPluginManager().isPluginEnabled("MBedwars") &&
+                BedwarsAPI.getAPIVersion() >= 7) {
+            BedwarsAPI.onReady(() -> {
+                if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+                    new Placeholders().register();
+                    papiEnabled = true;
+                } else {
+                    log("PlaceholderAPI Was not Found! Placeholders wont work!");
+                }
+                GenTiers.section = ServerManager.getTiersConfig().getConfigurationSection("Gen-Tiers");
+            });
+        }else{
+            log("This extension requires MBedwars v5.0.5 or later! Disabling Addon...");
+            this.setEnabled(false);
+        }
     }
 
     public static MBedwarsTweaks getInstance() {
