@@ -38,7 +38,7 @@ Anti-Drop:
 #With this feature enabled players can only have one tool of a specific type at a time
 #Players will not be able to downgrade their tool if the is enabled
 #If force ordered is true, you must buy every tier in order
-#Buy-group names are 'axe', and 'pickaxe'
+#REQURED Buy-group names are 'axe', and 'pickaxe'
 Advanced-Tool-Replacement:
   Enabled: true
   Force-Ordered: true
@@ -47,12 +47,13 @@ Advanced-Tool-Replacement:
 
 #Advanced-Tool-Replacement MUST be enabled
 #When you die with a tool, you will get one tier lower when you respawn
-#Buy-group names are 'axe', and 'pickaxe'
+#REQURED Buy-group names are 'axe', and 'pickaxe'
 Degraded-Tool-BuyGroups: true
 
 #One slot tools
+#REQURED Buy-group names are 'axe', and 'pickaxe'
 One-Slot-Tools:
-  Enabled: true
+  Enabled: false
   Slots:
     Shears-Slot: 19
     Pickaxe-Slot: 20
