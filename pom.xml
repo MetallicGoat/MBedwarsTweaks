@@ -6,7 +6,7 @@
 
     <groupId>me.metallicgoat</groupId>
     <artifactId>TweaksAndFeatures</artifactId>
-    <version>1.0.0-R3</version>
+    <version>1.0.0-R5</version>
 
     <repositories>
         <repository>
@@ -35,10 +35,19 @@
             <version>2.10.10</version>
             <scope>provided</scope>
         </dependency>
+        <!--
         <dependency>
             <groupId>de.marcely.bedwars</groupId>
             <artifactId>API</artifactId>
             <version>5.0.4</version>
+        </dependency>
+        -->
+        <dependency>
+            <groupId>de.marcely.bedwars</groupId>
+            <artifactId>MBedwars</artifactId>
+            <version>5.0.5</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/bedwars.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
