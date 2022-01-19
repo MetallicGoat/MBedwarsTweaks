@@ -14,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 
@@ -23,6 +24,7 @@ import java.util.HashMap;
 public class PersonalChests implements Listener {
 
     private static final HashMap<Inventory, Arena> inventoryArenaHashMap = new HashMap<>();
+    private static final HashMap<Player, Block> openChests = new HashMap<>();
 
     @EventHandler
     public void onRoundStart(RoundStartEvent e){
@@ -56,9 +58,19 @@ public class PersonalChests implements Listener {
                 inventoryArenaHashMap.forEach((inventory, arena1) -> {
                     if(inventory.getHolder() == player){
                         player.openInventory(inventory);
+                        BedwarsAPI.getNMSHelper().simulateChestOpening(block);
+                        openChests.put(player, block);
                     }
                 });
             }
+        }
+    }
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent e){
+        final Player player = (Player) e.getPlayer();
+        if(openChests.containsKey(player)){
+            BedwarsAPI.getNMSHelper().simulateChestClosing(openChests.get(player));
+            openChests.remove(player);
         }
     }
 }
