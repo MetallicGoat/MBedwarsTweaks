@@ -55,6 +55,7 @@ Gen-Tiers-Enabled: false
 Gen-Tiers-Holos-Enabled: true
 
 #Adds 'Tier I' to spawners listed
+#Add the spigot name of the item being dropped
 Tier-One-Titles:
   Tier-Name: '&eTier &cI'
   Spawners:
@@ -81,9 +82,6 @@ Auto-Destroy-Message:
   - ''
   - '&c&lALL BEDS HAVE BEEN DESTROYED'
   - ''
-
-# https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
-Bed-Destroy-Sound: 'ENTITY_ENDER_DRAGON_GROWL'
 
 #Title displayed to a player when his bed gets destroyed
 #This replaces MBedwars' message, and only gets sent to the player with no bed
@@ -138,8 +136,8 @@ Next-Tier-PAPI-Placeholder:
   Stopped: '&rArena Stopped'
 
 #PAPI Placeholder: %tweaks_arena-mode%
+#TeamNumber:PlayerNumber:ModeName
 PAPI-Mode-Placeholder:
-  #TeamNumber:PlayerNumber:ModeName
   - '8:2:Duos'
   - '8:1:Solos'
   - '4:3:Trios'
@@ -148,13 +146,17 @@ PAPI-Mode-Placeholder:
 #Whether to count Spectators for the Player Count Placeholders
 Player-Count-Placeholder-Count-Spectators: true
 
-#PAPI Placeholder: %tweaks_team-status-{name}%
+#PAPI Placeholder: %tweaks_team-status-{TeamName}%
 #To be used on the scoreboard as is above
 Team-Status-Placeholder:
   Your-Team: " &7You"
   Has-Bed: "&a✔"
   No-Bed: "&a{player-amount}"
   Team-Dead: "&c✘"
+
+#PAPI-Placeholder: %tweaks_team-you-{name}%
+#Displayes specified value if the team in the placeholder matches the players current team
+Team-You-Placeholder: " &7You"
 
 #If set to true, the scoreboard will be force updated to refresh PAPI placeholders
 #WARNING: Force updating the MBedwars scoreboard may cause scoreboard flicker

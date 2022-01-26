@@ -9,4 +9,7 @@ softdepend: [PlaceholderAPI]
 commands:
   MBedwarsTweaks:
     usage: /<command>
+    aliases:
+     - tweaks
+     - mbwt
     permission: mbedwars-tweaks.admin

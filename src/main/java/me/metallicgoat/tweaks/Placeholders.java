@@ -163,6 +163,19 @@ public class Placeholders extends PlaceholderExpansion {
                 return Message.build(output).placeholder("player-amount", playerAmount).done();
             }
         }
+        if(params.toLowerCase().startsWith("team-you-")){
+            String teamName = params.replace("team-you-", "");
+
+            if(arena != null && (arena.getStatus() == ArenaStatus.RUNNING || arena.getStatus() == ArenaStatus.END_LOBBY)) {
+                final Team playerTeam = arena.getPlayerTeam(player1);
+                final Team placeholderTeam = Team.getByName(teamName);
+
+                if(placeholderTeam != null && playerTeam == placeholderTeam){
+                    return Message.build(ServerManager.getConfig().getString("Team-You-Placeholder")).done();
+                }
+            }
+            return "";
+        }
         return null;
     }
 

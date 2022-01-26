@@ -8,13 +8,10 @@ import de.marcely.bedwars.api.message.Message;
 import de.marcely.bedwars.tools.location.XYZD;
 import me.metallicgoat.tweaks.MBedwarsTweaks;
 import me.metallicgoat.tweaks.utils.ServerManager;
-import me.metallicgoat.tweaks.utils.XSeries.XSound;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-
-import java.util.Optional;
 
 public class ScheduleBedBreak implements Listener {
 
@@ -46,12 +43,10 @@ public class ScheduleBedBreak implements Listener {
 
     //Message that gets sent when a bed gets destroyed
     private static void sendBedBreakMessage(Arena arena, Team team, Player destroyer){
-        final String sound = ServerManager.getConfig().getString("Bed-Destroy-Sound");
         final String bigTitle = ServerManager.getConfig().getString("Notification.Big-Title");
         final String smallTitle = ServerManager.getConfig().getString("Notification.Small-Title");
-        final XYZD location = arena.getBedLocation(team);
 
-        //Send sound/title to victim team
+        //Send title to victim team
         for(Player p : arena.getPlayersInTeam(team)){
             assert bigTitle != null;
             assert smallTitle != null;
@@ -59,20 +54,10 @@ public class ScheduleBedBreak implements Listener {
                     ChatColor.translateAlternateColorCodes('&', bigTitle),
                     ChatColor.translateAlternateColorCodes('&', smallTitle),
                     60, 15, 15);
-            if(location != null && sound != null && !sound.equals("")) {
-                Optional<XSound> xSound = XSound.matchXSound(sound);
-                xSound.ifPresent(value -> value.play(location.toLocation(arena.getGameWorld())));
-            }
         }
 
         //Send public message
         if(destroyer != null) {
-
-            //Send sound to destroyer
-            if(location != null && sound != null && !sound.equals("")) {
-                Optional<XSound> xSound = XSound.matchXSound(sound);
-                xSound.ifPresent(value -> value.play(location.toLocation(arena.getGameWorld())));
-            }
 
             //Send public message
             for (String message : ServerManager.getConfig().getStringList("Player-Destroy-Message")) {

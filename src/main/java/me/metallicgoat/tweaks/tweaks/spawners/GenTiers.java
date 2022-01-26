@@ -30,8 +30,8 @@ public class GenTiers implements Listener {
 
     @EventHandler
     public void onGameStart(RoundStartEvent e){
-        Arena arena = e.getArena();
-        boolean enabled = plugin().getConfig().getBoolean("Gen-Tiers-Enabled");
+        final Arena arena = e.getArena();
+        final boolean enabled = plugin().getConfig().getBoolean("Gen-Tiers-Enabled");
 
         if(enabled) {
             //Start updating placeholders
@@ -39,13 +39,17 @@ public class GenTiers implements Listener {
                 placeHolderTask = startUpdatingTime();
             }
 
-            List<String> tierOneSpawners = ServerManager.getConfig().getStringList("Tier-One-Titles.Spawners");
-            String tierLevel = ServerManager.getConfig().getString("Tier-One-Titles.Tier-Name");
+            final List<String> tierOneSpawners = ServerManager.getConfig().getStringList("Tier-One-Titles.Spawners");
+            final String tierLevel = ServerManager.getConfig().getString("Tier-One-Titles.Tier-Name");
             if (ServerManager.getConfig().getBoolean("Gen-Tiers-Holos-Enabled")) {
+
                 //Add custom Holo titles
                 for (Spawner spawner:arena.getSpawners()){
-                    if (tierOneSpawners.contains(getItemType(spawner))) {
-                        spawner.setOverridingHologramLines(formatHoloTiles(tierLevel, spawner).toArray(new String[0]));
+                    final String itemType = getItemType(spawner);
+                    for(String type : tierOneSpawners){
+                        if(type.equalsIgnoreCase(itemType)){
+                            spawner.setOverridingHologramLines(formatHoloTiles(tierLevel, spawner).toArray(new String[0]));
+                        }
                     }
                 }
             }
@@ -55,6 +59,7 @@ public class GenTiers implements Listener {
 
     @EventHandler
     public void onGameStop(RoundEndEvent event){
+
         //Kill Gen Tiers on round end
         BukkitTask task = tasksToKill.get(event.getArena());
         if(task != null) {
