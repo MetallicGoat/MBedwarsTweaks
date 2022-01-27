@@ -13,6 +13,7 @@ import me.metallicgoat.tweaks.utils.ServerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -62,7 +63,7 @@ public class DowngradeTools implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void levelOneBuy(PlayerBuyInShopEvent e) {
         Player p = e.getPlayer();
 
