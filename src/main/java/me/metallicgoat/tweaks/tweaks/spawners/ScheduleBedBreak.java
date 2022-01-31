@@ -18,6 +18,7 @@ public class ScheduleBedBreak implements Listener {
     @EventHandler
     public void onBedBreak(ArenaBedBreakEvent e){
         e.setBroadcasted(false);
+        e.setPlayingSound(true);
         Arena arena = e.getArena();
         Player p = e.getPlayer();
         Team team = e.getTeam();

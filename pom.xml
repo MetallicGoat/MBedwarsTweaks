@@ -39,13 +39,13 @@
         <dependency>
             <groupId>de.marcely.bedwars</groupId>
             <artifactId>API</artifactId>
-            <version>5.0.4</version>
+            <version>5.0.5.1</version>
         </dependency>
         -->
         <dependency>
             <groupId>de.marcely.bedwars</groupId>
             <artifactId>MBedwars</artifactId>
-            <version>5.0.5</version>
+            <version>5.0.5.1</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/libs/bedwars.jar</systemPath>
         </dependency>

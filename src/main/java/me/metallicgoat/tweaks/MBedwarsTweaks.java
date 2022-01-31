@@ -31,7 +31,7 @@ public class MBedwarsTweaks extends JavaPlugin {
         );
 
         if(Bukkit.getServer().getPluginManager().isPluginEnabled("MBedwars") &&
-                BedwarsAPI.getAPIVersion() >= 6) {
+                BedwarsAPI.getAPIVersion() >= 7) {
             BedwarsAPI.onReady(() -> {
                 if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
                     new Placeholders().register();
