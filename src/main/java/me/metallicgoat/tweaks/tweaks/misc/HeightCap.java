@@ -19,20 +19,22 @@ public class HeightCap implements Listener {
         Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
         boolean enabled = ServerManager.getConfig().getBoolean("Height-Cap.Enabled");
         if(enabled && arena != null && arena.getStatus() == ArenaStatus.RUNNING){
-            ServerManager.getConfig().getStringList("Height-Cap.Arenas").forEach(s -> {
+            for (String s : ServerManager.getConfig().getStringList("Height-Cap.Arenas")) {
                 if(s.contains(":")) {
                     String[] token = s.split(":");
-                    if (arena.getName().equalsIgnoreCase(token[0])) {
+                    if(token[0].equalsIgnoreCase("ALL-ARENAS")
+                            || arena.getName().equalsIgnoreCase(token[0])) {
                         if (e.getBlockPlaced().getY() > Integer.parseInt(token[1])) {
                             String message = ServerManager.getConfig().getString("Height-Cap.Message");
                             if(message != null && !message.equals("")) {
                                 player.sendMessage(Message.build(message).done());
                             }
                             e.setCancelled(true);
+                            break;
                         }
                     }
                 }
-            });
+            }
         }
     }
 }

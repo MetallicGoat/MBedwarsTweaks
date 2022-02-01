@@ -171,6 +171,7 @@ Scoreboard-Updating-Interval: 10
 #Add a height cap for specific MBedwars arenas
 #Add height cap like 'arenaName:70'
 #To disable the message, set to ''
+#All arenas = ALL-ARENAS
 Height-Cap:
   Enabled: false
   Message: '&cYou cannot build any higher'
