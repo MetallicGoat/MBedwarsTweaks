@@ -62,14 +62,16 @@ public class ScheduleBedBreak implements Listener {
 
             //Send public message
             for (String message : ServerManager.getConfig().getStringList("Player-Destroy-Message")) {
-                String teamName = team.getDisplayName();
-                String playerName = BedwarsAPI.getHelper().getPlayerDisplayName(destroyer);
-                String destroyerColor = arena.getPlayerTeam(destroyer) != null ? "&" + arena.getPlayerTeam(destroyer).getChatColor().getChar() : "";
+                final String teamName = team.getDisplayName();
+                final String playerName = BedwarsAPI.getHelper().getPlayerDisplayName(destroyer);
+                final String destroyerColor = arena.getPlayerTeam(destroyer) != null ? "&" + arena.getPlayerTeam(destroyer).getChatColor().getChar() : "";
+                final String destroyerTeam = arena.getPlayerTeam(destroyer) != null ? ChatColor.stripColor(arena.getPlayerTeam(destroyer).getDisplayName()) : "";
 
-                String messageFormatted = Message.build(message)
+                final String messageFormatted = Message.build(message)
                         .placeholder("team-name", teamName)
-                        .placeholder("destroyer-name", playerName)
                         .placeholder("team-color", "&" + team.getChatColor().getChar())
+                        .placeholder("destroyer-name", playerName)
+                        .placeholder("destroyer-team-name", destroyerTeam)
                         .placeholder("destroyer-color", destroyerColor)
                         .done();
                 arena.broadcast(messageFormatted);
