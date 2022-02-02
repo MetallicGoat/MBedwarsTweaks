@@ -2,7 +2,7 @@
  * The MIT License (MIT)
  *
  * Copyright (c) 2018 Hex_27
- * Copyright (c) 2021 Crypto Morin
+ * Copyright (c) 2022 Crypto Morin
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,19 +20,20 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 package me.metallicgoat.tweaks.utils.XSeries;
 
 import com.google.common.base.Enums;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SpawnEggMeta;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -62,7 +63,7 @@ import java.util.regex.PatternSyntaxException;
  * <b>/give @p minecraft:dirt 1 10</b> where 1 is the item amount, and 10 is the data value. The material {@link #DIRT} with a data value of {@code 10} doesn't exist.
  *
  * @author Crypto Morin
- * @version 10.1.1
+ * @version 10.1.1.1
  * @see Material
  * @see ItemStack
  */
@@ -165,7 +166,7 @@ public enum XMaterial {
     BLACK_CARPET(15, "CARPET"),
     BLACK_CONCRETE(15, "CONCRETE"),
     BLACK_CONCRETE_POWDER(15, "CONCRETE_POWDER"),
-    BLACK_DYE("INK_SACK", "INK_SAC"),
+    BLACK_DYE,
     BLACK_GLAZED_TERRACOTTA,
     BLACK_SHULKER_BOX,
     BLACK_STAINED_GLASS(15, "STAINED_GLASS"),
@@ -467,7 +468,7 @@ public enum XMaterial {
     DONKEY_SPAWN_EGG(32, "MONSTER_EGG"),
     DRAGON_BREATH("DRAGONS_BREATH"),
     DRAGON_EGG,
-    DRAGON_HEAD("SKULL", "SKULL_ITEM"),
+    DRAGON_HEAD(5, "SKULL", "SKULL_ITEM"),
     DRAGON_WALL_HEAD(5, "SKULL", "SKULL_ITEM"),
     DRIED_KELP,
     DRIED_KELP_BLOCK,
@@ -1419,19 +1420,9 @@ public enum XMaterial {
      *
      * @since 3.4.0
      */
-    private static final LoadingCache<String, Pattern> CACHED_REGEX = CacheBuilder.newBuilder()
+    private static final Cache<String, Pattern> CACHED_REGEX = CacheBuilder.newBuilder()
             .expireAfterAccess(3, TimeUnit.HOURS)
-            .build(new CacheLoader<String, Pattern>() {
-                @Override
-                public Pattern load(@Nonnull String str) {
-                    try {
-                        return Pattern.compile(str);
-                    } catch (PatternSyntaxException ex) {
-                        ex.printStackTrace();
-                        return null;
-                    }
-                }
-            });
+            .build();
     /**
      * The maximum data value in the pre-flattening update which belongs to {@link #VILLAGER_SPAWN_EGG}<br>
      * https://minecraftitemids.com/types/spawn-egg
@@ -1522,7 +1513,7 @@ public enum XMaterial {
         this.material = mat;
     }
 
-    XMaterial(String... legacy) { this(0, legacy); }
+    XMaterial(String... legacy) {this(0, legacy);}
 
     /**
      * Checks if the version is 1.13 Aquatic Update or higher.
@@ -1694,11 +1685,21 @@ public enum XMaterial {
         String material = item.getType().name();
         byte data = (byte) (Data.ISFLAT || item.getType().getMaxDurability() > 0 ? 0 : item.getDurability());
 
+        if (!Data.ISFLAT && item.hasItemMeta() && material.equals("MONSTER_EGG")) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta instanceof SpawnEggMeta) {
+                SpawnEggMeta egg = (SpawnEggMeta) meta;
+                material = egg.getSpawnedType().name() + "_SPAWN_EGG";
+            }
+        }
+
         // Check FILLED_MAP enum for more info.
         //if (!Data.ISFLAT && item.hasItemMeta() && item.getItemMeta() instanceof org.bukkit.inventory.meta.MapMeta) return FILLED_MAP;
 
-        return matchDefinedXMaterial(material, data)
-                .orElseThrow(() -> new IllegalArgumentException("Unsupported material from item: " + material + " (" + data + ')'));
+        // No orElseThrow, I don't want to deal with all that final variable bullshit.
+        Optional<XMaterial> result = matchDefinedXMaterial(material, data);
+        if (result.isPresent()) return result.get();
+        throw new IllegalArgumentException("Unsupported material from item: " + material + " (" + data + ')');
     }
 
     /**
@@ -1907,7 +1908,15 @@ public enum XMaterial {
             }
             if (checker.startsWith("REGEX:")) {
                 comp = comp.substring(6);
-                Pattern pattern = CACHED_REGEX.getUnchecked(comp);
+                Pattern pattern = CACHED_REGEX.getIfPresent(comp);
+                if (pattern == null) {
+                    try {
+                        pattern = Pattern.compile(comp);
+                        CACHED_REGEX.put(comp, pattern);
+                    } catch (PatternSyntaxException ex) {
+                        ex.printStackTrace();
+                    }
+                }
                 if (pattern != null && pattern.matcher(name).matches()) return true;
                 continue;
             }
@@ -2123,31 +2132,21 @@ public enum XMaterial {
          *
          * @since 1.0.0
          */
-        private static final int VERSION = parseVersion();
+        private static final int VERSION;
+
+        static { // This needs to be right below VERSION because of initialization order.
+            String version = Bukkit.getVersion();
+            Matcher matcher = Pattern.compile("MC: \\d\\.(\\d+)").matcher(version);
+
+            if (matcher.find()) VERSION = Integer.parseInt(matcher.group(1));
+            else throw new IllegalArgumentException("Failed to parse server version from: " + version);
+        }
+
         /**
          * Cached result if the server version is after the v1.13 flattening update.
          *
          * @since 3.0.0
          */
         private static final boolean ISFLAT = supports(13);
-
-        /**
-         * Gets the exact minor version (8, 9, ..., 17, 18)
-         * It's necessary to use this alternative method instead of <b>static initialization block</b>
-         * since you can't throw exceptions in them directly.
-         * <p>
-         * Performance doesn't matter here as the method is only called once.
-         *
-         * @return the exact minor version.
-         * @see #VERSION
-         * @since 8.5.0
-         */
-        private static int parseVersion() {
-            String version = Bukkit.getVersion();
-            Matcher matcher = Pattern.compile("MC: \\d\\.(\\d+)").matcher(version);
-
-            if (matcher.find()) return Integer.parseInt(matcher.group(1));
-            throw new IllegalArgumentException("Failed to parse server version from: " + version);
-        }
     }
 }
