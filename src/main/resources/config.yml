@@ -185,12 +185,20 @@ Lock-Team-Chest: false
 Team-Chest-Distance: 8
 Prevent-Chest-Open-Message: '&cYou cannot open this chest until {team} &chas been eliminated.'
 
+#Change default team chat colors
+#Add teams like: "DefaultTeamName:ChatColorCar"
+Custom-Team-Chat-Color:
+  Enabled: false
+  Teams:
+    - 'CYAN:3'
+
 #Personal Ender Chests
 Personal-Ender-Chests: false
 
 #If enabled you still join a server even if the Player Limit is reached.
 Bypass-PlayerLimit: false
 
+#THIS CONFIG IS NOW OBSOLETE, AND MAY BE REMOVED AT ANYTIME
 #Shortens lobby time to a specified value
 #if arena filled over a certain percent
 Shorten-Countdown:
