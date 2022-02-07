@@ -20,7 +20,7 @@ Tweaks & Features for MBedWars
  12. Waterflow Fix
  13. Schedule Bed Break
  14. Disable unused Gens
- 15. Bed Break Effects
+ 15. Bed Break Effects (Will be replaced by Marcel's Cosmetics Addon)
  16. And More!
 
 **Example Configuration**
