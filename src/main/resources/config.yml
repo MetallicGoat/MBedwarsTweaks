@@ -240,6 +240,7 @@ Empty-Potions: true
 Sponge-Partials: true
 
 ############### BED DESTROY EFFECTS [BETA] ###############
+#ATTENTION: This is deprecated and will be removed, when the official Cosmetics Addon Releases.
 
 # NONE - None
 # FIREWORK - Firework
