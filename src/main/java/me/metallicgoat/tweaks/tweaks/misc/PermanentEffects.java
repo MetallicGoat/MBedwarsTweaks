@@ -35,8 +35,8 @@ public class PermanentEffects implements Listener {
 
                 int amplifier = tryParseInt(arenaPotionSplit);
 
-                if(potion.isPresent() && potion.get().parsePotionEffectType() != null) {
-                    PotionEffectType potionEffectType = potion.get().parsePotionEffectType();
+                if(potion.isPresent()) {
+                    final PotionEffectType potionEffectType = potion.get().getPotionEffectType();
                     if(potionEffectType != null) {
                         player.addPotionEffect((new PotionEffect(potionEffectType, Integer.MAX_VALUE, amplifier)));
                     }
