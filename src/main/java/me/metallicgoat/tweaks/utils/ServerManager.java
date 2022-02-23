@@ -1,12 +1,17 @@
 package me.metallicgoat.tweaks.utils;
 
-import me.metallicgoat.tweaks.MBedwarsTweaks;
-import me.metallicgoat.tweaks.advancedswords.*;
-import me.metallicgoat.tweaks.bedbreakeffects.*;
-import me.metallicgoat.tweaks.tweaks.explotions.*;
-import me.metallicgoat.tweaks.tweaks.messages.*;
-import me.metallicgoat.tweaks.tweaks.misc.*;
-import me.metallicgoat.tweaks.tweaks.spawners.*;
+import me.metallicgoat.tweaks.MBedwarsTweaksPlugin;
+import me.metallicgoat.tweaks.old.advancedswords.*;
+import me.metallicgoat.tweaks.old.tweaks.explotions.FireballOutsideArena;
+import me.metallicgoat.tweaks.old.tweaks.explotions.FireballWhitelist;
+import me.metallicgoat.tweaks.old.tweaks.messages.BuyMessage;
+import me.metallicgoat.tweaks.old.tweaks.messages.FinalKill;
+import me.metallicgoat.tweaks.old.tweaks.messages.TeamEliminate;
+import me.metallicgoat.tweaks.old.tweaks.messages.TopKillers;
+import me.metallicgoat.tweaks.old.tweaks.misc.*;
+import me.metallicgoat.tweaks.old.tweaks.spawners.GenTiers;
+import me.metallicgoat.tweaks.old.tweaks.spawners.ScheduleBedBreak;
+import me.metallicgoat.tweaks.old.tweaks.spawners.UnusedGens;
 import me.metallicgoat.tweaks.utils.cmd.*;
 import me.metallicgoat.tweaks.utils.configupdater.ConfigUpdater;
 import org.bukkit.command.PluginCommand;
@@ -22,13 +27,13 @@ import java.util.List;
 
 public class ServerManager {
     
-    private static MBedwarsTweaks plugin;
+    private static MBedwarsTweaksPlugin plugin;
     private static FileConfiguration defaultConfig;
     private static FileConfiguration tiersConfig;
     private static FileConfiguration swordsToolsConfig;
 
     public static void load(){
-        plugin = MBedwarsTweaks.getInstance();
+        plugin = MBedwarsTweaksPlugin.getInstance();
         registerCommands();
         registerEvents();
         loadConfigs();
@@ -87,7 +92,6 @@ public class ServerManager {
         manager.registerEvents(new ScheduleBedBreak(), plugin);
         manager.registerEvents(new UnusedGens(), plugin);
 
-
         //Advanced Swords
         manager.registerEvents(new AlwaysSword(), plugin);
         manager.registerEvents(new AntiChest(), plugin);
@@ -98,9 +102,6 @@ public class ServerManager {
         manager.registerEvents(new ReplaceSwordOnBuy(), plugin);
         manager.registerEvents(new SwordDrop(), plugin);
         manager.registerEvents(new ToolBuy(), plugin);
-
-        //Break Effects
-        manager.registerEvents(new BedDestroyListener(), plugin);
     }
 
     private static YamlConfiguration loadCustomConfig(String ymlName, List<String> ignore){

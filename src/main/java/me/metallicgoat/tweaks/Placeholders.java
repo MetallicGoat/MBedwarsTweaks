@@ -7,7 +7,7 @@ import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.message.Message;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import me.metallicgoat.tweaks.tweaks.spawners.GenTiers;
+import me.metallicgoat.tweaks.old.tweaks.spawners.GenTiers;
 import me.metallicgoat.tweaks.utils.ServerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -29,7 +29,7 @@ public class Placeholders extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return "1.0.0";
+        return "2.0.0";
     }
 
     @Override

@@ -1,6 +1,6 @@
 package me.metallicgoat.tweaks.utils.cmd;
 
-import me.metallicgoat.tweaks.MBedwarsTweaks;
+import me.metallicgoat.tweaks.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaks.utils.ServerManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -13,7 +13,7 @@ public class Commands implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        MBedwarsTweaks plugin = MBedwarsTweaks.getInstance();
+        MBedwarsTweaksPlugin plugin = MBedwarsTweaksPlugin.getInstance();
         if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
             if (sender instanceof Player) {
                 if (sender.hasPermission("mbedwars-tweaks.admin")) {

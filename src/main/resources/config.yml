@@ -238,31 +238,3 @@ Empty-Potions: true
 
 #Sponge partials on place
 Sponge-Partials: true
-
-############### BED DESTROY EFFECTS [BETA] ###############
-#ATTENTION: This is deprecated and will be removed, when the official Cosmetics Addon Releases.
-
-# NONE - None
-# FIREWORK - Firework
-bed-destroy-effect: 'NONE'
-
-#-----> FIREWORK CUSTOMISATION
-
-#RGB Color
-firework-color-red: 255
-firework-color-green: 255
-firework-color-blue: 255
-
-#Types:
-#CREEPER - Creeper Face
-#BALL - Ball
-#BALL_LARGE - Large Ball
-#BURST - Burst
-#STAR - Star
-firework-type: "STAR"
-
-#Firework Trail
-firework-trail: true
-
-#Duration Until Firework will detonate in ticks (20 ticks = 1 sec)
-firework-duration: 20
