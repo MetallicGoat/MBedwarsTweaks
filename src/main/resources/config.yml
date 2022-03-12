@@ -239,7 +239,7 @@ Empty-Potions: true
 #Sponge partials on place
 Sponge-Partials: true
 
-############### BED DESTROY EFFECTS [BETA] ###############
+############### BED DESTROY EFFECTS [BETA, DEPRECATED] ###############
 #ATTENTION: This is deprecated and will be removed, when the official Cosmetics Addon Releases.
 
 # NONE - None
