@@ -2,9 +2,8 @@ package me.metallicgoat.tweaksaddon.AA_old.utils;
 
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.AA_old.advancedswords.*;
-import me.metallicgoat.tweaksaddon.tweaks.DisableFireballOutsideArena;
+import me.metallicgoat.tweaksaddon.tweaks.*;
 import me.metallicgoat.tweaksaddon.AA_old.tweaks.explotions.FireballWhitelist;
-import me.metallicgoat.tweaksaddon.tweaks.SpongeParticles;
 import me.metallicgoat.tweaksaddon.tweaks.messages.BuyMessage;
 import me.metallicgoat.tweaksaddon.tweaks.messages.FinalKillSuffix;
 import me.metallicgoat.tweaksaddon.tweaks.messages.TeamEliminate;
@@ -85,7 +84,7 @@ public class ServerManager {
         manager.registerEvents(new PlayerLimitBypass(), plugin);
         manager.registerEvents(new ShortenCountdown(), plugin);
         manager.registerEvents(new SpongeParticles(), plugin);
-        manager.registerEvents(new WaterFlow(), plugin);
+        manager.registerEvents(new PreventLiquidBuildUp(), plugin);
 
         //Tweaks - spawners
         manager.registerEvents(new GenTiers(), plugin);
