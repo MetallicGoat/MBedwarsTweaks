@@ -1,10 +1,14 @@
 package me.metallicgoat.tweaksaddon.tweaks.advancedswords;
 
+import de.marcely.bedwars.api.event.player.PlayerBuyInShopEvent;
 import de.marcely.bedwars.api.game.shop.ShopItem;
 import de.marcely.bedwars.api.game.shop.product.ItemShopProduct;
 import de.marcely.bedwars.api.game.shop.product.ShopProduct;
+import de.marcely.bedwars.api.message.Message;
 import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.tweaksaddon.AA_old.utils.ServerManager;
+import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
+import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -12,6 +16,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 
 public class ToolSwordHelper {
 
@@ -123,5 +128,19 @@ public class ToolSwordHelper {
             }
         }
         return false;
+    }
+
+    public static void addShopProblem(PlayerBuyInShopEvent event, String problem) {
+        event.addProblem(new PlayerBuyInShopEvent.Problem() {
+            @Override
+            public Plugin getPlugin() {
+                return MBedwarsTweaksPlugin.getInstance();
+            }
+
+            @Override
+            public void handleNotification(PlayerBuyInShopEvent e) {
+                e.getPlayer().sendMessage(Message.build(problem).done());
+            }
+        });
     }
 }

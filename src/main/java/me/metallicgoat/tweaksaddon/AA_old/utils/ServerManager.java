@@ -1,7 +1,6 @@
 package me.metallicgoat.tweaksaddon.AA_old.utils;
 
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
-import me.metallicgoat.tweaksaddon.AA_old.advancedswords.*;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.*;
 import me.metallicgoat.tweaksaddon.tweaks.cosmetic.ActionBar;
 import me.metallicgoat.tweaksaddon.tweaks.mechanics.FireballBlockBreakWhitelist;

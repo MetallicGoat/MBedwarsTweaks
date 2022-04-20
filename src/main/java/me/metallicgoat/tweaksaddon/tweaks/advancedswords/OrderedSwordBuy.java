@@ -3,8 +3,6 @@ package me.metallicgoat.tweaksaddon.tweaks.advancedswords;
 import de.marcely.bedwars.api.event.player.PlayerBuyInShopEvent;
 import de.marcely.bedwars.api.game.shop.product.ItemShopProduct;
 import de.marcely.bedwars.api.game.shop.product.ShopProduct;
-import de.marcely.bedwars.api.message.Message;
-import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -12,7 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.plugin.Plugin;
 
 public class OrderedSwordBuy implements Listener {
     @EventHandler
@@ -32,7 +29,7 @@ public class OrderedSwordBuy implements Listener {
                             ToolSwordHelper.isNotToIgnore(event.getItem().getDisplayName())) {
 
                         if (!isPurchasable(item, pi))
-                            addShopProblem(event);
+                            ToolSwordHelper.addShopProblem(event, ConfigValue.ordered_sword_buy_problem);
                         else
                             clearOld(item.getType(), player);
                     }
@@ -61,20 +58,5 @@ public class OrderedSwordBuy implements Listener {
             }
         }
         return true;
-    }
-
-
-    private void addShopProblem(PlayerBuyInShopEvent event) {
-        event.addProblem(new PlayerBuyInShopEvent.Problem() {
-            @Override
-            public Plugin getPlugin() {
-                return MBedwarsTweaksPlugin.getInstance();
-            }
-
-            @Override
-            public void handleNotification(PlayerBuyInShopEvent e) {
-                e.getPlayer().sendMessage(Message.build(ConfigValue.ordered_sword_buy_problem).done());
-            }
-        });
     }
 }

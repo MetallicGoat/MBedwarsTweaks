@@ -78,4 +78,18 @@ public class ConfigValue {
     public static boolean replace_sword_on_buy_enabled = false;
     public static boolean replace_sword_on_buy_all_type = false;
 
+    public static boolean advanced_tool_replacement_enabled = false;
+    public static boolean advanced_tool_replacement_force_ordered = false;
+    public static String advanced_tool_replacement_force_ordered_problem = "";
+    public static String advanced_tool_replacement_regular_problem = "";
+
+    public static boolean degrading_tool_groups = false;
+
+    public static boolean one_slot_tools_enabled = false;
+    public static int one_slot_tools_pickaxe = 20;
+    public static int one_slot_tools_axe = 21;
+    public static int one_slot_tools_shears = 22;
+
+    public static List<Material> anti_chest_materials = new ArrayList<>();
+
 }
