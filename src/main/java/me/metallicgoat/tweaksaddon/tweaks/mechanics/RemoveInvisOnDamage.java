@@ -1,4 +1,4 @@
-package me.metallicgoat.tweaksaddon.tweaks;
+package me.metallicgoat.tweaksaddon.tweaks.mechanics;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;

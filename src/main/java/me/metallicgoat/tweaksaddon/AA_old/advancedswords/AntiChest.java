@@ -2,6 +2,7 @@ package me.metallicgoat.tweaksaddon.AA_old.advancedswords;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import me.metallicgoat.tweaksaddon.AA_old.utils.ServerManager;
+import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

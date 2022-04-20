@@ -6,6 +6,7 @@ import de.marcely.bedwars.api.game.shop.BuyGroup;
 import de.marcely.bedwars.api.message.Message;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.AA_old.utils.ServerManager;
+import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -58,11 +59,11 @@ public class ToolBuy implements Listener {
     }
 
     private void clearOld(Material tool, Player p) {
-        boolean pickaxe = tool.name().contains("PICKAXE");
+        boolean pickaxe = tool.name().endsWith("PICKAXE");
         for(ItemStack itemStack : p.getInventory()) {
-            if (itemStack != null && itemStack.getType().name().contains("AXE")) {
-                if ((itemStack.getType().name().contains("PICKAXE") && pickaxe) ||
-                        (!itemStack.getType().name().contains("PICKAXE") && !pickaxe)) {
+            if (itemStack != null && itemStack.getType().name().endsWith("AXE")) {
+                if ((itemStack.getType().name().endsWith("PICKAXE") && pickaxe) ||
+                        (!itemStack.getType().name().endsWith("PICKAXE") && !pickaxe)) {
                     if (ToolSwordHelper.getSwordToolLevel(tool) > ToolSwordHelper.getSwordToolLevel(itemStack.getType())) {
                         p.getInventory().remove(itemStack.getType());
                     }

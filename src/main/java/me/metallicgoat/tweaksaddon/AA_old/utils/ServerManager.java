@@ -2,8 +2,16 @@ package me.metallicgoat.tweaksaddon.AA_old.utils;
 
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.AA_old.advancedswords.*;
-import me.metallicgoat.tweaksaddon.tweaks.*;
-import me.metallicgoat.tweaksaddon.AA_old.tweaks.explotions.FireballWhitelist;
+import me.metallicgoat.tweaksaddon.tweaks.advancedswords.*;
+import me.metallicgoat.tweaksaddon.tweaks.cosmetic.ActionBar;
+import me.metallicgoat.tweaksaddon.tweaks.mechanics.FireballBlockBreakWhitelist;
+import me.metallicgoat.tweaksaddon.tweaks.cosmetic.FinalStrike;
+import me.metallicgoat.tweaksaddon.tweaks.cosmetic.SpongeParticles;
+import me.metallicgoat.tweaksaddon.tweaks.gameplay.LockTeamChest;
+import me.metallicgoat.tweaksaddon.tweaks.gameplay.PermanentEffects;
+import me.metallicgoat.tweaksaddon.tweaks.gameplay.PersonalChests;
+import me.metallicgoat.tweaksaddon.tweaks.mechanics.DisableFireballOutsideArena;
+import me.metallicgoat.tweaksaddon.tweaks.mechanics.PreventLiquidBuildUp;
 import me.metallicgoat.tweaksaddon.tweaks.messages.BuyMessage;
 import me.metallicgoat.tweaksaddon.tweaks.messages.FinalKillSuffix;
 import me.metallicgoat.tweaksaddon.tweaks.messages.TeamEliminate;
@@ -13,6 +21,7 @@ import me.metallicgoat.tweaksaddon.AA_old.tweaks.spawners.GenTiers;
 import me.metallicgoat.tweaksaddon.AA_old.tweaks.spawners.ScheduleBedBreak;
 import me.metallicgoat.tweaksaddon.AA_old.utils.cmd.*;
 import me.metallicgoat.tweaksaddon.AA_old.utils.configupdater.ConfigUpdater;
+import me.metallicgoat.tweaksaddon.tweaks.server.PlayerLimitBypass;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -62,7 +71,7 @@ public class ServerManager {
 
         //Tweaks - explosions
         manager.registerEvents(new DisableFireballOutsideArena(), plugin);
-        manager.registerEvents(new FireballWhitelist(), plugin);
+        manager.registerEvents(new FireballBlockBreakWhitelist(), plugin);
 
         //Tweaks - messages
         manager.registerEvents(new BuyMessage(), plugin);

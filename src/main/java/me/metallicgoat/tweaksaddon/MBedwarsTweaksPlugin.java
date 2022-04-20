@@ -6,6 +6,7 @@ import me.metallicgoat.tweaksaddon.AA_old.Placeholders;
 import me.metallicgoat.tweaksaddon.AA_old.tweaks.spawners.GenTiers;
 import me.metallicgoat.tweaksaddon.AA_old.utils.Metrics;
 import me.metallicgoat.tweaksaddon.AA_old.utils.ServerManager;
+import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -37,6 +38,7 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
 
         new Metrics(this, 11928);
 
+        ToolSwordHelper.load();
         // Load Config
         // Register Events
 

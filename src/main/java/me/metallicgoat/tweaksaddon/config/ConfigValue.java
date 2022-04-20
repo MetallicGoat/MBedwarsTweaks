@@ -4,6 +4,7 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.game.spawner.Spawner;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
 
@@ -14,7 +15,20 @@ import java.util.List;
 
 public class ConfigValue {
 
+    // Main Tweaks Config
     public static boolean sponge_particles_enabled = false;
+
+    public static boolean remove_empty_buckets = false;
+    public static boolean remove_empty_potions = false;
+
+    public static boolean custom_action_bar_lobby = false;
+    public static boolean custom_action_bar_in_game = false;
+    public static String custom_action_bar_message = "Tweaks Action-Bar";
+
+    public static boolean final_strike_enabled = false;
+
+    public static boolean fireball_whitelist_enabled = false;
+    public static List<Material> fireball_whitelist_blocks = new ArrayList<>();
 
     public static boolean prevent_liquid_build_up = false;
 
@@ -45,11 +59,23 @@ public class ConfigValue {
     public static boolean remove_invis_ondamage_enabled = false;
     public static List<EntityDamageEvent.DamageCause> remove_invis_remove_causes = new ArrayList<>();
 
-    // Generators
     public static boolean disable_empty_generators = false;
     public static double disable_empty_generators_range = 6;
     public static List<Spawner> disable_empty_generators_spawners = new ArrayList<>();
 
-    // Messages
+    // Advanced Swords Tools
+    public static boolean always_sword_enabled = false;
+
+    public static boolean anti_drop_enabled = false;
+    public static List<Material> anti_drop_materials = new ArrayList<>();
+
+    public static boolean sword_drop_enabled = false;
+    public static List<Material> sword_drop_materials = new ArrayList<>();
+
+    public static boolean ordered_sword_buy_enabled = false;
+    public static String ordered_sword_buy_problem= "";
+
+    public static boolean replace_sword_on_buy_enabled = false;
+    public static boolean replace_sword_on_buy_all_type = false;
 
 }

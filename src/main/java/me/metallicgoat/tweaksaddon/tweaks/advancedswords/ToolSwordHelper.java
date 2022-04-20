@@ -1,16 +1,30 @@
-package me.metallicgoat.tweaksaddon.AA_old.advancedswords;
+package me.metallicgoat.tweaksaddon.tweaks.advancedswords;
 
 import de.marcely.bedwars.api.game.shop.ShopItem;
 import de.marcely.bedwars.api.game.shop.product.ItemShopProduct;
 import de.marcely.bedwars.api.game.shop.product.ShopProduct;
+import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.tweaksaddon.AA_old.utils.ServerManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class ToolSwordHelper {
+
+    public static Material WOOD_SWORD;
+
+    public static void load(){
+        Material sword = Helper.get().getMaterialByName("WOODEN_SWORD");
+
+        if(sword == null)
+            sword = Material.AIR;
+
+        WOOD_SWORD = sword;
+    }
 
     public static int getSwordToolLevel(Material tool){
 
@@ -49,6 +63,7 @@ public class ToolSwordHelper {
         return Material.AIR;
     }
 
+    // Some items may look like a sword, but not be one. Example: Special Items
     public static boolean isNotToIgnore(ItemStack itemStack){
         ItemMeta meta = itemStack.getItemMeta();
         boolean isNotToIgnore = true;
@@ -77,6 +92,33 @@ public class ToolSwordHelper {
         for(ItemStack itemStack:playerInventory){
             if(itemStack != null && itemStack.getType().name().contains(material)
                     && isNotToIgnore(itemStack.getItemMeta() != null ? itemStack.getItemMeta().getDisplayName():"NOTHING")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Checks how many swords a player has
+    public static int getSwordsAmount(Player player) {
+        int count = 0;
+        for (ItemStack item : player.getInventory().getContents()) {
+            if(item != null && item.getType().name().endsWith("SWORD")
+                    && ToolSwordHelper.isNotToIgnore(item)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    // returns true if a player has a sword that is better than wood
+    public static boolean hasBetterSword(Player player){
+        final Inventory pi = player.getInventory();
+        for(ItemStack itemStack : pi.getContents()){
+            if(itemStack != null
+                    && itemStack.getType().name().endsWith("SWORD")
+                    && ToolSwordHelper.isNotToIgnore(itemStack)
+                    && itemStack.getType() == ToolSwordHelper.WOOD_SWORD){
+
                 return true;
             }
         }

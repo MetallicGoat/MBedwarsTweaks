@@ -1,4 +1,4 @@
-package me.metallicgoat.tweaksaddon.tweaks;
+package me.metallicgoat.tweaksaddon.tweaks.gameplay;
 
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
