@@ -16,7 +16,7 @@ import me.metallicgoat.tweaksaddon.tweaks.messages.FinalKillSuffix;
 import me.metallicgoat.tweaksaddon.tweaks.messages.TeamEliminate;
 import me.metallicgoat.tweaksaddon.AA_old.tweaks.messages.TopKillers;
 import me.metallicgoat.tweaksaddon.AA_old.tweaks.misc.*;
-import me.metallicgoat.tweaksaddon.AA_old.tweaks.spawners.GenTiers;
+import me.metallicgoat.tweaksaddon.tweaks.gentiers.GenTiers;
 import me.metallicgoat.tweaksaddon.AA_old.tweaks.spawners.ScheduleBedBreak;
 import me.metallicgoat.tweaksaddon.AA_old.utils.cmd.*;
 import me.metallicgoat.tweaksaddon.AA_old.utils.configupdater.ConfigUpdater;
@@ -80,9 +80,9 @@ public class ServerManager {
 
         //Tweaks - misc
         manager.registerEvents(new ActionBar(), plugin);
-        manager.registerEvents(new BreakInvis(), plugin);
-        manager.registerEvents(new EmptyBucket(), plugin);
-        manager.registerEvents(new EmptyPotion(), plugin);
+        //manager.registerEvents(new BreakInvis(), plugin);
+        //manager.registerEvents(new EmptyBucket(), plugin);
+        //manager.registerEvents(new EmptyPotion(), plugin);
         manager.registerEvents(new FinalStrike(), plugin);
         manager.registerEvents(new FriendlyVillagers(), plugin);
         manager.registerEvents(new HeightCap(), plugin);
@@ -90,14 +90,14 @@ public class ServerManager {
         manager.registerEvents(new PermanentEffects(), plugin);
         manager.registerEvents(new PersonalChests(), plugin);
         manager.registerEvents(new PlayerLimitBypass(), plugin);
-        manager.registerEvents(new ShortenCountdown(), plugin);
+        //manager.registerEvents(new ShortenCountdown(), plugin);
         manager.registerEvents(new SpongeParticles(), plugin);
         manager.registerEvents(new PreventLiquidBuildUp(), plugin);
 
         //Tweaks - spawners
         manager.registerEvents(new GenTiers(), plugin);
         manager.registerEvents(new ScheduleBedBreak(), plugin);
-        manager.registerEvents(new UnusedGens(), plugin);
+        //manager.registerEvents(new UnusedGens(), plugin);
 
         //Advanced Swords
         manager.registerEvents(new AlwaysSword(), plugin);

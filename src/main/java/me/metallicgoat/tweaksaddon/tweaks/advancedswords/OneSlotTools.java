@@ -14,7 +14,6 @@ import de.marcely.bedwars.api.game.shop.product.ShopProduct;
 import de.marcely.bedwars.tools.gui.GUIItem;
 import de.marcely.bedwars.tools.gui.type.ChestGUI;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
-import me.metallicgoat.tweaksaddon.tweaks.advancedswords.DowngradeTools;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

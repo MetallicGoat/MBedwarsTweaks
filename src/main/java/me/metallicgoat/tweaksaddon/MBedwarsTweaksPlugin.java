@@ -2,8 +2,7 @@ package me.metallicgoat.tweaksaddon;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.tools.Helper;
-import me.metallicgoat.tweaksaddon.AA_old.Placeholders;
-import me.metallicgoat.tweaksaddon.AA_old.tweaks.spawners.GenTiers;
+import me.metallicgoat.tweaksaddon.tweaks.gentiers.GenTiers;
 import me.metallicgoat.tweaksaddon.AA_old.utils.Metrics;
 import me.metallicgoat.tweaksaddon.AA_old.utils.ServerManager;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;

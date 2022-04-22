@@ -63,7 +63,20 @@ public class ConfigValue {
     public static double disable_empty_generators_range = 6;
     public static List<Spawner> disable_empty_generators_spawners = new ArrayList<>();
 
+    // Gen Tiers
+    public static boolean gen_tiers_enabled = false;
+    public static boolean gen_tiers_custom_enabled = false;
+    public static String gen_tiers_start_tier = "";
+    public static List<String> gen_tiers_spawner_holo_titles = new ArrayList<>();
+    public static List<String> gen_tiers_start_spawners = new ArrayList<>();
+
+    public static boolean gen_tiers_scoreboard_updating_enabled = false;
+    public static int gen_tiers_scoreboard_updating_interval = 5;
+
+
     // Advanced Swords Tools
+    public static List<String> tools_swords_do_not_effect = new ArrayList<>();
+
     public static boolean always_sword_enabled = false;
 
     public static boolean anti_drop_enabled = false;

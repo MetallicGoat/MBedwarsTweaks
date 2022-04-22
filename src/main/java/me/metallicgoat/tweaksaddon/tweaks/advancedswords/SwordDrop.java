@@ -3,10 +3,7 @@ package me.metallicgoat.tweaksaddon.tweaks.advancedswords;
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
-import me.metallicgoat.tweaksaddon.AA_old.utils.ServerManager;
-import me.metallicgoat.tweaksaddon.AA_old.utils.XSeries.XMaterial;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
-import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,9 +11,6 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.Objects;
 
 public class SwordDrop implements Listener {
 

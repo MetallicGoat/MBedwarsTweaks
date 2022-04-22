@@ -6,7 +6,6 @@ import de.marcely.bedwars.api.game.shop.product.ItemShopProduct;
 import de.marcely.bedwars.api.game.shop.product.ShopProduct;
 import de.marcely.bedwars.api.message.Message;
 import de.marcely.bedwars.tools.Helper;
-import me.metallicgoat.tweaksaddon.AA_old.utils.ServerManager;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import org.bukkit.ChatColor;
@@ -70,10 +69,10 @@ public class ToolSwordHelper {
 
     // Some items may look like a sword, but not be one. Example: Special Items
     public static boolean isNotToIgnore(ItemStack itemStack){
-        ItemMeta meta = itemStack.getItemMeta();
+        final ItemMeta meta = itemStack.getItemMeta();
         boolean isNotToIgnore = true;
         if(meta != null) {
-            for(String s : ServerManager.getSwordsToolsConfig().getStringList("Do-Not-Effect")){
+            for(String s : ConfigValue.tools_swords_do_not_effect){
                 if(s.equals(ChatColor.stripColor(meta.getDisplayName())) && !s.equals("")) {
                     isNotToIgnore = false;
                 }
@@ -84,8 +83,8 @@ public class ToolSwordHelper {
 
     public static boolean isNotToIgnore(String name){
         boolean isNotToIgnore = true;
-        for (String s : ServerManager.getSwordsToolsConfig().getStringList("Do-Not-Effect")){
-            String formatted = ChatColor.translateAlternateColorCodes('&', s);
+        for (String s : ConfigValue.tools_swords_do_not_effect){
+            final String formatted = ChatColor.translateAlternateColorCodes('&', s);
             if(formatted.equals(name) && !s.equals("")){
                 isNotToIgnore = false;
             }

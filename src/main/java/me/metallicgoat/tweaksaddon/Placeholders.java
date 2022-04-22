@@ -1,4 +1,4 @@
-package me.metallicgoat.tweaksaddon.AA_old;
+package me.metallicgoat.tweaksaddon;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.GameAPI;
@@ -7,13 +7,12 @@ import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.message.Message;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import me.metallicgoat.tweaksaddon.AA_old.tweaks.spawners.GenTiers;
+import me.metallicgoat.tweaksaddon.tweaks.gentiers.GenTiers;
 import me.metallicgoat.tweaksaddon.AA_old.utils.ServerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-
 
 public class Placeholders extends PlaceholderExpansion {
 
@@ -33,9 +32,9 @@ public class Placeholders extends PlaceholderExpansion {
     }
 
     @Override
-    public String onRequest(OfflinePlayer player, @NotNull String params) {
+    public String onRequest(OfflinePlayer offlinePlayer, @NotNull String params) {
 
-        final Player player1 = Bukkit.getPlayer(player.getUniqueId());
+        final Player player1 = Bukkit.getPlayer(offlinePlayer.getUniqueId());
         final Arena arena = BedwarsAPI.getGameAPI().getSpectatingPlayers().contains(player1) ? BedwarsAPI.getGameAPI().getArenaBySpectator(player1):BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
 
         switch (params.toLowerCase()){
@@ -116,7 +115,7 @@ public class Placeholders extends PlaceholderExpansion {
                     }
                 }
 
-            //Status of current team
+                //Status of current team
             case "player-team-status":
                 if(arena != null){
                     Team team = arena.getPlayerTeam(player1);
@@ -129,7 +128,7 @@ public class Placeholders extends PlaceholderExpansion {
                     }
                 }
 
-            //Player count placeholders
+                //Player count placeholders
             case "allplayers": return getPlayerAmount();
             case "players-ingame": return getPlayerAmount(ArenaStatus.RUNNING);
             case "players-lobby": return getPlayerAmount(ArenaStatus.LOBBY);
@@ -160,7 +159,7 @@ public class Placeholders extends PlaceholderExpansion {
                 if(playerTeam != null && scoreTeam == playerTeam){
                     output += ServerManager.getConfig().getString("Team-Status-Placeholder.Your-Team");
                 }
-                return Message.build(output).placeholder("player-amount", playerAmount).done();
+                return Message.build(output).placeholder("offlinePlayer-amount", playerAmount).done();
             }
         }
         if(params.toLowerCase().startsWith("team-you-")){
