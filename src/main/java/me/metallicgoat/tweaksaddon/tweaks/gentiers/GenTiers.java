@@ -10,11 +10,11 @@ import de.marcely.bedwars.api.game.spawner.SpawnerDurationModifier;
 import de.marcely.bedwars.api.message.Message;
 import me.metallicgoat.tweaksaddon.AA_old.tweaks.spawners.ScheduleBedBreak;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
+import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
@@ -29,52 +29,48 @@ public class GenTiers implements Listener {
     private BukkitTask placeHolderTask = null;
 
     @EventHandler
-    public void onGameStart(RoundStartEvent e) {
-        final Arena arena = e.getArena();
-        final boolean enabled = plugin().getConfig().getBoolean("Gen-Tiers-Enabled");
+    public void onGameStart(RoundStartEvent event) {
 
-        if (enabled) {
-            //Start updating placeholders
-            if (placeHolderTask == null) {
-                placeHolderTask = startUpdatingTime();
-            }
+        if (!ConfigValue.gen_tiers_enabled)
+            return;
 
-            final List<String> tierOneSpawners = ServerManager.getConfig().getStringList("Tier-One-Titles.Spawners");
-            final String tierLevel = ServerManager.getConfig().getString("Tier-One-Titles.Tier-Name");
-            if (ServerManager.getConfig().getBoolean("Gen-Tiers-Holos-Enabled")) {
-
-                //Add custom Holo titles
-                for (Spawner spawner : arena.getSpawners()) {
-                    final String itemType = getItemType(spawner);
-                    for (String type : tierOneSpawners) {
-                        if (type.equalsIgnoreCase(itemType)) {
-                            spawner.setOverridingHologramLines(formatHoloTiles(tierLevel, spawner).toArray(new String[0]));
-                        }
-                    }
-                }
-            }
-            scheduleTier(arena, 0);
+        // Start updating placeholders
+        if (placeHolderTask == null) {
+            placeHolderTask = startUpdatingTime();
         }
+
+        final Arena arena = event.getArena();
+
+        if (ConfigValue.gen_tiers_custom_holo_enabled) {
+            // Add custom Holo titles
+            for (Spawner spawner : arena.getSpawners()) {
+                if(ConfigValue.gen_tiers_start_spawners.contains(spawner))
+                    spawner.setOverridingHologramLines(formatHoloTiles(ConfigValue.gen_tiers_start_tier, spawner).toArray(new String[0]));
+            }
+        }
+
+        scheduleTier(arena, 0);
     }
 
     @EventHandler
     public void onGameStop(RoundEndEvent event) {
 
-        //Kill Gen Tiers on round end
-        BukkitTask task = tasksToKill.get(event.getArena());
+        // Kill Gen Tiers on round end
+        final BukkitTask task = tasksToKill.get(event.getArena());
+
         if (task != null) {
             task.cancel();
             tasksToKill.remove(event.getArena());
         }
 
-        //Dont kill task if
+        // Dont kill task if
         for (Arena arena : BedwarsAPI.getGameAPI().getArenas()) {
             if (arena.getStatus() == ArenaStatus.RUNNING) {
                 return;
             }
         }
 
-        //Kill task
+        // Kill task
         if (placeHolderTask != null) {
             placeHolderTask.cancel();
             placeHolderTask = null;
@@ -83,69 +79,61 @@ public class GenTiers implements Listener {
 
     private void scheduleTier(Arena arena, int key) {
 
-        //Array of all tier config section names
-        String[] orderedList = section.getKeys(false).toArray(new String[0]);
-
-        //Check if gone through all tiers
-        if (orderedList.length < key) {
+        // Check if tier exists
+        if (ConfigValue.gen_tier_levels.get(key) != null) {
             return;
         }
 
-        //Name of current Tiers' config section name
-        String group = orderedList[key];
+        final GenTierLevel currentLevel = ConfigValue.gen_tier_levels.get(key);
 
-        final String tierName = ServerManager.getTiersConfig().getString("Gen-Tiers." + group + ".TierName");
-        final String tierLevel = ServerManager.getTiersConfig().getString("Gen-Tiers." + group + ".TierLevel");
-        final long time = ServerManager.getTiersConfig().getLong("Gen-Tiers." + group + ".Time");
-        final long speed = ServerManager.getTiersConfig().getLong("Gen-Tiers." + group + ".Speed");
-        final String spawnerType = ServerManager.getTiersConfig().getString("Gen-Tiers." + group + ".Type");
-        final String chat = ServerManager.getTiersConfig().getString("Gen-Tiers." + group + ".Chat");
-
-        int newKey = key + 1;
+        int nextTierLevel = key + 1;
 
         // Update Placeholder
-        nextTierMap.put(arena, tierName);
-        timeToNextUpdate.put(arena, time * 20 * 60);
+        nextTierMap.put(arena, currentLevel.getTierLevel());
+        timeToNextUpdate.put(arena, currentLevel.getTime() * 20 * 60);
 
-        //Kill previous task if running for some reason
+        // Kill previous task if running for some reason
         BukkitTask task = tasksToKill.get(arena);
         if (task != null)
             task.cancel();
 
-        switch (group.toLowerCase()) {
-            case "game-over":
-                arena.setIngameTimeRemaining((int) (time * 60));
+        switch (currentLevel.getAction()) {
+            case GAME_OVER:
+                arena.setIngameTimeRemaining((int) (currentLevel.getTime() * 60));
                 break;
-            case "bed-break":
+
+            case BED_DESTROY:
                 tasksToKill.put(arena, Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
                     if (arena.getStatus() == ArenaStatus.RUNNING) {
-                        //Break beds, start next tier
-                        scheduleTier(arena, newKey);
+                        // Break beds, start next tier
+                        scheduleTier(arena, nextTierLevel);
                         ScheduleBedBreak.breakArenaBeds(arena);
                     }
-                }, time * 20 * 60));
+                }, currentLevel.getTime() * 20 * 60));
                 break;
-            default:
+
+            case GEN_UPGRADE:
                 tasksToKill.put(arena, Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
                     if (arena.getStatus() == ArenaStatus.RUNNING) {
-                        scheduleTier(arena, newKey);
-                        arena.broadcast(Message.build(chat));
 
-                        //For all spawners
+                        scheduleTier(arena, nextTierLevel);
+                        arena.broadcast(Message.build(currentLevel.getEarnMessage()));
+
+                        // For all spawners
                         for (Spawner s : arena.getSpawners()) {
-                            if (getItemType(s).equalsIgnoreCase(spawnerType)) {
-                                //Set drop time
-                                s.addDropDurationModifier("GEN_TIER_UPDATE", MBedwarsTweaksPlugin.getInstance(), SpawnerDurationModifier.Operation.SET, speed);
-                                //Add custom Holo tiles
-                                if (ServerManager.getConfig().getBoolean("Gen-Tiers-Holos-Enabled")) {
-                                    s.setOverridingHologramLines(formatHoloTiles(tierLevel, s).toArray(new String[0]));
+                            if(s.getDropType() == currentLevel.getType()){
+                                // Set drop time
+                                s.addDropDurationModifier("GEN_UPGRADE", MBedwarsTweaksPlugin.getInstance(), SpawnerDurationModifier.Operation.SET, currentLevel.getSpeed());
+                                // Add custom Holo tiles
+                                if (ConfigValue.gen_tiers_custom_holo_enabled) {
+                                    s.setOverridingHologramLines(formatHoloTiles(currentLevel.getTierLevel(), s).toArray(new String[0]));
                                 }
                             }
                         }
                     } else {
                         nextTierMap.remove(arena);
                     }
-                }, time * 20 * 60));
+                }, currentLevel.getTime() * 20 * 60));
                 break;
         }
     }
@@ -162,22 +150,15 @@ public class GenTiers implements Listener {
                 if (MBedwarsTweaksPlugin.papiEnabled)
                     timeToNextUpdate.replace(arena, integer, integer - 20);
 
-                if (scoreBoardUpdating && ((integer - 20) / 20) % scoreBoardUpdatingInterval == 0)
+                if (ConfigValue.gen_tiers_scoreboard_updating_enabled
+                        && ((integer - 20) / 20) % ConfigValue.gen_tiers_scoreboard_updating_interval == 0)
                     arena.updateScoreboard();
 
             });
         }, 0L, 20L);
     }
 
-    //Get spawner dropping material
-    private String getItemType(Spawner s) {
-        for (ItemStack i : s.getDropType().getDroppingMaterials()) {
-            return i.getType().name();
-        }
-        return "";
-    }
-
-    //Format time for placeholder
+    // Format time for placeholder
     public static String[] timeLeft(Arena arena) {
 
         final int timeoutTicks = Math.toIntExact(timeToNextUpdate.get(arena));
@@ -199,14 +180,14 @@ public class GenTiers implements Listener {
         }
     }
 
-    //Format custom holo titles
+    // Format custom holo titles
     private List<String> formatHoloTiles(String tier, Spawner spawner) {
         final String spawnerName = spawner.getDropType().getConfigName();
         final String colorCode = "&" + spawnerName.charAt(1);
         final String strippedSpawnerName = spawnerName.substring(2);
         final List<String> formatted = new ArrayList<>();
 
-        for (String string : spawnerTitleLines) {
+        for (String string : ConfigValue.gen_tiers_spawner_holo_titles) {
             final String formattedString = Message.build(string)
                     .placeholder("{tier}", tier)
                     .placeholder("{spawner-color}", colorCode)

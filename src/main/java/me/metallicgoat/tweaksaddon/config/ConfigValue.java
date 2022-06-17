@@ -3,6 +3,7 @@ package me.metallicgoat.tweaksaddon.config;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.game.spawner.Spawner;
+import me.metallicgoat.tweaksaddon.tweaks.gentiers.GenTierLevel;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -65,10 +66,11 @@ public class ConfigValue {
 
     // Gen Tiers
     public static boolean gen_tiers_enabled = false;
-    public static boolean gen_tiers_custom_enabled = false;
-    public static String gen_tiers_start_tier = "";
+    public static HashMap<Integer, GenTierLevel> gen_tier_levels = new HashMap<>();
+    public static boolean gen_tiers_custom_holo_enabled = false;
     public static List<String> gen_tiers_spawner_holo_titles = new ArrayList<>();
-    public static List<String> gen_tiers_start_spawners = new ArrayList<>();
+    public static List<Spawner> gen_tiers_start_spawners = new ArrayList<>();
+    public static String gen_tiers_start_tier = "";
 
     public static boolean gen_tiers_scoreboard_updating_enabled = false;
     public static int gen_tiers_scoreboard_updating_interval = 5;
