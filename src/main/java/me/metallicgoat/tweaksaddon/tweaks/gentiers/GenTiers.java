@@ -8,7 +8,6 @@ import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.api.game.spawner.SpawnerDurationModifier;
 import de.marcely.bedwars.api.message.Message;
-import me.metallicgoat.tweaksaddon.AA_old.tweaks.spawners.ScheduleBedBreak;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import org.bukkit.Bukkit;
@@ -107,7 +106,7 @@ public class GenTiers implements Listener {
                     if (arena.getStatus() == ArenaStatus.RUNNING) {
                         // Break beds, start next tier
                         scheduleTier(arena, nextTierLevel);
-                        ScheduleBedBreak.breakArenaBeds(arena);
+                        BedBreakTier.breakArenaBeds(arena);
                     }
                 }, currentLevel.getTime() * 20 * 60));
                 break;

@@ -14,10 +14,10 @@ import me.metallicgoat.tweaksaddon.tweaks.mechanics.PreventLiquidBuildUp;
 import me.metallicgoat.tweaksaddon.tweaks.messages.BuyMessage;
 import me.metallicgoat.tweaksaddon.tweaks.messages.FinalKillSuffix;
 import me.metallicgoat.tweaksaddon.tweaks.messages.TeamEliminate;
-import me.metallicgoat.tweaksaddon.AA_old.tweaks.messages.TopKillers;
+import me.metallicgoat.tweaksaddon.tweaks.messages.TopKillerMessage;
 import me.metallicgoat.tweaksaddon.AA_old.tweaks.misc.*;
 import me.metallicgoat.tweaksaddon.tweaks.gentiers.GenTiers;
-import me.metallicgoat.tweaksaddon.AA_old.tweaks.spawners.ScheduleBedBreak;
+import me.metallicgoat.tweaksaddon.tweaks.gentiers.BedBreakTier;
 import me.metallicgoat.tweaksaddon.AA_old.utils.cmd.*;
 import me.metallicgoat.tweaksaddon.AA_old.utils.configupdater.ConfigUpdater;
 import me.metallicgoat.tweaksaddon.tweaks.server.PlayerLimitBypass;
@@ -76,7 +76,7 @@ public class ServerManager {
         manager.registerEvents(new BuyMessage(), plugin);
         manager.registerEvents(new FinalKillSuffix(), plugin);
         manager.registerEvents(new TeamEliminate(), plugin);
-        manager.registerEvents(new TopKillers(), plugin);
+        manager.registerEvents(new TopKillerMessage(), plugin);
 
         //Tweaks - misc
         manager.registerEvents(new ActionBar(), plugin);
@@ -96,7 +96,7 @@ public class ServerManager {
 
         //Tweaks - spawners
         manager.registerEvents(new GenTiers(), plugin);
-        manager.registerEvents(new ScheduleBedBreak(), plugin);
+        manager.registerEvents(new BedBreakTier(), plugin);
         //manager.registerEvents(new UnusedGens(), plugin);
 
         //Advanced Swords
