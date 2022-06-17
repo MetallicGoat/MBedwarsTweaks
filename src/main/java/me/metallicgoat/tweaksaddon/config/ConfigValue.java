@@ -64,6 +64,20 @@ public class ConfigValue {
     public static double disable_empty_generators_range = 6;
     public static List<Spawner> disable_empty_generators_spawners = new ArrayList<>();
 
+    public static boolean top_killer_message_enabled = false;
+    public static List<String> top_killer_pre_lines = new ArrayList<>();
+    public static HashMap<Integer, String> top_killer_lines = new HashMap<>();
+    public static List<String> top_killer_sub_lines = new ArrayList<>();
+    public static boolean no_top_killer_message_enabled = false;
+    public static List<String> no_top_killer_message = new ArrayList<>();
+
+    public static boolean custom_bed_break_message = false;
+    public static List<String> player_break_bed_message = new ArrayList<>();
+    public static boolean auto_destroy_bed_message_enabled = false;
+    public static List<String> auto_destroy_bed_message = new ArrayList<>();
+    public static String bed_destroy_title = "";
+    public static String bed_destroy_subtitle = "";
+
     // Gen Tiers
     public static boolean gen_tiers_enabled = false;
     public static HashMap<Integer, GenTierLevel> gen_tier_levels = new HashMap<>();
