@@ -5,14 +5,17 @@ import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.arena.Team;
+import de.marcely.bedwars.api.exception.ArenaConditionParseException;
 import de.marcely.bedwars.api.message.Message;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import me.metallicgoat.tweaksaddon.tweaks.gentiers.GenTiers;
-import me.metallicgoat.tweaksaddon.AA_old.utils.ServerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
 
 public class Placeholders extends PlaceholderExpansion {
 
@@ -35,142 +38,162 @@ public class Placeholders extends PlaceholderExpansion {
     public String onRequest(OfflinePlayer offlinePlayer, @NotNull String params) {
 
         final Player player1 = Bukkit.getPlayer(offlinePlayer.getUniqueId());
-        final Arena arena = BedwarsAPI.getGameAPI().getSpectatingPlayers().contains(player1) ? BedwarsAPI.getGameAPI().getArenaBySpectator(player1):BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
+        final Arena arena = BedwarsAPI.getGameAPI().getSpectatingPlayers().contains(player1) ? BedwarsAPI.getGameAPI().getArenaBySpectator(player1) : BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
 
-        switch (params.toLowerCase()){
-            case "next-tier":
-                //Gen Tiers With countdown
-                if(ServerManager.getConfig().getBoolean("Gen-Tiers-Enabled")) {
-                    if (arena != null) {
 
-                        switch (arena.getStatus()) {
-                            case LOBBY:
-                                int time = (int) arena.getLobbyTimeRemaining();
-                                if(time > 0){
-                                    //Waiting
-                                    return Message.build(ServerManager.getConfig().getString("Next-Tier-PAPI-Placeholder.Lobby-Starting")).placeholder("time", time).done();
-                                }else{
-                                    //Starting
-                                    return Message.build(ServerManager.getConfig().getString("Next-Tier-PAPI-Placeholder.Lobby-Waiting")).done();
-                                }
-                            case END_LOBBY:
-                                return Message.build(ServerManager.getConfig().getString("Next-Tier-PAPI-Placeholder.End-Lobby")).done();
-                            case STOPPED:
-                                return Message.build(ServerManager.getConfig().getString("Next-Tier-PAPI-Placeholder.Stopped")).done();
-                            case RESETTING:
-                                return Message.build(ServerManager.getConfig().getString("Next-Tier-PAPI-Placeholder.Resetting")).done();
-                            case RUNNING:
-                                String nextTierName = GenTiers.nextTierMap.get(arena);
-                                String[] nextTierTime = GenTiers.timeLeft(arena);
-                                String minutes = nextTierTime[0];
-                                String seconds = nextTierTime[1];
-                                //Old format
-                                String fullTime = minutes + ":" + seconds;
+        switch (params.toLowerCase()) {
+            case "next-tier": {
+                // GenTiers with countdown
+                if (!ConfigValue.gen_tiers_enabled || arena == null)
+                    return "";
 
-                                return Message.build(ServerManager.getConfig().getString("Next-Tier-PAPI-Placeholder.Running"))
-                                        .placeholder("next-tier", nextTierName)
-                                        .placeholder("time", fullTime)
-                                        .placeholder("min", minutes)
-                                        .placeholder("sec", seconds)
-                                        .done();
+                switch (arena.getStatus()) {
+                    case LOBBY:
+                        int time = (int) arena.getLobbyTimeRemaining();
+                        if (time > 0) {
+                            //Waiting
+                            return Message.build(ConfigValue.papi_next_tier_lobby_starting).placeholder("time", time).done();
+                        } else {
+                            //Starting
+                            return Message.build(ConfigValue.papi_next_tier_lobby_waiting).done();
                         }
-                    }
-                }
-                return "---";
-            //Next tier name
-            case "next-tier-name":
-                if(ServerManager.getConfig().getBoolean("Gen-Tiers-Enabled")) {
-                    if (arena != null && arena.getStatus() == ArenaStatus.RUNNING) {
-                        String nextTierName = GenTiers.nextTierMap.get(arena);
-                        return Message.build(nextTierName).done();
-                    }
-                }
-                return "---";
-            //Arena mode placeholder (eg. Solo, Duos)
-            case "arena-mode":
-                if (arena != null) {
-                    int teamsAmount = arena.getEnabledTeams().size();
-                    int playersPerTeam = arena.getPlayersPerTeam();
-                    for(String modeGroup : ServerManager.getConfig().getStringList("PAPI-Mode-Placeholder")){
-                        String[] splitModeGroup = modeGroup.split(":");
-                        try{
-                            int groupTeams = Integer.parseInt(splitModeGroup[0]);
-                            int groupPlayerPerTeam = Integer.parseInt(splitModeGroup[1]);
-                            if(teamsAmount == groupTeams && playersPerTeam == groupPlayerPerTeam){
-                                return splitModeGroup[2];
-                            }
-                        }catch (NumberFormatException ignored){
+                    case END_LOBBY:
+                        return Message.build(ConfigValue.papi_next_tier_lobby_end_lobby).done();
+                    case STOPPED:
+                        return Message.build(ConfigValue.papi_next_tier_lobby_stopped).done();
+                    case RESETTING:
+                        return Message.build(ConfigValue.papi_next_tier_lobby_resetting).done();
+                    case RUNNING:
+                        final String nextTierName = GenTiers.nextTierMap.get(arena);
+                        final String[] nextTierTime = GenTiers.timeLeft(arena);
+                        final String minutes = nextTierTime[0];
+                        final String seconds = nextTierTime[1];
+                        //Old format
+                        final String fullTime = minutes + ":" + seconds;
 
+                        return Message.build(ConfigValue.papi_next_tier_lobby_running)
+                                .placeholder("next-tier", nextTierName)
+                                .placeholder("time", fullTime)
+                                .placeholder("min", minutes)
+                                .placeholder("sec", seconds)
+                                .done();
+                }
+
+
+                return "";
+            }
+            // Next tier name
+            case "next-tier-name": {
+                if (!ConfigValue.gen_tiers_enabled)
+                    return "";
+
+                if (arena != null && arena.getStatus() == ArenaStatus.RUNNING) {
+                    final String nextTierName = GenTiers.nextTierMap.get(arena);
+                    return Message.build(nextTierName).done();
+                }
+
+                return "";
+            }
+
+            // Arena mode placeholder (eg. Solo, Duos)
+            case "arena-mode": {
+                if (arena == null)
+                    return "";
+
+                for (Map.Entry<String, String> entries : ConfigValue.papi_arena_mode.entrySet()) {
+                    try {
+                        if (GameAPI.get().getArenasByPickerCondition(entries.getKey()).contains(arena)) {
+                            return Message.build(entries.getValue()).done();
                         }
-                    }
-                }
-                return "---";
+                    } catch (ArenaConditionParseException ignored) {
 
-            //Amount of players currently on team
-            case "player-team-current-size":
-                if(arena != null){
-                    Team team = arena.getPlayerTeam(player1);
-                    if(team != null){
-                        return Integer.toString(arena.getPlayersInTeam(team).size());
                     }
                 }
 
-                //Status of current team
-            case "player-team-status":
-                if(arena != null){
-                    Team team = arena.getPlayerTeam(player1);
-                    if(team != null){
-                        if(arena.isBedDestroyed(team)){
-                            return "Bed-Destroyed";
-                        }else{
-                            return "Active";
-                        }
-                    }
-                }
+                return "";
+            }
 
-                //Player count placeholders
-            case "allplayers": return getPlayerAmount();
-            case "players-ingame": return getPlayerAmount(ArenaStatus.RUNNING);
-            case "players-lobby": return getPlayerAmount(ArenaStatus.LOBBY);
-            case "players-endlobby": return getPlayerAmount(ArenaStatus.END_LOBBY);
+            // Amount of players currently on team
+            case "player-team-current-size": {
+                if (arena == null)
+                    return "";
+
+                final Team team = arena.getPlayerTeam(player1);
+
+                if (team == null)
+                    return "";
+
+                return Integer.toString(arena.getPlayersInTeam(team).size());
+            }
+
+
+            // Status of current team
+            case "player-team-status": {
+                if (arena == null)
+                    return "";
+
+                final Team team = arena.getPlayerTeam(player1);
+
+                if (team == null)
+                    return "";
+
+                if (arena.isBedDestroyed(team))
+                    return "Bed-Destroyed";
+                else
+                    return "Active";
+
+            }
+
+            // Player count placeholders
+            case "all-players":
+                return getPlayerAmount();
+            case "players-ingame":
+                return getPlayerAmount(ArenaStatus.RUNNING);
+            case "players-lobby":
+                return getPlayerAmount(ArenaStatus.LOBBY);
+            case "players-endlobby":
+                return getPlayerAmount(ArenaStatus.END_LOBBY);
         }
-        //Team status placeholder, to be used on scoreboard
-        if(params.toLowerCase().startsWith("team-status-")){
-            String output;
-            String teamName = params.replace("team-status-", "");
 
-            if(arena != null && (arena.getStatus() == ArenaStatus.RUNNING || arena.getStatus() == ArenaStatus.END_LOBBY)){
-                Team playerTeam = arena.getPlayerTeam(player1);
-                Team scoreTeam = Team.getByName(teamName);
+        // TODO Build into core MBedwars {Heart} placeholder
+        // Team status placeholder, to be used on scoreboard
+        if (params.toLowerCase().startsWith("team-status-")) {
 
-                if(scoreTeam == null)
+            if (arena != null && (arena.getStatus() == ArenaStatus.RUNNING || arena.getStatus() == ArenaStatus.END_LOBBY)) {
+
+                String output;
+                final String teamName = params.replace("team-status-", "");
+                final Team playerTeam = arena.getPlayerTeam(player1);
+                final Team scoreTeam = Team.getByName(teamName);
+
+                if (scoreTeam == null)
                     return null;
 
-                int playerAmount = arena.getPlayersInTeam(scoreTeam).size();
+                final int playerAmount = arena.getPlayersInTeam(scoreTeam).size();
 
-                if(!arena.isBedDestroyed(scoreTeam)){
-                    output = ServerManager.getConfig().getString("Team-Status-Placeholder.Has-Bed");
-                }else if(arena.getPlayersInTeam(scoreTeam).isEmpty()){
-                    output = ServerManager.getConfig().getString("Team-Status-Placeholder.Team-Dead");
-                }else{
-                    output = ServerManager.getConfig().getString("Team-Status-Placeholder.No-Bed");
-                }
+                if (!arena.isBedDestroyed(scoreTeam))
+                    output = ConfigValue.papi_team_status_has_bed;
+                else if (arena.getPlayersInTeam(scoreTeam).isEmpty())
+                    output = ConfigValue.papi_team_status_team_dead;
+                else
+                    output = ConfigValue.papi_team_status_no_bed;
 
-                if(playerTeam != null && scoreTeam == playerTeam){
-                    output += ServerManager.getConfig().getString("Team-Status-Placeholder.Your-Team");
-                }
-                return Message.build(output).placeholder("offlinePlayer-amount", playerAmount).done();
+                if (playerTeam != null && scoreTeam == playerTeam)
+                    output += ConfigValue.papi_team_status_your_team_suffix;
+
+                return Message.build(output).placeholder("player-amount", playerAmount).done();
             }
         }
-        if(params.toLowerCase().startsWith("team-you-")){
-            String teamName = params.replace("team-you-", "");
 
-            if(arena != null && (arena.getStatus() == ArenaStatus.RUNNING || arena.getStatus() == ArenaStatus.END_LOBBY)) {
+        if (params.toLowerCase().startsWith("team-you-")) {
+            final String teamName = params.replace("team-you-", "");
+
+            if (arena != null && (arena.getStatus() == ArenaStatus.RUNNING || arena.getStatus() == ArenaStatus.END_LOBBY)) {
                 final Team playerTeam = arena.getPlayerTeam(player1);
                 final Team placeholderTeam = Team.getByName(teamName);
 
-                if(placeholderTeam != null && playerTeam == placeholderTeam){
-                    return Message.build(ServerManager.getConfig().getString("Team-You-Placeholder")).done();
+                if (placeholderTeam != null && playerTeam == placeholderTeam) {
+                    return Message.build(ConfigValue.papi_team_you_placeholder).done();
                 }
             }
             return "";
@@ -181,10 +204,10 @@ public class Placeholders extends PlaceholderExpansion {
     private String getPlayerAmount(ArenaStatus status) {
         int count = 0;
 
-        //Iterate through every arena and check arena status
+        // Iterate through every arena and check arena status
         for (Arena arena : GameAPI.get().getArenas()) {
-            if(arena.getStatus() == status) {
-                count += (ServerManager.getConfig().getBoolean("Player-Count-Placeholder-Count-Spectators") ? arena.getPlayers().size() + arena.getSpectators().size() : arena.getPlayers().size());
+            if (arena.getStatus() == status) {
+                count += (ConfigValue.papi_count_spectators_as_players ? arena.getPlayers().size() + arena.getSpectators().size() : arena.getPlayers().size());
             }
         }
 
@@ -194,9 +217,9 @@ public class Placeholders extends PlaceholderExpansion {
     private String getPlayerAmount() {
         int count = 0;
 
-        //Iterate through every arena
+        // Iterate through every arena
         for (Arena arena : GameAPI.get().getArenas()) {
-            count += (ServerManager.getConfig().getBoolean("Player-Count-Placeholder-Count-Spectators") ? arena.getPlayers().size() + arena.getSpectators().size() : arena.getPlayers().size());
+            count += (ConfigValue.papi_count_spectators_as_players ? arena.getPlayers().size() + arena.getSpectators().size() : arena.getPlayers().size());
         }
 
         return Integer.toString(count);

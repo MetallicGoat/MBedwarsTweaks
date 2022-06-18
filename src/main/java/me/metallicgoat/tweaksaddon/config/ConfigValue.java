@@ -121,4 +121,23 @@ public class ConfigValue {
 
     public static List<Material> anti_chest_materials = new ArrayList<>();
 
+    // PAPI
+    public static String papi_next_tier_lobby_starting = "";
+    public static String papi_next_tier_lobby_waiting = "";
+    public static String papi_next_tier_lobby_end_lobby = "";
+    public static String papi_next_tier_lobby_stopped = "";
+    public static String papi_next_tier_lobby_resetting = "";
+    public static String papi_next_tier_lobby_running = "";
+
+    public static String papi_team_status_has_bed = "";
+    public static String papi_team_status_team_dead = "";
+    public static String papi_team_status_no_bed = "";
+    public static String papi_team_status_your_team_suffix = "";
+
+    public static boolean papi_count_spectators_as_players = false;
+
+    public static String papi_team_you_placeholder = ""; // for tab or smth? (Was a request)
+
+    // Condition + Mode Name
+    public static HashMap<String, String> papi_arena_mode = new HashMap<>();
 }
