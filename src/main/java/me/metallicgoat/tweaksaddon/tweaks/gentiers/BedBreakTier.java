@@ -36,11 +36,13 @@ public class BedBreakTier implements Listener {
     public static void sendBedBreakMessage(Arena arena, Team team, Player destroyer){
 
         // Send title to victim team
-        for(Player p : arena.getPlayersInTeam(team)){
-            BedwarsAPI.getNMSHelper().showTitle(p,
-                    ChatColor.translateAlternateColorCodes('&', ConfigValue.bed_destroy_title),
-                    ChatColor.translateAlternateColorCodes('&', ConfigValue.bed_destroy_subtitle),
-                    60, 15, 15);
+        if(ConfigValue.bed_break_title_enabled) {
+            for (Player p : arena.getPlayersInTeam(team)) {
+                BedwarsAPI.getNMSHelper().showTitle(p,
+                        Message.build(ConfigValue.bed_destroy_title).done(),
+                        Message.build(ConfigValue.bed_destroy_subtitle).done(),
+                        60, 15, 15);
+            }
         }
 
         // Send public message

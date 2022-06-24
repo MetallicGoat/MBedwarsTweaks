@@ -3,6 +3,7 @@ package me.metallicgoat.tweaksaddon.tweaks.gameplay;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.event.player.PlayerIngameRespawnEvent;
+import me.metallicgoat.tweaksaddon.Util;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,13 +11,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 public class PermanentEffects implements Listener {
 
     @EventHandler
     public void onRoundStart(RoundStartEvent event){
         final Arena arena = event.getArena();
-        final Collection<PotionEffect> effects = ConfigValue.permanent_effects_arenas.get(arena);
+        final Collection<PotionEffect> effects = getArenaEffects(arena);
 
         if(!ConfigValue.permanent_effects_enabled || effects.isEmpty())
             return;
@@ -28,7 +31,7 @@ public class PermanentEffects implements Listener {
     @EventHandler
     public void onRespawn(PlayerIngameRespawnEvent event){
         final Arena arena = event.getArena();
-        final Collection<PotionEffect> effects = ConfigValue.permanent_effects_arenas.get(arena);
+        final Collection<PotionEffect> effects = getArenaEffects(arena);
 
 
         if(!ConfigValue.permanent_effects_enabled || effects.isEmpty())
@@ -37,6 +40,17 @@ public class PermanentEffects implements Listener {
         final Player player = event.getPlayer();
 
         player.addPotionEffects(effects);
+    }
+
+    public Collection<PotionEffect> getArenaEffects(Arena arena){
+        for(Map.Entry<String, Collection<PotionEffect>> entry : ConfigValue.permanent_effects_arenas.entrySet()){
+            final Collection<Arena> arenas = Util.parseArenas(entry.getKey());
+
+            if(arenas.contains(arena))
+                return entry.getValue();
+
+        }
+        return Collections.emptyList();
     }
 
 

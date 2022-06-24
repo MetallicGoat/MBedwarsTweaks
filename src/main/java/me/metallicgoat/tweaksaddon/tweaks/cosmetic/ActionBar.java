@@ -21,7 +21,7 @@ public class ActionBar implements Listener {
 
     @EventHandler
     public void onGameStart(PlayerJoinArenaEvent e) {
-        final boolean enabled = (ConfigValue.custom_action_bar_in_game || ConfigValue.custom_action_bar_lobby);
+        final boolean enabled = (ConfigValue.custom_action_bar_in_game || ConfigValue.custom_action_bar_in_lobby);
 
         if (!enabled || actionBarTask != null)
             return;
@@ -32,7 +32,7 @@ public class ActionBar implements Listener {
 
     @EventHandler
     public void onGameStop(RoundEndEvent event) {
-        final boolean enabled = (ConfigValue.custom_action_bar_in_game || ConfigValue.custom_action_bar_lobby);
+        final boolean enabled = (ConfigValue.custom_action_bar_in_game || ConfigValue.custom_action_bar_in_lobby);
 
         if (!enabled)
             return;
@@ -56,7 +56,7 @@ public class ActionBar implements Listener {
         return Bukkit.getServer().getScheduler().runTaskTimer(MBedwarsTweaksPlugin.getInstance(), () -> {
             for (Arena arena : BedwarsAPI.getGameAPI().getArenas()) {
                 if ((arena.getStatus() == ArenaStatus.RUNNING && ConfigValue.custom_action_bar_in_game) ||
-                        (arena.getStatus() == ArenaStatus.LOBBY && ConfigValue.custom_action_bar_lobby)) {
+                        (arena.getStatus() == ArenaStatus.LOBBY && ConfigValue.custom_action_bar_in_lobby)) {
 
                     for (Player player : arena.getPlayers()) {
                         BedwarsAPI.getNMSHelper().showActionbar(player, PlaceholderAPI.setPlaceholders(player, ConfigValue.custom_action_bar_message));

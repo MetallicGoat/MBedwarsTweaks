@@ -13,15 +13,15 @@ import java.util.List;
 public class FireballBlockBreakWhitelist implements Listener {
 
     @EventHandler
-    public void onEntityExplode(EntityExplodeEvent e) {
-        if (!ConfigValue.fireball_whitelist_enabled || e.isCancelled() || e.getEntityType() != EntityType.FIREBALL)
+    public void onEntityExplode(EntityExplodeEvent event) {
+        if (!ConfigValue.fireball_whitelist_enabled || event.isCancelled() || event.getEntityType() != EntityType.FIREBALL)
             return;
 
-        final List<Block> blockListCopy = new ArrayList<>(e.blockList());
+        final List<Block> blockListCopy = new ArrayList<>(event.blockList());
 
         for (Block block : blockListCopy) {
             if (ConfigValue.fireball_whitelist_blocks.contains(block.getType()))
-                e.blockList().remove(block);
+                event.blockList().remove(block);
         }
     }
 }

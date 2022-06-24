@@ -22,7 +22,7 @@ public class ConfigValue {
     public static boolean remove_empty_buckets = false;
     public static boolean remove_empty_potions = false;
 
-    public static boolean custom_action_bar_lobby = false;
+    public static boolean custom_action_bar_in_lobby = false;
     public static boolean custom_action_bar_in_game = false;
     public static String custom_action_bar_message = "Tweaks Action-Bar";
 
@@ -39,7 +39,7 @@ public class ConfigValue {
     public static HashMap<Team, ChatColor> custom_team_colors = new HashMap<>();
 
     public static boolean permanent_effects_enabled = false;
-    public static HashMap<Arena, Collection<PotionEffect>> permanent_effects_arenas = new HashMap<>();
+    public static HashMap<String, Collection<PotionEffect>> permanent_effects_arenas = new HashMap<>();
 
     public static boolean lock_team_chest_enabled = false;
     public static double lock_team_chest_range = 8;
@@ -58,7 +58,7 @@ public class ConfigValue {
     public static String buy_message = "&aYou Purchased &6{product} x{amount}";
 
     public static boolean remove_invis_ondamage_enabled = false;
-    public static List<EntityDamageEvent.DamageCause> remove_invis_remove_causes = new ArrayList<>();
+    public static List<EntityDamageEvent.DamageCause> remove_invis_damge_causes = new ArrayList<>();
 
     public static boolean disable_empty_generators = false;
     public static double disable_empty_generators_range = 6;
@@ -75,8 +75,13 @@ public class ConfigValue {
     public static List<String> player_break_bed_message = new ArrayList<>();
     public static boolean auto_destroy_bed_message_enabled = false;
     public static List<String> auto_destroy_bed_message = new ArrayList<>();
+    public static boolean bed_break_title_enabled = false;
     public static String bed_destroy_title = "";
     public static String bed_destroy_subtitle = "";
+
+    public static boolean custom_height_cap = false;
+    public static HashMap<String, Integer> custom_height_cap_arenas = new HashMap<>();
+    public static String custom_height_cap_warn = "";
 
     // Gen Tiers
     public static boolean gen_tiers_enabled = false;

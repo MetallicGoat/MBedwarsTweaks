@@ -39,7 +39,7 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
 
         ToolSwordHelper.load();
         // Load Config
-        // Register Events
+        MBedwarsTweaksAddon.registerEvents();
 
 
         PluginDescriptionFile pdf = this.getDescription();
