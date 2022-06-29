@@ -18,15 +18,15 @@ public class BedBreakTier implements Listener {
         for (Team team : arena.getEnabledTeams()) {
             final XYZD bedLoc = arena.getBedLocation(team);
             if (!arena.isBedDestroyed(team) && bedLoc != null) {
-                arena.destroyBedNaturally(team, "Auto-Break", !ConfigValue.custom_bed_break_message);
+                arena.destroyBedNaturally(team, "Auto-Break", !ConfigValue.custom_bed_break_message_enabled);
                 bedLoc.toLocation(arena.getGameWorld()).getBlock().setType(Material.AIR);
-                if(ConfigValue.custom_bed_break_message)
+                if(ConfigValue.custom_bed_break_message_enabled)
                     sendBedBreakMessage(arena, team, null);
             }
         }
         // Broadcast Message
-        if(ConfigValue.auto_destroy_bed_message_enabled) {
-            for (String s : ConfigValue.auto_destroy_bed_message) {
+        if(ConfigValue.auto_bed_break_message_enabled) {
+            for (String s : ConfigValue.auto_bed_break_message) {
                 arena.broadcast(Message.build(s).done());
             }
         }
@@ -36,7 +36,7 @@ public class BedBreakTier implements Listener {
     public static void sendBedBreakMessage(Arena arena, Team team, Player destroyer){
 
         // Send title to victim team
-        if(ConfigValue.bed_break_title_enabled) {
+        if(ConfigValue.bed_destroy_title_enabled) {
             for (Player p : arena.getPlayersInTeam(team)) {
                 BedwarsAPI.getNMSHelper().showTitle(p,
                         Message.build(ConfigValue.bed_destroy_title).done(),
@@ -50,7 +50,7 @@ public class BedBreakTier implements Listener {
             return;
 
         // Send public message
-        for (String message : ConfigValue.player_break_bed_message) {
+        for (String message : ConfigValue.custom_bed_break_message) {
             final String teamName = team.getDisplayName();
             final String playerName = BedwarsAPI.getHelper().getPlayerDisplayName(destroyer);
             final String destroyerColor = arena.getPlayerTeam(destroyer) != null ? "&" + arena.getPlayerTeam(destroyer).getChatColor().getChar() : "";

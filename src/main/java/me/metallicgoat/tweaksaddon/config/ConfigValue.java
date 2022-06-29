@@ -1,8 +1,7 @@
 package me.metallicgoat.tweaksaddon.config;
 
-import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
-import de.marcely.bedwars.api.game.spawner.Spawner;
+import de.marcely.bedwars.api.game.spawner.DropType;
 import me.metallicgoat.tweaksaddon.tweaks.gentiers.GenTierLevel;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -62,7 +61,7 @@ public class ConfigValue {
 
     public static boolean disable_empty_generators = false;
     public static double disable_empty_generators_range = 6;
-    public static List<Spawner> disable_empty_generators_spawners = new ArrayList<>();
+    public static List<DropType> disable_empty_generators_spawners = new ArrayList<>();
 
     public static boolean top_killer_message_enabled = false;
     public static List<String> top_killer_pre_lines = new ArrayList<>();
@@ -71,11 +70,11 @@ public class ConfigValue {
     public static boolean no_top_killer_message_enabled = false;
     public static List<String> no_top_killer_message = new ArrayList<>();
 
-    public static boolean custom_bed_break_message = false;
-    public static List<String> player_break_bed_message = new ArrayList<>();
-    public static boolean auto_destroy_bed_message_enabled = false;
-    public static List<String> auto_destroy_bed_message = new ArrayList<>();
-    public static boolean bed_break_title_enabled = false;
+    public static boolean custom_bed_break_message_enabled = false;
+    public static List<String> custom_bed_break_message = new ArrayList<>();
+    public static boolean auto_bed_break_message_enabled = false;
+    public static List<String> auto_bed_break_message = new ArrayList<>();
+    public static boolean bed_destroy_title_enabled = false;
     public static String bed_destroy_title = "";
     public static String bed_destroy_subtitle = "";
 
@@ -88,7 +87,7 @@ public class ConfigValue {
     public static HashMap<Integer, GenTierLevel> gen_tier_levels = new HashMap<>();
     public static boolean gen_tiers_custom_holo_enabled = false;
     public static List<String> gen_tiers_spawner_holo_titles = new ArrayList<>();
-    public static List<Spawner> gen_tiers_start_spawners = new ArrayList<>();
+    public static List<DropType> gen_tiers_start_spawners = new ArrayList<>();
     public static String gen_tiers_start_tier = "";
 
     public static boolean gen_tiers_scoreboard_updating_enabled = false;

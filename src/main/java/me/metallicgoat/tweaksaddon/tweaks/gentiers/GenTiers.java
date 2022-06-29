@@ -43,7 +43,7 @@ public class GenTiers implements Listener {
         if (ConfigValue.gen_tiers_custom_holo_enabled) {
             // Add custom Holo titles
             for (Spawner spawner : arena.getSpawners()) {
-                if(ConfigValue.gen_tiers_start_spawners.contains(spawner))
+                if(ConfigValue.gen_tiers_start_spawners.contains(spawner.getDropType()))
                     spawner.setOverridingHologramLines(formatHoloTiles(ConfigValue.gen_tiers_start_tier, spawner).toArray(new String[0]));
             }
         }

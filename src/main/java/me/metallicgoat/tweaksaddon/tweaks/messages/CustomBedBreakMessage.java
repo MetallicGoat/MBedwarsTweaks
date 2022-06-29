@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 public class CustomBedBreakMessage implements Listener {
     @EventHandler
     public void onBedBreak(ArenaBedBreakEvent event){
-        if(!ConfigValue.custom_bed_break_message)
+        if(!ConfigValue.custom_bed_break_message_enabled)
             return;
 
         event.setBroadcasted(false);
