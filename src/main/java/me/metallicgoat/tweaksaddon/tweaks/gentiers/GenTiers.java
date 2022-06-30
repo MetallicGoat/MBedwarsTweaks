@@ -11,7 +11,6 @@ import de.marcely.bedwars.api.message.Message;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitTask;
@@ -19,8 +18,6 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.*;
 
 public class GenTiers implements Listener {
-
-    public static ConfigurationSection section;
 
     public static HashMap<Arena, String> nextTierMap = new HashMap<>();
     public static HashMap<Arena, Long> timeToNextUpdate = new HashMap<>();
@@ -97,11 +94,12 @@ public class GenTiers implements Listener {
             task.cancel();
 
         switch (currentLevel.getAction()) {
-            case GAME_OVER:
+            case GAME_OVER: {
                 arena.setIngameTimeRemaining((int) (currentLevel.getTime() * 60));
                 break;
+            }
 
-            case BED_DESTROY:
+            case BED_DESTROY: {
                 tasksToKill.put(arena, Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
                     if (arena.getStatus() == ArenaStatus.RUNNING) {
                         // Break beds, start next tier
@@ -110,8 +108,9 @@ public class GenTiers implements Listener {
                     }
                 }, currentLevel.getTime() * 20 * 60));
                 break;
+            }
 
-            case GEN_UPGRADE:
+            case GEN_UPGRADE: {
                 tasksToKill.put(arena, Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
                     if (arena.getStatus() == ArenaStatus.RUNNING) {
 
@@ -120,7 +119,7 @@ public class GenTiers implements Listener {
 
                         // For all spawners
                         for (Spawner s : arena.getSpawners()) {
-                            if(s.getDropType() == currentLevel.getType()){
+                            if (s.getDropType() == currentLevel.getType()) {
                                 // Set drop time
                                 s.addDropDurationModifier("GEN_UPGRADE", MBedwarsTweaksPlugin.getInstance(), SpawnerDurationModifier.Operation.SET, currentLevel.getSpeed());
                                 // Add custom Holo tiles
@@ -134,6 +133,7 @@ public class GenTiers implements Listener {
                     }
                 }, currentLevel.getTime() * 20 * 60));
                 break;
+            }
         }
     }
 

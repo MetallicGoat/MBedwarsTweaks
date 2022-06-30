@@ -1,4 +1,4 @@
-package me.metallicgoat.tweaksaddon.AA_old.tweaks.misc;
+package me.metallicgoat.tweaksaddon.tweaks.cosmetic;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
@@ -7,7 +7,6 @@ import de.marcely.bedwars.api.world.WorldStorage;
 import de.marcely.bedwars.api.world.hologram.HologramControllerType;
 import de.marcely.bedwars.api.world.hologram.HologramEntity;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
-import me.metallicgoat.tweaksaddon.AA_old.utils.ServerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -19,6 +18,10 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.*;
 
 public class FriendlyVillagers implements Listener {
+
+    // TODO this shit
+
+    /*
 
     private final MBedwarsTweaksPlugin plugin = MBedwarsTweaksPlugin.getInstance();
     private BukkitTask task;
@@ -105,4 +108,6 @@ public class FriendlyVillagers implements Listener {
             }
         }), 0L, 4);
     }
+
+     */
 }

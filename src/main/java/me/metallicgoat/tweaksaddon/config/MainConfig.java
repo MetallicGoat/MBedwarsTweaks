@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Config {
+public class MainConfig {
 
     private static final byte VERSION = 1;
 
@@ -28,21 +28,21 @@ public class Config {
         return new File(MBedwarsTweaksPlugin.getAddon().getDataFolder(), "configs.yml");
     }
 
-    public static void load(MBedwarsTweaksPlugin plugin){
-        synchronized(Config.class){
+    public static void load(){
+        synchronized(MainConfig.class){
             try{
-                loadUnchecked(plugin);
+                loadUnchecked();
             }catch(Exception e){
                 e.printStackTrace();
             }
         }
     }
 
-    public static void loadUnchecked(MBedwarsTweaksPlugin plugin) throws Exception {
+    public static void loadUnchecked() throws Exception {
         final File file = getFile();
 
         if(!file.exists()){
-            save(plugin);
+            save();
             return;
         }
 
@@ -211,34 +211,7 @@ public class Config {
         }
 
         ConfigValue.permanent_effects_enabled = config.getBoolean("Permanent-Effects.Enabled", false);
-        {
-            for(String string : config.getStringList("Permanent-Effects.Effects")){
-
-                if(!string.contains(":"))
-                    continue;
-
-                final String[] strings = string.split(":");
-
-                final String arenaId = strings[0];
-                final String effectName = strings[1];
-                Integer amplifier = Helper.get().parseInt(strings[2]);
-
-                if(effectName == null || arenaId == null)
-                    continue;
-
-                if(amplifier == null)
-                    amplifier = 7;
-
-                final PotionEffectType type = PotionEffectType.getByName(effectName);
-
-                if(type == null)
-                    continue;
-
-                final PotionEffect effect = new PotionEffect(type, Integer.MAX_VALUE, amplifier);
-
-                ConfigValue.permanent_effects_arenas.put(arenaId, effect);
-            }
-        }
+        loadPermanentEffects(config, "Permanent-Effects.Effects");
 
         ConfigValue.sponge_particles_enabled = config.getBoolean("Sponge-Particles", true);
 
@@ -254,18 +227,18 @@ public class Config {
 
             if(currentVersion == -1) {
                 updateV1Configs(config);
-                save(plugin);
+                save();
                 return;
             }
 
             if(currentVersion != VERSION) {
                 updateV2Configs(config);
-                save(plugin);
+                save();
             }
         }
     }
 
-    private static void save(MBedwarsTweaksPlugin plugin) throws Exception {
+    private static void save() throws Exception {
         final YamlConfigurationDescriptor config = new YamlConfigurationDescriptor();
 
         config.addComment("Used for auto-updating the config file. Ignore it");
@@ -367,7 +340,6 @@ public class Config {
 
         config.addEmptyLine();
 
-        // TODO UPDATE
         config.addComment("Displayed if Top-Killer-Message IS enabled, but there are no top killers");
         config.set("No-Top-Killer-Message.Enabled", ConfigValue.no_top_killer_message_enabled);
         config.set("No-Top-Killer-Message.Message", ConfigValue.no_top_killer_message);
@@ -423,7 +395,6 @@ public class Config {
 
         config.addEmptyLine();
 
-        // TODO UPDATE
         config.addComment("If set to true, the scoreboard will be force updated to refresh PAPI placeholders");
         config.addComment("Scoreboard will update every X amount of seconds");
         config.addComment("We recommended keeping at 5 or 10 seconds to reduce flicker");
@@ -467,7 +438,6 @@ public class Config {
 
         config.addEmptyLine();
 
-        // TODO UPDATE
         config.addComment("Prevents player from opening a bases' chest if bases team is still alive");
         config.set("Lock-Team-Chest.Enabled", ConfigValue.lock_team_chest_enabled);
         config.set("Lock-Team-Chest.Range", ConfigValue.lock_team_chest_range);
@@ -475,7 +445,6 @@ public class Config {
 
         config.addEmptyLine();
 
-        // TODO UPDATE
         config.addComment("Personal Ender Chests. Overrides MBedwars Team Ender Chests");
         config.set("Personal-Ender-Chests.Enabled", ConfigValue.personal_ender_chests_enabled);
         config.set("Personal-Ender-Chests.Title", ConfigValue.personal_ender_chests_name);
@@ -515,7 +484,6 @@ public class Config {
 
         config.addEmptyLine();
 
-        // TODO UPDATE
         config.addComment("Permanent effects players have while playing");
         config.addComment("ArenaName:PotionEffectName:amplifier");
         config.addComment("Supports arena conditions");
@@ -574,13 +542,16 @@ public class Config {
         // TODO defaults
         config.set("Height-Cap.Arenas", new ArrayList<String>());
 
-    }
-
-    public static void updateV2Configs(FileConfiguration config){
+        config.save(getFile());
 
     }
 
-    public static void updateV1Configs(FileConfiguration config){
+    // Use when the name of a config changes or something
+    public static void updateV2Configs(FileConfiguration config) {
+        // No updates yet :)
+    }
+
+    public static void updateV1Configs(FileConfiguration config) {
         ConfigValue.custom_action_bar_in_game = config.getBoolean("Action-Bar-Enabled-In-Game", false);
         ConfigValue.custom_action_bar_in_lobby = config.getBoolean("Action-Bar-Enabled-In-Lobby", false);
         ConfigValue.custom_action_bar_message = config.getString("Action-Bar-Message", ConfigValue.custom_action_bar_message);
@@ -595,5 +566,49 @@ public class Config {
 
         ConfigValue.team_eliminate_message_enabled = config.getBoolean("Team-Eliminate-Message-Enabled", true);
         ConfigValue.team_eliminate_message = config.getStringList("Team-Eliminate-Message");
+
+        ConfigValue.no_top_killer_message = config.getStringList("No-Top-Killers-Message");
+
+        ConfigValue.gen_tiers_scoreboard_updating_enabled = config.getBoolean("Scoreboard-Updating");
+        ConfigValue.gen_tiers_scoreboard_updating_interval = config.getInt("Scoreboard-Updating-Interval", 5);
+
+        ConfigValue.lock_team_chest_enabled = config.getBoolean("Lock-Team-Chest", false);
+        ConfigValue.lock_team_chest_range = config.getDouble("Team-Chest-Distance", 8);
+        ConfigValue.lock_team_chest_fail_open = config.getString("Prevent-Chest-Open-Message", ConfigValue.lock_team_chest_fail_open);
+
+        ConfigValue.personal_ender_chests_enabled = config.getBoolean("Personal-Ender-Chests");
+
+        loadPermanentEffects(config, "Permanent-Effects");
+
+
+    }
+
+    public static void loadPermanentEffects(FileConfiguration config, String path){
+        for(String string : config.getStringList(path)){
+
+            if(!string.contains(":"))
+                continue;
+
+            final String[] strings = string.split(":");
+
+            final String arenaId = strings[0];
+            final String effectName = strings[1];
+            Integer amplifier = Helper.get().parseInt(strings[2]);
+
+            if(effectName == null || arenaId == null)
+                continue;
+
+            if(amplifier == null)
+                amplifier = 7;
+
+            final PotionEffectType type = PotionEffectType.getByName(effectName);
+
+            if(type == null)
+                continue;
+
+            final PotionEffect effect = new PotionEffect(type, Integer.MAX_VALUE, amplifier);
+
+            ConfigValue.permanent_effects_arenas.put(arenaId, effect);
+        }
     }
 }

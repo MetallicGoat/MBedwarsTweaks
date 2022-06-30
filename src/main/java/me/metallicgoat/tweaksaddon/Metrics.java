@@ -12,7 +12,7 @@
  *
  * Violations will result in a ban of your plugin and account from bStats.
  */
-package me.metallicgoat.tweaksaddon.AA_old.utils;
+package me.metallicgoat.tweaksaddon;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -58,7 +58,7 @@ public class Metrics {
      *
      * @param plugin Your plugin instance.
      * @param serviceId The id of the service. It can be found at <a
-     *     href="https://bstats.org/what-is-my-plugin-id">What is my plugin id?</a>
+     *     href="https://bstats.org/what-is-my-plugin-id">What is my plugin id?a>
      */
     public Metrics(JavaPlugin plugin, int serviceId) {
         this.plugin = plugin;
@@ -142,7 +142,7 @@ public class Metrics {
             // org.bukkit.Bukkit.getOnlinePlayers()Ljava/util/Collection;
             Method onlinePlayersMethod = Class.forName("org.bukkit.Server").getMethod("getOnlinePlayers");
             return onlinePlayersMethod.getReturnType().equals(Collection.class)
-                    ? ((Collection<?>) onlinePlayersMethod.invoke(Bukkit.getServer())).size()
+                    ? ((Collection) onlinePlayersMethod.invoke(Bukkit.getServer())).size()
                     : ((Player[]) onlinePlayersMethod.invoke(Bukkit.getServer())).length;
         } catch (Exception e) {
             // Just use the new method if the reflection failed

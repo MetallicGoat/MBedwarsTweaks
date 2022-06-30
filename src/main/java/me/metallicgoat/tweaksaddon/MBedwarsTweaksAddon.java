@@ -7,9 +7,11 @@ import me.metallicgoat.tweaksaddon.tweaks.gameplay.*;
 import me.metallicgoat.tweaksaddon.tweaks.gentiers.*;
 import me.metallicgoat.tweaksaddon.tweaks.mechanics.*;
 import me.metallicgoat.tweaksaddon.tweaks.messages.*;
+import me.metallicgoat.tweaksaddon.tweaks.server.*;
 import org.bukkit.plugin.PluginManager;
 
 public class MBedwarsTweaksAddon extends BedwarsAddon {
+
     private final MBedwarsTweaksPlugin plugin;
 
     public MBedwarsTweaksAddon(MBedwarsTweaksPlugin plugin) {
@@ -43,6 +45,7 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
         manager.registerEvents(new ActionBar(), plugin);
         manager.registerEvents(new CustomTeamColors(), plugin);
         manager.registerEvents(new FinalStrike(), plugin);
+        manager.registerEvents(new FriendlyVillagers(), plugin);
         manager.registerEvents(new SpongeParticles(), plugin);
 
         // Gameplay
@@ -69,6 +72,9 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
         manager.registerEvents(new FinalKillSuffix(), plugin);
         manager.registerEvents(new TeamEliminate(), plugin);
         manager.registerEvents(new TopKillerMessage(), plugin);
+
+        // Server
+        manager.registerEvents(new PlayerLimitBypass(), plugin);
 
     }
 }

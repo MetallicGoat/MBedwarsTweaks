@@ -1,19 +1,14 @@
 package me.metallicgoat.tweaksaddon.tweaks.advancedswords;
 
 import de.marcely.bedwars.api.BedwarsAPI;
-import me.metallicgoat.tweaksaddon.AA_old.utils.ServerManager;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
-import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.List;
 
 public class AntiChest implements Listener {
 

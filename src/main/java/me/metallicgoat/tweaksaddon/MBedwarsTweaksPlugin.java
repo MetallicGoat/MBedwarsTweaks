@@ -1,20 +1,11 @@
 package me.metallicgoat.tweaksaddon;
 
 import de.marcely.bedwars.api.BedwarsAPI;
-import de.marcely.bedwars.tools.Helper;
-import me.metallicgoat.tweaksaddon.tweaks.gentiers.GenTiers;
-import me.metallicgoat.tweaksaddon.AA_old.utils.Metrics;
-import me.metallicgoat.tweaksaddon.AA_old.utils.ServerManager;
+import me.metallicgoat.tweaksaddon.config.MainConfig;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
 import org.bukkit.Bukkit;
-import org.bukkit.Server;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class MBedwarsTweaksPlugin extends JavaPlugin {
 
@@ -23,7 +14,6 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
 
     private static MBedwarsTweaksPlugin instance;
     private static MBedwarsTweaksAddon addon;
-    private final Server server = getServer();
 
     public static boolean papiEnabled = false;
 
@@ -38,9 +28,10 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
         new Metrics(this, 11928);
 
         ToolSwordHelper.load();
-        // Load Config
         MBedwarsTweaksAddon.registerEvents();
 
+        MainConfig.load();
+        // TODO Gen-Tiers + Swords-Tools configs
 
         PluginDescriptionFile pdf = this.getDescription();
 
@@ -57,9 +48,8 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
                 new Placeholders().register();
                 papiEnabled = true;
             } else {
-                log("PlaceholderAPI Was not Found! Placeholders wont work!");
+                log("PlaceholderAPI Was not Found! PAPI placeholders won't work!");
             }
-            GenTiers.section = ServerManager.getTiersConfig().getConfigurationSection("Gen-Tiers");
         });
     }
 
@@ -101,6 +91,7 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
         return true;
     }
 
+    /*
     public boolean copyResource(String internalPath, File out) throws IOException {
         if(!out.exists() || out.length() == 0){
             try(InputStream is = getResource(internalPath)){
@@ -118,9 +109,9 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
                 return true;
             }
         }
-
         return false;
     }
+     */
 
     private void log(String ...args) {
         for(String s : args)
