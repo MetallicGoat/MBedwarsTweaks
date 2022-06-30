@@ -8,9 +8,12 @@ import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -86,7 +89,7 @@ public class Config {
         ConfigValue.final_kill_suffix = config.getString("Final-Kill-Suffix.Enabled", ConfigValue.final_kill_suffix);
 
         ConfigValue.buy_message_enabled = config.getBoolean("Buy-Message.Enabled", false);
-        ConfigValue.buy_message = config.getString("Buy-Message.Chat", ConfigValue.buy_message);
+        ConfigValue.buy_message = config.getString("Buy-Message.Message", ConfigValue.buy_message);
 
         ConfigValue.custom_bed_break_message_enabled = config.getBoolean("Player-Bed-Break-Message.Enabled", true);
         ConfigValue.custom_bed_break_message = config.getStringList("Player-Bed-Break-Message.Message");
@@ -101,7 +104,30 @@ public class Config {
         ConfigValue.team_eliminate_message_enabled = config.getBoolean("Team-Eliminate.Enabled", true);
         ConfigValue.team_eliminate_message = config.getStringList("Team-Eliminate.Message");
 
-        // TODO Top Killer Message
+        ConfigValue.top_killer_message_enabled = config.getBoolean("Top-Killer-Message.Enabled", false);
+        ConfigValue.top_killer_pre_lines = config.getStringList("Top-Killer-Message.Pre-Lines");
+        {
+            final ConfigurationSection section = config.getConfigurationSection("Top-Killer-Message.Lines");
+
+            if(section != null) {
+                for (String key : section.getKeys(false)){
+                    final Integer placeValue = Helper.get().parseInt(key);
+
+                    if(placeValue == null)
+                        continue;
+
+                    final String line = config.getString("Top-Killer-Message.Lines." + key);
+
+                    if(line != null)
+                        ConfigValue.top_killer_lines.put(placeValue, line);
+
+                }
+            }
+        }
+        ConfigValue.top_killer_sub_lines = config.getStringList("Top-Killer-Message.Sub-Lines");
+
+        ConfigValue.no_top_killer_message_enabled = config.getBoolean("No-Top-Killer-Message.Message", false);
+        ConfigValue.no_top_killer_message = config.getStringList("No-Top-Killer-Message.Message");
 
         ConfigValue.papi_next_tier_lobby_waiting = config.getString("Next-Tier-PAPI-Placeholder.Lobby-Waiting", ConfigValue.papi_next_tier_lobby_waiting);
         ConfigValue.papi_next_tier_lobby_starting = config.getString("Next-Tier-PAPI-Placeholder.Lobby-Starting", ConfigValue.papi_next_tier_lobby_starting);
@@ -185,7 +211,34 @@ public class Config {
         }
 
         ConfigValue.permanent_effects_enabled = config.getBoolean("Permanent-Effects.Enabled", false);
-        // TODO load permanent effects
+        {
+            for(String string : config.getStringList("Permanent-Effects.Effects")){
+
+                if(!string.contains(":"))
+                    continue;
+
+                final String[] strings = string.split(":");
+
+                final String arenaId = strings[0];
+                final String effectName = strings[1];
+                Integer amplifier = Helper.get().parseInt(strings[2]);
+
+                if(effectName == null || arenaId == null)
+                    continue;
+
+                if(amplifier == null)
+                    amplifier = 7;
+
+                final PotionEffectType type = PotionEffectType.getByName(effectName);
+
+                if(type == null)
+                    continue;
+
+                final PotionEffect effect = new PotionEffect(type, Integer.MAX_VALUE, amplifier);
+
+                ConfigValue.permanent_effects_arenas.put(arenaId, effect);
+            }
+        }
 
         ConfigValue.sponge_particles_enabled = config.getBoolean("Sponge-Particles", true);
 
@@ -199,11 +252,16 @@ public class Config {
         {
             final int currentVersion = config.getInt("file-version", -1);
 
-            if(currentVersion == -1)
+            if(currentVersion == -1) {
                 updateV1Configs(config);
-
-            if(currentVersion != VERSION)
                 save(plugin);
+                return;
+            }
+
+            if(currentVersion != VERSION) {
+                updateV2Configs(config);
+                save(plugin);
+            }
         }
     }
 
@@ -229,6 +287,7 @@ public class Config {
 
         config.addEmptyLine();
 
+        // TODO Update?
         config.addComment("Adds 'Tier I' to spawners listed");
         config.addComment("Add the spigot name of the item being dropped");
         config.set("Tier-One-Titles.Tier-Name", ConfigValue.gen_tiers_start_tier);
@@ -254,7 +313,6 @@ public class Config {
 
         config.addEmptyLine();
 
-        // TODO UPDATE
         config.addComment("You may want to disable the MBedwars team name actionbar in the config.cm2");
         config.set("Action-Bar.Enabled-In-Lobby", ConfigValue.custom_action_bar_in_lobby);
         config.set("Action-Bar.Enabled-In-Game", ConfigValue.custom_action_bar_in_game);
@@ -262,7 +320,6 @@ public class Config {
 
         config.addEmptyLine();
 
-        // TODO UPDATE
         config.addComment("Add a suffix to the end of a message if the kill is final");
         config.set("Final-Kill-Suffix.Enabled", ConfigValue.final_kill_suffix_enabled);
         config.set("Final-Kill-Suffix.Suffix", ConfigValue.final_kill_suffix);
@@ -271,29 +328,24 @@ public class Config {
 
         config.addComment("Message sent to players when they purchase an item");
         config.addComment("Placeholders: {amount} {product}");
-        // TODO UPDATE
         config.set("Buy-Message.Enabled", ConfigValue.buy_message_enabled);
-        config.set("Buy-Message.Chat", ConfigValue.buy_message);
+        config.set("Buy-Message.Message", ConfigValue.buy_message);
 
         config.addEmptyLine();
 
-        // TODO UPDATE
         config.addComment("Message displayed when any bed is broken (to everyone in the arena)");
         config.set("Player-Bed-Break-Message.Enabled", ConfigValue.custom_bed_break_message_enabled);
         config.set("Player-Bed-Break-Message.Message", ConfigValue.custom_bed_break_message);
 
-        // TODO UPDATE
         config.set("Auto-Bed-Break-Message.Enabled", ConfigValue.auto_bed_break_message_enabled);
         config.set("Auto-Bed-Break-Message.Message", ConfigValue.auto_bed_break_message);
 
-        // TODO UPDATE
         config.set("Bed-Destroy-Title.Enabled", ConfigValue.auto_bed_break_message);
         config.set("Bed-Destroy-Title.BigTitle", ConfigValue.auto_bed_break_message);
         config.set("Bed-Destroy-Title.SubTitle", ConfigValue.auto_bed_break_message);
 
         config.addEmptyLine();
 
-        // TODO UPDATE
         config.addComment("Message displayed when any team is eliminated (to everyone in the arena)");
         config.addComment("Placeholders: {team-color} {team-name}");
         config.set("Team-Eliminate.Enabled", ConfigValue.team_eliminate_message_enabled);
@@ -301,7 +353,24 @@ public class Config {
 
         config.addEmptyLine();
 
-        // TODO TOP Killer message
+        //TODO UPDATE?
+        config.addComment("Top killer message displayed at the end of a round");
+        config.set("Top-Killer-Message.Enabled", ConfigValue.top_killer_message_enabled);
+        config.set("Top-Killer-Message.Pre-Lines", ConfigValue.top_killer_pre_lines);
+        {
+            for(Map.Entry<Integer, String> entry : ConfigValue.top_killer_lines.entrySet()){
+                config.set("Top-Killer-Message.Lines." + entry.getKey(), entry.getValue());
+            }
+        }
+        config.set("Top-Killer-Message.Lines", ConfigValue.top_killer_lines);
+        config.set("Top-Killer-Message.Sub-Lines", ConfigValue.top_killer_sub_lines);
+
+        config.addEmptyLine();
+
+        // TODO UPDATE
+        config.addComment("Displayed if Top-Killer-Message IS enabled, but there are no top killers");
+        config.set("No-Top-Killer-Message.Enabled", ConfigValue.no_top_killer_message_enabled);
+        config.set("No-Top-Killer-Message.Message", ConfigValue.no_top_killer_message);
 
         config.addEmptyLine();
 
@@ -446,16 +515,23 @@ public class Config {
 
         config.addEmptyLine();
 
+        // TODO UPDATE
         config.addComment("Permanent effects players have while playing");
         config.addComment("ArenaName:PotionEffectName:amplifier");
         config.addComment("Supports arena conditions");
         config.set("Permanent-Effects.Enabled", ConfigValue.permanent_effects_enabled);
-        // TODO Update + improve value
-        /*
         {
-            for(ConfigValue.permanent_effects_arenas)
+            final List<String> values = new ArrayList<>();
+
+            for(Map.Entry<String, PotionEffect> entry : ConfigValue.permanent_effects_arenas.entrySet()){
+                final String effectName = entry.getValue().getType().getName().toLowerCase();
+                final String duration = String.valueOf(entry.getValue().getDuration());
+
+                values.add(entry.getKey() + ":" + effectName + ":" + duration);
+
+            }
+            config.set("Permanent-Effects.Effects", values);
         }
-         */
 
         config.addEmptyLine();
 
@@ -505,6 +581,19 @@ public class Config {
     }
 
     public static void updateV1Configs(FileConfiguration config){
+        ConfigValue.custom_action_bar_in_game = config.getBoolean("Action-Bar-Enabled-In-Game", false);
+        ConfigValue.custom_action_bar_in_lobby = config.getBoolean("Action-Bar-Enabled-In-Lobby", false);
+        ConfigValue.custom_action_bar_message = config.getString("Action-Bar-Message", ConfigValue.custom_action_bar_message);
 
+        ConfigValue.final_kill_suffix_enabled = config.getBoolean("Final-Kill-Message", true);
+
+        ConfigValue.custom_bed_break_message = config.getStringList("Player-Destroy-Message");
+        ConfigValue.auto_bed_break_message = config.getStringList("Auto-Destroy-Message");
+
+        ConfigValue.bed_destroy_title = config.getString("Notification.Big-Title", ConfigValue.bed_destroy_title);
+        ConfigValue.bed_destroy_subtitle = config.getString("Notification.Small-Title", ConfigValue.bed_destroy_subtitle);
+
+        ConfigValue.team_eliminate_message_enabled = config.getBoolean("Team-Eliminate-Message-Enabled", true);
+        ConfigValue.team_eliminate_message = config.getStringList("Team-Eliminate-Message");
     }
 }

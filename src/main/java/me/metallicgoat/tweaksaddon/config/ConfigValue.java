@@ -38,7 +38,7 @@ public class ConfigValue {
     public static HashMap<Team, ChatColor> custom_team_colors = new HashMap<>();
 
     public static boolean permanent_effects_enabled = false;
-    public static HashMap<String, Collection<PotionEffect>> permanent_effects_arenas = new HashMap<>();
+    public static HashMap<String, PotionEffect> permanent_effects_arenas = new HashMap<>();
 
     public static boolean lock_team_chest_enabled = false;
     public static double lock_team_chest_range = 8;
