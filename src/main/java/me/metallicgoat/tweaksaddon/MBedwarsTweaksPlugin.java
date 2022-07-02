@@ -2,6 +2,7 @@ package me.metallicgoat.tweaksaddon;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
+import me.metallicgoat.tweaksaddon.config.SwordsToolsConfig;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -31,7 +32,8 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
         MBedwarsTweaksAddon.registerEvents();
 
         MainConfig.load();
-        // TODO Gen-Tiers + Swords-Tools configs
+        SwordsToolsConfig.load();
+        // TODO Gen-Tiers
 
         PluginDescriptionFile pdf = this.getDescription();
 

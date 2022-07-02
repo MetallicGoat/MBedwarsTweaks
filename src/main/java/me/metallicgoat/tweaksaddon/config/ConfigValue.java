@@ -7,57 +7,69 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class ConfigValue {
 
     // Main Tweaks Config
-    public static boolean sponge_particles_enabled = false;
+    public static boolean sponge_particles_enabled = true;
 
-    public static boolean remove_empty_buckets = false;
-    public static boolean remove_empty_potions = false;
+    public static boolean remove_empty_buckets = true;
+    public static boolean remove_empty_potions = true;
 
     public static boolean custom_action_bar_in_lobby = false;
     public static boolean custom_action_bar_in_game = false;
-    public static String custom_action_bar_message = "Tweaks Action-Bar";
+    public static String custom_action_bar_message = "%tweaks_next-tier%";
 
     public static boolean final_strike_enabled = false;
 
     public static boolean fireball_whitelist_enabled = false;
-    public static List<Material> fireball_whitelist_blocks = new ArrayList<>();
+    public static List<Material> fireball_whitelist_blocks = new ArrayList<>(Collections.singletonList(Material.ENDER_STONE));
 
-    public static boolean prevent_liquid_build_up = false;
+    public static boolean prevent_liquid_build_up = true;
 
     public static boolean player_limit_bypass = false;
 
     public static boolean custom_team_colors_enabled = false;
-    public static HashMap<Team, ChatColor> custom_team_colors = new HashMap<>();
+    public static HashMap<Team, ChatColor> custom_team_colors = new HashMap<Team, ChatColor>() {{
+        put(Team.CYAN, ChatColor.DARK_AQUA);
+    }};
 
     public static boolean permanent_effects_enabled = false;
-    public static HashMap<String, PotionEffect> permanent_effects_arenas = new HashMap<>();
+    public static HashMap<String, PotionEffect> permanent_effects_arenas = new HashMap<String, PotionEffect>() {{
+        put("Ruins", new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
+    }};
 
-    public static boolean lock_team_chest_enabled = false;
+    public static boolean lock_team_chest_enabled = true;
     public static double lock_team_chest_range = 8;
     public static String lock_team_chest_fail_open = "&cYou cannot open this chest until {team} &chas been eliminated.";
 
     public static boolean personal_ender_chests_enabled = false;
     public static String personal_ender_chests_name = "Ender Chest";
 
-    public static boolean team_eliminate_message_enabled = false;
-    public static List<String> team_eliminate_message = new ArrayList<>();
+    public static boolean team_eliminate_message_enabled = true;
+    public static List<String> team_eliminate_message = new ArrayList<>(Arrays.asList(
+            " ",
+            "&f&lTEAM ELIMINATED > {team-color}{team-name} Team &chas been eliminated!",
+            " "
+    ));
 
-    public static boolean final_kill_suffix_enabled = false;
+    public static boolean final_kill_suffix_enabled = true;
     public static String final_kill_suffix = " &b&lFINAL KILL!";
 
-    public static boolean buy_message_enabled = false;
+    public static boolean buy_message_enabled = true;
     public static String buy_message = "&aYou Purchased &6{product} x{amount}";
 
-    public static boolean remove_invis_ondamage_enabled = false;
-    public static List<EntityDamageEvent.DamageCause> remove_invis_damge_causes = new ArrayList<>();
+    public static boolean remove_invis_ondamage_enabled = true;
+    public static List<EntityDamageEvent.DamageCause> remove_invis_damge_causes = new ArrayList<>(Arrays.asList(
+            EntityDamageEvent.DamageCause.ENTITY_ATTACK,
+            EntityDamageEvent.DamageCause.BLOCK_EXPLOSION,
+            EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
+    ));
+
+    // TODO Add defaults for below
 
     public static boolean disable_empty_generators = false;
     public static double disable_empty_generators_range = 6;
@@ -123,25 +135,27 @@ public class ConfigValue {
     public static int one_slot_tools_axe = 21;
     public static int one_slot_tools_shears = 22;
 
+    public static boolean anti_chest_enabled = false;
     public static List<Material> anti_chest_materials = new ArrayList<>();
 
     // PAPI
-    public static String papi_next_tier_lobby_starting = "";
-    public static String papi_next_tier_lobby_waiting = "";
-    public static String papi_next_tier_lobby_end_lobby = "";
-    public static String papi_next_tier_lobby_stopped = "";
-    public static String papi_next_tier_lobby_resetting = "";
-    public static String papi_next_tier_lobby_running = "";
+    public static String papi_next_tier_lobby_starting = "&fStarting in &a{time}s";
+    public static String papi_next_tier_lobby_waiting = "&fWaiting...";
+    public static String papi_next_tier_lobby_end_lobby = "&rGame Over";
+    public static String papi_next_tier_lobby_stopped = "&rArena Stopped";
+    public static String papi_next_tier_lobby_resetting = "&rArena Regenerating";
+    public static String papi_next_tier_lobby_running = "{next-tier} in &a{time}'";
 
-    public static String papi_team_status_has_bed = "";
-    public static String papi_team_status_team_dead = "";
-    public static String papi_team_status_no_bed = "";
-    public static String papi_team_status_your_team_suffix = "";
+    public static String papi_team_status_has_bed = " &7You";
+    public static String papi_team_status_team_dead = "&a✔";
+    public static String papi_team_status_no_bed = "&a{player-amount}";
+    public static String papi_team_status_your_team_suffix = "&c✘";
 
     public static boolean papi_count_spectators_as_players = false;
 
-    public static String papi_team_you_placeholder = ""; // for tab or smth? (Was a request)
+    public static String papi_team_you_placeholder = " &7You"; // for tab or smth? (Was a request)
 
+    //TODO Defaults
     // Condition + Mode Name
     public static HashMap<String, String> papi_arena_mode = new HashMap<>();
 }

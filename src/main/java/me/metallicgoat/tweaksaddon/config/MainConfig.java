@@ -22,7 +22,8 @@ import java.util.Map;
 
 public class MainConfig {
 
-    private static final byte VERSION = 1;
+    public static final byte VERSION = 1;
+    public static int CURRENT_VERSION = -1;
 
     private static File getFile(){
         return new File(MBedwarsTweaksPlugin.getAddon().getDataFolder(), "configs.yml");
@@ -63,6 +64,8 @@ public class MainConfig {
 
         ConfigValue.gen_tiers_start_tier = config.getString("Tier-One-Titles.Tier-Name", ConfigValue.gen_tiers_start_tier);
         {
+            ConfigValue.gen_tiers_start_spawners.clear();
+
             for (String string : config.getStringList("Tier-One-Titles.Spawners")) {
 
                 final DropType type = Util.getDropType(string);
@@ -110,6 +113,9 @@ public class MainConfig {
             final ConfigurationSection section = config.getConfigurationSection("Top-Killer-Message.Lines");
 
             if(section != null) {
+
+                ConfigValue.top_killer_lines.clear();
+
                 for (String key : section.getKeys(false)){
                     final Integer placeValue = Helper.get().parseInt(key);
 
@@ -137,6 +143,8 @@ public class MainConfig {
         ConfigValue.papi_next_tier_lobby_stopped = config.getString("Next-Tier-PAPI-Placeholder.Lobby-Stopped", ConfigValue.papi_next_tier_lobby_stopped);
 
         {
+            ConfigValue.papi_arena_mode.clear();
+
             for (String string : config.getStringList("PAPI-Arena-Modes")){
                 if(string.contains(":")){
                     final String[] strings = string.split(":");
@@ -153,6 +161,8 @@ public class MainConfig {
 
         ConfigValue.fireball_whitelist_enabled = config.getBoolean("FireballWhitelist.Enabled", false);
         {
+            ConfigValue.fireball_whitelist_blocks.clear();
+
             for(String blockName : config.getStringList("FireballWhitelist.Blocks")){
 
                 final Material mat = Helper.get().getMaterialByName(blockName);
@@ -166,6 +176,8 @@ public class MainConfig {
         ConfigValue.disable_empty_generators = config.getBoolean("Disable-Unused-Gens.Enabled", false);
         ConfigValue.disable_empty_generators_range = config.getDouble("Disable-Unused-Gens.Range", ConfigValue.disable_empty_generators_range);
         {
+            ConfigValue.disable_empty_generators_spawners.clear();
+
             for(String string : config.getStringList("Disable-Unused-Gens.Gen-Types")){
                 final DropType type = Util.getDropType(string);
 
@@ -197,6 +209,8 @@ public class MainConfig {
 
         ConfigValue.custom_team_colors_enabled = config.getBoolean("Custom-Team-Chat-Color.Enabled", false);
         {
+            ConfigValue.custom_team_colors.clear();
+
             for(String string : config.getStringList("Custom-Team-Chat-Color.Teams")){
                 if(string.contains(":")){
                     final String[] strings = string.split(":");
@@ -223,15 +237,15 @@ public class MainConfig {
 
         // auto update file if newer version
         {
-            final int currentVersion = config.getInt("file-version", -1);
+            CURRENT_VERSION = config.getInt("file-version", -1);
 
-            if(currentVersion == -1) {
+            if(CURRENT_VERSION == -1) {
                 updateV1Configs(config);
                 save();
                 return;
             }
 
-            if(currentVersion != VERSION) {
+            if(CURRENT_VERSION != VERSION) {
                 updateV2Configs(config);
                 save();
             }
@@ -584,6 +598,9 @@ public class MainConfig {
     }
 
     public static void loadPermanentEffects(FileConfiguration config, String path){
+
+        ConfigValue.permanent_effects_arenas.clear();
+
         for(String string : config.getStringList(path)){
 
             if(!string.contains(":"))

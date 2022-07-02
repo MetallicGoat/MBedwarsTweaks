@@ -33,9 +33,3 @@ public class GenTierLevel {
         this.earnMessage = earnMessage;
     }
 }
-
-enum TierAction {
-    GEN_UPGRADE,
-    BED_DESTROY,
-    GAME_OVER;
-}
