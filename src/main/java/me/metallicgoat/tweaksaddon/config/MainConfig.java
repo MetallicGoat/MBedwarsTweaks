@@ -26,7 +26,7 @@ public class MainConfig {
     public static int CURRENT_VERSION = -1;
 
     private static File getFile(){
-        return new File(MBedwarsTweaksPlugin.getAddon().getDataFolder(), "configs.yml");
+        return new File(MBedwarsTweaksPlugin.getAddon().getDataFolder(), "config.yml");
     }
 
     public static void load(){
@@ -276,7 +276,7 @@ public class MainConfig {
 
         // TODO Update?
         config.addComment("Adds 'Tier I' to spawners listed");
-        config.addComment("Add the spigot name of the item being dropped");
+        config.addComment("Add the spawner id of the item being dropped");
         config.set("Tier-One-Titles.Tier-Name", ConfigValue.gen_tiers_start_tier);
         {
             final List<String> startSpawners = new ArrayList<>();
@@ -324,12 +324,16 @@ public class MainConfig {
         config.set("Player-Bed-Break-Message.Enabled", ConfigValue.custom_bed_break_message_enabled);
         config.set("Player-Bed-Break-Message.Message", ConfigValue.custom_bed_break_message);
 
+        config.addEmptyLine();
+
         config.set("Auto-Bed-Break-Message.Enabled", ConfigValue.auto_bed_break_message_enabled);
         config.set("Auto-Bed-Break-Message.Message", ConfigValue.auto_bed_break_message);
 
-        config.set("Bed-Destroy-Title.Enabled", ConfigValue.auto_bed_break_message);
-        config.set("Bed-Destroy-Title.BigTitle", ConfigValue.auto_bed_break_message);
-        config.set("Bed-Destroy-Title.SubTitle", ConfigValue.auto_bed_break_message);
+        config.addEmptyLine();
+
+        config.set("Bed-Destroy-Title.Enabled", ConfigValue.bed_destroy_title_enabled);
+        config.set("Bed-Destroy-Title.BigTitle", ConfigValue.bed_destroy_title);
+        config.set("Bed-Destroy-Title.SubTitle", ConfigValue.bed_destroy_subtitle);
 
         config.addEmptyLine();
 
@@ -468,6 +472,8 @@ public class MainConfig {
         config.addComment("If enabled you still join a server even if the Player Limit is reached.");
         config.set("Bypass-PlayerLimit", ConfigValue.player_limit_bypass);
 
+        config.addEmptyLine();
+
         config.addComment("Removes invisibility on specified damage causes");
         config.set("Break-Invis.Enabled", ConfigValue.remove_invis_ondamage_enabled);
         {
@@ -507,9 +513,9 @@ public class MainConfig {
 
             for(Map.Entry<String, PotionEffect> entry : ConfigValue.permanent_effects_arenas.entrySet()){
                 final String effectName = entry.getValue().getType().getName().toLowerCase();
-                final String duration = String.valueOf(entry.getValue().getDuration());
+                final String amplifier = String.valueOf(entry.getValue().getAmplifier());
 
-                values.add(entry.getKey() + ":" + effectName + ":" + duration);
+                values.add(entry.getKey() + ":" + effectName + ":" + amplifier);
 
             }
             config.set("Permanent-Effects.Effects", values);
@@ -549,12 +555,20 @@ public class MainConfig {
 
         config.addEmptyLine();
 
+        // TODO Update & load
         config.addComment("Add a height cap for specific MBedwars arenas");
         config.addComment("Add height cap like 'arenaName:70' (supports arena conditions)");
         config.set("Height-Cap.Enabled", ConfigValue.custom_height_cap);
         config.set("Height-Cap.Message", ConfigValue.custom_height_cap_warn);
-        // TODO defaults
-        config.set("Height-Cap.Arenas", new ArrayList<String>());
+        {
+            final List<String> arenas = new ArrayList<>();
+
+            for(Map.Entry<String, Integer> entry : ConfigValue.custom_height_cap_arenas.entrySet()){
+                arenas.add(entry.getKey() + ":" + entry.getValue());
+            }
+
+            config.set("Height-Cap.Arenas", arenas);
+        }
 
         config.save(getFile());
 

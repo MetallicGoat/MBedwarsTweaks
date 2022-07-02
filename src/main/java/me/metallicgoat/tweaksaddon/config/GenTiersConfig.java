@@ -16,6 +16,8 @@ import java.util.Map;
 
 public class GenTiersConfig {
 
+    // TODO support more features with non gen upgrade tiers (eg. send a message)
+
     private static File getFile(){
         return new File(MBedwarsTweaksPlugin.getAddon().getDataFolder(), "gen-tiers.yml");
     }
@@ -73,12 +75,11 @@ public class GenTiersConfig {
                 final String message = config.getString(configKey + "Message");
 
                 // TODO Validate other values not null
-                if(typeString == null || actionString == null) {
+                if(actionString == null) {
                     // TODO Log issues
                     continue;
                 }
 
-                final DropType dropType = Util.getDropType(typeString);
                 TierAction action = null;
 
                 for (TierAction action1 : TierAction.values()){
@@ -89,22 +90,41 @@ public class GenTiersConfig {
                     }
                 }
 
-                if(dropType == null || action == null){
+                if(action == null){
                     // TODO Log issues
                     continue;
                 }
 
-                final GenTierLevel genTierLevel = new GenTierLevel(
-                        tierName,
-                        tierLevel,
-                        dropType,
-                        action,
-                        time,
-                        speed,
-                        message
-                );
+                if(action == TierAction.GEN_UPGRADE) {
 
-                ConfigValue.gen_tier_levels.put(levelNum, genTierLevel);
+                    final DropType dropType = Util.getDropType(typeString);
+
+                    if (dropType == null){
+                        // TODO Log Issues
+                        continue;
+                    }
+
+                    final GenTierLevel genTierLevel = new GenTierLevel(
+                            tierName,
+                            tierLevel,
+                            dropType,
+                            action,
+                            time,
+                            speed,
+                            message
+                    );
+
+                    ConfigValue.gen_tier_levels.put(levelNum, genTierLevel);
+                } else {
+
+                    final GenTierLevel genTierLevel = new GenTierLevel(
+                            tierName,
+                            action,
+                            time
+                    );
+
+                    ConfigValue.gen_tier_levels.put(levelNum, genTierLevel);
+                }
             }
         }
 
@@ -136,14 +156,19 @@ public class GenTiersConfig {
             final GenTierLevel level = entry.getValue();
             final String configKey = "Gen-Tiers." + entry.getKey() + ".";
 
-            config.set(configKey + "Tier-Name", level.getTierName());
-            config.set(configKey + "Tier-Level", level.getTierLevel());
-            config.set(configKey + "Action", level.getAction().getId());
-            config.set(configKey + "Type", level.getType());
-            config.set(configKey + "Time", level.getTime());
-            config.set(configKey + "Speed", level.getSpeed());
-            config.set(configKey + "Message", level.getEarnMessage());
-
+            if(level.getAction() == TierAction.GEN_UPGRADE) {
+                config.set(configKey + "Tier-Name", level.getTierName());
+                config.set(configKey + "Tier-Level", level.getTierLevel());
+                config.set(configKey + "Action", level.getAction().getId());
+                config.set(configKey + "Type", level.getType().getId());
+                config.set(configKey + "Time", level.getTime());
+                config.set(configKey + "Speed", level.getSpeed());
+                config.set(configKey + "Message", level.getEarnMessage());
+            } else {
+                config.set(configKey + "Tier-Name", level.getTierName());
+                config.set(configKey + "Action", level.getAction().getId());
+                config.set(configKey + "Time", level.getTime());
+            }
         }
 
         config.save(getFile());
@@ -155,6 +180,75 @@ public class GenTiersConfig {
     }
 
     private static void updateV1Configs(FileConfiguration config){
-        // TODO update
+        final ConfigurationSection tiersSection = config.getConfigurationSection("Gen-Tiers");
+
+        int lastVal = -1;
+
+        if (tiersSection != null) {
+            for (String levelNumString : tiersSection.getKeys(false)) {
+
+                final String configKey = "Gen-Tiers." + levelNumString + ".";
+
+                final String tierName = config.getString(configKey + "TierName");
+                final String tierLevel = config.getString(configKey + "TierLevel");
+                final String typeString = config.getString(configKey + "Type");
+                final long time = config.getLong(configKey + "Time");
+                final double speed = config.getDouble(configKey + "Speed");
+                final String message = config.getString(configKey + "Chat");
+
+                if(tierName == null){
+                    // TODO Log issues
+                    continue;
+                }
+
+                if(levelNumString.equalsIgnoreCase("bed-break")){
+                    lastVal++;
+
+                    if(ConfigValue.gen_tier_levels.containsKey(lastVal)){
+                        // TODO log issues
+                        continue;
+                    }
+
+                    ConfigValue.gen_tier_levels.put(lastVal, new GenTierLevel(tierName, TierAction.BED_DESTROY, time));
+                }
+
+                if(levelNumString.equalsIgnoreCase("game-over")){
+                    lastVal++;
+
+                    if(ConfigValue.gen_tier_levels.containsKey(lastVal)){
+                        // TODO log issues
+                        continue;
+                    }
+
+                    ConfigValue.gen_tier_levels.put(lastVal, new GenTierLevel(tierName, TierAction.GAME_OVER, time));
+                }
+
+                final Integer levelNum = Helper.get().parseInt(levelNumString);
+
+                if (levelNum == null){
+                    // TODO Log issue
+                    continue;
+                }
+
+                final DropType dropType = Util.getDropType(typeString);
+
+                if (dropType == null){
+                    // TODO Log Issues
+                    continue;
+                }
+
+                final GenTierLevel genTierLevel = new GenTierLevel(
+                        tierName,
+                        tierLevel,
+                        dropType,
+                        TierAction.GEN_UPGRADE,
+                        time,
+                        speed,
+                        message
+                );
+
+                ConfigValue.gen_tier_levels.put(levelNum, genTierLevel);
+            }
+        }
     }
 }

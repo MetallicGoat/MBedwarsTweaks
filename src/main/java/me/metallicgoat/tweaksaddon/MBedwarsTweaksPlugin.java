@@ -1,6 +1,7 @@
 package me.metallicgoat.tweaksaddon;
 
 import de.marcely.bedwars.api.BedwarsAPI;
+import me.metallicgoat.tweaksaddon.config.GenTiersConfig;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import me.metallicgoat.tweaksaddon.config.SwordsToolsConfig;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
@@ -31,9 +32,10 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
         ToolSwordHelper.load();
         MBedwarsTweaksAddon.registerEvents();
 
+        // Load Configs
         MainConfig.load();
         SwordsToolsConfig.load();
-        // TODO Gen-Tiers
+        GenTiersConfig.load();
 
         PluginDescriptionFile pdf = this.getDescription();
 
@@ -46,6 +48,9 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
         );
 
         BedwarsAPI.onReady(() -> {
+
+            // TODO log if drop types are null
+
             if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
                 new Placeholders().register();
                 papiEnabled = true;

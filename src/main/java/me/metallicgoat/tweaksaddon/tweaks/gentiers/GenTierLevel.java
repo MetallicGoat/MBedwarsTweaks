@@ -9,10 +9,23 @@ public class GenTierLevel {
     @Getter private final String tierLevel;
     @Getter private final DropType type;
     @Getter private final TierAction action;
-    @Getter private final long time;
-    @Getter private final double speed;
+    @Getter private final Long time;
+    @Getter private final Double speed;
     @Getter private final String earnMessage;
 
+    public GenTierLevel(
+            String tierName,
+            TierAction action,
+            long time
+    ) {
+        this.tierName = tierName;
+        this.tierLevel = null;
+        this.type = null;
+        this.action = action;
+        this.time = time;
+        this.speed = null;
+        this.earnMessage = null;
+    }
 
     public GenTierLevel(
             String tierName, // Display Name
@@ -23,7 +36,6 @@ public class GenTierLevel {
             double speed, // New drop speed
             String earnMessage // The chat message displayed on update
     ) {
-
         this.tierName = tierName;
         this.tierLevel = tierLevel;
         this.type = type;
