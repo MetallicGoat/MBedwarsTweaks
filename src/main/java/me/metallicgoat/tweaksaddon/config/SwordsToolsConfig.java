@@ -48,27 +48,31 @@ public class SwordsToolsConfig {
         // read it
         ConfigValue.anti_chest_enabled = config.getBoolean("Anti-Chest.Enabled");
         {
-            ConfigValue.anti_chest_materials.clear();
+            if(config.contains("Anti-Chest.Materials")) {
+                ConfigValue.anti_chest_materials.clear();
 
-            for(String materialName : config.getStringList("Anti-Chest.Materials")){
-                final Material material = Helper.get().getMaterialByName(materialName);
+                for (String materialName : config.getStringList("Anti-Chest.Materials")) {
+                    final Material material = Helper.get().getMaterialByName(materialName);
 
-                if(material != null)
-                    ConfigValue.anti_chest_materials.add(material);
+                    if (material != null)
+                        ConfigValue.anti_chest_materials.add(material);
 
+                }
             }
         }
 
         ConfigValue.anti_drop_enabled = config.getBoolean("Anti-Drop.Enabled");
         {
-            ConfigValue.anti_drop_materials.clear();
+            if(config.contains("Anti-Drop.Materials")) {
+                ConfigValue.anti_drop_materials.clear();
 
-            for(String materialName : config.getStringList("Anti-Drop.Materials")){
-                final Material material = Helper.get().getMaterialByName(materialName);
+                for (String materialName : config.getStringList("Anti-Drop.Materials")) {
+                    final Material material = Helper.get().getMaterialByName(materialName);
 
-                if(material != null)
-                    ConfigValue.anti_drop_materials.add(material);
+                    if (material != null)
+                        ConfigValue.anti_drop_materials.add(material);
 
+                }
             }
         }
 
@@ -91,21 +95,24 @@ public class SwordsToolsConfig {
 
         ConfigValue.sword_drop_enabled = config.getBoolean("Advanced-Sword-Drop.Enabled", false);
         {
-            ConfigValue.sword_drop_materials.clear();
+            if(config.contains("Advanced-Sword-Drop.Materials")) {
+                ConfigValue.sword_drop_materials.clear();
 
-            for(String materialName : config.getStringList("Advanced-Sword-Drop.Materials")){
-                final Material material = Helper.get().getMaterialByName(materialName);
+                for (String materialName : config.getStringList("Advanced-Sword-Drop.Materials")) {
+                    final Material material = Helper.get().getMaterialByName(materialName);
 
-                if(material != null)
-                    ConfigValue.sword_drop_materials.add(material);
+                    if (material != null)
+                        ConfigValue.sword_drop_materials.add(material);
 
+                }
             }
         }
 
         ConfigValue.replace_sword_on_buy_enabled = config.getBoolean("Replace-Sword-On-Buy.Enabled", false);
         ConfigValue.replace_sword_on_buy_all_type = config.getBoolean("Replace-Sword-On-Buy.All-Type", false);
 
-        ConfigValue.tools_swords_do_not_effect = config.getStringList("Do-Not-Effect");
+        if(config.contains("Do-Not-Effect"))
+            ConfigValue.tools_swords_do_not_effect = config.getStringList("Do-Not-Effect");
 
         // auto update file if newer version
         {
@@ -231,38 +238,43 @@ public class SwordsToolsConfig {
     private static void updateV1Configs(FileConfiguration config){
 
         {
-            ConfigValue.anti_chest_materials.clear();
+            if(config.contains("Anti-Chest")) {
+                ConfigValue.anti_chest_materials.clear();
 
-            for(String materialName : config.getStringList("Anti-Chest")){
-                final Material material = Helper.get().getMaterialByName(materialName);
+                for (String materialName : config.getStringList("Anti-Chest")) {
+                    final Material material = Helper.get().getMaterialByName(materialName);
 
-                if(material != null)
-                    ConfigValue.anti_chest_materials.add(material);
-
+                    if (material != null)
+                        ConfigValue.anti_chest_materials.add(material);
+                }
             }
         }
 
         {
-            ConfigValue.anti_drop_materials.clear();
+            if(config.contains("Anti-Drop.List")) {
+                ConfigValue.anti_drop_materials.clear();
 
-            for(String materialName : config.getStringList("Anti-Drop.List")){
-                final Material material = Helper.get().getMaterialByName(materialName);
+                for (String materialName : config.getStringList("Anti-Drop.List")) {
+                    final Material material = Helper.get().getMaterialByName(materialName);
 
-                if(material != null)
-                    ConfigValue.anti_drop_materials.add(material);
+                    if (material != null)
+                        ConfigValue.anti_drop_materials.add(material);
 
+                }
             }
         }
 
         {
-            ConfigValue.sword_drop_materials.clear();
+            if(config.contains("Advanced-Sword-Drop.List")) {
+                ConfigValue.sword_drop_materials.clear();
 
-            for(String materialName : config.getStringList("Advanced-Sword-Drop.List")){
-                final Material material = Helper.get().getMaterialByName(materialName);
+                for (String materialName : config.getStringList("Advanced-Sword-Drop.List")) {
+                    final Material material = Helper.get().getMaterialByName(materialName);
 
-                if(material != null)
-                    ConfigValue.sword_drop_materials.add(material);
+                    if (material != null)
+                        ConfigValue.sword_drop_materials.add(material);
 
+                }
             }
         }
     }

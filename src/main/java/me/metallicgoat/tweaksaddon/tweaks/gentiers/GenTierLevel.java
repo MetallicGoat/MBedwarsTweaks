@@ -15,16 +15,18 @@ public class GenTierLevel {
 
     public GenTierLevel(
             String tierName,
+            String tierLevel,
             TierAction action,
-            long time
+            long time,
+            String earnMessage
     ) {
         this.tierName = tierName;
-        this.tierLevel = null;
+        this.tierLevel = tierLevel;
         this.type = null;
         this.action = action;
         this.time = time;
         this.speed = null;
-        this.earnMessage = null;
+        this.earnMessage = earnMessage;
     }
 
     public GenTierLevel(

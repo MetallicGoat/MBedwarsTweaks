@@ -16,8 +16,6 @@ import java.util.Map;
 
 public class GenTiersConfig {
 
-    // TODO support more features with non gen upgrade tiers (eg. send a message)
-
     private static File getFile(){
         return new File(MBedwarsTweaksPlugin.getAddon().getDataFolder(), "gen-tiers.yml");
     }
@@ -68,10 +66,10 @@ public class GenTiersConfig {
 
                 final String tierName = config.getString(configKey + "Tier-Name");
                 final String tierLevel = config.getString(configKey + "Tier-Level");
-                final String typeString = config.getString(configKey + "Type");
                 final String actionString = config.getString(configKey + "Action");
+                final String typeString = config.getString(configKey + "Drop-Type");
+                final double speed = config.getDouble(configKey + "Drop-Speed");
                 final long time = config.getLong(configKey + "Time");
-                final double speed = config.getDouble(configKey + "Speed");
                 final String message = config.getString(configKey + "Message");
 
                 // TODO Validate other values not null
@@ -119,15 +117,16 @@ public class GenTiersConfig {
 
                     final GenTierLevel genTierLevel = new GenTierLevel(
                             tierName,
+                            action == TierAction.BED_DESTROY ? "Bed Gone" : "Game Over",
                             action,
-                            time
+                            time,
+                            action == TierAction.BED_DESTROY ? "All beds have been broken" : "Game Ended"
                     );
 
                     ConfigValue.gen_tier_levels.put(levelNum, genTierLevel);
                 }
             }
         }
-
 
 
         // auto update file if newer version
@@ -156,19 +155,17 @@ public class GenTiersConfig {
             final GenTierLevel level = entry.getValue();
             final String configKey = "Gen-Tiers." + entry.getKey() + ".";
 
+            config.set(configKey + "Tier-Name", level.getTierName());
+            config.set(configKey + "Tier-Level", level.getTierLevel());
+            config.set(configKey + "Action", level.getAction().getId());
+
             if(level.getAction() == TierAction.GEN_UPGRADE) {
-                config.set(configKey + "Tier-Name", level.getTierName());
-                config.set(configKey + "Tier-Level", level.getTierLevel());
-                config.set(configKey + "Action", level.getAction().getId());
-                config.set(configKey + "Type", level.getType().getId());
-                config.set(configKey + "Time", level.getTime());
-                config.set(configKey + "Speed", level.getSpeed());
-                config.set(configKey + "Message", level.getEarnMessage());
-            } else {
-                config.set(configKey + "Tier-Name", level.getTierName());
-                config.set(configKey + "Action", level.getAction().getId());
-                config.set(configKey + "Time", level.getTime());
+                config.set(configKey + "Drop-Type", level.getType().getId());
+                config.set(configKey + "Drop-Speed", level.getSpeed());
             }
+
+            config.set(configKey + "Time", level.getTime());
+            config.set(configKey + "Message", level.getEarnMessage());
         }
 
         config.save(getFile());
@@ -179,6 +176,7 @@ public class GenTiersConfig {
         // No updates yet :)
     }
 
+    // TODO fix the major issue
     private static void updateV1Configs(FileConfiguration config){
         final ConfigurationSection tiersSection = config.getConfigurationSection("Gen-Tiers");
 
@@ -209,7 +207,7 @@ public class GenTiersConfig {
                         continue;
                     }
 
-                    ConfigValue.gen_tier_levels.put(lastVal, new GenTierLevel(tierName, TierAction.BED_DESTROY, time));
+                    ConfigValue.gen_tier_levels.put(lastVal, new GenTierLevel(tierName, tierLevel, TierAction.BED_DESTROY, time, message));
                 }
 
                 if(levelNumString.equalsIgnoreCase("game-over")){
@@ -220,7 +218,7 @@ public class GenTiersConfig {
                         continue;
                     }
 
-                    ConfigValue.gen_tier_levels.put(lastVal, new GenTierLevel(tierName, TierAction.GAME_OVER, time));
+                    ConfigValue.gen_tier_levels.put(lastVal, new GenTierLevel(tierName, tierLevel, TierAction.GAME_OVER, time, message));
                 }
 
                 final Integer levelNum = Helper.get().parseInt(levelNumString);

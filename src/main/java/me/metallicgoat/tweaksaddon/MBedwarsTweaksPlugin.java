@@ -98,28 +98,6 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
         return true;
     }
 
-    /*
-    public boolean copyResource(String internalPath, File out) throws IOException {
-        if(!out.exists() || out.length() == 0){
-            try(InputStream is = getResource(internalPath)){
-                if(is == null){
-                    getLogger().warning("Your plugin seems to be broken (Failed to find internal file " + internalPath + ")");
-                    return false;
-                }
-
-                out.createNewFile();
-
-                try(FileOutputStream os = new FileOutputStream(out)){
-                    Helper.get().copy(is, os);
-                }
-
-                return true;
-            }
-        }
-        return false;
-    }
-     */
-
     private void log(String ...args) {
         for(String s : args)
             getLogger().info(s);

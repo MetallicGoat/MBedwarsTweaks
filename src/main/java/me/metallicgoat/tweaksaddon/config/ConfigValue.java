@@ -140,11 +140,13 @@ public class ConfigValue {
     public static String bed_destroy_title = "&cBED DESTROYED";
     public static String bed_destroy_subtitle = "&fYou will no longer respawn!";
 
-    public static boolean custom_height_cap = false;
+    public static boolean custom_height_cap_enabled = false;
     public static HashMap<String, Integer> custom_height_cap_arenas = new HashMap<String, Integer>() {{
         put("ArenaName", 70);
     }};
     public static String custom_height_cap_warn = "&cYou cannot build any higher";
+
+    public static boolean friendly_villagers = false;
 
     // Gen Tiers
     public static boolean gen_tiers_enabled = false;
@@ -173,8 +175,8 @@ public class ConfigValue {
                 TierAction.GEN_UPGRADE, 6, 30,
                 "&bEmerald Generators &ehave been upgraded to Tier &4III"
         ));
-        put(5, new GenTierLevel("Bed Gone", TierAction.BED_DESTROY, 7));
-        put(6, new GenTierLevel("Game Over", TierAction.GAME_OVER, 10));
+        put(5, new GenTierLevel("Bed Gone", "Bed Gone", TierAction.BED_DESTROY, 7, "All beds have been broken"));
+        put(6, new GenTierLevel("Game Over", "Game Over", TierAction.GAME_OVER, 10, "Game Ended"));
     }} : new HashMap<>();
     public static boolean gen_tiers_custom_holo_enabled = false;
     public static List<String> gen_tiers_spawner_holo_titles = new ArrayList<>(Arrays.asList(

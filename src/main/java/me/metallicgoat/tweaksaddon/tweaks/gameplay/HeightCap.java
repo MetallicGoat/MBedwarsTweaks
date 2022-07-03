@@ -21,7 +21,7 @@ public class HeightCap implements Listener {
         final Player player = e.getPlayer();
         final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
 
-        if (!ConfigValue.custom_height_cap || arena == null || arena.getStatus() != ArenaStatus.RUNNING)
+        if (!ConfigValue.custom_height_cap_enabled || arena == null || arena.getStatus() != ArenaStatus.RUNNING)
             return;
 
         for (Map.Entry<String, Integer> arenaHeight : ConfigValue.custom_height_cap_arenas.entrySet()) {

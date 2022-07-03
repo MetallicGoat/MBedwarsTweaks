@@ -1,5 +1,6 @@
 package me.metallicgoat.tweaksaddon.config;
 
+import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.tools.Helper;
@@ -12,6 +13,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -64,25 +66,22 @@ public class MainConfig {
 
         ConfigValue.gen_tiers_start_tier = config.getString("Tier-One-Titles.Tier-Name", ConfigValue.gen_tiers_start_tier);
         {
-            ConfigValue.gen_tiers_start_spawners.clear();
+            if(config.contains("Tier-One-Titles.Spawners")) {
+                ConfigValue.gen_tiers_start_spawners.clear();
 
-            for (String string : config.getStringList("Tier-One-Titles.Spawners")) {
+                for (String string : config.getStringList("Tier-One-Titles.Spawners")) {
 
-                final DropType type = Util.getDropType(string);
+                    final DropType type = Util.getDropType(string);
 
-                if (type != null)
-                    ConfigValue.gen_tiers_start_spawners.add(type);
+                    if (type != null)
+                        ConfigValue.gen_tiers_start_spawners.add(type);
 
+                }
             }
         }
 
-        {
-            final List<String> titles = config.getStringList("Spawner-Title");
-
-            if(titles != null){
-                ConfigValue.gen_tiers_spawner_holo_titles = titles;
-            }
-        }
+        if (config.contains("Spawner-Title"))
+            ConfigValue.gen_tiers_spawner_holo_titles = config.getStringList("Spawner-Title");
 
         ConfigValue.custom_action_bar_in_game = config.getBoolean("Action-Bar.Enabled-In-Lobby", false);
         ConfigValue.custom_action_bar_in_lobby = config.getBoolean("Action-Bar.Enabled-In-Game", false);
@@ -95,20 +94,24 @@ public class MainConfig {
         ConfigValue.buy_message = config.getString("Buy-Message.Message", ConfigValue.buy_message);
 
         ConfigValue.custom_bed_break_message_enabled = config.getBoolean("Player-Bed-Break-Message.Enabled", true);
-        ConfigValue.custom_bed_break_message = config.getStringList("Player-Bed-Break-Message.Message");
+        if (config.contains("Player-Bed-Break-Message.Message"))
+            ConfigValue.custom_bed_break_message = config.getStringList("Player-Bed-Break-Message.Message");
 
         ConfigValue.auto_bed_break_message_enabled = config.getBoolean("Auto-Bed-Break-Message.Enabled", true);
-        ConfigValue.auto_bed_break_message = config.getStringList("Auto-Bed-Break-Message.Enabled");
+        if (config.contains("Auto-Bed-Break-Message.Message"))
+            ConfigValue.auto_bed_break_message = config.getStringList("Auto-Bed-Break-Message.Message");
 
         ConfigValue.bed_destroy_title_enabled = config.getBoolean("Bed-Destroy-Title.Enabled", true);
         ConfigValue.bed_destroy_title = config.getString("Bed-Destroy-Title.BigTitle", ConfigValue.bed_destroy_title);
         ConfigValue.bed_destroy_subtitle = config.getString("Bed-Destroy-Title.SubTitle", ConfigValue.bed_destroy_subtitle);
 
         ConfigValue.team_eliminate_message_enabled = config.getBoolean("Team-Eliminate.Enabled", true);
-        ConfigValue.team_eliminate_message = config.getStringList("Team-Eliminate.Message");
+        if (config.contains("Team-Eliminate.Message"))
+            ConfigValue.team_eliminate_message = config.getStringList("Team-Eliminate.Message");
 
         ConfigValue.top_killer_message_enabled = config.getBoolean("Top-Killer-Message.Enabled", false);
-        ConfigValue.top_killer_pre_lines = config.getStringList("Top-Killer-Message.Pre-Lines");
+        if(config.contains("Top-Killer-Message.Pre-Lines"))
+            ConfigValue.top_killer_pre_lines = config.getStringList("Top-Killer-Message.Pre-Lines");
         {
             final ConfigurationSection section = config.getConfigurationSection("Top-Killer-Message.Lines");
 
@@ -130,10 +133,13 @@ public class MainConfig {
                 }
             }
         }
-        ConfigValue.top_killer_sub_lines = config.getStringList("Top-Killer-Message.Sub-Lines");
 
-        ConfigValue.no_top_killer_message_enabled = config.getBoolean("No-Top-Killer-Message.Message", false);
-        ConfigValue.no_top_killer_message = config.getStringList("No-Top-Killer-Message.Message");
+        if(config.contains("Top-Killer-Message.Sub-Lines"))
+            ConfigValue.top_killer_sub_lines = config.getStringList("Top-Killer-Message.Sub-Lines");
+
+        ConfigValue.no_top_killer_message_enabled = config.getBoolean("No-Top-Killer-Message.Enabled", false);
+        if(config.contains("No-Top-Killer-Message.Message"))
+            ConfigValue.no_top_killer_message = config.getStringList("No-Top-Killer-Message.Message");
 
         ConfigValue.papi_next_tier_lobby_waiting = config.getString("Next-Tier-PAPI-Placeholder.Lobby-Waiting", ConfigValue.papi_next_tier_lobby_waiting);
         ConfigValue.papi_next_tier_lobby_starting = config.getString("Next-Tier-PAPI-Placeholder.Lobby-Starting", ConfigValue.papi_next_tier_lobby_starting);
@@ -143,13 +149,15 @@ public class MainConfig {
         ConfigValue.papi_next_tier_lobby_stopped = config.getString("Next-Tier-PAPI-Placeholder.Lobby-Stopped", ConfigValue.papi_next_tier_lobby_stopped);
 
         {
-            ConfigValue.papi_arena_mode.clear();
+            if(config.contains("PAPI-Arena-Modes")) {
+                ConfigValue.papi_arena_mode.clear();
 
-            for (String string : config.getStringList("PAPI-Arena-Modes")){
-                if(string.contains(":")){
-                    final String[] strings = string.split(":");
+                for (String string : config.getStringList("PAPI-Arena-Modes")) {
+                    if (string.contains(":")) {
+                        final String[] strings = string.split(":");
 
-                    ConfigValue.papi_arena_mode.put(strings[0], strings[1]);
+                        ConfigValue.papi_arena_mode.put(strings[0], strings[1]);
+                    }
                 }
             }
         }
@@ -161,15 +169,17 @@ public class MainConfig {
 
         ConfigValue.fireball_whitelist_enabled = config.getBoolean("FireballWhitelist.Enabled", false);
         {
-            ConfigValue.fireball_whitelist_blocks.clear();
+            if(config.contains("FireballWhitelist.Blocks")) {
+                ConfigValue.fireball_whitelist_blocks.clear();
 
-            for(String blockName : config.getStringList("FireballWhitelist.Blocks")){
+                for (String blockName : config.getStringList("FireballWhitelist.Blocks")) {
 
-                final Material mat = Helper.get().getMaterialByName(blockName);
+                    final Material mat = Helper.get().getMaterialByName(blockName);
 
-                if(mat != null)
-                    ConfigValue.fireball_whitelist_blocks.add(mat);
+                    if (mat != null)
+                        ConfigValue.fireball_whitelist_blocks.add(mat);
 
+                }
             }
         }
 
@@ -197,28 +207,35 @@ public class MainConfig {
 
         ConfigValue.remove_invis_ondamage_enabled = config.getBoolean("Break-Invis.Enabled", true);
         {
-            for(String string : config.getStringList("Break-Invis.Causes")){
+            if(config.contains("Break-Invis.Causes")) {
 
-                try {
-                    ConfigValue.remove_invis_damge_causes.add(EntityDamageEvent.DamageCause.valueOf(string));
-                }catch(IllegalArgumentException exception){
-                    // Log failure to parse
+                ConfigValue.remove_invis_damge_causes.clear();
+
+                for (String string : config.getStringList("Break-Invis.Causes")) {
+
+                    try {
+                        ConfigValue.remove_invis_damge_causes.add(EntityDamageEvent.DamageCause.valueOf(string));
+                    } catch (IllegalArgumentException exception) {
+                        // Log failure to parse
+                    }
                 }
             }
         }
 
         ConfigValue.custom_team_colors_enabled = config.getBoolean("Custom-Team-Chat-Color.Enabled", false);
         {
-            ConfigValue.custom_team_colors.clear();
+            if(config.contains("Custom-Team-Chat-Color.Teams")) {
+                ConfigValue.custom_team_colors.clear();
 
-            for(String string : config.getStringList("Custom-Team-Chat-Color.Teams")){
-                if(string.contains(":")){
-                    final String[] strings = string.split(":");
-                    final Team team = Team.getByName(strings[0]);
-                    final ChatColor chatColor = ChatColor.getByChar(strings[1]);
+                for (String string : config.getStringList("Custom-Team-Chat-Color.Teams")) {
+                    if (string.contains(":")) {
+                        final String[] strings = string.split(":");
+                        final Team team = Team.getByName(strings[0]);
+                        final ChatColor chatColor = ChatColor.getByChar(strings[1]);
 
-                    if(team != null && chatColor != null){
-                        ConfigValue.custom_team_colors.put(team, chatColor);
+                        if (team != null && chatColor != null) {
+                            ConfigValue.custom_team_colors.put(team, chatColor);
+                        }
                     }
                 }
             }
@@ -233,6 +250,27 @@ public class MainConfig {
 
         ConfigValue.remove_empty_buckets = config.getBoolean("Empty-Buckets", true);
         ConfigValue.remove_empty_potions = config.getBoolean("Empty-Buckets", true);
+
+        ConfigValue.custom_height_cap_enabled = config.getBoolean("Height-Cap.Enabled", false);
+        ConfigValue.custom_height_cap_warn = config.getString("Height-Cap.Message", ConfigValue.custom_height_cap_warn);
+        {
+            if(config.contains("Custom-Team-Chat-Color.Teams")) {
+                ConfigValue.custom_height_cap_arenas.clear();
+
+                for (String string : config.getStringList("Height-Cap.Arenas")) {
+                    if (!string.contains(":"))
+                        continue;
+
+                    final String[] strings = string.split(":");
+                    final Integer capInt = Helper.get().parseInt(strings[1]);
+
+                    if (capInt != null)
+                        continue;
+
+                    ConfigValue.custom_height_cap_arenas.put(strings[0], capInt);
+                }
+            }
+        }
 
 
         // auto update file if newer version
@@ -274,7 +312,6 @@ public class MainConfig {
 
         config.addEmptyLine();
 
-        // TODO Update?
         config.addComment("Adds 'Tier I' to spawners listed");
         config.addComment("Add the spawner id of the item being dropped");
         config.set("Tier-One-Titles.Tier-Name", ConfigValue.gen_tiers_start_tier);
@@ -344,7 +381,6 @@ public class MainConfig {
 
         config.addEmptyLine();
 
-        //TODO UPDATE?
         config.addComment("Top killer message displayed at the end of a round");
         config.set("Top-Killer-Message.Enabled", ConfigValue.top_killer_message_enabled);
         config.set("Top-Killer-Message.Pre-Lines", ConfigValue.top_killer_pre_lines);
@@ -551,14 +587,13 @@ public class MainConfig {
 
         config.addComment("If this is enabled, MBedwars dealers/upgrade-dealers");
         config.addComment("Will look at the closest players");
-        // TODO config.set("Friendly-Villagers", ConfigValue.friendly_villagers);
+        config.set("Friendly-Villagers", ConfigValue.friendly_villagers);
 
         config.addEmptyLine();
 
-        // TODO Update & load
         config.addComment("Add a height cap for specific MBedwars arenas");
         config.addComment("Add height cap like 'arenaName:70' (supports arena conditions)");
-        config.set("Height-Cap.Enabled", ConfigValue.custom_height_cap);
+        config.set("Height-Cap.Enabled", ConfigValue.custom_height_cap_enabled);
         config.set("Height-Cap.Message", ConfigValue.custom_height_cap_warn);
         {
             final List<String> arenas = new ArrayList<>();
@@ -580,22 +615,51 @@ public class MainConfig {
     }
 
     public static void updateV1Configs(FileConfiguration config) {
+
+        {
+            if(config.contains("Tier-One-Titles.Spawners")) {
+                ConfigValue.gen_tiers_start_spawners.clear();
+
+                for (String string : config.getStringList("Tier-One-Titles.Spawners")) {
+                    final Material material = Helper.get().getMaterialByName(string);
+
+                    if (material == null)
+                        continue;
+
+                    for (DropType type : GameAPI.get().getDropTypes()) {
+                        final ItemStack[] droppingItemStacks = type.getDroppingMaterials();
+
+                        for (ItemStack itemStack : droppingItemStacks) {
+                            if (itemStack.getType() == material) {
+                                ConfigValue.gen_tiers_start_spawners.add(type);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         ConfigValue.custom_action_bar_in_game = config.getBoolean("Action-Bar-Enabled-In-Game", false);
         ConfigValue.custom_action_bar_in_lobby = config.getBoolean("Action-Bar-Enabled-In-Lobby", false);
         ConfigValue.custom_action_bar_message = config.getString("Action-Bar-Message", ConfigValue.custom_action_bar_message);
 
         ConfigValue.final_kill_suffix_enabled = config.getBoolean("Final-Kill-Message", true);
 
-        ConfigValue.custom_bed_break_message = config.getStringList("Player-Destroy-Message");
-        ConfigValue.auto_bed_break_message = config.getStringList("Auto-Destroy-Message");
+        if(config.contains("Player-Destroy-Message"))
+            ConfigValue.custom_bed_break_message = config.getStringList("Player-Destroy-Message");
+        if(config.contains("Auto-Destroy-Message"))
+            ConfigValue.auto_bed_break_message = config.getStringList("Auto-Destroy-Message");
 
         ConfigValue.bed_destroy_title = config.getString("Notification.Big-Title", ConfigValue.bed_destroy_title);
         ConfigValue.bed_destroy_subtitle = config.getString("Notification.Small-Title", ConfigValue.bed_destroy_subtitle);
 
         ConfigValue.team_eliminate_message_enabled = config.getBoolean("Team-Eliminate-Message-Enabled", true);
-        ConfigValue.team_eliminate_message = config.getStringList("Team-Eliminate-Message");
+        if(config.contains("Team-Eliminate-Message"))
+            ConfigValue.team_eliminate_message = config.getStringList("Team-Eliminate-Message");
 
-        ConfigValue.no_top_killer_message = config.getStringList("No-Top-Killers-Message");
+        if(config.contains("No-Top-Killers-Message"))
+            ConfigValue.no_top_killer_message = config.getStringList("No-Top-Killers-Message");
 
         ConfigValue.gen_tiers_scoreboard_updating_enabled = config.getBoolean("Scoreboard-Updating");
         ConfigValue.gen_tiers_scoreboard_updating_interval = config.getInt("Scoreboard-Updating-Interval", 5);
@@ -613,33 +677,39 @@ public class MainConfig {
 
     public static void loadPermanentEffects(FileConfiguration config, String path){
 
-        ConfigValue.permanent_effects_arenas.clear();
+        if(config.contains(path)) {
 
-        for(String string : config.getStringList(path)){
+            ConfigValue.permanent_effects_arenas.clear();
 
-            if(!string.contains(":"))
-                continue;
+            for (String string : config.getStringList(path)) {
 
-            final String[] strings = string.split(":");
+                if (!string.contains(":"))
+                    continue;
 
-            final String arenaId = strings[0];
-            final String effectName = strings[1];
-            Integer amplifier = Helper.get().parseInt(strings[2]);
+                final String[] strings = string.split(":");
 
-            if(effectName == null || arenaId == null)
-                continue;
+                final String arenaId = strings[0];
+                final String effectName = strings[1];
+                Integer amplifier = null;
 
-            if(amplifier == null)
-                amplifier = 7;
+                if (strings.length > 2)
+                    amplifier = Helper.get().parseInt(strings[2]);
 
-            final PotionEffectType type = PotionEffectType.getByName(effectName);
+                if (effectName == null || arenaId == null)
+                    continue;
 
-            if(type == null)
-                continue;
+                if (amplifier == null)
+                    amplifier = 1;
 
-            final PotionEffect effect = new PotionEffect(type, Integer.MAX_VALUE, amplifier);
+                final PotionEffectType type = PotionEffectType.getByName(effectName);
 
-            ConfigValue.permanent_effects_arenas.put(arenaId, effect);
+                if (type == null)
+                    continue;
+
+                final PotionEffect effect = new PotionEffect(type, Integer.MAX_VALUE, amplifier);
+
+                ConfigValue.permanent_effects_arenas.put(arenaId, effect);
+            }
         }
     }
 }
