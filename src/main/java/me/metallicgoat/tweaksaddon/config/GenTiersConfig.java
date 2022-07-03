@@ -149,6 +149,8 @@ public class GenTiersConfig {
 
         config.addComment("MAKE SURE Gen-Tiers are enabled in the config.yml!");
 
+        config.addEmptyLine();
+
         config.addComment("Tier-Name (Used in PAPI Placeholders)");
         config.addComment("Tier-Levels (Used in Holos)");
         config.addComment("Action (gen-upgrade, bed-destroy, game-over)");
@@ -156,6 +158,8 @@ public class GenTiersConfig {
         config.addComment("Speed (How often an item drops (in seconds))");
         config.addComment("Time (time until action - NOTE time starts after the last action)");
         config.addComment("Message (chat message sent on trigger)");
+
+        config.addEmptyLine();
 
         for(Map.Entry<Integer, GenTierLevel> entry : ConfigValue.gen_tier_levels.entrySet()){
 

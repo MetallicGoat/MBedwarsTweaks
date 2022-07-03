@@ -2,9 +2,11 @@ package me.metallicgoat.tweaksaddon.tweaks.advancedswords;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
@@ -32,12 +34,21 @@ public class AntiChest implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
 
-        //TODO
-        /*
-        if(e.getAction() == InventoryAction.HOTBAR_SWAP)
-            System.out.println("Hotbar swap");
+        if(e.getAction() == InventoryAction.HOTBAR_SWAP || e.getAction() == InventoryAction.HOTBAR_MOVE_AND_READD){
+            final HumanEntity player = e.getWhoClicked();
+            final Inventory inventory = player != null ? player.getInventory() : null;
 
-         */
+            if(inventory != null){
+                final int swapSlot = e.getHotbarButton();
+                final ItemStack itemStack = inventory.getItem(swapSlot);
+
+                if(itemStack != null
+                        && ConfigValue.anti_chest_materials.contains(itemStack.getType())
+                        && ToolSwordHelper.isNotToIgnore(itemStack)){
+                    e.setCancelled(true);
+                }
+            }
+        }
 
         final Inventory clicked = e.getClickedInventory();
         if(e.getInventory().getSize() > 26) {
@@ -52,6 +63,7 @@ public class AntiChest implements Listener {
             }
         }
     }
+
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent e) {
         final ItemStack dragged = e.getOldCursor();

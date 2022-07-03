@@ -32,7 +32,7 @@ public class ToolSwordHelper {
 
     public static int getSwordToolLevel(Material tool){
 
-        String toolName = tool.name();
+        final String toolName = tool.name();
 
         if(toolName.contains("WOOD")){
             return 1;

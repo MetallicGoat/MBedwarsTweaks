@@ -32,7 +32,7 @@ public class DisableEmptyGenerators implements Listener {
     private void disableGens(Arena arena, Location spawnPoint){
         for(Spawner spawner : arena.getSpawners()){
 
-            if(!ConfigValue.disable_empty_generators_spawners.contains(spawner))
+            if(!ConfigValue.disable_empty_generators_spawners.contains(spawner.getDropType()))
                 return;
 
             final Location spawnerLoc = spawner.getLocation().toLocation(arena.getGameWorld());
