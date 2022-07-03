@@ -2,15 +2,14 @@ package me.metallicgoat.tweaksaddon.tweaks.gameplay;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
-import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class EmptyContainers implements Listener {
 
@@ -28,11 +27,7 @@ public class EmptyContainers implements Listener {
         if (arena == null)
             return;
 
-        Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
-            // Added isCancelled check because of WaterFlow or other plugin
-            if (!event.isCancelled())
-                event.getItemStack().setType(Material.AIR);
-        }, 1L);
+        event.getItemStack().setType(Material.AIR);
     }
 
     @EventHandler
@@ -47,9 +42,6 @@ public class EmptyContainers implements Listener {
         if (arena == null)
             return;
 
-        Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
-            if (!event.isCancelled())
-                event.getItem().setType(Material.AIR);
-        }, 1L);
+        event.setItem(new ItemStack(Material.AIR));
     }
 }

@@ -186,13 +186,15 @@ public class MainConfig {
         ConfigValue.disable_empty_generators = config.getBoolean("Disable-Unused-Gens.Enabled", false);
         ConfigValue.disable_empty_generators_range = config.getDouble("Disable-Unused-Gens.Range", ConfigValue.disable_empty_generators_range);
         {
-            ConfigValue.disable_empty_generators_spawners.clear();
+            if (config.contains("Disable-Unused-Gens.Gen-Types")) {
+                ConfigValue.disable_empty_generators_spawners.clear();
 
-            for(String string : config.getStringList("Disable-Unused-Gens.Gen-Types")){
-                final DropType type = Util.getDropType(string);
+                for (String string : config.getStringList("Disable-Unused-Gens.Gen-Types")) {
+                    final DropType type = Util.getDropType(string);
 
-                if (type != null)
-                    ConfigValue.disable_empty_generators_spawners.add(type);
+                    if (type != null)
+                        ConfigValue.disable_empty_generators_spawners.add(type);
+                }
             }
         }
 
@@ -671,7 +673,6 @@ public class MainConfig {
         ConfigValue.personal_ender_chests_enabled = config.getBoolean("Personal-Ender-Chests");
 
         loadPermanentEffects(config, "Permanent-Effects");
-
 
     }
 

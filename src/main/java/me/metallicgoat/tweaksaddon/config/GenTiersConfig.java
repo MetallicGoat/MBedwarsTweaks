@@ -147,6 +147,16 @@ public class GenTiersConfig {
     private static void save() throws Exception{
         final YamlConfigurationDescriptor config = new YamlConfigurationDescriptor();
 
+        config.addComment("MAKE SURE Gen-Tiers are enabled in the config.yml!");
+
+        config.addComment("Tier-Name (Used in PAPI Placeholders)");
+        config.addComment("Tier-Levels (Used in Holos)");
+        config.addComment("Action (gen-upgrade, bed-destroy, game-over)");
+        config.addComment("Type (Type of spawner that will be updated)");
+        config.addComment("Speed (How often an item drops (in seconds))");
+        config.addComment("Time (time until action - NOTE time starts after the last action)");
+        config.addComment("Message (chat message sent on trigger)");
+
         for(Map.Entry<Integer, GenTierLevel> entry : ConfigValue.gen_tier_levels.entrySet()){
 
             if(entry.getKey() == null || entry.getValue() == null)
@@ -176,11 +186,12 @@ public class GenTiersConfig {
         // No updates yet :)
     }
 
-    // TODO fix the major issue
     private static void updateV1Configs(FileConfiguration config){
         final ConfigurationSection tiersSection = config.getConfigurationSection("Gen-Tiers");
 
-        int lastVal = -1;
+        int val = -1;
+        GenTierLevel bedBreakTier = null;
+        GenTierLevel gameOverTier = null;
 
         if (tiersSection != null) {
             for (String levelNumString : tiersSection.getKeys(false)) {
@@ -190,8 +201,8 @@ public class GenTiersConfig {
                 final String tierName = config.getString(configKey + "TierName");
                 final String tierLevel = config.getString(configKey + "TierLevel");
                 final String typeString = config.getString(configKey + "Type");
-                final long time = config.getLong(configKey + "Time");
-                final double speed = config.getDouble(configKey + "Speed");
+                final long time = config.getLong(configKey + "Time", 8);
+                final double speed = config.getDouble(configKey + "Speed", 8.0);
                 final String message = config.getString(configKey + "Chat");
 
                 if(tierName == null){
@@ -199,27 +210,11 @@ public class GenTiersConfig {
                     continue;
                 }
 
-                if(levelNumString.equalsIgnoreCase("bed-break")){
-                    lastVal++;
+                if(levelNumString.equalsIgnoreCase("bed-break"))
+                    bedBreakTier = new GenTierLevel(tierName, tierLevel != null ? tierLevel : "Bed Gone", TierAction.BED_DESTROY, time, message != null ? message : "All beds have been broken");
 
-                    if(ConfigValue.gen_tier_levels.containsKey(lastVal)){
-                        // TODO log issues
-                        continue;
-                    }
-
-                    ConfigValue.gen_tier_levels.put(lastVal, new GenTierLevel(tierName, tierLevel, TierAction.BED_DESTROY, time, message));
-                }
-
-                if(levelNumString.equalsIgnoreCase("game-over")){
-                    lastVal++;
-
-                    if(ConfigValue.gen_tier_levels.containsKey(lastVal)){
-                        // TODO log issues
-                        continue;
-                    }
-
-                    ConfigValue.gen_tier_levels.put(lastVal, new GenTierLevel(tierName, tierLevel, TierAction.GAME_OVER, time, message));
-                }
+                if(levelNumString.equalsIgnoreCase("game-over"))
+                    gameOverTier = new GenTierLevel(tierName, tierLevel != null ? tierLevel : "Game Over", TierAction.GAME_OVER, time, message != null ? message : "Game Ended");
 
                 final Integer levelNum = Helper.get().parseInt(levelNumString);
 
@@ -227,6 +222,9 @@ public class GenTiersConfig {
                     // TODO Log issue
                     continue;
                 }
+
+                if(levelNum > val)
+                    val = levelNum;
 
                 final DropType dropType = Util.getDropType(typeString);
 
@@ -247,6 +245,16 @@ public class GenTiersConfig {
 
                 ConfigValue.gen_tier_levels.put(levelNum, genTierLevel);
             }
+        }
+
+        if(bedBreakTier != null){
+            val++;
+            ConfigValue.gen_tier_levels.put(val, bedBreakTier);
+        }
+
+        if(gameOverTier != null){
+            val++;
+            ConfigValue.gen_tier_levels.put(val, gameOverTier);
         }
     }
 }
