@@ -24,17 +24,17 @@ public class ConfigValue {
     );
 
     private static final List<Material> defaultMaterials = new ArrayList<>(Arrays.asList(
-            Helper.get().getMaterialByName("WOOD_SWORD"),
+            Helper.get().getMaterialByName("WOODEN_SWORD"),
             Helper.get().getMaterialByName("SHEARS"),
-            Helper.get().getMaterialByName("WOOD_PICKAXE"),
+            Helper.get().getMaterialByName("WOODEN_PICKAXE"),
             Helper.get().getMaterialByName("STONE_PICKAXE"),
             Helper.get().getMaterialByName("IRON_PICKAXE"),
-            Helper.get().getMaterialByName("GOLD_PICKAXE"),
+            Helper.get().getMaterialByName("GOLDEN_PICKAXE"),
             Helper.get().getMaterialByName("DIAMOND_PICKAXE"),
-            Helper.get().getMaterialByName("WOOD_AXE"),
+            Helper.get().getMaterialByName("WOODEN_AXE"),
             Helper.get().getMaterialByName("STONE_AXE"),
             Helper.get().getMaterialByName("IRON_AXE"),
-            Helper.get().getMaterialByName("GOLD_AXE"),
+            Helper.get().getMaterialByName("GOLDEN_AXE"),
             Helper.get().getMaterialByName("DIAMOND_AXE")
     ));
 
@@ -51,7 +51,7 @@ public class ConfigValue {
     public static boolean final_strike_enabled = false;
 
     public static boolean fireball_whitelist_enabled = false;
-    public static List<Material> fireball_whitelist_blocks = new ArrayList<>(Collections.singletonList(Helper.get().getMaterialByName("ENDER_STONE")));
+    public static List<Material> fireball_whitelist_blocks = new ArrayList<>(Collections.singletonList(Helper.get().getMaterialByName("END_STONE")));
 
     public static boolean prevent_liquid_build_up = true;
 
@@ -161,7 +161,7 @@ public class ConfigValue {
                 "Emerald II", "&eTier &cII",
                 Util.getDropType("emerald"),
                 TierAction.GEN_UPGRADE, 6, 40,
-                "&bEmerald Generators &ehave been upgraded to Tier &4II"
+                "&aEmerald Generators &ehave been upgraded to Tier &4II"
         ));
         put(3, new GenTierLevel(
                 "Diamond III", "&eTier &cIII",
@@ -173,7 +173,7 @@ public class ConfigValue {
                 "Emerald III", "&eTier &cIII",
                 Util.getDropType("emerald"),
                 TierAction.GEN_UPGRADE, 6, 30,
-                "&bEmerald Generators &ehave been upgraded to Tier &4III"
+                "&aEmerald Generators &ehave been upgraded to Tier &4III"
         ));
         put(5, new GenTierLevel("Bed Gone", "Bed Gone", TierAction.BED_DESTROY, 7, "All beds have been broken"));
         put(6, new GenTierLevel("Game Over", "Game Over", TierAction.GAME_OVER, 10, "Game Ended"));
@@ -181,7 +181,7 @@ public class ConfigValue {
     public static boolean gen_tiers_custom_holo_enabled = false;
     public static List<String> gen_tiers_spawner_holo_titles = new ArrayList<>(Arrays.asList(
             "{tier}",
-            "{spawner-color}{spawner}",
+            "{spawner}",
             "&eSpawning in &c{time} &eseconds!"
     ));
     public static List<DropType> gen_tiers_start_spawners = defaultDropTypesExist
@@ -207,7 +207,7 @@ public class ConfigValue {
     public static List<Material> sword_drop_materials = new ArrayList<>(Arrays.asList(
             Helper.get().getMaterialByName("STONE_SWORD"),
             Helper.get().getMaterialByName("IRON_SWORD"),
-            Helper.get().getMaterialByName("GOLD_SWORD"),
+            Helper.get().getMaterialByName("GOLDEN_SWORD"),
             Helper.get().getMaterialByName("DIAMOND_SWORD")
     ));
 

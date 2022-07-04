@@ -20,6 +20,8 @@ public class GenTiersConfig {
         return new File(MBedwarsTweaksPlugin.getAddon().getDataFolder(), "gen-tiers.yml");
     }
 
+    // TODO ensure tiers are numbered correctly
+
     public static void load(){
         synchronized(MainConfig.class){
             try{
@@ -49,16 +51,16 @@ public class GenTiersConfig {
         }
 
         // read it
-        ConfigValue.gen_tier_levels.clear();
 
         final ConfigurationSection tiersSection = config.getConfigurationSection("Gen-Tiers");
 
         if (tiersSection != null) {
+            ConfigValue.gen_tier_levels.clear();
             for (String levelNumString : tiersSection.getKeys(false)) {
                 final Integer levelNum = Helper.get().parseInt(levelNumString);
 
                 if (levelNum == null){
-                    // TODO Log issue
+                    // TODO System.out.println("Level Num Issue");
                     continue;
                 }
 
@@ -74,7 +76,7 @@ public class GenTiersConfig {
 
                 // TODO Validate other values not null
                 if(actionString == null) {
-                    // TODO Log issues
+                    // TODO System.out.println("Level String Issue");
                     continue;
                 }
 
@@ -89,7 +91,7 @@ public class GenTiersConfig {
                 }
 
                 if(action == null){
-                    // TODO Log issues
+                    // TODO System.out.println("Action parse issue");
                     continue;
                 }
 
@@ -98,7 +100,7 @@ public class GenTiersConfig {
                     final DropType dropType = Util.getDropType(typeString);
 
                     if (dropType == null){
-                        // TODO Log Issues
+                        // TODO System.out.println("Drop type parse issue");
                         continue;
                     }
 
@@ -111,6 +113,8 @@ public class GenTiersConfig {
                             speed,
                             message
                     );
+
+                    // TODO System.out.println("Level Num " + levelNum);
 
                     ConfigValue.gen_tier_levels.put(levelNum, genTierLevel);
                 } else {

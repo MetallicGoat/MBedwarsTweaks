@@ -14,8 +14,6 @@ import java.util.*;
 
 public class TopKillerMessage implements Listener {
 
-    //TODO: Showing 0
-
     private final HashMap<Arena, Collection<Player>> arenaPlayerHashMap = new HashMap<>();
     private final HashMap<Player, Integer> scoreHashMap = new HashMap<>();
 
@@ -69,16 +67,19 @@ public class TopKillerMessage implements Listener {
 
     private void printMessage(RoundEndEvent event, LinkedHashMap<Player, Integer> playerIntegerMap) {
         final List<String> formattedList = new ArrayList<>();
+        final Object[] keys = playerIntegerMap.keySet().toArray();
 
-        if (!playerIntegerMap.isEmpty()) {
+        if (!playerIntegerMap.isEmpty() && playerIntegerMap.get((Player) keys[0]) != 0) {
 
             for (String line : ConfigValue.top_killer_pre_lines) {
                 formattedList.add(Message.build(line).done());
             }
 
-            final Object[] keys = playerIntegerMap.keySet().toArray();
-
             for (Map.Entry<Integer, String> scoreText : ConfigValue.top_killer_lines.entrySet()) {
+
+                if (keys.length < scoreText.getKey())
+                    continue;
+
                 final Player player = (Player) keys[scoreText.getKey() - 1];
 
                 if (player == null)

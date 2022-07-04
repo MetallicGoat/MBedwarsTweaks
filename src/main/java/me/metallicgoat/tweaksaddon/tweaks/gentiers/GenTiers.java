@@ -11,6 +11,7 @@ import de.marcely.bedwars.api.message.Message;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitTask;
@@ -45,7 +46,7 @@ public class GenTiers implements Listener {
             }
         }
 
-        scheduleTier(arena, 0);
+        scheduleTier(arena, 1);
     }
 
     @EventHandler
@@ -76,9 +77,8 @@ public class GenTiers implements Listener {
     private void scheduleTier(Arena arena, int key) {
 
         // Check if tier exists
-        if (ConfigValue.gen_tier_levels.get(key) != null) {
+        if (ConfigValue.gen_tier_levels.get(key) == null)
             return;
-        }
 
         final GenTierLevel currentLevel = ConfigValue.gen_tier_levels.get(key);
 
@@ -186,13 +186,14 @@ public class GenTiers implements Listener {
         final String strippedSpawnerName = spawnerName.substring(2);
         final List<String> formatted = new ArrayList<>();
 
-        for (String string : ConfigValue.gen_tiers_spawner_holo_titles) {
-            final String formattedString = Message.build(string)
-                    .placeholder("{tier}", tier)
-                    .placeholder("{spawner-color}", colorCode)
-                    .placeholder("{spawner}", strippedSpawnerName)
-                    .done();
-            formatted.add(formattedString);
+        // Dont use placeholder, use REPLACE
+        for(String string : ConfigValue.gen_tiers_spawner_holo_titles){
+            final String formattedString = string
+                    .replace("{tier}", tier)
+                    .replace("{spawner-color}", colorCode)
+                    .replace("{spawner}", strippedSpawnerName);
+
+            formatted.add(ChatColor.translateAlternateColorCodes('&', formattedString));
         }
 
         return formatted;
