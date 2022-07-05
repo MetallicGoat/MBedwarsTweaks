@@ -1,7 +1,7 @@
-version: 1.0.0-R5
+version: 2.0.0-Pre-1
 name: MBedwarsTweaks
 author: MetallicGoat
-main: me.metallicgoat.tweaks.MBedwarsTweaks
+main: me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin
 description: Tweaks and Features for MBedwars
 api-version: 1.13
 depend: [MBedwars]
