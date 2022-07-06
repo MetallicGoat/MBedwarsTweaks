@@ -13,12 +13,12 @@ import org.bukkit.event.Listener;
 public class BedBreakTier implements Listener {
 
     // Sets all beds to be destroyed at a specified time
-    public static void breakArenaBeds(Arena arena){
+    public static void breakArenaBeds(Arena arena, String tierName){
         // Break all beds in an arena
         for (Team team : arena.getEnabledTeams()) {
             final XYZD bedLoc = arena.getBedLocation(team);
             if (!arena.isBedDestroyed(team) && bedLoc != null) {
-                arena.destroyBedNaturally(team, "Auto-Break", !ConfigValue.custom_bed_break_message_enabled);
+                arena.destroyBedNaturally(team, Message.build(tierName).done(), !ConfigValue.custom_bed_break_message_enabled);
                 bedLoc.toLocation(arena.getGameWorld()).getBlock().setType(Material.AIR);
                 if(ConfigValue.custom_bed_break_message_enabled)
                     sendBedBreakMessage(arena, team, null);

@@ -365,11 +365,13 @@ public class MainConfig {
 
         config.addEmptyLine();
 
+        config.addComment("Message displayed when all beds are broken by the gen tiers system");
         config.set("Auto-Bed-Break-Message.Enabled", ConfigValue.auto_bed_break_message_enabled);
         config.set("Auto-Bed-Break-Message.Message", ConfigValue.auto_bed_break_message);
 
         config.addEmptyLine();
 
+        config.addComment("Titles displayed when a bed is broken. Overrides the MBedwars titles");
         config.set("Bed-Destroy-Title.Enabled", ConfigValue.bed_destroy_title_enabled);
         config.set("Bed-Destroy-Title.BigTitle", ConfigValue.bed_destroy_title);
         config.set("Bed-Destroy-Title.SubTitle", ConfigValue.bed_destroy_subtitle);

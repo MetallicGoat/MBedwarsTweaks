@@ -175,13 +175,13 @@ public class ConfigValue {
                 TierAction.GEN_UPGRADE, 6, 30,
                 "&aEmerald Generators &ehave been upgraded to Tier &4III"
         ));
-        put(5, new GenTierLevel("Bed Gone", "Bed Gone", TierAction.BED_DESTROY, 7, "All beds have been broken"));
-        put(6, new GenTierLevel("Game Over", "Game Over", TierAction.GAME_OVER, 10, "Game Ended"));
+        put(5, new GenTierLevel("Auto-Break", "Bed Destroy", TierAction.BED_DESTROY, 7, "All beds have been broken"));
+        put(6, new GenTierLevel("Game-Over", "Game Over", TierAction.GAME_OVER, 10, "Game Ended"));
     }} : new HashMap<>();
     public static boolean gen_tiers_custom_holo_enabled = false;
     public static List<String> gen_tiers_spawner_holo_titles = new ArrayList<>(Arrays.asList(
+            "{spawner-color}{spawner}",
             "{tier}",
-            "{spawner}",
             "&eSpawning in &c{time} &eseconds!"
     ));
     public static List<DropType> gen_tiers_start_spawners = defaultDropTypesExist
@@ -238,12 +238,12 @@ public class ConfigValue {
     public static String papi_next_tier_lobby_end_lobby = "&rGame Over";
     public static String papi_next_tier_lobby_stopped = "&rArena Stopped";
     public static String papi_next_tier_lobby_resetting = "&rArena Regenerating";
-    public static String papi_next_tier_lobby_running = "{next-tier} in &a{time}'";
+    public static String papi_next_tier_lobby_running = "{next-tier} in &a{time}";
 
-    public static String papi_team_status_has_bed = " &7You";
-    public static String papi_team_status_team_dead = "&a✔";
+    public static String papi_team_status_has_bed = "&a✔";
+    public static String papi_team_status_team_dead = "&c✘";
     public static String papi_team_status_no_bed = "&a{player-amount}";
-    public static String papi_team_status_your_team_suffix = "&c✘";
+    public static String papi_team_status_your_team_suffix = " &7You";
 
     public static boolean papi_count_spectators_as_players = false;
 

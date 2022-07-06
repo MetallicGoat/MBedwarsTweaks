@@ -85,7 +85,7 @@ public class GenTiers implements Listener {
         int nextTierLevel = key + 1;
 
         // Update Placeholder
-        nextTierMap.put(arena, currentLevel.getTierLevel());
+        nextTierMap.put(arena, currentLevel.getTierName());
         timeToNextUpdate.put(arena, currentLevel.getTime() * 20 * 60);
 
         // Kill previous task if running for some reason
@@ -104,7 +104,7 @@ public class GenTiers implements Listener {
                     if (arena.getStatus() == ArenaStatus.RUNNING) {
                         // Break beds, start next tier
                         scheduleTier(arena, nextTierLevel);
-                        BedBreakTier.breakArenaBeds(arena);
+                        BedBreakTier.breakArenaBeds(arena, currentLevel.getTierName());
                     }
                 }, currentLevel.getTime() * 20 * 60));
                 break;
