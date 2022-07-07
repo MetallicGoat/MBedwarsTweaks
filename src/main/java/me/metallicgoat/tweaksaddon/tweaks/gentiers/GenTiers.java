@@ -20,6 +20,8 @@ import java.util.*;
 
 public class GenTiers implements Listener {
 
+    // TODO Sounds option
+
     public static HashMap<Arena, String> nextTierMap = new HashMap<>();
     public static HashMap<Arena, Long> timeToNextUpdate = new HashMap<>();
     private final HashMap<Arena, BukkitTask> tasksToKill = new HashMap<>();
@@ -32,17 +34,18 @@ public class GenTiers implements Listener {
             return;
 
         // Start updating placeholders
-        if (placeHolderTask == null) {
+        if (placeHolderTask == null)
             placeHolderTask = startUpdatingTime();
-        }
 
         final Arena arena = event.getArena();
 
         if (ConfigValue.gen_tiers_custom_holo_enabled) {
+
             // Add custom Holo titles
             for (Spawner spawner : arena.getSpawners()) {
-                if(ConfigValue.gen_tiers_start_spawners.contains(spawner.getDropType()))
+                if(ConfigValue.gen_tiers_start_spawners.contains(spawner.getDropType())) {
                     spawner.setOverridingHologramLines(formatHoloTiles(ConfigValue.gen_tiers_start_tier, spawner).toArray(new String[0]));
+                }
             }
         }
 

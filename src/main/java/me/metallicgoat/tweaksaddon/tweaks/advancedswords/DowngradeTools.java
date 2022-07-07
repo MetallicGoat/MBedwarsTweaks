@@ -25,24 +25,26 @@ public class DowngradeTools implements Listener {
     public static final HashMap<Player, Integer> axeHashMap = new HashMap<>();
 
     @EventHandler
-    public void onStart(RoundStartEvent e) {
-        for (Player player : e.getArena().getPlayers()) {
+    public void onStart(RoundStartEvent event) {
+        for (Player player : event.getArena().getPlayers()) {
             pickaxeHashMap.put(player, 0);
             axeHashMap.put(player, 0);
         }
     }
 
     @EventHandler
-    public void onRespawn(PlayerIngameRespawnEvent e) {
-        if (!ConfigValue.degrading_tool_groups || ConfigValue.advanced_tool_replacement_enabled)
+    public void onRespawn(PlayerIngameRespawnEvent event) {
+        if (!ConfigValue.degrading_tool_groups || !ConfigValue.advanced_tool_replacement_enabled)
             return;
 
-        final Player player = e.getPlayer();
-        final Arena arena = e.getArena();
+        final Player player = event.getPlayer();
+        final Arena arena = event.getArena();
         final Collection<BuyGroup> buyGroups = GameAPI.get().getBuyGroups();
 
         for (BuyGroup buyGroup : buyGroups) {
-            String buyGroupName = buyGroup.getName();
+
+            final String buyGroupName = buyGroup.getName();
+
             if (buyGroupName.equalsIgnoreCase("pickaxe")
                     || buyGroup.getName().equalsIgnoreCase("axe")) {
 
@@ -55,7 +57,7 @@ public class DowngradeTools implements Listener {
                 for (ShopItem item : shopItems) {
                     Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> item.getProducts().forEach(shopProduct -> {
                         arena.setBuyGroupLevel(player, buyGroup, level);
-                        shopProduct.give(e.getPlayer(), e.getArena().getPlayerTeam(player), e.getArena(), 1);
+                        shopProduct.give(event.getPlayer(), event.getArena().getPlayerTeam(player), event.getArena(), 1);
                     }), 1L);
                     break;
                 }
@@ -85,12 +87,12 @@ public class DowngradeTools implements Listener {
     }
 
     @EventHandler
-    public void onRespawn(PlayerIngameDeathEvent e) {
+    public void onRespawn(PlayerIngameDeathEvent event) {
         if (!ConfigValue.degrading_tool_groups || ConfigValue.advanced_tool_replacement_enabled)
             return;
 
-        final Player player = e.getPlayer();
-        final Arena arena = e.getArena();
+        final Player player = event.getPlayer();
+        final Arena arena = event.getArena();
         final Collection<BuyGroup> buyGroups = GameAPI.get().getBuyGroups();
 
         for (BuyGroup buyGroup : buyGroups) {

@@ -30,6 +30,9 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
         final MBedwarsTweaksPlugin plugin = MBedwarsTweaksPlugin.getInstance();
         final PluginManager manager = plugin.getServer().getPluginManager();
 
+        // Loading
+        manager.registerEvents(new LoadConfigs(), plugin);
+
         // Advanced Swords
         manager.registerEvents(new AlwaysSword(), plugin);
         manager.registerEvents(new AntiChest(), plugin);
