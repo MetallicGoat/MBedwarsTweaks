@@ -39,13 +39,18 @@ public class AntiChest implements Listener {
             final Inventory inventory = player != null ? player.getInventory() : null;
 
             if(inventory != null){
-                final int swapSlot = e.getHotbarButton();
-                final ItemStack itemStack = inventory.getItem(swapSlot);
 
-                if(itemStack != null
-                        && ConfigValue.anti_chest_materials.contains(itemStack.getType())
-                        && ToolSwordHelper.isNotToIgnore(itemStack)){
-                    e.setCancelled(true);
+                final int swapSlot = e.getHotbarButton();
+
+                if(swapSlot >= 0) {
+
+                    final ItemStack itemStack = inventory.getItem(swapSlot);
+
+                    if (itemStack != null
+                            && ConfigValue.anti_chest_materials.contains(itemStack.getType())
+                            && ToolSwordHelper.isNotToIgnore(itemStack)) {
+                        e.setCancelled(true);
+                    }
                 }
             }
         }

@@ -12,6 +12,8 @@ import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitTask;
@@ -19,6 +21,8 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.*;
 
 public class GenTiers implements Listener {
+
+    // TODO Sounds option
 
     public static HashMap<Arena, String> nextTierMap = new HashMap<>();
     public static HashMap<Arena, Long> timeToNextUpdate = new HashMap<>();
@@ -32,17 +36,18 @@ public class GenTiers implements Listener {
             return;
 
         // Start updating placeholders
-        if (placeHolderTask == null) {
+        if (placeHolderTask == null)
             placeHolderTask = startUpdatingTime();
-        }
 
         final Arena arena = event.getArena();
 
         if (ConfigValue.gen_tiers_custom_holo_enabled) {
+
             // Add custom Holo titles
             for (Spawner spawner : arena.getSpawners()) {
-                if(ConfigValue.gen_tiers_start_spawners.contains(spawner.getDropType()))
+                if(ConfigValue.gen_tiers_start_spawners.contains(spawner.getDropType())) {
                     spawner.setOverridingHologramLines(formatHoloTiles(ConfigValue.gen_tiers_start_tier, spawner).toArray(new String[0]));
+                }
             }
         }
 
@@ -85,7 +90,7 @@ public class GenTiers implements Listener {
         int nextTierLevel = key + 1;
 
         // Update Placeholder
-        nextTierMap.put(arena, currentLevel.getTierLevel());
+        nextTierMap.put(arena, currentLevel.getTierName());
         timeToNextUpdate.put(arena, currentLevel.getTime() * 20 * 60);
 
         // Kill previous task if running for some reason
@@ -95,6 +100,7 @@ public class GenTiers implements Listener {
 
         switch (currentLevel.getAction()) {
             case GAME_OVER: {
+                playTierSound(arena, currentLevel);
                 arena.setIngameTimeRemaining((int) (currentLevel.getTime() * 60));
                 break;
             }
@@ -103,8 +109,9 @@ public class GenTiers implements Listener {
                 tasksToKill.put(arena, Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
                     if (arena.getStatus() == ArenaStatus.RUNNING) {
                         // Break beds, start next tier
+                        playTierSound(arena, currentLevel);
                         scheduleTier(arena, nextTierLevel);
-                        BedBreakTier.breakArenaBeds(arena);
+                        BedBreakTier.breakArenaBeds(arena, currentLevel.getTierName());
                     }
                 }, currentLevel.getTime() * 20 * 60));
                 break;
@@ -120,6 +127,8 @@ public class GenTiers implements Listener {
                         // For all spawners
                         for (Spawner s : arena.getSpawners()) {
                             if (s.getDropType() == currentLevel.getType()) {
+
+                                playTierSound(arena, currentLevel);
                                 // Set drop time
                                 s.addDropDurationModifier("GEN_UPGRADE", MBedwarsTweaksPlugin.getInstance(), SpawnerDurationModifier.Operation.SET, currentLevel.getSpeed());
                                 // Add custom Holo tiles
@@ -197,5 +206,15 @@ public class GenTiers implements Listener {
         }
 
         return formatted;
+    }
+
+    private void playTierSound(Arena arena, GenTierLevel level){
+        final Sound sound = level.getEarnSound();
+
+        if(sound == null || arena == null)
+            return;
+
+        for(Player p : arena.getPlayers())
+            p.playSound(p.getLocation(), sound, 1F, 1F);
     }
 }

@@ -44,7 +44,10 @@ public class Placeholders extends PlaceholderExpansion {
         switch (params.toLowerCase()) {
             case "next-tier": {
                 // GenTiers with countdown
-                if (!ConfigValue.gen_tiers_enabled || arena == null)
+                if (!ConfigValue.gen_tiers_enabled)
+                    return "Gen-Tiers-Disabled";
+
+                if(arena == null)
                     return "";
 
                 switch (arena.getStatus()) {

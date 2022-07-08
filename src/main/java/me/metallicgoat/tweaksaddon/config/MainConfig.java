@@ -164,6 +164,13 @@ public class MainConfig {
 
         ConfigValue.papi_count_spectators_as_players = config.getBoolean("Player-Count-Placeholder-Count-Spectators", false);
 
+        ConfigValue.papi_team_status_has_bed = config.getString("Team-Status-Placeholder.Has-Bed", ConfigValue.papi_team_status_has_bed);
+        ConfigValue.papi_team_status_no_bed = config.getString("Team-Status-Placeholder.No-Bed", ConfigValue.papi_team_status_no_bed);
+        ConfigValue.papi_team_status_team_dead = config.getString("Team-Status-Placeholder.Team-Dead", ConfigValue.papi_team_status_team_dead);
+        ConfigValue.papi_team_status_your_team_suffix = config.getString("Team-Status-Placeholder.Your-Team", ConfigValue.papi_team_status_your_team_suffix);
+
+        ConfigValue.papi_team_you_placeholder = config.getString("Team-You-Placeholder", ConfigValue.papi_team_you_placeholder);
+
         ConfigValue.gen_tiers_scoreboard_updating_enabled = config.getBoolean("Force-Scoreboard-Updating.Enabled", false);
         ConfigValue.gen_tiers_scoreboard_updating_interval = config.getInt("Force-Scoreboard-Updating.Interval", 5);
 
@@ -230,14 +237,16 @@ public class MainConfig {
                 ConfigValue.custom_team_colors.clear();
 
                 for (String string : config.getStringList("Custom-Team-Chat-Color.Teams")) {
-                    if (string.contains(":")) {
-                        final String[] strings = string.split(":");
-                        final Team team = Team.getByName(strings[0]);
-                        final ChatColor chatColor = ChatColor.getByChar(strings[1]);
 
-                        if (team != null && chatColor != null) {
-                            ConfigValue.custom_team_colors.put(team, chatColor);
-                        }
+                    if (!string.contains(":"))
+                        continue;
+
+                    final String[] strings = string.split(":");
+                    final Team team = Team.getByName(strings[0]);
+                    final ChatColor chatColor = ChatColor.getByChar(strings[1]);
+
+                    if (team != null && chatColor != null) {
+                        ConfigValue.custom_team_colors.put(team, chatColor);
                     }
                 }
             }
@@ -285,10 +294,11 @@ public class MainConfig {
                 return;
             }
 
-            if(CURRENT_VERSION != VERSION) {
+            // TODO uncomment before v2 releases
+            //if(CURRENT_VERSION != VERSION) {
                 updateV2Configs(config);
                 save();
-            }
+            //}
         }
     }
 
@@ -365,11 +375,13 @@ public class MainConfig {
 
         config.addEmptyLine();
 
+        config.addComment("Message displayed when all beds are broken by the gen tiers system");
         config.set("Auto-Bed-Break-Message.Enabled", ConfigValue.auto_bed_break_message_enabled);
         config.set("Auto-Bed-Break-Message.Message", ConfigValue.auto_bed_break_message);
 
         config.addEmptyLine();
 
+        config.addComment("Titles displayed when a bed is broken. Overrides the MBedwars titles");
         config.set("Bed-Destroy-Title.Enabled", ConfigValue.bed_destroy_title_enabled);
         config.set("Bed-Destroy-Title.BigTitle", ConfigValue.bed_destroy_title);
         config.set("Bed-Destroy-Title.SubTitle", ConfigValue.bed_destroy_subtitle);
@@ -438,10 +450,10 @@ public class MainConfig {
 
         config.addComment("PAPI Placeholder: %tweaks_team-status-{TeamName}%");
         config.addComment("To be used on the scoreboard as is above");
-        config.set("Team-Status-Placeholder.Your-Team", ConfigValue.papi_team_status_your_team_suffix);
         config.set("Team-Status-Placeholder.Has-Bed", ConfigValue.papi_team_status_has_bed);
         config.set("Team-Status-Placeholder.No-Bed", ConfigValue.papi_team_status_no_bed);
         config.set("Team-Status-Placeholder.Team-Dead", ConfigValue.papi_team_status_team_dead);
+        config.set("Team-Status-Placeholder.Your-Team", ConfigValue.papi_team_status_your_team_suffix);
 
         config.addEmptyLine();
 
@@ -451,6 +463,7 @@ public class MainConfig {
 
         config.addEmptyLine();
 
+        // TODO lobby/game configs?
         config.addComment("If set to true, the scoreboard will be force updated to refresh PAPI placeholders");
         config.addComment("Scoreboard will update every X amount of seconds");
         config.addComment("We recommended keeping at 5 or 10 seconds to reduce flicker");
@@ -533,12 +546,11 @@ public class MainConfig {
             final List<String> customTeamColors = new ArrayList<>();
 
             for(Map.Entry<Team, ChatColor> entry : ConfigValue.custom_team_colors.entrySet()){
-                customTeamColors.add(entry.getKey().name().toLowerCase() + ":" + entry.getValue().name().toLowerCase());
+                customTeamColors.add(entry.getKey().name().toLowerCase() + ":" + entry.getValue().getChar());
             }
 
             config.set("Custom-Team-Chat-Color.Teams", customTeamColors);
         }
-        config.set("Custom-Team-Chat-Color.Teams", null);
 
         config.addEmptyLine();
 

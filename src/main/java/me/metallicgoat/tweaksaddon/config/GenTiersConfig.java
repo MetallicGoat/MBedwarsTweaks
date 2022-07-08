@@ -3,10 +3,12 @@ package me.metallicgoat.tweaksaddon.config;
 import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.YamlConfigurationDescriptor;
+import me.metallicgoat.tweaksaddon.Console;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.Util;
 import me.metallicgoat.tweaksaddon.tweaks.gentiers.GenTierLevel;
 import me.metallicgoat.tweaksaddon.tweaks.gentiers.TierAction;
+import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -60,7 +62,7 @@ public class GenTiersConfig {
                 final Integer levelNum = Helper.get().parseInt(levelNumString);
 
                 if (levelNum == null){
-                    // TODO System.out.println("Level Num Issue");
+                    Console.printConfigWarn("Failed to load tier with level num of: " + levelNumString, "gen-tiers");
                     continue;
                 }
 
@@ -73,10 +75,12 @@ public class GenTiersConfig {
                 final double speed = config.getDouble(configKey + "Drop-Speed");
                 final long time = config.getLong(configKey + "Time");
                 final String message = config.getString(configKey + "Message");
+                final String soundString = config.getString(configKey + "Earn-Sound");
 
                 // TODO Validate other values not null
+
                 if(actionString == null) {
-                    // TODO System.out.println("Level String Issue");
+                    Console.printConfigWarn("Failed to load tier: [" + tierName + "]. Action is null", "gen-tiers");
                     continue;
                 }
 
@@ -91,16 +95,21 @@ public class GenTiersConfig {
                 }
 
                 if(action == null){
-                    // TODO System.out.println("Action parse issue");
+                    Console.printConfigWarn("Failed to load tier: [" + tierName + "]. Action '" + actionString + "' is invalid.", "gen-tiers");
                     continue;
                 }
+
+                Sound earnSound = null;
+
+                if(soundString != null)
+                    earnSound = Helper.get().getSoundByName(soundString);
 
                 if(action == TierAction.GEN_UPGRADE) {
 
                     final DropType dropType = Util.getDropType(typeString);
 
                     if (dropType == null){
-                        // TODO System.out.println("Drop type parse issue");
+                        Console.printConfigWarn("Failed to load gen-tier + [" + tierName + "]. '" + typeString + "' is not a valid DropType", "gen-tiers");
                         continue;
                     }
 
@@ -111,10 +120,9 @@ public class GenTiersConfig {
                             action,
                             time,
                             speed,
-                            message
+                            message,
+                            earnSound
                     );
-
-                    // TODO System.out.println("Level Num " + levelNum);
 
                     ConfigValue.gen_tier_levels.put(levelNum, genTierLevel);
                 } else {
@@ -124,7 +132,8 @@ public class GenTiersConfig {
                             action == TierAction.BED_DESTROY ? "Bed Gone" : "Game Over",
                             action,
                             time,
-                            action == TierAction.BED_DESTROY ? "All beds have been broken" : "Game Ended"
+                            action == TierAction.BED_DESTROY ? "All beds have been broken" : "Game Ended",
+                            earnSound
                     );
 
                     ConfigValue.gen_tier_levels.put(levelNum, genTierLevel);
@@ -184,6 +193,9 @@ public class GenTiersConfig {
 
             config.set(configKey + "Time", level.getTime());
             config.set(configKey + "Message", level.getEarnMessage());
+
+            if(level.getEarnSound() != null)
+                config.set(configKey + "Earn-Sound", level.getEarnSound());
         }
 
         config.save(getFile());
@@ -214,20 +226,20 @@ public class GenTiersConfig {
                 final String message = config.getString(configKey + "Chat");
 
                 if(tierName == null){
-                    // TODO Log issues
+                    Console.printConfigWarn("Failed to load tier with level num of: " + levelNumString, "gen-tiers");
                     continue;
                 }
 
                 if(levelNumString.equalsIgnoreCase("bed-break"))
-                    bedBreakTier = new GenTierLevel(tierName, tierLevel != null ? tierLevel : "Bed Gone", TierAction.BED_DESTROY, time, message != null ? message : "All beds have been broken");
+                    bedBreakTier = new GenTierLevel(tierName, tierLevel != null ? tierLevel : "Bed Gone", TierAction.BED_DESTROY, time, message != null ? message : "All beds have been broken", null);
 
                 if(levelNumString.equalsIgnoreCase("game-over"))
-                    gameOverTier = new GenTierLevel(tierName, tierLevel != null ? tierLevel : "Game Over", TierAction.GAME_OVER, time, message != null ? message : "Game Ended");
+                    gameOverTier = new GenTierLevel(tierName, tierLevel != null ? tierLevel : "Game Over", TierAction.GAME_OVER, time, message != null ? message : "Game Ended", null);
 
                 final Integer levelNum = Helper.get().parseInt(levelNumString);
 
                 if (levelNum == null){
-                    // TODO Log issue
+                    Console.printConfigWarn("Failed to load tier: [" + tierName  + "]. Level number is null.", "gen-tiers");
                     continue;
                 }
 
@@ -237,7 +249,7 @@ public class GenTiersConfig {
                 final DropType dropType = Util.getDropType(typeString);
 
                 if (dropType == null){
-                    // TODO Log Issues
+                    Console.printConfigWarn("Failed to load gen-tier + [" + tierName + "]. '" + typeString + "' is not a valid DropType", "gen-tiers");
                     continue;
                 }
 
@@ -248,7 +260,8 @@ public class GenTiersConfig {
                         TierAction.GEN_UPGRADE,
                         time,
                         speed,
-                        message
+                        message,
+                        null
                 );
 
                 ConfigValue.gen_tier_levels.put(levelNum, genTierLevel);

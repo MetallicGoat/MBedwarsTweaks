@@ -1,9 +1,6 @@
 package me.metallicgoat.tweaksaddon;
 
 import de.marcely.bedwars.api.BedwarsAPI;
-import me.metallicgoat.tweaksaddon.config.GenTiersConfig;
-import me.metallicgoat.tweaksaddon.config.MainConfig;
-import me.metallicgoat.tweaksaddon.config.SwordsToolsConfig;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -32,14 +29,9 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
         ToolSwordHelper.load();
         MBedwarsTweaksAddon.registerEvents();
 
-        // Load Configs
-        MainConfig.load();
-        SwordsToolsConfig.load();
-        GenTiersConfig.load();
-
         PluginDescriptionFile pdf = this.getDescription();
 
-        log(
+        Console.printInfo(
                 "------------------------------",
                 pdf.getName() + " For MBedwars",
                 "By: " + pdf.getAuthors(),
@@ -51,11 +43,13 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
 
             // TODO log if drop types are null
 
+            LoadConfigs.loadTweaksConfigs();
+
             if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
                 new Placeholders().register();
                 papiEnabled = true;
             } else {
-                log("PlaceholderAPI Was not Found! PAPI placeholders won't work!");
+                Console.printInfo("PlaceholderAPI Was not Found! PAPI placeholders won't work!");
             }
         });
     }
@@ -96,10 +90,5 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
         }
 
         return true;
-    }
-
-    private void log(String ...args) {
-        for(String s : args)
-            getLogger().info(s);
     }
 }

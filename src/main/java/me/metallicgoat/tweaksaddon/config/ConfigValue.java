@@ -16,12 +16,7 @@ import java.util.*;
 
 public class ConfigValue {
 
-    private static final boolean defaultDropTypesExist = (
-            Util.getDropType("iron") != null
-            && Util.getDropType("gold") != null
-            && Util.getDropType("diamond") != null
-            && Util.getDropType("emerald") != null
-    );
+    public static boolean defaultDropTypesExist = false;
 
     private static final List<Material> defaultMaterials = new ArrayList<>(Arrays.asList(
             Helper.get().getMaterialByName("WOODEN_SWORD"),
@@ -155,33 +150,37 @@ public class ConfigValue {
                 "Diamond II", "&eTier &cII",
                 Util.getDropType("diamond"),
                 TierAction.GEN_UPGRADE, 6, 30,
-                "&bDiamond Generators &ehave been upgraded to Tier &4II"
+                "&bDiamond Generators &ehave been upgraded to Tier &4II",
+                null
         ));
         put(2, new GenTierLevel(
                 "Emerald II", "&eTier &cII",
                 Util.getDropType("emerald"),
                 TierAction.GEN_UPGRADE, 6, 40,
-                "&aEmerald Generators &ehave been upgraded to Tier &4II"
+                "&aEmerald Generators &ehave been upgraded to Tier &4II",
+                null
         ));
         put(3, new GenTierLevel(
                 "Diamond III", "&eTier &cIII",
                 Util.getDropType("diamond"),
                 TierAction.GEN_UPGRADE, 6, 20,
-                "&bDiamond Generators &ehave been upgraded to Tier &4III"
+                "&bDiamond Generators &ehave been upgraded to Tier &4III",
+                null
         ));
         put(4, new GenTierLevel(
                 "Emerald III", "&eTier &cIII",
                 Util.getDropType("emerald"),
                 TierAction.GEN_UPGRADE, 6, 30,
-                "&aEmerald Generators &ehave been upgraded to Tier &4III"
+                "&aEmerald Generators &ehave been upgraded to Tier &4III",
+                null
         ));
-        put(5, new GenTierLevel("Bed Gone", "Bed Gone", TierAction.BED_DESTROY, 7, "All beds have been broken"));
-        put(6, new GenTierLevel("Game Over", "Game Over", TierAction.GAME_OVER, 10, "Game Ended"));
+        put(5, new GenTierLevel("Auto-Break", "Bed Destroy", TierAction.BED_DESTROY, 7, "All beds have been broken", null));
+        put(6, new GenTierLevel("Game-Over", "Game Over", TierAction.GAME_OVER, 10, "Game Ended", null));
     }} : new HashMap<>();
     public static boolean gen_tiers_custom_holo_enabled = false;
     public static List<String> gen_tiers_spawner_holo_titles = new ArrayList<>(Arrays.asList(
+            "{spawner-color}{spawner}",
             "{tier}",
-            "{spawner}",
             "&eSpawning in &c{time} &eseconds!"
     ));
     public static List<DropType> gen_tiers_start_spawners = defaultDropTypesExist
@@ -238,12 +237,12 @@ public class ConfigValue {
     public static String papi_next_tier_lobby_end_lobby = "&rGame Over";
     public static String papi_next_tier_lobby_stopped = "&rArena Stopped";
     public static String papi_next_tier_lobby_resetting = "&rArena Regenerating";
-    public static String papi_next_tier_lobby_running = "{next-tier} in &a{time}'";
+    public static String papi_next_tier_lobby_running = "{next-tier} in &a{time}";
 
-    public static String papi_team_status_has_bed = " &7You";
-    public static String papi_team_status_team_dead = "&a✔";
+    public static String papi_team_status_has_bed = "&a✔";
+    public static String papi_team_status_team_dead = "&c✘";
     public static String papi_team_status_no_bed = "&a{player-amount}";
-    public static String papi_team_status_your_team_suffix = "&c✘";
+    public static String papi_team_status_your_team_suffix = " &7You";
 
     public static boolean papi_count_spectators_as_players = false;
 

@@ -86,13 +86,15 @@ public class TopKillerMessage implements Listener {
                     continue;
 
                 // TODO Placeholders
-                formattedList.add(Message.build(scoreText.getValue())
+                final String buildPlaceholders = (scoreText.getValue())
+                        .replace("{killer-name}", player.getDisplayName())
+                        .replace("{kill-amount}", String.valueOf(playerIntegerMap.get(player)));
+
+                formattedList.add(Message.build(buildPlaceholders)
                         //.placeholder("%Winner-Members%", !event.getWinners().isEmpty() ? event.getWinners().stream().map(Player::getName).collect(Collectors.joining(", ")) : "")
                         //.placeholder("%Winner-Members-Colored%", event.getWinnerTeam() != null ? event.getWinnerTeam().getChatColor()+event.getWinners().stream().map(Player::getName).collect(Collectors.joining(ChatColor.WHITE+", "+event.getWinnerTeam().getChatColor())) : "")
                         //.placeholder("%Winner-Team-Name%", event.getWinnerTeam() != null ? event.getWinnerTeam().getDisplayName() : "")
                         //.placeholder("%Winner-Team-Color%", !event.getWinners().isEmpty() ? event.getWinnerTeam().getChatColor().toString() : "")
-                        .placeholder("{killer-name}", player.getDisplayName())
-                        .placeholder("{kill-amount}", String.valueOf(playerIntegerMap.get(player)))
                         .done());
 
             }
