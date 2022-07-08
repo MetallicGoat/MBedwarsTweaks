@@ -12,6 +12,8 @@ import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitTask;
@@ -98,6 +100,7 @@ public class GenTiers implements Listener {
 
         switch (currentLevel.getAction()) {
             case GAME_OVER: {
+                playTierSound(arena, currentLevel);
                 arena.setIngameTimeRemaining((int) (currentLevel.getTime() * 60));
                 break;
             }
@@ -106,6 +109,7 @@ public class GenTiers implements Listener {
                 tasksToKill.put(arena, Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
                     if (arena.getStatus() == ArenaStatus.RUNNING) {
                         // Break beds, start next tier
+                        playTierSound(arena, currentLevel);
                         scheduleTier(arena, nextTierLevel);
                         BedBreakTier.breakArenaBeds(arena, currentLevel.getTierName());
                     }
@@ -123,6 +127,8 @@ public class GenTiers implements Listener {
                         // For all spawners
                         for (Spawner s : arena.getSpawners()) {
                             if (s.getDropType() == currentLevel.getType()) {
+
+                                playTierSound(arena, currentLevel);
                                 // Set drop time
                                 s.addDropDurationModifier("GEN_UPGRADE", MBedwarsTweaksPlugin.getInstance(), SpawnerDurationModifier.Operation.SET, currentLevel.getSpeed());
                                 // Add custom Holo tiles
@@ -200,5 +206,15 @@ public class GenTiers implements Listener {
         }
 
         return formatted;
+    }
+
+    private void playTierSound(Arena arena, GenTierLevel level){
+        final Sound sound = level.getEarnSound();
+
+        if(sound == null || arena == null)
+            return;
+
+        for(Player p : arena.getPlayers())
+            p.playSound(p.getLocation(), sound, 1F, 1F);
     }
 }

@@ -21,7 +21,7 @@ public class Placeholders extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getIdentifier() {
-        return "MBedwarsTweaks";
+        return "tweaks";
     }
 
     @Override

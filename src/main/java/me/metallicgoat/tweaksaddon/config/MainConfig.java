@@ -237,14 +237,16 @@ public class MainConfig {
                 ConfigValue.custom_team_colors.clear();
 
                 for (String string : config.getStringList("Custom-Team-Chat-Color.Teams")) {
-                    if (string.contains(":")) {
-                        final String[] strings = string.split(":");
-                        final Team team = Team.getByName(strings[0]);
-                        final ChatColor chatColor = ChatColor.getByChar(strings[1]);
 
-                        if (team != null && chatColor != null) {
-                            ConfigValue.custom_team_colors.put(team, chatColor);
-                        }
+                    if (!string.contains(":"))
+                        continue;
+
+                    final String[] strings = string.split(":");
+                    final Team team = Team.getByName(strings[0]);
+                    final ChatColor chatColor = ChatColor.getByChar(strings[1]);
+
+                    if (team != null && chatColor != null) {
+                        ConfigValue.custom_team_colors.put(team, chatColor);
                     }
                 }
             }
@@ -292,10 +294,11 @@ public class MainConfig {
                 return;
             }
 
-            if(CURRENT_VERSION != VERSION) {
+            // TODO uncomment before v2 releases
+            //if(CURRENT_VERSION != VERSION) {
                 updateV2Configs(config);
                 save();
-            }
+            //}
         }
     }
 
@@ -543,12 +546,11 @@ public class MainConfig {
             final List<String> customTeamColors = new ArrayList<>();
 
             for(Map.Entry<Team, ChatColor> entry : ConfigValue.custom_team_colors.entrySet()){
-                customTeamColors.add(entry.getKey().name().toLowerCase() + ":" + entry.getValue().name().toLowerCase());
+                customTeamColors.add(entry.getKey().name().toLowerCase() + ":" + entry.getValue().getChar());
             }
 
             config.set("Custom-Team-Chat-Color.Teams", customTeamColors);
         }
-        config.set("Custom-Team-Chat-Color.Teams", null);
 
         config.addEmptyLine();
 

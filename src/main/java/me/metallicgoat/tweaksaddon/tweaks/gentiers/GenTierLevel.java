@@ -2,6 +2,7 @@ package me.metallicgoat.tweaksaddon.tweaks.gentiers;
 
 import de.marcely.bedwars.api.game.spawner.DropType;
 import lombok.Getter;
+import org.bukkit.Sound;
 
 public class GenTierLevel {
 
@@ -12,13 +13,15 @@ public class GenTierLevel {
     @Getter private final Long time;
     @Getter private final Double speed;
     @Getter private final String earnMessage;
+    @Getter private final Sound earnSound;
 
     public GenTierLevel(
             String tierName,
             String tierLevel,
             TierAction action,
             long time,
-            String earnMessage
+            String earnMessage,
+            Sound earnSound
     ) {
         this.tierName = tierName;
         this.tierLevel = tierLevel;
@@ -27,6 +30,7 @@ public class GenTierLevel {
         this.time = time;
         this.speed = null;
         this.earnMessage = earnMessage;
+        this.earnSound = earnSound;
     }
 
     public GenTierLevel(
@@ -36,7 +40,8 @@ public class GenTierLevel {
             TierAction action,
             long time, // Time until the update happens (After Last Event)
             double speed, // New drop speed
-            String earnMessage // The chat message displayed on update
+            String earnMessage, // The chat message displayed on update
+            Sound earnSound // Sound played when a tier is earned
     ) {
         this.tierName = tierName;
         this.tierLevel = tierLevel;
@@ -45,5 +50,6 @@ public class GenTierLevel {
         this.time = time;
         this.speed = speed;
         this.earnMessage = earnMessage;
+        this.earnSound = earnSound;
     }
 }

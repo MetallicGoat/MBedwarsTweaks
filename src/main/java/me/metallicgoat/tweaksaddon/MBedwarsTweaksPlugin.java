@@ -31,7 +31,7 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
 
         PluginDescriptionFile pdf = this.getDescription();
 
-        log(
+        Console.printInfo(
                 "------------------------------",
                 pdf.getName() + " For MBedwars",
                 "By: " + pdf.getAuthors(),
@@ -41,13 +41,15 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
 
         BedwarsAPI.onReady(() -> {
 
+            // TODO log if drop types are null
+
             LoadConfigs.loadTweaksConfigs();
 
             if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
                 new Placeholders().register();
                 papiEnabled = true;
             } else {
-                log("PlaceholderAPI Was not Found! PAPI placeholders won't work!");
+                Console.printInfo("PlaceholderAPI Was not Found! PAPI placeholders won't work!");
             }
         });
     }
@@ -88,10 +90,5 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
         }
 
         return true;
-    }
-
-    private void log(String ...args) {
-        for(String s : args)
-            getLogger().info(s);
     }
 }

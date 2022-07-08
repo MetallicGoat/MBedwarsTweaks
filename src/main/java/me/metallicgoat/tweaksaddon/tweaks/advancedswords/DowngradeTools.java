@@ -34,6 +34,7 @@ public class DowngradeTools implements Listener {
 
     @EventHandler
     public void onRespawn(PlayerIngameRespawnEvent event) {
+
         if (!ConfigValue.degrading_tool_groups || !ConfigValue.advanced_tool_replacement_enabled)
             return;
 
@@ -88,7 +89,8 @@ public class DowngradeTools implements Listener {
 
     @EventHandler
     public void onRespawn(PlayerIngameDeathEvent event) {
-        if (!ConfigValue.degrading_tool_groups || ConfigValue.advanced_tool_replacement_enabled)
+
+        if (!ConfigValue.degrading_tool_groups || !ConfigValue.advanced_tool_replacement_enabled)
             return;
 
         final Player player = event.getPlayer();
@@ -96,11 +98,13 @@ public class DowngradeTools implements Listener {
         final Collection<BuyGroup> buyGroups = GameAPI.get().getBuyGroups();
 
         for (BuyGroup buyGroup : buyGroups) {
+
             if (buyGroup.getName().contains("axe")) {
 
                 final int level = arena.getBuyGroupLevel(player, buyGroup);
 
                 if (level > 1) {
+
                     if (buyGroup.getName().equalsIgnoreCase("pickaxe")) {
                         pickaxeHashMap.put(player, level - 1);
                         arena.setBuyGroupLevel(player, buyGroup, level - 1);
