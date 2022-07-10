@@ -22,8 +22,6 @@ import java.util.*;
 
 public class GenTiers implements Listener {
 
-    // TODO Sounds option
-
     public static HashMap<Arena, String> nextTierMap = new HashMap<>();
     public static HashMap<Arena, Long> timeToNextUpdate = new HashMap<>();
     private final HashMap<Arena, BukkitTask> tasksToKill = new HashMap<>();
@@ -146,21 +144,28 @@ public class GenTiers implements Listener {
         }
     }
 
+    // TODO improve (why is this a part of gen-tier?) (shit code)
     private static BukkitTask startUpdatingTime() {
         return Bukkit.getServer().getScheduler().runTaskTimer(MBedwarsTweaksPlugin.getInstance(), () -> {
             if (timeToNextUpdate.isEmpty())
                 return;
 
             timeToNextUpdate.forEach((arena, integer) -> {
-                if (arena.getStatus() != ArenaStatus.RUNNING)
-                    return;
+                if (arena.getStatus() == ArenaStatus.RUNNING) {
 
-                if (MBedwarsTweaksPlugin.papiEnabled)
-                    timeToNextUpdate.replace(arena, integer, integer - 20);
+                    if (MBedwarsTweaksPlugin.papiEnabled)
+                        timeToNextUpdate.replace(arena, integer, integer - 20);
 
-                if (ConfigValue.gen_tiers_scoreboard_updating_enabled
-                        && ((integer - 20) / 20) % ConfigValue.gen_tiers_scoreboard_updating_interval == 0)
-                    arena.updateScoreboard();
+                    if (ConfigValue.gen_tiers_scoreboard_updating_enabled_in_game
+                            && ((integer - 20) / 20) % ConfigValue.gen_tiers_scoreboard_updating_interval == 0)
+                        arena.updateScoreboard();
+
+                } else if (arena.getStatus() == ArenaStatus.LOBBY){
+
+                    if (ConfigValue.gen_tiers_scoreboard_updating_enabled_in_lobby
+                            && ((integer - 20) / 20) % ConfigValue.gen_tiers_scoreboard_updating_interval == 0)
+                        arena.updateScoreboard();
+                }
 
             });
         }, 0L, 20L);

@@ -190,7 +190,8 @@ public class ConfigValue {
     )) : new ArrayList<>();
     public static String gen_tiers_start_tier = "&eTier &cI";
 
-    public static boolean gen_tiers_scoreboard_updating_enabled = false;
+    public static boolean gen_tiers_scoreboard_updating_enabled_in_game = false;
+    public static boolean gen_tiers_scoreboard_updating_enabled_in_lobby = false;
     public static int gen_tiers_scoreboard_updating_interval = 5;
 
 

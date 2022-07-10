@@ -1,8 +1,8 @@
-version: 2.0.0-Pre-4
+version: 2.0.0
 name: MBedwarsTweaks
 author: MetallicGoat
 main: me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin
-description: Tweaks and Features for MBedwars
+description: Adds some extra features to MBedwars
 api-version: 1.13
 depend: [MBedwars]
 softdepend:
