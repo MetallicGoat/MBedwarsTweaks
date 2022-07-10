@@ -259,7 +259,6 @@ public class SwordsToolsConfig {
 
                     if (material != null)
                         ConfigValue.anti_drop_materials.add(material);
-
                 }
             }
         }
@@ -273,7 +272,6 @@ public class SwordsToolsConfig {
 
                     if (material != null)
                         ConfigValue.sword_drop_materials.add(material);
-
                 }
             }
         }

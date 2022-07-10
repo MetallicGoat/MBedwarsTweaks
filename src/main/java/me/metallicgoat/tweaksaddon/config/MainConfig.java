@@ -5,6 +5,7 @@ import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.YamlConfigurationDescriptor;
+import me.metallicgoat.tweaksaddon.Console;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.Util;
 import org.bukkit.ChatColor;
@@ -24,7 +25,7 @@ import java.util.Map;
 
 public class MainConfig {
 
-    public static final byte VERSION = 1;
+    public static final byte VERSION = 0;
     public static int CURRENT_VERSION = -1;
 
     private static File getFile(){
@@ -171,7 +172,8 @@ public class MainConfig {
 
         ConfigValue.papi_team_you_placeholder = config.getString("Team-You-Placeholder", ConfigValue.papi_team_you_placeholder);
 
-        ConfigValue.gen_tiers_scoreboard_updating_enabled = config.getBoolean("Force-Scoreboard-Updating.Enabled", false);
+        ConfigValue.gen_tiers_scoreboard_updating_enabled_in_game = config.getBoolean("Force-Scoreboard-Updating.Enabled-In-Game", false);
+        ConfigValue.gen_tiers_scoreboard_updating_enabled_in_lobby = config.getBoolean("Force-Scoreboard-Updating.Enabled-In-Lobby", false);
         ConfigValue.gen_tiers_scoreboard_updating_interval = config.getInt("Force-Scoreboard-Updating.Interval", 5);
 
         ConfigValue.fireball_whitelist_enabled = config.getBoolean("FireballWhitelist.Enabled", false);
@@ -289,16 +291,16 @@ public class MainConfig {
             CURRENT_VERSION = config.getInt("file-version", -1);
 
             if(CURRENT_VERSION == -1) {
+                Console.printInfo("Attempting to update Tweaks v1 configs!");
                 updateV1Configs(config);
                 save();
                 return;
             }
 
-            // TODO uncomment before v2 releases
-            //if(CURRENT_VERSION != VERSION) {
+            if(CURRENT_VERSION != VERSION) {
                 updateV2Configs(config);
                 save();
-            //}
+            }
         }
     }
 
@@ -463,12 +465,12 @@ public class MainConfig {
 
         config.addEmptyLine();
 
-        // TODO lobby/game configs?
         config.addComment("If set to true, the scoreboard will be force updated to refresh PAPI placeholders");
         config.addComment("Scoreboard will update every X amount of seconds");
         config.addComment("We recommended keeping at 5 or 10 seconds to reduce flicker");
         config.addComment("WARNING: Force updating the MBedwars scoreboard may cause scoreboard flicker");
-        config.set("Force-Scoreboard-Updating.Enabled", ConfigValue.gen_tiers_scoreboard_updating_enabled);
+        config.set("Force-Scoreboard-Updating.Enabled-In-Game", ConfigValue.gen_tiers_scoreboard_updating_enabled_in_game);
+        config.set("Force-Scoreboard-Updating.Enabled-In-Lobby", ConfigValue.gen_tiers_scoreboard_updating_enabled_in_lobby);
         config.set("Force-Scoreboard-Updating.Interval", ConfigValue.gen_tiers_scoreboard_updating_interval);
 
         config.addEmptyLine();
@@ -675,7 +677,7 @@ public class MainConfig {
         if(config.contains("No-Top-Killers-Message"))
             ConfigValue.no_top_killer_message = config.getStringList("No-Top-Killers-Message");
 
-        ConfigValue.gen_tiers_scoreboard_updating_enabled = config.getBoolean("Scoreboard-Updating");
+        ConfigValue.gen_tiers_scoreboard_updating_enabled_in_game = config.getBoolean("Scoreboard-Updating");
         ConfigValue.gen_tiers_scoreboard_updating_interval = config.getInt("Scoreboard-Updating-Interval", 5);
 
         ConfigValue.lock_team_chest_enabled = config.getBoolean("Lock-Team-Chest", false);

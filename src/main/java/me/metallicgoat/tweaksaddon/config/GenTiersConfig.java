@@ -171,6 +171,7 @@ public class GenTiersConfig {
         config.addComment("Speed (How often an item drops (in seconds))");
         config.addComment("Time (time until action - NOTE time starts after the last action)");
         config.addComment("Message (chat message sent on trigger)");
+        config.addComment("Earn-Sound (sound played on trigger) (You have to add this config if you want it)");
 
         config.addEmptyLine();
 
