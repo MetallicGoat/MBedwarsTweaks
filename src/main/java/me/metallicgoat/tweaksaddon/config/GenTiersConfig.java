@@ -196,7 +196,7 @@ public class GenTiersConfig {
             config.set(configKey + "Message", level.getEarnMessage());
 
             if(level.getEarnSound() != null)
-                config.set(configKey + "Earn-Sound", level.getEarnSound());
+                config.set(configKey + "Earn-Sound", level.getEarnSound().name());
         }
 
         config.save(getFile());

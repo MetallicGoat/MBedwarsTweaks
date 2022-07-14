@@ -3,6 +3,7 @@ package me.metallicgoat.tweaksaddon.tweaks.gameplay;
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
+import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 
 public class EmptyContainers implements Listener {
 
@@ -30,6 +32,7 @@ public class EmptyContainers implements Listener {
         event.getItemStack().setType(Material.AIR);
     }
 
+    // TODO test with offhand
     @EventHandler
     public void onConsume(PlayerItemConsumeEvent event) {
 
@@ -42,6 +45,7 @@ public class EmptyContainers implements Listener {
         if (arena == null)
             return;
 
-        event.setItem(new ItemStack(Material.AIR));
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(MBedwarsTweaksPlugin.getInstance(), () ->
+                event.getPlayer().getInventory().removeItem(new ItemStack(Material.GLASS_BOTTLE)), 1);
     }
 }

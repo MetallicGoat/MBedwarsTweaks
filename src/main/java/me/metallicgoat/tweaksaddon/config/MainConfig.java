@@ -262,7 +262,7 @@ public class MainConfig {
         ConfigValue.prevent_liquid_build_up = config.getBoolean("Prevent-Liquid-Build-Up", true);
 
         ConfigValue.remove_empty_buckets = config.getBoolean("Empty-Buckets", true);
-        ConfigValue.remove_empty_potions = config.getBoolean("Empty-Buckets", true);
+        ConfigValue.remove_empty_potions = config.getBoolean("Empty-Potions", true);
 
         ConfigValue.custom_height_cap_enabled = config.getBoolean("Height-Cap.Enabled", false);
         ConfigValue.custom_height_cap_warn = config.getString("Height-Cap.Message", ConfigValue.custom_height_cap_warn);
