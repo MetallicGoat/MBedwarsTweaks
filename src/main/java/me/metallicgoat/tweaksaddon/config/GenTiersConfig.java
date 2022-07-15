@@ -158,6 +158,7 @@ public class GenTiersConfig {
     }
 
     private static void save() throws Exception{
+
         final YamlConfigurationDescriptor config = new YamlConfigurationDescriptor();
 
         config.addComment("MAKE SURE Gen-Tiers are enabled in the config.yml!");

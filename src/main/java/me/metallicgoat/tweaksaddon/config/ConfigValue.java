@@ -145,38 +145,8 @@ public class ConfigValue {
 
     // Gen Tiers
     public static boolean gen_tiers_enabled = false;
-    public static HashMap<Integer, GenTierLevel> gen_tier_levels = defaultDropTypesExist ? new HashMap<Integer, GenTierLevel>() {{
-        put(1, new GenTierLevel(
-                "Diamond II", "&eTier &cII",
-                Util.getDropType("diamond"),
-                TierAction.GEN_UPGRADE, 6, 30,
-                "&bDiamond Generators &ehave been upgraded to Tier &4II",
-                null
-        ));
-        put(2, new GenTierLevel(
-                "Emerald II", "&eTier &cII",
-                Util.getDropType("emerald"),
-                TierAction.GEN_UPGRADE, 6, 40,
-                "&aEmerald Generators &ehave been upgraded to Tier &4II",
-                null
-        ));
-        put(3, new GenTierLevel(
-                "Diamond III", "&eTier &cIII",
-                Util.getDropType("diamond"),
-                TierAction.GEN_UPGRADE, 6, 20,
-                "&bDiamond Generators &ehave been upgraded to Tier &4III",
-                null
-        ));
-        put(4, new GenTierLevel(
-                "Emerald III", "&eTier &cIII",
-                Util.getDropType("emerald"),
-                TierAction.GEN_UPGRADE, 6, 30,
-                "&aEmerald Generators &ehave been upgraded to Tier &4III",
-                null
-        ));
-        put(5, new GenTierLevel("Auto-Break", "Bed Destroy", TierAction.BED_DESTROY, 7, "All beds have been broken", null));
-        put(6, new GenTierLevel("Game-Over", "Game Over", TierAction.GAME_OVER, 10, "Game Ended", null));
-    }} : new HashMap<>();
+    // TODO find better loading solution
+    public static HashMap<Integer, GenTierLevel> gen_tier_levels = new HashMap<>(); // Defaults set in Load Configs class
     public static boolean gen_tiers_custom_holo_enabled = false;
     public static List<String> gen_tiers_spawner_holo_titles = new ArrayList<>(Arrays.asList(
             "{spawner-color}{spawner}",
