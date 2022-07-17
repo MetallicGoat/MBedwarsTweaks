@@ -48,6 +48,7 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
         manager.registerEvents(new ActionBar(), plugin);
         manager.registerEvents(new CustomTeamColors(), plugin);
         manager.registerEvents(new FinalStrike(), plugin);
+        manager.registerEvents(new ForceScoreboardUpdating(), plugin);
         manager.registerEvents(new FriendlyVillagers(), plugin);
         manager.registerEvents(new SpongeParticles(), plugin);
 

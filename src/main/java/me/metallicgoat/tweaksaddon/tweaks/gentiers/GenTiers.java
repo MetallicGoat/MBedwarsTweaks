@@ -151,22 +151,13 @@ public class GenTiers implements Listener {
                 return;
 
             timeToNextUpdate.forEach((arena, integer) -> {
+
                 if (arena.getStatus() == ArenaStatus.RUNNING) {
 
                     if (MBedwarsTweaksPlugin.papiEnabled)
                         timeToNextUpdate.replace(arena, integer, integer - 20);
 
-                    if (ConfigValue.gen_tiers_scoreboard_updating_enabled_in_game
-                            && ((integer - 20) / 20) % ConfigValue.gen_tiers_scoreboard_updating_interval == 0)
-                        arena.updateScoreboard();
-
-                } else if (arena.getStatus() == ArenaStatus.LOBBY){
-
-                    if (ConfigValue.gen_tiers_scoreboard_updating_enabled_in_lobby
-                            && ((integer - 20) / 20) % ConfigValue.gen_tiers_scoreboard_updating_interval == 0)
-                        arena.updateScoreboard();
                 }
-
             });
         }, 0L, 20L);
     }
