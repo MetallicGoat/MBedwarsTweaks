@@ -89,7 +89,7 @@ public class MainConfig {
         ConfigValue.custom_action_bar_message = config.getString("Action-Bar.Message", ConfigValue.custom_action_bar_message);
 
         ConfigValue.final_kill_suffix_enabled = config.getBoolean("Final-Kill-Suffix.Enabled", true);
-        ConfigValue.final_kill_suffix = config.getString("Final-Kill-Suffix.Enabled", ConfigValue.final_kill_suffix);
+        ConfigValue.final_kill_suffix = config.getString("Final-Kill-Suffix.Suffix", ConfigValue.final_kill_suffix);
 
         ConfigValue.buy_message_enabled = config.getBoolean("Buy-Message.Enabled", false);
         ConfigValue.buy_message = config.getString("Buy-Message.Message", ConfigValue.buy_message);
