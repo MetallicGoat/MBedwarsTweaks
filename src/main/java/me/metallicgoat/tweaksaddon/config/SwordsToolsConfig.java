@@ -49,30 +49,36 @@ public class SwordsToolsConfig {
         ConfigValue.anti_chest_enabled = config.getBoolean("Anti-Chest.Enabled");
         {
             if(config.contains("Anti-Chest.Materials")) {
-                ConfigValue.anti_chest_materials.clear();
+
+                final List<Material> antiChestMaterials = new ArrayList<>();
 
                 for (String materialName : config.getStringList("Anti-Chest.Materials")) {
                     final Material material = Helper.get().getMaterialByName(materialName);
 
                     if (material != null)
-                        ConfigValue.anti_chest_materials.add(material);
+                        antiChestMaterials.add(material);
 
                 }
+
+                ConfigValue.anti_chest_materials = antiChestMaterials;
             }
         }
 
         ConfigValue.anti_drop_enabled = config.getBoolean("Anti-Drop.Enabled");
         {
             if(config.contains("Anti-Drop.Materials")) {
-                ConfigValue.anti_drop_materials.clear();
+
+                final List<Material> antiDropMaterials = new ArrayList<>();
 
                 for (String materialName : config.getStringList("Anti-Drop.Materials")) {
                     final Material material = Helper.get().getMaterialByName(materialName);
 
                     if (material != null)
-                        ConfigValue.anti_drop_materials.add(material);
+                        antiDropMaterials.add(material);
 
                 }
+
+                ConfigValue.anti_drop_materials = antiDropMaterials;
             }
         }
 

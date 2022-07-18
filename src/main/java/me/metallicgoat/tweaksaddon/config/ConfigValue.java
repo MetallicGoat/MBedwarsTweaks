@@ -5,7 +5,6 @@ import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.tweaksaddon.Util;
 import me.metallicgoat.tweaksaddon.tweaks.gentiers.GenTierLevel;
-import me.metallicgoat.tweaksaddon.tweaks.gentiers.TierAction;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -170,6 +169,9 @@ public class ConfigValue {
 
     public static boolean always_sword_enabled = false;
 
+    public static boolean anti_chest_enabled = false;
+    public static List<Material> anti_chest_materials = defaultMaterials;
+
     public static boolean anti_drop_enabled = true;
     public static List<Material> anti_drop_materials = defaultMaterials;
 
@@ -198,9 +200,6 @@ public class ConfigValue {
     public static int one_slot_tools_shears = 19;
     public static int one_slot_tools_pickaxe = 20;
     public static int one_slot_tools_axe = 21;
-
-    public static boolean anti_chest_enabled = false;
-    public static List<Material> anti_chest_materials = defaultMaterials;
 
     // PAPI
     public static String papi_next_tier_lobby_starting = "&fStarting in &a{time}s";
