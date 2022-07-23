@@ -174,7 +174,7 @@ public class Placeholders extends PlaceholderExpansion {
 
                 final int playerAmount = arena.getPlayersInTeam(scoreTeam).size();
 
-                if (!arena.isBedDestroyed(scoreTeam))
+                if (!arena.isBedDestroyed(scoreTeam) && !arena.getPlayersInTeam(scoreTeam).isEmpty())
                     output = ConfigValue.papi_team_status_has_bed;
                 else if (arena.getPlayersInTeam(scoreTeam).isEmpty())
                     output = ConfigValue.papi_team_status_team_dead;
