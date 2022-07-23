@@ -8,6 +8,7 @@ import de.marcely.bedwars.api.event.player.PlayerJoinArenaEvent;
 import de.marcely.bedwars.api.event.player.PlayerQuitArenaEvent;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
+import me.metallicgoat.tweaksaddon.tweaks.gentiers.GenTiers;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -66,19 +67,16 @@ public class ForceScoreboardUpdating implements Listener {
 
                 if ((arena.getStatus() == ArenaStatus.RUNNING && ConfigValue.gen_tiers_scoreboard_updating_enabled_in_game)) {
 
-                    /*
                     if (GenTiers.timeToNextUpdate.containsKey(arena)){
 
                         final long integer = GenTiers.timeToNextUpdate.get(arena);
 
                         if (((integer - 20) / 20) % ConfigValue.gen_tiers_scoreboard_updating_interval == 0){
-                            System.out.println("ya");
                             arena.updateScoreboard();
                         }
 
                         continue;
                     }
-                    */
 
                     final int integer = arena.getIngameTimeRemaining();
 

@@ -34,6 +34,11 @@ public class AntiChest implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
 
+        final Inventory clicked = e.getClickedInventory();
+
+        if(!(e.getInventory().getSize() > 26))
+            return;
+
         if(e.getAction() == InventoryAction.HOTBAR_SWAP || e.getAction() == InventoryAction.HOTBAR_MOVE_AND_READD){
             final HumanEntity player = e.getWhoClicked();
             final Inventory inventory = player != null ? player.getInventory() : null;
@@ -50,21 +55,19 @@ public class AntiChest implements Listener {
                             && ConfigValue.anti_chest_materials.contains(itemStack.getType())
                             && ToolSwordHelper.isNotToIgnore(itemStack)) {
                         e.setCancelled(true);
+                        return;
                     }
                 }
             }
         }
 
-        final Inventory clicked = e.getClickedInventory();
-        if(e.getInventory().getSize() > 26) {
-            if (clicked != e.getWhoClicked().getInventory() && inArena((Player) e.getWhoClicked())) {
-                // The cursor item is going into the top inventory
-                final ItemStack onCursor = e.getCursor();
-                if (onCursor != null
-                        && ConfigValue.anti_chest_materials.contains(onCursor.getType())
-                        && ToolSwordHelper.isNotToIgnore(onCursor)) {
-                    e.setCancelled(true);
-                }
+        if (clicked != e.getWhoClicked().getInventory() && inArena((Player) e.getWhoClicked())) {
+            // The cursor item is going into the top inventory
+            final ItemStack onCursor = e.getCursor();
+            if (onCursor != null
+                    && ConfigValue.anti_chest_materials.contains(onCursor.getType())
+                    && ToolSwordHelper.isNotToIgnore(onCursor)) {
+                e.setCancelled(true);
             }
         }
     }
