@@ -14,7 +14,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class GenTiersConfig {
 
@@ -215,7 +217,10 @@ public class GenTiersConfig {
         GenTierLevel bedBreakTier = null;
         GenTierLevel gameOverTier = null;
 
-        if (tiersSection != null) {
+        if (tiersSection != null && isV1Config(config)) {
+
+            Console.printConfigInfo("Detected Gen-Tiers v1 Config. Updating...", "gen-tiers");
+
             for (String levelNumString : tiersSection.getKeys(false)) {
 
                 final String configKey = "Gen-Tiers." + levelNumString + ".";
@@ -279,5 +284,34 @@ public class GenTiersConfig {
             val++;
             ConfigValue.gen_tier_levels.put(val, gameOverTier);
         }
+    }
+
+    /*
+     *
+     * We are doing this because if the
+     * main config fails to load the config
+     * version will not be set, and therefor
+     * we will try and update it as a v1 config
+     * when we should not.
+     *
+     */
+    private static boolean isV1Config(ConfigurationSection section){
+
+        final Set<String> list  = section.getKeys(false);
+
+        if(list.contains("bed-break") || list.contains("game-over"))
+            return true;
+
+        for(String key : list){
+
+            if(key.equals("Type"))
+                return true;
+
+            if(key.equals("TierName")){
+                return true;
+            }
+        }
+
+        return false;
     }
 }

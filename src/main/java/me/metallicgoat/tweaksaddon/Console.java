@@ -16,7 +16,7 @@ public class Console {
     }
 
     private static void printInfo(String tag, String msg){
-        printInfo("(" + tag + " " + msg);
+        printInfo("(" + tag + ") " + msg);
     }
 
     private static void printWarn(String tag, String msg){
@@ -24,10 +24,10 @@ public class Console {
     }
 
     public static void printConfigWarn(String warn, String config){
-        printWarn("Config-" + config, warn);
+        printWarn("[config][" + config + "]", warn);
     }
 
     public static void printConfigInfo(String info, String config){
-        printInfo("Config-" + config, info);
+        printInfo("[config][" + config + "]", info);
     }
 }

@@ -291,7 +291,6 @@ public class MainConfig {
             CURRENT_VERSION = config.getInt("file-version", -1);
 
             if(CURRENT_VERSION == -1) {
-                Console.printInfo("Attempting to update Tweaks v1 configs!");
                 updateV1Configs(config);
                 save();
                 return;
