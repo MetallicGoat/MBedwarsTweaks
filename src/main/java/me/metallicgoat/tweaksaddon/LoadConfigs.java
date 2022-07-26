@@ -15,16 +15,16 @@ import java.util.HashMap;
 public class LoadConfigs implements Listener {
 
     private static boolean isLoading = false;
-    private static long lastLoad = 0;
 
     @EventHandler
     public void onConfigLoad(ConfigsLoadEvent event) {
-        loadTweaksConfigs();
+        if(!event.isStartup())
+            loadTweaksConfigs();
     }
 
     public static void loadTweaksConfigs() {
 
-        if(isLoading || (System.currentTimeMillis() - lastLoad) < 2000)
+        if(isLoading)
             return;
 
         isLoading = true;
@@ -48,9 +48,9 @@ public class LoadConfigs implements Listener {
         GenTiersConfig.load();
 
         isLoading = false;
-        lastLoad = System.currentTimeMillis();
+        final long end = System.currentTimeMillis();
 
-        Console.printInfo("Configs loaded in " + (lastLoad - start) + "ms.");
+        Console.printInfo("Configs loaded in " + (end - start) + "ms.");
     }
 
     public static HashMap<Integer, GenTierLevel> getDefaultGenTiers() {

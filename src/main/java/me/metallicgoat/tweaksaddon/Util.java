@@ -27,13 +27,6 @@ public class Util {
     }
 
     public static @Nullable DropType getDropType(String id){
-
-        for(DropType type : GameAPI.get().getDropTypes()){
-
-            if(type.getId().equalsIgnoreCase(id))
-                return type;
-        }
-
-        return null;
+        return GameAPI.get().getDropTypeById(id);
     }
 }
