@@ -41,8 +41,6 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
 
         BedwarsAPI.onReady(() -> {
 
-            // TODO log if drop types are null
-
             LoadConfigs.loadTweaksConfigs();
 
             if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {

@@ -39,8 +39,17 @@
         <dependency>
             <groupId>de.marcely.bedwars</groupId>
             <artifactId>API</artifactId>
+            <version>5.0.12</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/libs/MBedwars.jar</systemPath>
+        </dependency>
+        <!--
+        <dependency>
+            <groupId>de.marcely.bedwars</groupId>
+            <artifactId>API</artifactId>
             <version>5.0.11</version>
         </dependency>
+        -->
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>

@@ -41,11 +41,16 @@ public class OneSlotTools implements Listener {
 
             for (int i = chestGUI.getSize() - 1; i > 0; i--) {
                 final GUIItem item = chestGUI.getItem(i);
+
                 if (item != null && item.getAttachement() != null) {
+
                     final Object attachment = item.getAttachement();
+
                     if (attachment instanceof ShopItem) {
+
                         final ShopItem shopItem = (ShopItem) attachment;
                         final BuyGroup group = shopItem.getBuyGroup();
+
                         if (group != null && (group.getName().equalsIgnoreCase("axe")
                                 || group.getName().equalsIgnoreCase("pickaxe"))) {
 

@@ -36,17 +36,7 @@ public class SwordDrop implements Listener {
 
         if (ToolSwordHelper.getSwordsAmount(event.getPlayer()) == 0) {
 
-            final ItemStack is = new ItemStack(ToolSwordHelper.WOOD_SWORD);
-
-            // TODO Wooden Sword DISPLAY Name / meta should be copied from config
-
-            /*
-            final ItemStack item = event.getItemDrop().getItemStack();
-            final ItemMeta meta = item.getItemMeta();
-            assert meta != null;
-            meta.setDisplayName("Wooden Sword");
-            is.setItemMeta(meta);
-             */
+            final ItemStack is = ToolSwordHelper.getDefaultWoodSword(player, arena);
 
             // tries to put sword in slot player dropped sword from
             if (pi.getItem(pi.getHeldItemSlot()) == null)

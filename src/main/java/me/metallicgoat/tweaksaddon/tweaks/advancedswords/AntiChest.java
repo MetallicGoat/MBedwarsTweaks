@@ -18,7 +18,9 @@ public class AntiChest implements Listener {
     public void onShiftClick(InventoryClickEvent e) {
         if(e.getInventory().getSize() > 26) {
             if (e.getClick().isShiftClick() && inArena((Player) e.getWhoClicked())) {
-                Inventory clicked = e.getClickedInventory();
+
+                final Inventory clicked = e.getClickedInventory();
+
                 if (clicked == e.getWhoClicked().getInventory()) {
                     ItemStack clickedOn = e.getCurrentItem();
                     if (clickedOn != null

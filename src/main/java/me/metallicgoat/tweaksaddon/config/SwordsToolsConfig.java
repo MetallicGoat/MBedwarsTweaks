@@ -4,12 +4,14 @@ import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.YamlConfigurationDescriptor;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class SwordsToolsConfig {
 
@@ -243,6 +245,9 @@ public class SwordsToolsConfig {
 
     private static void updateV1Configs(FileConfiguration config){
 
+        if(!isV1Config(config))
+            return;
+
         {
             if(config.contains("Anti-Chest")) {
                 ConfigValue.anti_chest_materials.clear();
@@ -281,5 +286,19 @@ public class SwordsToolsConfig {
                 }
             }
         }
+    }
+
+    private static boolean isV1Config(FileConfiguration config){
+
+        if(config.contains("Anti-Chest.Enabled"))
+            return true;
+
+        if(config.contains("Anti-Drop.List"))
+            return true;
+
+        if(config.contains("Advanced-Sword-Drop.List"))
+            return true;
+
+        return false;
     }
 }

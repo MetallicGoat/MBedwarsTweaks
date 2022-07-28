@@ -52,7 +52,7 @@ public class AlwaysSword implements Listener {
                         (e.getCurrentItem() == null || e.getCurrentItem() != null && !e.getCurrentItem().getType().name().endsWith("SWORD") && ToolSwordHelper.isNotToIgnore(e.getCurrentItem())) &&
                         (e.getCursor() == null || e.getCursor() != null && !e.getCursor().getType().name().endsWith("SWORD") && ToolSwordHelper.isNotToIgnore(e.getCursor()))) {
 
-                    pi.addItem(new ItemStack(ToolSwordHelper.WOOD_SWORD));
+                    pi.addItem(ToolSwordHelper.getDefaultWoodSword(player, arena));
 
                 }
             }, 25L);
