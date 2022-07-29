@@ -29,4 +29,13 @@ public class Util {
     public static @Nullable DropType getDropType(String id){
         return GameAPI.get().getDropTypeById(id);
     }
+
+    public static boolean isInteger(String s){
+        try{
+            Integer.valueOf(s);
+            return true;
+        }catch(NumberFormatException e){
+            return false;
+        }
+    }
 }

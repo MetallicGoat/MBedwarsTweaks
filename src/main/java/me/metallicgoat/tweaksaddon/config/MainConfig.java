@@ -17,6 +17,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.StringUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -188,6 +189,33 @@ public class MainConfig {
                     if (mat != null)
                         ConfigValue.fireball_whitelist_blocks.add(mat);
 
+                }
+            }
+        }
+
+        ConfigValue.fireball_cooldown_enabled = config.getBoolean("Fireball-Cooldown.Enabled", true);
+        ConfigValue.fireball_cooldown_time = config.getLong("Fireball-Cooldown.Time", 20L);
+
+        ConfigValue.fireball_throw_effects_enabled = config.getBoolean("Fireball-Throw-Effects.Enabled", true);
+        {
+            if (config.getStringList("Fireball-Throw-Effects.Effects") != null) {
+                ConfigValue.fireball_throw_effects = new ArrayList<>();
+
+                for (String raw : config.getStringList("Fireball-Throw-Effects.Effects")) {
+                    final String[] parts = raw.split(":");
+
+                    if (parts.length == 3) {
+                        if (Util.isInteger(parts[1]) && Util.isInteger(parts[2])) {
+                            final PotionEffectType type = PotionEffectType.getByName(parts[0]);
+
+                            if (type != null) {
+                                ConfigValue.fireball_throw_effects.add(new PotionEffect(type, Integer.parseInt(parts[1]), Integer.parseInt(parts[2]) - 1));
+                            } else
+                                Console.printConfigWarn("\"Fireball-Throw-Effects.Effects\": " + parts[0] + " isn't a valid effect type", "Main");
+                        } else
+                            Console.printConfigWarn("\"Fireball-Throw-Effects.Effects\": " + parts[1] + " or " + parts[2] + " isn't a valid number", "Main");
+                    } else
+                        Console.printConfigWarn("\"Fireball-Throw-Effects.Effects\": \"" + raw + "\" has " + parts.length + " :, but 3 are needed", "Main");
                 }
             }
         }
@@ -488,6 +516,27 @@ public class MainConfig {
             }
 
             config.set("FireballWhitelist.Blocks", blocks);
+        }
+
+        config.addEmptyLine();
+
+        config.addComment("Fireball use cool down (20 ticks = 1 sec)");
+        config.set("Fireball-Cooldown.Enabled", ConfigValue.fireball_cooldown_enabled);
+        config.set("Fireball-Cooldown.Time", ConfigValue.fireball_cooldown_time);
+
+        config.addEmptyLine();
+
+        config.addComment("Effects given when a fireball is thrown (Default is like hypixel)");
+        config.set("Fireball-Throw-Effects.Enabled", true);
+        {
+            final List<String> lines = new ArrayList<>();
+
+            for(PotionEffect effect:ConfigValue.fireball_throw_effects)
+                lines.add(effect.getType().getName() + ":" + effect.getDuration() + ":" + (effect.getAmplifier() + 1));
+
+            config.addComment("Specify here which potion effects the player shall gain after throwing a fireball");
+            config.addComment("Usage: <potion effect name>:<duration in ticks (20 ticks = 1 sec):<level>");
+            config.set("Fireball-Throw-Effects.Effects", lines);
         }
 
         config.addEmptyLine();

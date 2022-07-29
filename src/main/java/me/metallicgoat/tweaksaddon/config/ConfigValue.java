@@ -17,7 +17,7 @@ public class ConfigValue {
 
     public static boolean defaultDropTypesExist = false;
 
-    private static final List<Material> defaultMaterials = new ArrayList<>(Arrays.asList(
+    private static final List<Material> defaultMaterials = Arrays.asList(
             Helper.get().getMaterialByName("WOODEN_SWORD"),
             Helper.get().getMaterialByName("SHEARS"),
             Helper.get().getMaterialByName("WOODEN_PICKAXE"),
@@ -30,7 +30,7 @@ public class ConfigValue {
             Helper.get().getMaterialByName("IRON_AXE"),
             Helper.get().getMaterialByName("GOLDEN_AXE"),
             Helper.get().getMaterialByName("DIAMOND_AXE")
-    ));
+    );
 
     // Main Tweaks Config
     public static boolean sponge_particles_enabled = true;
@@ -45,7 +45,7 @@ public class ConfigValue {
     public static boolean final_strike_enabled = false;
 
     public static boolean fireball_whitelist_enabled = false;
-    public static List<Material> fireball_whitelist_blocks = new ArrayList<>(Collections.singletonList(Helper.get().getMaterialByName("END_STONE")));
+    public static List<Material> fireball_whitelist_blocks = Collections.singletonList(Helper.get().getMaterialByName("END_STONE"));
 
     public static boolean prevent_liquid_build_up = true;
 
@@ -68,12 +68,20 @@ public class ConfigValue {
     public static boolean personal_ender_chests_enabled = false;
     public static String personal_ender_chests_name = "Ender Chest";
 
+    public static boolean fireball_cooldown_enabled = true;
+    public static long fireball_cooldown_time = 20L;
+
+    public static boolean fireball_throw_effects_enabled = true;
+    public static List<PotionEffect> fireball_throw_effects = Collections.singletonList(
+            new PotionEffect(PotionEffectType.SLOW, 25, 0)
+    );
+
     public static boolean team_eliminate_message_enabled = true;
-    public static List<String> team_eliminate_message = new ArrayList<>(Arrays.asList(
+    public static List<String> team_eliminate_message = Arrays.asList(
             " ",
             "&f&lTEAM ELIMINATED > {team-color}{team-name} Team &chas been eliminated!",
             " "
-    ));
+    );
 
     public static boolean final_kill_suffix_enabled = true;
     public static String final_kill_suffix = " &b&lFINAL KILL!";
@@ -82,11 +90,11 @@ public class ConfigValue {
     public static String buy_message = "&aYou Purchased &6{product} x{amount}";
 
     public static boolean remove_invis_ondamage_enabled = true;
-    public static List<EntityDamageEvent.DamageCause> remove_invis_damge_causes = new ArrayList<>(Arrays.asList(
+    public static List<EntityDamageEvent.DamageCause> remove_invis_damge_causes = Arrays.asList(
             EntityDamageEvent.DamageCause.ENTITY_ATTACK,
             EntityDamageEvent.DamageCause.BLOCK_EXPLOSION,
             EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
-    ));
+    );
 
     public static boolean disable_empty_generators = false;
     public static double disable_empty_generators_range = 6;
@@ -97,39 +105,39 @@ public class ConfigValue {
     )) : new ArrayList<>();
 
     public static boolean top_killer_message_enabled = true;
-    public static List<String> top_killer_pre_lines = new ArrayList<>(Arrays.asList(
+    public static List<String> top_killer_pre_lines = Arrays.asList(
             "&a&l-------------------------------",
             "                &lBedWars",
             " "
-    ));
+    );
     public static HashMap<Integer, String> top_killer_lines = new HashMap<Integer, String>() {{
         put(1, "    &e&l1st Killer &7- {killer-name} - {kill-amount}");
         put(2, "    &6&l2nd Killer &7- {killer-name} - {kill-amount}");
         put(3, "    &c&l3rd Killer &7- {killer-name} - {kill-amount}");
     }};
-    public static List<String> top_killer_sub_lines = new ArrayList<>(Arrays.asList(
+    public static List<String> top_killer_sub_lines = Arrays.asList(
             " ",
             "&a&l-------------------------------"
-    ));
+    );
     public static boolean no_top_killer_message_enabled = false;
-    public static List<String> no_top_killer_message = new ArrayList<>(Arrays.asList(
+    public static List<String> no_top_killer_message = Arrays.asList(
             " ",
             "&eNo Top Killers This Round",
             " "
-    ));
+    );
 
     public static boolean custom_bed_break_message_enabled = false;
-    public static List<String> custom_bed_break_message = new ArrayList<>(Arrays.asList(
+    public static List<String> custom_bed_break_message = Arrays.asList(
             " ",
             "&f&lBED DESTRUCTION > {team-color}{team-name} Bed &7was destroyed by {destroyer-color}{destroyer-name}",
             " "
-    ));
+    );
     public static boolean auto_bed_break_message_enabled = false;
-    public static List<String> auto_bed_break_message = new ArrayList<>(Arrays.asList(
+    public static List<String> auto_bed_break_message = Arrays.asList(
             " ",
             "&c&lALL BEDS HAVE BEEN DESTROYED",
             " "
-    ));
+    );
     public static boolean bed_destroy_title_enabled = false;
     public static String bed_destroy_title = "&cBED DESTROYED";
     public static String bed_destroy_subtitle = "&fYou will no longer respawn!";
@@ -147,16 +155,16 @@ public class ConfigValue {
     // TODO find better loading solution
     public static HashMap<Integer, GenTierLevel> gen_tier_levels = new HashMap<>(); // Defaults set in Load Configs class
     public static boolean gen_tiers_custom_holo_enabled = false;
-    public static List<String> gen_tiers_spawner_holo_titles = new ArrayList<>(Arrays.asList(
+    public static List<String> gen_tiers_spawner_holo_titles = Arrays.asList(
             "{spawner-color}{spawner}",
             "{tier}",
             "&eSpawning in &c{time} &eseconds!"
-    ));
+    );
     public static List<DropType> gen_tiers_start_spawners = defaultDropTypesExist
-            ? new ArrayList<>(Arrays.asList(
+            ? Arrays.asList(
             Util.getDropType("emerald"),
             Util.getDropType("diamond")
-    )) : new ArrayList<>();
+    ) : new ArrayList<>();
     public static String gen_tiers_start_tier = "&eTier &cI";
 
     public static boolean gen_tiers_scoreboard_updating_enabled_in_game = false;
@@ -176,12 +184,12 @@ public class ConfigValue {
     public static List<Material> anti_drop_materials = defaultMaterials;
 
     public static boolean sword_drop_enabled = true;
-    public static List<Material> sword_drop_materials = new ArrayList<>(Arrays.asList(
+    public static List<Material> sword_drop_materials = Arrays.asList(
             Helper.get().getMaterialByName("STONE_SWORD"),
             Helper.get().getMaterialByName("IRON_SWORD"),
             Helper.get().getMaterialByName("GOLDEN_SWORD"),
             Helper.get().getMaterialByName("DIAMOND_SWORD")
-    ));
+    );
 
     public static boolean ordered_sword_buy_enabled = false;
     public static String ordered_sword_buy_problem= "You already have the same, or higher tier";
