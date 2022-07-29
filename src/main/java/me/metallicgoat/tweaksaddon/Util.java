@@ -9,6 +9,22 @@ import java.util.Collection;
 import java.util.Collections;
 
 public class Util {
+
+    // TODO make better
+    public static String[] formatMinSec(int minutes, int seconds){
+        if (minutes + seconds > 0) {
+            if (seconds < 10) {
+                return new String[]{String.valueOf(minutes), "0" + seconds};
+            } else {
+                return new String[]{String.valueOf(minutes), String.valueOf(seconds)};
+            }
+        } else if (seconds == 0 && minutes > 0) {
+            return new String[]{String.valueOf(minutes), "00"};
+        } else {
+            return new String[]{"0", "00"};
+        }
+    }
+
     public static Collection<Arena> parseArenas(String arenaKey){
 
         if(arenaKey.equalsIgnoreCase("ALL-ARENAS")){

@@ -17,16 +17,16 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.StringUtil;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MainConfig {
 
-    public static final byte VERSION = 0;
+    public static final byte VERSION = 1;
     public static int CURRENT_VERSION = -1;
 
     private static File getFile(){
@@ -119,6 +119,8 @@ public class MainConfig {
 
             if(section != null) {
 
+                final HashMap<Integer, String> map = new HashMap<>();
+
                 ConfigValue.top_killer_lines.clear();
 
                 for (String key : section.getKeys(false)){
@@ -130,9 +132,11 @@ public class MainConfig {
                     final String line = config.getString("Top-Killer-Message.Lines." + key);
 
                     if(line != null)
-                        ConfigValue.top_killer_lines.put(placeValue, line);
+                        map.put(placeValue, line);
 
                 }
+
+                ConfigValue.top_killer_lines = map;
             }
         }
 
@@ -152,15 +156,18 @@ public class MainConfig {
 
         {
             if(config.contains("PAPI-Arena-Modes")) {
-                ConfigValue.papi_arena_mode.clear();
+
+                final HashMap<String, String> map = new HashMap<>();
 
                 for (String string : config.getStringList("PAPI-Arena-Modes")) {
                     if (string.contains(":")) {
                         final String[] strings = string.split(":");
 
-                        ConfigValue.papi_arena_mode.put(strings[0], strings[1]);
+                        map.put(strings[0], strings[1]);
                     }
                 }
+
+                ConfigValue.papi_arena_mode = map;
             }
         }
 
@@ -173,6 +180,8 @@ public class MainConfig {
 
         ConfigValue.papi_team_you_placeholder = config.getString("Team-You-Placeholder", ConfigValue.papi_team_you_placeholder);
 
+        ConfigValue.papi_player_arena_running_time = config.getString("Running-Time-Placeholder", ConfigValue.papi_player_arena_running_time);
+
         ConfigValue.gen_tiers_scoreboard_updating_enabled_in_game = config.getBoolean("Force-Scoreboard-Updating.Enabled-In-Game", false);
         ConfigValue.gen_tiers_scoreboard_updating_enabled_in_lobby = config.getBoolean("Force-Scoreboard-Updating.Enabled-In-Lobby", false);
         ConfigValue.gen_tiers_scoreboard_updating_interval = config.getInt("Force-Scoreboard-Updating.Interval", 5);
@@ -180,16 +189,19 @@ public class MainConfig {
         ConfigValue.fireball_whitelist_enabled = config.getBoolean("FireballWhitelist.Enabled", false);
         {
             if(config.contains("FireballWhitelist.Blocks")) {
-                ConfigValue.fireball_whitelist_blocks.clear();
+
+                final List<Material> mats = new ArrayList<>();
 
                 for (String blockName : config.getStringList("FireballWhitelist.Blocks")) {
 
                     final Material mat = Helper.get().getMaterialByName(blockName);
 
                     if (mat != null)
-                        ConfigValue.fireball_whitelist_blocks.add(mat);
+                        mats.add(mat);
 
                 }
+
+                ConfigValue.fireball_whitelist_blocks = mats;
             }
         }
 
@@ -224,14 +236,17 @@ public class MainConfig {
         ConfigValue.disable_empty_generators_range = config.getDouble("Disable-Unused-Gens.Range", ConfigValue.disable_empty_generators_range);
         {
             if (config.contains("Disable-Unused-Gens.Gen-Types")) {
-                ConfigValue.disable_empty_generators_spawners.clear();
+
+                final List<DropType> dropTypes = new ArrayList<>();
 
                 for (String string : config.getStringList("Disable-Unused-Gens.Gen-Types")) {
                     final DropType type = Util.getDropType(string);
 
                     if (type != null)
-                        ConfigValue.disable_empty_generators_spawners.add(type);
+                        dropTypes.add(type);
                 }
+
+                ConfigValue.disable_empty_generators_spawners = dropTypes;
             }
         }
 
@@ -248,23 +263,26 @@ public class MainConfig {
         {
             if(config.contains("Break-Invis.Causes")) {
 
-                ConfigValue.remove_invis_damge_causes.clear();
+                final List<EntityDamageEvent.DamageCause> damageCauses = new ArrayList<>();
 
                 for (String string : config.getStringList("Break-Invis.Causes")) {
 
                     try {
-                        ConfigValue.remove_invis_damge_causes.add(EntityDamageEvent.DamageCause.valueOf(string));
+                        damageCauses.add(EntityDamageEvent.DamageCause.valueOf(string));
                     } catch (IllegalArgumentException exception) {
                         // Log failure to parse
                     }
                 }
+
+                ConfigValue.remove_invis_damge_causes = damageCauses;
             }
         }
 
         ConfigValue.custom_team_colors_enabled = config.getBoolean("Custom-Team-Chat-Color.Enabled", false);
         {
             if(config.contains("Custom-Team-Chat-Color.Teams")) {
-                ConfigValue.custom_team_colors.clear();
+
+                final HashMap<Team, ChatColor> map = new HashMap<>();
 
                 for (String string : config.getStringList("Custom-Team-Chat-Color.Teams")) {
 
@@ -276,9 +294,11 @@ public class MainConfig {
                     final ChatColor chatColor = ChatColor.getByChar(strings[1]);
 
                     if (team != null && chatColor != null) {
-                        ConfigValue.custom_team_colors.put(team, chatColor);
+                        map.put(team, chatColor);
                     }
                 }
+
+                ConfigValue.custom_team_colors = map;
             }
         }
 
@@ -296,7 +316,8 @@ public class MainConfig {
         ConfigValue.custom_height_cap_warn = config.getString("Height-Cap.Message", ConfigValue.custom_height_cap_warn);
         {
             if(config.contains("Custom-Team-Chat-Color.Teams")) {
-                ConfigValue.custom_height_cap_arenas.clear();
+
+                final HashMap<String, Integer> map = new HashMap<>();
 
                 for (String string : config.getStringList("Height-Cap.Arenas")) {
                     if (!string.contains(":"))
@@ -308,8 +329,10 @@ public class MainConfig {
                     if (capInt != null)
                         continue;
 
-                    ConfigValue.custom_height_cap_arenas.put(strings[0], capInt);
+                    map.put(strings[0], capInt);
                 }
+
+                ConfigValue.custom_height_cap_arenas = map;
             }
         }
 
@@ -489,6 +512,12 @@ public class MainConfig {
         config.addComment("PAPI-Placeholder: %tweaks_team-you-{name}%");
         config.addComment("Displays specified value if the team in the placeholder matches the players current team");
         config.set("Team-You-Placeholder", ConfigValue.papi_team_you_placeholder);
+
+        config.addEmptyLine();
+
+        config.addComment("PAPI Placeholder: %tweaks_player-arena-running-time%");
+        config.addComment("Displays how long an arena has been running for");
+        config.set("Running-Time-Placeholder", ConfigValue.papi_player_arena_running_time);
 
         config.addEmptyLine();
 

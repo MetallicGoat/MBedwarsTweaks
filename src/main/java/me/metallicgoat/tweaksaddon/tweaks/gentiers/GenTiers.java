@@ -9,6 +9,7 @@ import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.api.game.spawner.SpawnerDurationModifier;
 import de.marcely.bedwars.api.message.Message;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
+import me.metallicgoat.tweaksaddon.Util;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -171,17 +172,7 @@ public class GenTiers implements Listener {
         final int minutes = (timeoutSeconds / 60) % 60;
         final int seconds = timeoutSeconds % 60;
 
-        if (minutes + seconds > 0) {
-            if (seconds < 10) {
-                return new String[]{String.valueOf(minutes), "0" + seconds};
-            } else {
-                return new String[]{String.valueOf(minutes), String.valueOf(seconds)};
-            }
-        } else if (seconds == 0 && minutes > 0) {
-            return new String[]{String.valueOf(minutes), "00"};
-        } else {
-            return new String[]{"0", "00"};
-        }
+        return Util.formatMinSec(minutes, seconds);
     }
 
     // Format custom holo titles

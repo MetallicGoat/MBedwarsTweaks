@@ -147,6 +147,22 @@ public class Placeholders extends PlaceholderExpansion {
 
             }
 
+            case "player-arena-running-time": {
+                if (arena == null || arena.getStatus() != ArenaStatus.RUNNING)
+                    return "";
+
+                final long millis = arena.getRunningTime();
+                long minutes = (millis / 1000)  / 60;
+                long seconds = ((millis / 1000) % 60);
+
+                final String[] formatted = Util.formatMinSec((int) minutes, (int) seconds);
+
+                return Message.build(ConfigValue.papi_player_arena_running_time)
+                        .placeholder("min", formatted[0])
+                        .placeholder("sec", formatted[1])
+                        .done();
+            }
+
             // Player count placeholders
             case "all-players":
                 return getPlayerAmount();

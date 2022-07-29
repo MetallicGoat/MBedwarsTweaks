@@ -1,6 +1,7 @@
 package me.metallicgoat.tweaksaddon;
 
 import de.marcely.bedwars.api.BedwarsAPI;
+import lombok.Getter;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -11,7 +12,9 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
     public static final int MIN_MBEDWARS_API_VER = 11;
     public static final String MIN_MBEDWARS_VER_NAME = "5.0.10";
 
+    @Getter
     private static MBedwarsTweaksPlugin instance;
+    @Getter
     private static MBedwarsTweaksAddon addon;
 
     public static boolean papiEnabled = false;
@@ -58,14 +61,6 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
                 );
             }
         });
-    }
-
-    public static MBedwarsTweaksPlugin getInstance() {
-        return instance;
-    }
-
-    public static MBedwarsTweaksAddon getAddon() {
-        return addon;
     }
 
     private boolean checkMBedwars() {

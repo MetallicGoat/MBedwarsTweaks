@@ -104,15 +104,18 @@ public class SwordsToolsConfig {
         ConfigValue.sword_drop_enabled = config.getBoolean("Advanced-Sword-Drop.Enabled", false);
         {
             if(config.contains("Advanced-Sword-Drop.Materials")) {
-                ConfigValue.sword_drop_materials.clear();
+
+                final List<Material> mats = new ArrayList<>();
 
                 for (String materialName : config.getStringList("Advanced-Sword-Drop.Materials")) {
                     final Material material = Helper.get().getMaterialByName(materialName);
 
                     if (material != null)
-                        ConfigValue.sword_drop_materials.add(material);
+                        mats.add(material);
 
                 }
+
+                ConfigValue.sword_drop_materials = mats;
             }
         }
 
@@ -288,6 +291,15 @@ public class SwordsToolsConfig {
         }
     }
 
+    /*
+     *
+     * We are doing this because if the
+     * main config fails to load the config
+     * version will not be set, and therefor
+     * we will try and update it as a v1 config
+     * when we should not.
+     *
+     */
     private static boolean isV1Config(FileConfiguration config){
 
         if(config.contains("Anti-Chest.Enabled"))
