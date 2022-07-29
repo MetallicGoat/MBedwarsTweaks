@@ -20,8 +20,8 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
 
         instance = this;
 
-        if(!checkMBedwars()) return;
-        if(!registerAddon()) return;
+        if (!checkMBedwars()) return;
+        if (!registerAddon()) return;
 
 
         new Metrics(this, 11928);
@@ -47,7 +47,15 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
                 new Placeholders().register();
                 papiEnabled = true;
             } else {
-                Console.printInfo("PlaceholderAPI Was not Found! PAPI placeholders won't work!");
+                Console.printInfo("PlaceholderAPI was not Found! PAPI placeholders won't work!");
+            }
+
+            if (Bukkit.getPluginManager().isPluginEnabled("FireBallKnockback")) {
+                Console.printInfo("I noticed you are using my Fireball jumping addon. " +
+                        "As of 5.0.13, you do not need to anymore! Fireball jumping " +
+                        "is now built into MBedwars, and cooldown + throw effect " +
+                        "features have been added to this addon (MBedwarsTweaks)."
+                );
             }
         });
     }
@@ -60,14 +68,14 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
         return addon;
     }
 
-    private boolean checkMBedwars(){
-        try{
+    private boolean checkMBedwars() {
+        try {
             final Class<?> apiClass = Class.forName("de.marcely.bedwars.api.BedwarsAPI");
             final int apiVersion = (int) apiClass.getMethod("getAPIVersion").invoke(null);
 
-            if(apiVersion < MIN_MBEDWARS_API_VER)
+            if (apiVersion < MIN_MBEDWARS_API_VER)
                 throw new IllegalStateException();
-        }catch(Exception e){
+        } catch (Exception e) {
             getLogger().warning("Sorry, your installed version of MBedwars is not supported. Please install at least v" + MIN_MBEDWARS_VER_NAME);
             Bukkit.getPluginManager().disablePlugin(this);
 
@@ -77,10 +85,10 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
         return true;
     }
 
-    private boolean registerAddon(){
+    private boolean registerAddon() {
         addon = new MBedwarsTweaksAddon(this);
 
-        if(!addon.register()){
+        if (!addon.register()) {
             getLogger().warning("It seems like this addon has already been loaded. Please delete duplicates and try again.");
             Bukkit.getPluginManager().disablePlugin(this);
 
