@@ -43,6 +43,13 @@
             <scope>system</scope>
             <systemPath>${basedir}/libs/MBedwars.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>me.metallicgoat.hotbarmanageraddon</groupId>
+            <artifactId>API</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/libs/HotbarManager-1.0-SNAPSHOT.jar</systemPath>
+        </dependency>
         <!--
         <dependency>
             <groupId>de.marcely.bedwars</groupId>

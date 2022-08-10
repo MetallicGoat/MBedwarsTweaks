@@ -2,6 +2,7 @@ package me.metallicgoat.tweaksaddon;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import lombok.Getter;
+import lombok.Setter;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -16,6 +17,8 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
     private static MBedwarsTweaksPlugin instance;
     @Getter
     private static MBedwarsTweaksAddon addon;
+    @Getter @Setter
+    private boolean hotbarManagerEnabled = false;
 
     public static boolean papiEnabled = false;
 
@@ -45,6 +48,9 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
         BedwarsAPI.onReady(() -> {
 
             LoadConfigs.loadTweaksConfigs();
+
+            if(Bukkit.getPluginManager().isPluginEnabled("MBedwarsHotbarManager"))
+                setHotbarManagerEnabled(true);
 
             if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
                 new Placeholders().register();

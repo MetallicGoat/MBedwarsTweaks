@@ -5,5 +5,4 @@ main: me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin
 description: Adds some extra features to MBedwars
 api-version: 1.13
 depend: [MBedwars]
-softdepend:
-  - PlaceholderAPI
+softdepend: [PlaceholderAPI, MBedwarsHotbarManager]

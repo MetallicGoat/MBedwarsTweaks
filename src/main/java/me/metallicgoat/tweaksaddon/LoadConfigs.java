@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 public class LoadConfigs implements Listener {
 
+    // TODO is this even doing anything???
     private static boolean isLoading = false;
 
     @EventHandler
