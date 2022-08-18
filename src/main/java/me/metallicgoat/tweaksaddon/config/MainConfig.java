@@ -26,7 +26,7 @@ import java.util.Map;
 
 public class MainConfig {
 
-    public static final byte VERSION = 1;
+    public static final byte VERSION = 2;
     public static int CURRENT_VERSION = -1;
 
     private static File getFile(){
@@ -315,7 +315,7 @@ public class MainConfig {
         ConfigValue.custom_height_cap_enabled = config.getBoolean("Height-Cap.Enabled", false);
         ConfigValue.custom_height_cap_warn = config.getString("Height-Cap.Message", ConfigValue.custom_height_cap_warn);
         {
-            if(config.contains("Custom-Team-Chat-Color.Teams")) {
+            if(config.contains("Height-Cap.Arenas")) {
 
                 final HashMap<String, Integer> map = new HashMap<>();
 
@@ -326,7 +326,7 @@ public class MainConfig {
                     final String[] strings = string.split(":");
                     final Integer capInt = Helper.get().parseInt(strings[1]);
 
-                    if (capInt != null)
+                    if (capInt == null)
                         continue;
 
                     map.put(strings[0], capInt);

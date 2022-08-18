@@ -147,7 +147,7 @@ public class Placeholders extends PlaceholderExpansion {
 
             }
 
-            case "player-arena-running-time": {
+            case "igt": {
                 if (arena == null || arena.getStatus() != ArenaStatus.RUNNING)
                     return "";
 

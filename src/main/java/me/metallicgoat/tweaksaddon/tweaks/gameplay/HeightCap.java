@@ -18,6 +18,7 @@ public class HeightCap implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onBuild(BlockPlaceEvent e) {
+
         final Player player = e.getPlayer();
         final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
 
@@ -25,7 +26,9 @@ public class HeightCap implements Listener {
             return;
 
         for (Map.Entry<String, Integer> arenaHeight : ConfigValue.custom_height_cap_arenas.entrySet()) {
+
             if(Util.parseArenas(arenaHeight.getKey()).contains(arena)){
+
                 if (e.getBlockPlaced().getY() > arenaHeight.getValue()) {
                     player.sendMessage(Message.build(ConfigValue.custom_height_cap_warn).done());
                     e.setCancelled(true);

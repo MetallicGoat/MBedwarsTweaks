@@ -36,6 +36,7 @@ public class Util {
         if(arenaByName != null)
             return Collections.singleton(arenaByName);
 
+
         try {return GameAPI.get().getArenasByPickerCondition(arenaKey);}
         catch (Exception ignored) {}
 
