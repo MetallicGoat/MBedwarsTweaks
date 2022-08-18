@@ -10,8 +10,10 @@ import de.marcely.bedwars.api.game.shop.product.ItemShopProduct;
 import de.marcely.bedwars.api.game.shop.product.ShopProduct;
 import de.marcely.bedwars.api.message.Message;
 import de.marcely.bedwars.tools.Helper;
+import me.metallicgoat.hotbarmanageraddon.HotbarManagerTools;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -160,5 +162,18 @@ public class ToolSwordHelper {
                 e.getPlayer().sendMessage(Message.build(problem).done());
             }
         });
+    }
+
+    public static void givePlayerShopItem(Arena arena, Team team, Player player, ShopItem item){
+        if(MBedwarsTweaksPlugin.getInstance().isHotbarManagerEnabled()){
+            for(ShopProduct product : item.getProducts()) {
+                for(ItemStack itemStack : product.getGivingItems(player, team, arena, 1))
+                    HotbarManagerTools.giveItemsProperly(itemStack, player, item.getPage(), null, true);
+            }
+        } else {
+            Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> item.getProducts().forEach(shopProduct -> {
+                shopProduct.give(player, arena.getPlayerTeam(player), arena, 1);
+            }), 1L);
+        }
     }
 }

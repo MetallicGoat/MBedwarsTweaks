@@ -6,7 +6,7 @@
 
     <groupId>me.metallicgoat</groupId>
     <artifactId>MBedwarsTweaks</artifactId>
-    <version>2.0.1-Pre-2</version>
+    <version>2.0.1</version>
 
     <repositories>
         <repository>
@@ -36,6 +36,7 @@
             <version>2.10.10</version>
             <scope>provided</scope>
         </dependency>
+        <!--
         <dependency>
             <groupId>de.marcely.bedwars</groupId>
             <artifactId>API</artifactId>
@@ -43,6 +44,7 @@
             <scope>system</scope>
             <systemPath>${basedir}/libs/MBedwars.jar</systemPath>
         </dependency>
+        -->
         <dependency>
             <groupId>me.metallicgoat.hotbarmanageraddon</groupId>
             <artifactId>API</artifactId>
@@ -50,13 +52,11 @@
             <scope>system</scope>
             <systemPath>${basedir}/libs/HotbarManager-1.0-SNAPSHOT.jar</systemPath>
         </dependency>
-        <!--
         <dependency>
             <groupId>de.marcely.bedwars</groupId>
             <artifactId>API</artifactId>
-            <version>5.0.11</version>
+            <version>5.0.13</version>
         </dependency>
-        -->
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>

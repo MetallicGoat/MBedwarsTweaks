@@ -9,16 +9,11 @@ import de.marcely.bedwars.api.event.player.PlayerIngameDeathEvent;
 import de.marcely.bedwars.api.event.player.PlayerIngameRespawnEvent;
 import de.marcely.bedwars.api.game.shop.BuyGroup;
 import de.marcely.bedwars.api.game.shop.ShopItem;
-import de.marcely.bedwars.api.game.shop.product.ShopProduct;
-import me.metallicgoat.hotbarmanageraddon.HotbarManagerTools;
-import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -59,22 +54,12 @@ public class DowngradeTools implements Listener {
                 if (shopItems == null)
                     return;
 
-                // TODO make better
                 final Team team = arena.getPlayerTeam(player);
 
-                for (ShopItem item : shopItems) {
-                    if(MBedwarsTweaksPlugin.getInstance().isHotbarManagerEnabled()){
-                        for(ShopProduct product : item.getProducts()) {
-                            for(ItemStack itemStack : product.getGivingItems(player, team, arena, 1))
-                                HotbarManagerTools.giveItemsProperly(itemStack, player, item.getPage(), null, true);
-                        }
-                    } else {
-                        Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> item.getProducts().forEach(shopProduct -> {
-                            arena.setBuyGroupLevel(player, buyGroup, level);
-                            shopProduct.give(event.getPlayer(), event.getArena().getPlayerTeam(player), event.getArena(), 1);
-                        }), 1L);
-                    }
-                }
+                for (ShopItem item : shopItems)
+                    ToolSwordHelper.givePlayerShopItem(arena, team, player, item);
+
+                arena.setBuyGroupLevel(player, buyGroup, level);
             }
         }
     }

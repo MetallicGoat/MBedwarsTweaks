@@ -10,8 +10,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class MBedwarsTweaksPlugin extends JavaPlugin {
 
-    public static final int MIN_MBEDWARS_API_VER = 11;
-    public static final String MIN_MBEDWARS_VER_NAME = "5.0.10";
+    public static final int MIN_MBEDWARS_API_VER = 13;
+    public static final String MIN_MBEDWARS_VER_NAME = "5.0.13";
 
     @Getter
     private static MBedwarsTweaksPlugin instance;
@@ -61,9 +61,9 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
 
             if (Bukkit.getPluginManager().isPluginEnabled("FireBallKnockback")) {
                 Console.printInfo("I noticed you are using my Fireball jumping addon. " +
-                        "As of 5.0.13, you do not need to anymore! Fireball jumping " +
-                        "is now built into MBedwars, and cooldown + throw effect " +
-                        "features have been added to this addon (MBedwarsTweaks)."
+                        "As of 5.0.13, you do not need it anymore! Fireball jumping " +
+                        "is now built into core MBedwars. Features such as throw cooldown and throw " +
+                        "effects have been added to this addon (MBedwarsTweaks). - MetallicGoat"
                 );
             }
         });
