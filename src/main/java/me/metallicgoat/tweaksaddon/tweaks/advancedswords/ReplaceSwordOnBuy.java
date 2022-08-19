@@ -25,12 +25,20 @@ public class ReplaceSwordOnBuy implements Listener {
             if (rawProduct instanceof ItemShopProduct) {
                 final ItemStack[] is = ((ItemShopProduct) rawProduct).getItemStacks();
                 for (ItemStack item : is) {
-                    if (item.getType().name().endsWith("SWORD") && ToolSwordHelper.isNotToIgnore(event.getItem().getDisplayName())) {
+                    if (item.getType().name().endsWith("SWORD") && ToolSwordHelper.isNotToIgnore(item)) {
+
                         //Clear Wooden Swords
                         if (ConfigValue.replace_sword_on_buy_all_type) {
                             for (ItemStack itemStack : pi) {
-                                if (itemStack != null && itemStack.getType().name().contains("SWORD")) {
-                                    pi.remove(itemStack);
+                                if (itemStack != null
+                                        && itemStack.getType().name().contains("SWORD")
+                                        && ToolSwordHelper.isNotToIgnore(itemStack)) {
+
+                                    if(ToolSwordHelper.getSwordToolLevel(itemStack.getType()) < ToolSwordHelper.getSwordToolLevel(item.getType()))
+                                        pi.remove(itemStack);
+                                    else
+                                        ToolSwordHelper.addShopProblem(event, ConfigValue.ordered_sword_buy_problem);
+
                                 }
                             }
                         } else {

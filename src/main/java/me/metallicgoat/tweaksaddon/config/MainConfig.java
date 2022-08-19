@@ -26,7 +26,7 @@ import java.util.Map;
 
 public class MainConfig {
 
-    public static final byte VERSION = 2;
+    public static final byte VERSION = 1;
     public static int CURRENT_VERSION = -1;
 
     private static File getFile(){
