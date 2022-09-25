@@ -6,7 +6,7 @@
 
     <groupId>me.metallicgoat</groupId>
     <artifactId>MBedwarsTweaks</artifactId>
-    <version>2.0.1.1</version>
+    <version>2.0.1.2</version>
 
     <repositories>
         <repository>
@@ -40,7 +40,7 @@
         <dependency>
             <groupId>de.marcely.bedwars</groupId>
             <artifactId>API</artifactId>
-            <version>5.0.12</version>
+            <version>5.0.13</version>
             <scope>system</scope>
             <systemPath>${basedir}/libs/MBedwars.jar</systemPath>
         </dependency>
@@ -50,12 +50,12 @@
             <artifactId>API</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${basedir}/libs/HotbarManager-1.0-SNAPSHOT.jar</systemPath>
+            <systemPath>${basedir}/public-libs/HotbarManager-1.0-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>de.marcely.bedwars</groupId>
             <artifactId>API</artifactId>
-            <version>5.0.13</version>
+            <version>5.0.14.2</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
@@ -65,7 +65,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.22</version>
+            <version>1.18.24</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

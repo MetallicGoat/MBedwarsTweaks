@@ -1,10 +1,8 @@
 package me.metallicgoat.tweaksaddon.tweaks.advancedswords;
 
-import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.player.PlayerBuyInShopEvent;
-import de.marcely.bedwars.api.game.shop.BuyGroup;
 import de.marcely.bedwars.api.game.shop.ShopItem;
 import de.marcely.bedwars.api.game.shop.product.ItemShopProduct;
 import de.marcely.bedwars.api.game.shop.product.ShopProduct;
@@ -42,6 +40,9 @@ public class ToolSwordHelper {
             return new ItemStack(WOOD_SWORD);
 
         final Team team = arena.getPlayerTeam(player);
+
+        if(team == null)
+            return new ItemStack(WOOD_SWORD);
 
         for(ItemStack is : arena.getItemsGivenOnSpawn(player, team, true, true)){
             if(is.getType() == WOOD_SWORD)
