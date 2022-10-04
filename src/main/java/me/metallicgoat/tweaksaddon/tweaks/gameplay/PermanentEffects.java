@@ -33,13 +33,10 @@ public class PermanentEffects implements Listener {
         final Arena arena = event.getArena();
         final PotionEffect effect = getArenaEffects(arena);
 
-
         if(!ConfigValue.permanent_effects_enabled || effect == null)
             return;
 
-        final Player player = event.getPlayer();
-
-        player.addPotionEffect(effect);
+        event.getPlayer().addPotionEffect(effect);
     }
 
     public @Nullable PotionEffect getArenaEffects(Arena arena){
@@ -50,6 +47,7 @@ public class PermanentEffects implements Listener {
                 return entry.getValue();
 
         }
+
         return null;
     }
 

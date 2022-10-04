@@ -118,9 +118,9 @@ public class OneSlotTools implements Listener {
 
     private static int getPlayerToolLevel(BuyGroup group, Player player) {
         if (group.getName().equalsIgnoreCase("pickaxe")) {
-            return DowngradeTools.pickaxeHashMap.get(player);
+            return DowngradeTools.pickaxeHashMap.getOrDefault(player, 0);
         } else {
-            return DowngradeTools.axeHashMap.get(player);
+            return DowngradeTools.axeHashMap.getOrDefault(player, 0);
         }
     }
 

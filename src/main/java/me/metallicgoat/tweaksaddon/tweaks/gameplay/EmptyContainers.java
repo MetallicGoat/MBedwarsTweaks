@@ -32,10 +32,8 @@ public class EmptyContainers implements Listener {
         event.getItemStack().setType(Material.AIR);
     }
 
-    // TODO test with offhand
     @EventHandler
     public void onConsume(PlayerItemConsumeEvent event) {
-
         if (!ConfigValue.remove_empty_potions || event.getItem().getType() != Material.POTION)
             return;
 

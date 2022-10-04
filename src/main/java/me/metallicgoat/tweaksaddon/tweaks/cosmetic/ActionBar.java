@@ -6,7 +6,7 @@ import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.event.player.PlayerJoinArenaEvent;
 import de.marcely.bedwars.api.message.Message;
-import me.clip.placeholderapi.PlaceholderAPI;
+import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import org.bukkit.Bukkit;
@@ -60,9 +60,9 @@ public class ActionBar implements Listener {
                 if ((arena.getStatus() == ArenaStatus.RUNNING && ConfigValue.custom_action_bar_in_game) ||
                         (arena.getStatus() == ArenaStatus.LOBBY && ConfigValue.custom_action_bar_in_lobby)) {
 
-                    for (Player player : arena.getPlayers()) {
-                        BedwarsAPI.getNMSHelper().showActionbar(player, Message.build(PlaceholderAPI.setPlaceholders(player, ConfigValue.custom_action_bar_message)).done());
-                    }
+                    for (Player player : arena.getPlayers())
+                        BedwarsAPI.getNMSHelper().showActionbar(player, Message.build(Helper.get().replacePAPIPlaceholders(ConfigValue.custom_action_bar_message, player)).done());
+
                 }
             }
         }, 0L, 20L);

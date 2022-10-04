@@ -31,7 +31,7 @@ public class Placeholders extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return "2.0.0";
+        return MBedwarsTweaksPlugin.getInstance().getDescription().getVersion();
     }
 
     @Override
@@ -144,9 +144,9 @@ public class Placeholders extends PlaceholderExpansion {
                     return "Bed-Destroyed";
                 else
                     return "Active";
-
             }
 
+            case "player-arena-running-time":
             case "igt": {
                 if (arena == null || arena.getStatus() != ArenaStatus.RUNNING)
                     return "";

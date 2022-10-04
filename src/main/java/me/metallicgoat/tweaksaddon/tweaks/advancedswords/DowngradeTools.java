@@ -48,7 +48,7 @@ public class DowngradeTools implements Listener {
             if (buyGroupName.equalsIgnoreCase("pickaxe")
                     || buyGroup.getName().equalsIgnoreCase("axe")) {
 
-                final int level = buyGroupName.equalsIgnoreCase("pickaxe") ? pickaxeHashMap.get(player) : axeHashMap.get(player);
+                final int level = buyGroupName.equalsIgnoreCase("pickaxe") ? pickaxeHashMap.getOrDefault(player, 0) : axeHashMap.getOrDefault(player, 0);
                 final Collection<? extends ShopItem> shopItems = buyGroup.getItems(level);
 
                 if (shopItems == null)
@@ -79,9 +79,9 @@ public class DowngradeTools implements Listener {
 
             //if proper buy-group
             if (group.getName().equalsIgnoreCase("pickaxe"))
-                pickaxeHashMap.replace(player, level);
+                pickaxeHashMap.put(player, level);
             else if (group.getName().equalsIgnoreCase("axe"))
-                axeHashMap.replace(player, level);
+                axeHashMap.put(player, level);
         }
     }
 
