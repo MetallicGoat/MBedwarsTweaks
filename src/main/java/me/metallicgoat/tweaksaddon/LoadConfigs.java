@@ -14,9 +14,6 @@ import java.util.HashMap;
 
 public class LoadConfigs implements Listener {
 
-    // TODO is this even doing anything???
-    private static boolean isLoading = false;
-
     @EventHandler
     public void onConfigLoad(ConfigsLoadEvent event) {
         if(!event.isStartup())
@@ -24,11 +21,6 @@ public class LoadConfigs implements Listener {
     }
 
     public static void loadTweaksConfigs() {
-
-        if(isLoading)
-            return;
-
-        isLoading = true;
 
         final long start = System.currentTimeMillis();
 
@@ -48,7 +40,6 @@ public class LoadConfigs implements Listener {
         SwordsToolsConfig.load();
         GenTiersConfig.load();
 
-        isLoading = false;
         final long end = System.currentTimeMillis();
 
         Console.printInfo("Configs loaded in " + (end - start) + "ms.");
@@ -58,28 +49,28 @@ public class LoadConfigs implements Listener {
         return new HashMap<Integer, GenTierLevel>() {{
             put(1, new GenTierLevel(
                     "Diamond II", "&eTier &cII",
-                    Util.getDropType("diamond"),
+                    "diamond",
                     TierAction.GEN_UPGRADE, 6, 30,
                     "&bDiamond Generators &ehave been upgraded to Tier &4II",
                     null
             ));
             put(2, new GenTierLevel(
                     "Emerald II", "&eTier &cII",
-                    Util.getDropType("emerald"),
+                    "emerald",
                     TierAction.GEN_UPGRADE, 6, 40,
                     "&aEmerald Generators &ehave been upgraded to Tier &4II",
                     null
             ));
             put(3, new GenTierLevel(
                     "Diamond III", "&eTier &cIII",
-                    Util.getDropType("diamond"),
+                    "diamond",
                     TierAction.GEN_UPGRADE, 6, 20,
                     "&bDiamond Generators &ehave been upgraded to Tier &4III",
                     null
             ));
             put(4, new GenTierLevel(
                     "Emerald III", "&eTier &cIII",
-                    Util.getDropType("emerald"),
+                    "emerald",
                     TierAction.GEN_UPGRADE, 6, 30,
                     "&aEmerald Generators &ehave been upgraded to Tier &4III",
                     null

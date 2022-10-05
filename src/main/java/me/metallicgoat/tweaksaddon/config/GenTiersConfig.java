@@ -1,11 +1,9 @@
 package me.metallicgoat.tweaksaddon.config;
 
-import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.YamlConfigurationDescriptor;
 import me.metallicgoat.tweaksaddon.Console;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
-import me.metallicgoat.tweaksaddon.Util;
 import me.metallicgoat.tweaksaddon.tweaks.gentiers.GenTierLevel;
 import me.metallicgoat.tweaksaddon.tweaks.gentiers.TierAction;
 import org.bukkit.Sound;
@@ -14,7 +12,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,7 +22,6 @@ public class GenTiersConfig {
     }
 
     // TODO ensure tiers are numbered correctly
-
     public static void load(){
         synchronized(MainConfig.class){
             try{
@@ -80,7 +76,6 @@ public class GenTiersConfig {
                 final String soundString = config.getString(configKey + "Earn-Sound");
 
                 // TODO Validate other values not null
-
                 if(actionString == null) {
                     Console.printConfigWarn("Failed to load tier: [" + tierName + "]. Action is null", "gen-tiers");
                     continue;
@@ -108,17 +103,13 @@ public class GenTiersConfig {
 
                 if(action == TierAction.GEN_UPGRADE) {
 
-                    final DropType dropType = Util.getDropType(typeString);
-
-                    if (dropType == null){
-                        Console.printConfigWarn("Failed to load gen-tier + [" + tierName + "]. '" + typeString + "' is not a valid DropType", "gen-tiers");
-                        continue;
-                    }
-
+                    //final DropType dropType = Util.getDropType(typeString);
+                    //if (dropType == null)
+                    //    Console.printConfigInfo("The gen tier + [" + tierName + "]. May not work properly, as '" + typeString + "' is not a valid DropType", "gen-tiers");
                     final GenTierLevel genTierLevel = new GenTierLevel(
                             tierName,
                             tierLevel,
-                            dropType,
+                            typeString,
                             action,
                             time,
                             speed,
@@ -146,17 +137,13 @@ public class GenTiersConfig {
 
         // auto update file if newer version
         {
-            MainConfig.CURRENT_CONFIG_VERSION = config.getString("file-version");
-
             if(MainConfig.CURRENT_CONFIG_VERSION == null) {
-                Console.printConfigInfo("An update has just been detected. Seems like you are updating from V1. Updating configs to V2 format!", "Updater");
                 updateV1Configs(config);
                 save();
                 return;
             }
 
             if(!MainConfig.CURRENT_CONFIG_VERSION.equals(MainConfig.ADDON_VERSION)) {
-                Console.printConfigInfo("An update has just been detected. Updating configs!", "Updater");
                 updateV2Configs(config);
                 save();
             }
@@ -195,7 +182,7 @@ public class GenTiersConfig {
             config.set(configKey + "Action", level.getAction().getId());
 
             if(level.getAction() == TierAction.GEN_UPGRADE) {
-                config.set(configKey + "Drop-Type", level.getType().getId());
+                config.set(configKey + "Drop-Type", level.getTypeId());
                 config.set(configKey + "Drop-Speed", level.getSpeed());
             }
 
@@ -257,6 +244,7 @@ public class GenTiersConfig {
                 if(levelNum > val)
                     val = levelNum;
 
+                /*
                 final DropType dropType = Util.getDropType(typeString);
 
                 if (dropType == null){
@@ -264,10 +252,12 @@ public class GenTiersConfig {
                     continue;
                 }
 
+                 */
+
                 final GenTierLevel genTierLevel = new GenTierLevel(
                         tierName,
                         tierLevel,
-                        dropType,
+                        typeString,
                         TierAction.GEN_UPGRADE,
                         time,
                         speed,

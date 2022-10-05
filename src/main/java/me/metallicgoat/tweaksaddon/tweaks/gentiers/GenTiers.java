@@ -126,7 +126,7 @@ public class GenTiers implements Listener {
                         playTierSound(arena, currentLevel);
                         // For all spawners
                         for (Spawner s : arena.getSpawners()) {
-                            if (s.getDropType() == currentLevel.getType()) {
+                            if (currentLevel.getType() != null && s.getDropType() == currentLevel.getType()) {
                                 // Set drop time
                                 s.addDropDurationModifier("GEN_UPGRADE", MBedwarsTweaksPlugin.getInstance(), SpawnerDurationModifier.Operation.SET, currentLevel.getSpeed());
                                 // Add custom Holo tiles
