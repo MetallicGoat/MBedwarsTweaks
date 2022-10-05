@@ -61,36 +61,28 @@ public class ForceScoreboardUpdating implements Listener {
     }
 
     private static BukkitTask startUpdatingTime() {
-
         return Bukkit.getServer().getScheduler().runTaskTimer(MBedwarsTweaksPlugin.getInstance(), () -> {
             for (Arena arena : BedwarsAPI.getGameAPI().getArenas()) {
-
                 if ((arena.getStatus() == ArenaStatus.RUNNING && ConfigValue.gen_tiers_scoreboard_updating_enabled_in_game)) {
 
                     if (GenTiers.timeToNextUpdate.containsKey(arena)){
-
                         final long integer = GenTiers.timeToNextUpdate.get(arena);
 
-                        if (((integer - 20) / 20) % ConfigValue.gen_tiers_scoreboard_updating_interval == 0){
+                        if (((integer - 20) / 20) % ConfigValue.gen_tiers_scoreboard_updating_interval == 0)
                             arena.updateScoreboard();
-                        }
 
                         continue;
                     }
 
                     final int integer = arena.getIngameTimeRemaining();
-
-                    if (integer % ConfigValue.gen_tiers_scoreboard_updating_interval == 0){
+                    if (integer % ConfigValue.gen_tiers_scoreboard_updating_interval == 0)
                         arena.updateScoreboard();
-                    }
 
                 } else if (arena.getStatus() == ArenaStatus.LOBBY && ConfigValue.gen_tiers_scoreboard_updating_enabled_in_lobby){
-
                     final long integer = Math.round(arena.getLobbyTimeRemaining());
 
-                    if (integer % ConfigValue.gen_tiers_scoreboard_updating_interval == 0){
+                    if (integer % ConfigValue.gen_tiers_scoreboard_updating_interval == 0)
                         arena.updateScoreboard();
-                    }
                 }
             }
         }, 0L, 20L);

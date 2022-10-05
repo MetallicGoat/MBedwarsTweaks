@@ -1,6 +1,7 @@
 package me.metallicgoat.tweaksaddon.tweaks.mechanics;
 
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
+import de.marcely.bedwars.api.game.specialitem.SpecialItemType;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import org.bukkit.Bukkit;
@@ -18,13 +19,15 @@ public class FireballUseCoolDown implements Listener {
     @EventHandler
     public void onPlayerUseSpecialItem(PlayerUseSpecialItemEvent event) {
 
-        if (!ConfigValue.fireball_cooldown_enabled || !event.getSpecialItem().getId().equalsIgnoreCase("Fireball"))
+        if (!ConfigValue.fireball_cooldown_enabled || event.getSpecialItem().getType() != SpecialItemType.FIREBALL)
             return;
 
         final Player player = event.getPlayer();
 
-        if (coolDownPlayers.contains(player))
+        if (coolDownPlayers.contains(player)) {
+            event.setCancelled(true);
             return;
+        }
 
         coolDownPlayers.add(player);
 
