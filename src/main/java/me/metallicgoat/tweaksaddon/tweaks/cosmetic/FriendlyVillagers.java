@@ -28,7 +28,7 @@ public class FriendlyVillagers implements Listener {
 
     @EventHandler
     public void onRoundStart(RoundStartEvent e){
-        if(!ConfigValue.friendly_villagers)
+        if(!ConfigValue.friendly_villagers_enabled)
             return;
 
         // Add arena to update list

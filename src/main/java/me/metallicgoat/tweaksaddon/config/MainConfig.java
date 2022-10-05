@@ -26,8 +26,8 @@ import java.util.Map;
 
 public class MainConfig {
 
-    public static final byte VERSION = 1;
-    public static int CURRENT_VERSION = -1;
+    public static final String ADDON_VERSION = MBedwarsTweaksPlugin.getInstance().getDescription().getVersion();
+    public static String CURRENT_CONFIG_VERSION = null;
 
     private static File getFile(){
         return new File(MBedwarsTweaksPlugin.getAddon().getDataFolder(), "config.yml");
@@ -85,8 +85,8 @@ public class MainConfig {
         if (config.contains("Spawner-Title"))
             ConfigValue.gen_tiers_spawner_holo_titles = config.getStringList("Spawner-Title");
 
-        ConfigValue.custom_action_bar_in_game = config.getBoolean("Action-Bar.Enabled-In-Lobby", false);
-        ConfigValue.custom_action_bar_in_lobby = config.getBoolean("Action-Bar.Enabled-In-Game", false);
+        ConfigValue.custom_action_bar_in_game = config.getBoolean("Action-Bar.Enabled-In-Game", false);
+        ConfigValue.custom_action_bar_in_lobby = config.getBoolean("Action-Bar.Enabled-In-Lobby", false);
         ConfigValue.custom_action_bar_message = config.getString("Action-Bar.Message", ConfigValue.custom_action_bar_message);
 
         ConfigValue.final_kill_suffix_enabled = config.getBoolean("Final-Kill-Suffix.Enabled", true);
@@ -232,6 +232,10 @@ public class MainConfig {
             }
         }
 
+        ConfigValue.friendly_villagers_enabled = config.getBoolean("Friendly-Villagers.Enabled", false);
+        ConfigValue.friendly_villagers_range = config.getInt("Friendly-Villagers.Range", 12);
+
+
         ConfigValue.disable_empty_generators = config.getBoolean("Disable-Unused-Gens.Enabled", false);
         ConfigValue.disable_empty_generators_range = config.getDouble("Disable-Unused-Gens.Range", ConfigValue.disable_empty_generators_range);
         {
@@ -312,8 +316,6 @@ public class MainConfig {
         ConfigValue.remove_empty_buckets = config.getBoolean("Empty-Buckets", true);
         ConfigValue.remove_empty_potions = config.getBoolean("Empty-Potions", true);
 
-        ConfigValue.friendly_villagers = config.getBoolean("Friendly-Villagers", false);
-
         ConfigValue.custom_height_cap_enabled = config.getBoolean("Height-Cap.Enabled", false);
         ConfigValue.custom_height_cap_warn = config.getString("Height-Cap.Message", ConfigValue.custom_height_cap_warn);
         {
@@ -341,15 +343,17 @@ public class MainConfig {
 
         // auto update file if newer version
         {
-            CURRENT_VERSION = config.getInt("file-version", -1);
+            CURRENT_CONFIG_VERSION = config.getString("file-version");
 
-            if(CURRENT_VERSION == -1) {
+            if(CURRENT_CONFIG_VERSION == null) {
+                Console.printConfigInfo("An update has just been detected. Seems like you are updating from V1. Updating configs to V2 format!", "Updater");
                 updateV1Configs(config);
                 save();
                 return;
             }
 
-            if(CURRENT_VERSION != VERSION) {
+            if(!CURRENT_CONFIG_VERSION.equals(ADDON_VERSION)) {
+                Console.printConfigInfo("An update has just been detected. Updating configs!", "Updater");
                 updateV2Configs(config);
                 save();
             }
@@ -360,7 +364,7 @@ public class MainConfig {
         final YamlConfigurationDescriptor config = new YamlConfigurationDescriptor();
 
         config.addComment("Used for auto-updating the config file. Ignore it");
-        config.set("file-version", VERSION);
+        config.set("file-version", ADDON_VERSION);
 
         config.addEmptyLine();
 
@@ -533,7 +537,7 @@ public class MainConfig {
 
         config.addEmptyLine();
 
-        config.addComment("############### MISCELLANEOUS ###############");
+        config.addComment("############### FIREBALLS ###############");
 
         config.addEmptyLine();
 
@@ -558,6 +562,8 @@ public class MainConfig {
         config.addEmptyLine();
 
         config.addComment("Effects given when a fireball is thrown (Default is like hypixel)");
+        config.addComment("Specify which potion effects the player shall gain after throwing a fireball");
+        config.addComment("Usage: <potion effect name>:<duration in ticks (20 ticks = 1 sec):<level>");
         config.set("Fireball-Throw-Effects.Enabled", true);
         {
             final List<String> lines = new ArrayList<>();
@@ -565,10 +571,20 @@ public class MainConfig {
             for(PotionEffect effect:ConfigValue.fireball_throw_effects)
                 lines.add(effect.getType().getName() + ":" + effect.getDuration() + ":" + (effect.getAmplifier() + 1));
 
-            config.addComment("Specify here which potion effects the player shall gain after throwing a fireball");
-            config.addComment("Usage: <potion effect name>:<duration in ticks (20 ticks = 1 sec):<level>");
             config.set("Fireball-Throw-Effects.Effects", lines);
         }
+
+        config.addEmptyLine();
+
+        config.addComment("############### MISCELLANEOUS ###############");
+
+        config.addEmptyLine();
+
+        config.addComment("If this is enabled, MBedwars dealers/upgrade-dealers will look at the closest players,");
+        config.addComment("rather than stay in one position. Their position will reset when the round ends");
+        config.addComment("Range is how close players must be for Friendly Villagers to activate");
+        config.set("Friendly-Villagers.Enabled", ConfigValue.friendly_villagers_enabled);
+        config.set("Friendly-Villagers.Range", ConfigValue.friendly_villagers_range);
 
         config.addEmptyLine();
 
@@ -669,7 +685,6 @@ public class MainConfig {
         config.set("Empty-Buckets", ConfigValue.remove_empty_buckets);
         config.set("Empty-Potions", ConfigValue.remove_empty_buckets);
 
-
         config.addEmptyLine();
 
         config.addComment("############### UNSUPPORTED ###############");
@@ -677,12 +692,6 @@ public class MainConfig {
         config.addEmptyLine();
 
         config.addComment("The features may produce unforeseen issues. Use at your own risk.");
-
-        config.addEmptyLine();
-
-        config.addComment("If this is enabled, MBedwars dealers/upgrade-dealers");
-        config.addComment("Will look at the closest players");
-        config.set("Friendly-Villagers", ConfigValue.friendly_villagers);
 
         config.addEmptyLine();
 

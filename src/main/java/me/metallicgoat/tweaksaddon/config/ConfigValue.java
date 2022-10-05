@@ -148,7 +148,8 @@ public class ConfigValue {
     }};
     public static String custom_height_cap_warn = "&cYou cannot build any higher";
 
-    public static boolean friendly_villagers = false;
+    public static boolean friendly_villagers_enabled = true;
+    public static int friendly_villagers_range = 12;
 
     // Gen Tiers
     public static boolean gen_tiers_enabled = false;

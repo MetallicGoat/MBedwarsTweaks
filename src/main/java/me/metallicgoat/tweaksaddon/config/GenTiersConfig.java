@@ -146,13 +146,17 @@ public class GenTiersConfig {
 
         // auto update file if newer version
         {
-            if(MainConfig.CURRENT_VERSION == -1) {
+            MainConfig.CURRENT_CONFIG_VERSION = config.getString("file-version");
+
+            if(MainConfig.CURRENT_CONFIG_VERSION == null) {
+                Console.printConfigInfo("An update has just been detected. Seems like you are updating from V1. Updating configs to V2 format!", "Updater");
                 updateV1Configs(config);
                 save();
                 return;
             }
 
-            if(MainConfig.CURRENT_VERSION != MainConfig.VERSION) {
+            if(!MainConfig.CURRENT_CONFIG_VERSION.equals(MainConfig.ADDON_VERSION)) {
+                Console.printConfigInfo("An update has just been detected. Updating configs!", "Updater");
                 updateV2Configs(config);
                 save();
             }
