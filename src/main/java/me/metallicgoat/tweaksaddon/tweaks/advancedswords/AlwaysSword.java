@@ -17,7 +17,6 @@ import org.bukkit.inventory.ItemStack;
 public class AlwaysSword implements Listener {
 
     // TODO keep track of running instances
-
     @EventHandler
     public void onClick(InventoryClickEvent e) {
 

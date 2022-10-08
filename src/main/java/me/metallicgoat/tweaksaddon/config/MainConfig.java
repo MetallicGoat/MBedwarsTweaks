@@ -232,9 +232,9 @@ public class MainConfig {
             }
         }
 
-        ConfigValue.friendly_villagers_enabled = config.getBoolean("Friendly-Villagers.Enabled", false);
-        ConfigValue.friendly_villagers_range = config.getInt("Friendly-Villagers.Range", 12);
-
+        ConfigValue.friendly_villagers_enabled = config.getBoolean("Friendly-Villagers.Enabled", ConfigValue.friendly_villagers_enabled);
+        ConfigValue.friendly_villagers_range = config.getInt("Friendly-Villagers.Range", ConfigValue.friendly_villagers_range);
+        ConfigValue.friendly_villagers_check_visibility = config.getBoolean("Friendly-Villagers.Check-Visibility", ConfigValue.friendly_villagers_check_visibility);
 
         ConfigValue.disable_empty_generators = config.getBoolean("Disable-Unused-Gens.Enabled", false);
         ConfigValue.disable_empty_generators_range = config.getDouble("Disable-Unused-Gens.Range", ConfigValue.disable_empty_generators_range);
@@ -585,6 +585,7 @@ public class MainConfig {
         config.addComment("Range is how close players must be for Friendly Villagers to activate");
         config.set("Friendly-Villagers.Enabled", ConfigValue.friendly_villagers_enabled);
         config.set("Friendly-Villagers.Range", ConfigValue.friendly_villagers_range);
+        config.set("Friendly-Villagers.Check-Visibility", ConfigValue.friendly_villagers_check_visibility);
 
         config.addEmptyLine();
 

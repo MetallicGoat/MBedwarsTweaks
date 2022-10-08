@@ -10,17 +10,18 @@ import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.BlockIterator;
 
 import java.util.*;
 
 public class FriendlyVillagers implements Listener {
-
-    // 5+ hours has been spent on this. Rewritten like 6 times
+    // 6+ hours has been spent on this. Rewritten like 6 times
     private final MBedwarsTweaksPlugin plugin = MBedwarsTweaksPlugin.getInstance();
     private BukkitTask task;
     private final List<World> worlds = new ArrayList<>();
@@ -78,7 +79,6 @@ public class FriendlyVillagers implements Listener {
         task = Bukkit.getScheduler().runTaskTimer(plugin, () -> worlds.forEach(world -> {
 
             final WorldStorage worldStorage = BedwarsAPI.getWorldStorage(world);
-
             if (worldStorage == null)
                 return;
 
@@ -92,15 +92,34 @@ public class FriendlyVillagers implements Listener {
                         || hologramEntity.getControllerType() == HologramControllerType.UPGRADE_DEALER) {
 
                     // Get players in range of villager
-                    final Player[] playersArray = hologramEntity.getSeeingPlayers();
+                    final List<Player> visiblePlayers = new ArrayList<>();
+                    for(Player player : hologramEntity.getSeeingPlayers()){
 
-                    if (playersArray.length > 0) {
-                        // Get the closest player
-                        final Player lookAtPlayer = Arrays.stream(playersArray).min(Comparator.comparingDouble(p -> p.getLocation().distance(hologramEntity.getLocation()))).get();
-
-                        // Player is too far
-                        if (lookAtPlayer.getLocation().distance(hologramEntity.getLocation()) > 5)
+                        // Check for same world & within range
+                        if(player.getWorld() != hologramEntity.getWorld().asBukkit() || player.getLocation().distance(hologramEntity.getLocation()) > ConfigValue.friendly_villagers_range)
                             continue;
+
+                        // Check if villager can even see player
+                        boolean ok = true;
+                        if(ConfigValue.friendly_villagers_check_visibility){
+                            final BlockIterator iterator = new BlockIterator(player.getWorld(), hologramEntity.getLocation().toVector(), player.getLocation().clone().subtract(hologramEntity.getLocation()).toVector(), 1, ConfigValue.friendly_villagers_range);
+
+                            while (iterator.hasNext()){
+                                final Material type = iterator.next().getType();
+
+                                if(type != Material.AIR && type != Material.BARRIER) {
+                                    ok = false;
+                                }
+                            }
+                        }
+
+                        if(ok)
+                            visiblePlayers.add(player);
+                    }
+
+                    if (visiblePlayers.size() > 0) {
+                        // Get the closest player
+                        final Player lookAtPlayer = visiblePlayers.stream().min(Comparator.comparingDouble(p -> p.getLocation().distance(hologramEntity.getLocation()))).get();
 
                         // Final location
                         final Location moveTo = hologramEntity.getLocation().setDirection(lookAtPlayer.getLocation().subtract(hologramEntity.getLocation()).toVector());
@@ -108,11 +127,11 @@ public class FriendlyVillagers implements Listener {
                         final float currentYaw = hologramEntity.getLocation().getYaw(); // where the villager is currently facing
                         final float targetYaw = moveTo.getYaw(); // Where we eventually want to end up
                         final float difference = targetYaw - currentYaw; // How many degrees the npc needs to turn
-                        final int rotationDivisor = 3;
+                        final int rotationDivisor = 3; // the larger this number, the slower the npc will turn
                         float newYaw; // Where the player is going to be looking
 
                         // Its not worth doing anything for a degree this small
-                        if(Math.abs(difference) < 3) {
+                        if(Math.abs(difference) < 5) {
                             hologramEntity.teleport(moveTo, false);
                             continue;
                         }

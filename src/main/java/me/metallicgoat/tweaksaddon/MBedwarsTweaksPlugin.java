@@ -13,12 +13,9 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
     public static final int MIN_MBEDWARS_API_VER = 13;
     public static final String MIN_MBEDWARS_VER_NAME = "5.0.13";
 
-    @Getter
-    private static MBedwarsTweaksPlugin instance;
-    @Getter
-    private static MBedwarsTweaksAddon addon;
-    @Getter @Setter
-    private boolean hotbarManagerEnabled = false;
+    @Getter private static MBedwarsTweaksPlugin instance;
+    @Getter private static MBedwarsTweaksAddon addon;
+    @Getter @Setter private boolean hotbarManagerEnabled = false;
 
     public static boolean papiEnabled = false;
 
@@ -29,13 +26,12 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
         if (!checkMBedwars()) return;
         if (!registerAddon()) return;
 
-
         new Metrics(this, 11928);
 
         ToolSwordHelper.load();
         MBedwarsTweaksAddon.registerEvents();
 
-        PluginDescriptionFile pdf = this.getDescription();
+        final PluginDescriptionFile pdf = this.getDescription();
 
         Console.printInfo(
                 "------------------------------",
