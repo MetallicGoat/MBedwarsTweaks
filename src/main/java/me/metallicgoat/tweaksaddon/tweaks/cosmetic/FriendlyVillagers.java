@@ -109,6 +109,7 @@ public class FriendlyVillagers implements Listener {
 
                                 if(type != Material.AIR && type != Material.BARRIER) {
                                     ok = false;
+                                    break;
                                 }
                             }
                         }

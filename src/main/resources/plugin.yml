@@ -1,5 +1,5 @@
-version: 2.0.1.2
 name: MBedwarsTweaks
+version: 2.0.3
 author: MetallicGoat
 main: me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin
 description: Adds some extra customizability to MBedwars

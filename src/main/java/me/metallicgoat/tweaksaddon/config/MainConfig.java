@@ -583,6 +583,7 @@ public class MainConfig {
         config.addComment("If this is enabled, MBedwars dealers/upgrade-dealers will look at the closest players,");
         config.addComment("rather than stay in one position. Their position will reset when the round ends");
         config.addComment("Range is how close players must be for Friendly Villagers to activate");
+        config.addComment("If Check-Visibility is enabled, the npc will only look at a player if it has direct line of sight");
         config.set("Friendly-Villagers.Enabled", ConfigValue.friendly_villagers_enabled);
         config.set("Friendly-Villagers.Range", ConfigValue.friendly_villagers_range);
         config.set("Friendly-Villagers.Check-Visibility", ConfigValue.friendly_villagers_check_visibility);
