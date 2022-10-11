@@ -164,8 +164,7 @@ public class GenTiers implements Listener {
 
     // Format time for placeholder
     public static String[] timeLeft(Arena arena) {
-
-        final int timeoutTicks = Math.toIntExact(timeToNextUpdate.get(arena));
+        final int timeoutTicks = timeToNextUpdate.getOrDefault(arena, 0L).intValue();
         final int timeoutSeconds = (timeoutTicks / 20);
 
         final int minutes = (timeoutSeconds / 60) % 60;
