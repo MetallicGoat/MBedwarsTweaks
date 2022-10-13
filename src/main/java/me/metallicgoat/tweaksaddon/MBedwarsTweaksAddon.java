@@ -30,8 +30,9 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
         final MBedwarsTweaksPlugin plugin = MBedwarsTweaksPlugin.getInstance();
         final PluginManager manager = plugin.getServer().getPluginManager();
 
-        // Loading
+        // Utils
         manager.registerEvents(new LoadConfigs(), plugin);
+        manager.registerEvents(new ToolSwordHelper(), plugin);
 
         // Advanced Swords
         manager.registerEvents(new AlwaysSword(), plugin);
@@ -65,6 +66,7 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
         manager.registerEvents(new GenTiers(), plugin);
 
         // Mechanics
+        manager.registerEvents(new BlockArenaStats(), plugin);
         manager.registerEvents(new DisableFireballOutsideArena(), plugin);
         manager.registerEvents(new FireballBlockBreakWhitelist(), plugin);
         manager.registerEvents(new FireballThrowEffects(), plugin);

@@ -1,9 +1,13 @@
 package me.metallicgoat.tweaksaddon.tweaks.advancedswords;
 
+import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
+import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.event.player.PlayerBuyInShopEvent;
+import de.marcely.bedwars.api.game.shop.BuyGroup;
 import de.marcely.bedwars.api.game.shop.ShopItem;
+import de.marcely.bedwars.api.game.shop.ShopOpenCause;
 import de.marcely.bedwars.api.game.shop.product.ItemShopProduct;
 import de.marcely.bedwars.api.game.shop.product.ShopProduct;
 import de.marcely.bedwars.api.message.Message;
@@ -15,66 +19,151 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
-public class ToolSwordHelper {
+import java.util.HashMap;
+
+public class ToolSwordHelper implements Listener {
 
     public static Material WOOD_SWORD;
+    public static final HashMap<String, HashMap<Integer, ShopItem>> oneSlotItemGroups = new HashMap<>();
+    private static final HashMap<Player, HashMap<String, Integer>> trackBuyGroupMap = new HashMap<>();
 
-    public static void load(){
-        Material sword = Helper.get().getMaterialByName("WOODEN_SWORD");
+    public static void load() {
 
-        if(sword == null)
-            sword = Material.AIR;
+        // Get wooden sword given on spawn
+        {
+            Material sword = Helper.get().getMaterialByName("WOODEN_SWORD");
 
-        WOOD_SWORD = sword;
+            if (sword == null)
+                sword = Material.AIR;
+
+            WOOD_SWORD = sword;
+        }
+        System.out.println("Load");
+        // Get all items that are in ONE SLOT TOOLS
+        for (String buyGroupName : ConfigValue.oneSlotItemBuyGroups) {
+            System.out.println("Load " + buyGroupName);
+            final BuyGroup buyGroup = GameAPI.get().getBuyGroup(buyGroupName);
+
+            if (buyGroup == null || buyGroup.getLevels().isEmpty())
+                continue;
+
+            System.out.println("Pre-add " + buyGroupName);
+
+            final HashMap<Integer, ShopItem> groupMap = new HashMap<>();
+
+            for (Integer level : buyGroup.getLevels()) {
+                if(buyGroup.getItems(level).isEmpty())
+                    continue;
+
+                final ShopItem item = buyGroup.getItems(level).iterator().next();
+                if(item != null)
+                    groupMap.put(level, item);
+            }
+
+            oneSlotItemGroups.put(buyGroup.getName(), groupMap);
+        }
+
+        System.out.println(oneSlotItemGroups.keySet());
     }
 
-    public static ItemStack getDefaultWoodSword(Player player, Arena arena){
+    // TODO on reload/on player leave/rejoin
+    @EventHandler
+    public static void onRoundStart(RoundStartEvent event){
+        for (Player player : event.getArena().getPlayers())
+            loadDefaultPlayerBuyGroups(player);
+    }
 
-        if(player == null || arena == null)
+    @EventHandler
+    public void onShopBuy(PlayerBuyInShopEvent event) {
+        final BuyGroup group = event.getItem().getBuyGroup();
+        if(group == null || !event.getProblems().isEmpty())
+            return;
+
+        final Player player = event.getPlayer();
+        final HashMap<String, Integer> map = trackBuyGroupMap.get(player);
+        if(map == null) {
+            loadDefaultPlayerBuyGroups(player);
+            return;
+        }
+
+        // Increment if necessary
+        final int level = map.getOrDefault(group.getName(), 0);
+        if(group.getLevels().contains(level + 1))
+            map.put(group.getName(), level + 1);
+
+        // TODO test on other layouts. Should not refresh other layouts
+        if (event.getProblems().isEmpty())
+            GameAPI.get().openShop(player, GameAPI.get().getDefaultShopLayout(), ShopOpenCause.PLUGIN, event.getItem().getPage());
+
+    }
+
+    public static ShopItem getNextTierButton(String buyGroup, Player player){
+        final HashMap<Integer, ShopItem> map = ToolSwordHelper.oneSlotItemGroups.get(buyGroup);
+        final int currLevel = ToolSwordHelper.getBuyGroupLevel(buyGroup, player);
+
+        return map.get(currLevel + (map.containsKey(currLevel + 1) ? 1 : 0));
+    }
+
+    public static int getBuyGroupLevel(String buyGroupName, Player player){
+        return trackBuyGroupMap.get(player).getOrDefault(buyGroupName, 0);
+    }
+
+    private static void loadDefaultPlayerBuyGroups(Player player){
+        final HashMap<String, Integer> map = new HashMap<>();
+
+        for(BuyGroup group : GameAPI.get().getBuyGroups())
+            map.put(group.getName(), 0);
+
+        trackBuyGroupMap.put(player, map);
+    }
+
+    public static ItemStack getDefaultWoodSword(Player player, Arena arena) {
+        if (player == null || arena == null)
             return new ItemStack(WOOD_SWORD);
 
         final Team team = arena.getPlayerTeam(player);
-
-        if(team == null)
+        if (team == null)
             return new ItemStack(WOOD_SWORD);
 
-        for(ItemStack is : arena.getItemsGivenOnSpawn(player, team, true, true)){
-            if(is.getType() == WOOD_SWORD)
+        for (ItemStack is : arena.getItemsGivenOnSpawn(player, team, true, true)) {
+            if (is.getType() == WOOD_SWORD)
                 return is.clone();
         }
 
         return new ItemStack(WOOD_SWORD);
     }
 
-    public static int getSwordToolLevel(Material tool){
+    public static int getSwordToolLevel(Material tool) {
 
         final String toolName = tool.name();
 
-        if(toolName.contains("WOOD")){
+        if (toolName.contains("WOOD")) {
             return 1;
-        }else if(toolName.contains("STONE")){
+        } else if (toolName.contains("STONE")) {
             return 2;
-        }else if(toolName.contains("IRON")){
+        } else if (toolName.contains("IRON")) {
             return 3;
-        }else if(toolName.contains("GOLD")){
+        } else if (toolName.contains("GOLD")) {
             return 4;
-        }else if(toolName.contains("DIAMOND")){
+        } else if (toolName.contains("DIAMOND")) {
             return 5;
-        }else if(toolName.contains("NETHERITE")){
+        } else if (toolName.contains("NETHERITE")) {
             return 6;
-        }else{
+        } else {
             return 0;
         }
     }
 
 
-    public static Material getToolInShopProduct(ShopItem shopItem){
+    public static Material getToolInShopProduct(ShopItem shopItem) {
         for (ShopProduct rawProduct : shopItem.getProducts()) {
             if (rawProduct instanceof ItemShopProduct) {
                 final ItemStack[] is = ((ItemShopProduct) rawProduct).getItemStacks();
@@ -90,12 +179,12 @@ public class ToolSwordHelper {
     }
 
     // Some items may look like a sword, but not be one. Example: Special Items
-    public static boolean isNotToIgnore(ItemStack itemStack){
+    public static boolean isNotToIgnore(ItemStack itemStack) {
         final ItemMeta meta = itemStack.getItemMeta();
         boolean isNotToIgnore = true;
-        if(meta != null) {
-            for(String s : ConfigValue.tools_swords_do_not_effect){
-                if(s.equals(ChatColor.stripColor(meta.getDisplayName())) && !s.equals("")) {
+        if (meta != null) {
+            for (String s : ConfigValue.tools_swords_do_not_effect) {
+                if (s.equals(ChatColor.stripColor(meta.getDisplayName())) && !s.equals("")) {
                     isNotToIgnore = false;
                 }
             }
@@ -103,21 +192,21 @@ public class ToolSwordHelper {
         return isNotToIgnore;
     }
 
-    public static boolean isNotToIgnore(String name){
+    public static boolean isNotToIgnore(String name) {
         boolean isNotToIgnore = true;
-        for (String s : ConfigValue.tools_swords_do_not_effect){
+        for (String s : ConfigValue.tools_swords_do_not_effect) {
             final String formatted = ChatColor.translateAlternateColorCodes('&', s);
-            if(formatted.equals(name) && !s.equals("")){
+            if (formatted.equals(name) && !s.equals("")) {
                 isNotToIgnore = false;
             }
         }
         return isNotToIgnore;
     }
 
-    public static boolean doesInventoryContain(PlayerInventory playerInventory, String material){
-        for(ItemStack itemStack:playerInventory){
-            if(itemStack != null && itemStack.getType().name().contains(material)
-                    && isNotToIgnore(itemStack.getItemMeta() != null ? itemStack.getItemMeta().getDisplayName():"NOTHING")) {
+    public static boolean doesInventoryContain(PlayerInventory playerInventory, String material) {
+        for (ItemStack itemStack : playerInventory) {
+            if (itemStack != null && itemStack.getType().name().contains(material)
+                    && isNotToIgnore(itemStack.getItemMeta() != null ? itemStack.getItemMeta().getDisplayName() : "NOTHING")) {
                 return true;
             }
         }
@@ -128,7 +217,7 @@ public class ToolSwordHelper {
     public static int getSwordsAmount(Player player) {
         int count = 0;
         for (ItemStack item : player.getInventory().getContents()) {
-            if(item != null && item.getType().name().endsWith("SWORD")
+            if (item != null && item.getType().name().endsWith("SWORD")
                     && ToolSwordHelper.isNotToIgnore(item)) {
                 count++;
             }
@@ -137,13 +226,13 @@ public class ToolSwordHelper {
     }
 
     // returns true if a player has a sword that is better than wood
-    public static boolean hasBetterSword(Player player){
+    public static boolean hasBetterSword(Player player) {
         final Inventory pi = player.getInventory();
-        for(ItemStack itemStack : pi.getContents()){
-            if(itemStack != null
+        for (ItemStack itemStack : pi.getContents()) {
+            if (itemStack != null
                     && itemStack.getType().name().endsWith("SWORD")
                     && ToolSwordHelper.isNotToIgnore(itemStack)
-                    && itemStack.getType() == ToolSwordHelper.WOOD_SWORD){
+                    && itemStack.getType() == ToolSwordHelper.WOOD_SWORD) {
 
                 return true;
             }
@@ -165,10 +254,10 @@ public class ToolSwordHelper {
         });
     }
 
-    public static void givePlayerShopItem(Arena arena, Team team, Player player, ShopItem item){
-        if(MBedwarsTweaksPlugin.getInstance().isHotbarManagerEnabled()){
-            for(ShopProduct product : item.getProducts()) {
-                for(ItemStack itemStack : product.getGivingItems(player, team, arena, 1))
+    public static void givePlayerShopItem(Arena arena, Team team, Player player, ShopItem item) {
+        if (MBedwarsTweaksPlugin.getInstance().isHotbarManagerEnabled()) {
+            for (ShopProduct product : item.getProducts()) {
+                for (ItemStack itemStack : product.getGivingItems(player, team, arena, 1))
                     HotbarManagerTools.giveItemsProperly(itemStack, player, item.getPage(), null, true);
             }
         } else {

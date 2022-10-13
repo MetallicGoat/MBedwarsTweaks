@@ -1,29 +1,60 @@
 package me.metallicgoat.tweaksaddon.tweaks.advancedswords;
 
-import de.marcely.bedwars.api.BedwarsAPI;
-import de.marcely.bedwars.api.arena.Arena;
-import de.marcely.bedwars.api.event.ShopGUIPostProcessEvent;
-import de.marcely.bedwars.api.event.player.PlayerBuyInShopEvent;
+import de.marcely.bedwars.api.GameAPI;
+import de.marcely.bedwars.api.event.player.PlayerOpenShopEvent;
 import de.marcely.bedwars.api.game.shop.BuyGroup;
 import de.marcely.bedwars.api.game.shop.ShopItem;
 import de.marcely.bedwars.api.game.shop.ShopOpenCause;
 import de.marcely.bedwars.api.game.shop.ShopPage;
-import de.marcely.bedwars.api.game.shop.layout.ShopLayout;
-import de.marcely.bedwars.api.game.shop.product.ItemShopProduct;
-import de.marcely.bedwars.api.game.shop.product.ShopProduct;
-import de.marcely.bedwars.tools.gui.GUIItem;
-import de.marcely.bedwars.tools.gui.type.ChestGUI;
-import me.metallicgoat.tweaksaddon.config.ConfigValue;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
 
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 
 public class OneSlotTools implements Listener {
+
+    @EventHandler
+    public void onShopOpen(PlayerOpenShopEvent event){
+        final ShopPage page = event.getPage();
+        if(page == null)
+            return;
+
+        final Player player = event.getPlayer();
+        final Iterator<? extends ShopItem> it = page.getItems().iterator();
+        final List<String> reAddGroups = new ArrayList<>();
+        final List<ShopItem> removeItems = new ArrayList<>();
+
+        while(it.hasNext()){
+            final ShopItem item = it.next();
+            final BuyGroup group = item.getBuyGroup();
+            if(group == null)
+                continue;
+
+            if(ToolSwordHelper.oneSlotItemGroups.containsKey(group.getName())) {
+                removeItems.add(item);
+
+                if(!reAddGroups.contains(group.getName()))
+                    reAddGroups.add(group.getName());
+            }
+        }
+
+        for(ShopItem item : removeItems)
+            page.removeShopItem(item);
+
+        for(String string : reAddGroups)
+            page.addShopItem(ToolSwordHelper.getNextTierButton(string, player));
+
+    }
+    /*
+    @EventHandler
+    public void onBuy(PlayerBuyInShopEvent e) {
+        final BuyGroup group = e.getItem().getBuyGroup();
+        if(group == null)
+            return;
+
+        System.out.println(group.getName() + e.getArena().getBuyGroupLevel(e.getPlayer(), group));
+    }
 
     @EventHandler
     public void onPostProcess(ShopGUIPostProcessEvent e) {
@@ -132,4 +163,6 @@ public class OneSlotTools implements Listener {
         }
         return 0;
     }
+
+     */
 }

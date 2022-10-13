@@ -175,8 +175,14 @@ public class ConfigValue {
     public static boolean gen_tiers_scoreboard_updating_enabled_in_lobby = false;
     public static int gen_tiers_scoreboard_updating_interval = 5;
 
+    public static boolean block_stat_change_enabled = false;
+    public static List<String> block_stat_change_arenas = new ArrayList<>();
 
     // Advanced Swords Tools
+    // TODO
+    public static List<String> oneSlotItemBuyGroups = Arrays.asList("axe", "pickaxe");
+
+
     public static List<String> tools_swords_do_not_effect = new ArrayList<>();
 
     public static boolean always_sword_enabled = false;

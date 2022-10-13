@@ -309,6 +309,14 @@ public class MainConfig {
         ConfigValue.permanent_effects_enabled = config.getBoolean("Permanent-Effects.Enabled", false);
         loadPermanentEffects(config, "Permanent-Effects.Effects");
 
+        ConfigValue.block_stat_change_enabled = config.getBoolean("Block-Stat-Change.Enabled");
+        {
+            final List<String> blockedArenas = config.getStringList("Block-Stat-Change.Arenas");
+
+            if(blockedArenas != null)
+                ConfigValue.block_stat_change_arenas = blockedArenas;
+        }
+
         ConfigValue.sponge_particles_enabled = config.getBoolean("Sponge-Particles", true);
 
         ConfigValue.prevent_liquid_build_up = config.getBoolean("Prevent-Liquid-Build-Up", true);
@@ -669,6 +677,11 @@ public class MainConfig {
             }
             config.set("Permanent-Effects.Effects", values);
         }
+
+        config.addEmptyLine();
+
+        config.set("Block-Stat-Change.Enabled", ConfigValue.block_stat_change_enabled);
+        config.set("Block-Stat-Change.Arenas", ConfigValue.block_stat_change_arenas);
 
         config.addEmptyLine();
 

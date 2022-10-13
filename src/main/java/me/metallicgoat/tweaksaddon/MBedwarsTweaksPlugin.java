@@ -10,8 +10,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class MBedwarsTweaksPlugin extends JavaPlugin {
 
-    public static final int MIN_MBEDWARS_API_VER = 13;
-    public static final String MIN_MBEDWARS_VER_NAME = "5.0.13";
+    public static final int MIN_MBEDWARS_API_VER = 15;
+    public static final String MIN_MBEDWARS_VER_NAME = "5.0.15";
 
     @Getter private static MBedwarsTweaksPlugin instance;
     @Getter private static MBedwarsTweaksAddon addon;
@@ -28,7 +28,6 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
 
         new Metrics(this, 11928);
 
-        ToolSwordHelper.load();
         MBedwarsTweaksAddon.registerEvents();
 
         final PluginDescriptionFile pdf = this.getDescription();
@@ -44,6 +43,7 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
         BedwarsAPI.onReady(() -> {
 
             LoadConfigs.loadTweaksConfigs();
+            ToolSwordHelper.load();
 
             if(Bukkit.getPluginManager().isPluginEnabled("MBedwarsHotbarManager"))
                 setHotbarManagerEnabled(true);
