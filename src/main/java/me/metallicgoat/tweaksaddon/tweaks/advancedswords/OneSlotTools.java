@@ -1,11 +1,10 @@
 package me.metallicgoat.tweaksaddon.tweaks.advancedswords;
 
-import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.event.player.PlayerOpenShopEvent;
 import de.marcely.bedwars.api.game.shop.BuyGroup;
 import de.marcely.bedwars.api.game.shop.ShopItem;
-import de.marcely.bedwars.api.game.shop.ShopOpenCause;
 import de.marcely.bedwars.api.game.shop.ShopPage;
+import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,9 +14,9 @@ import java.util.*;
 public class OneSlotTools implements Listener {
 
     @EventHandler
-    public void onShopOpen(PlayerOpenShopEvent event){
+    public void onShopOpen(PlayerOpenShopEvent event) {
         final ShopPage page = event.getPage();
-        if(page == null)
+        if (!ConfigValue.one_slot_tools_enabled || page == null)
             return;
 
         final Player player = event.getPlayer();
@@ -25,28 +24,64 @@ public class OneSlotTools implements Listener {
         final List<String> reAddGroups = new ArrayList<>();
         final List<ShopItem> removeItems = new ArrayList<>();
 
-        while(it.hasNext()){
+        while (it.hasNext()) {
             final ShopItem item = it.next();
             final BuyGroup group = item.getBuyGroup();
-            if(group == null)
+            if (group == null)
                 continue;
 
-            if(ToolSwordHelper.oneSlotItemGroups.containsKey(group.getName())) {
+            if (ToolSwordHelper.oneSlotItemGroups.containsKey(group.getName())) {
                 removeItems.add(item);
 
-                if(!reAddGroups.contains(group.getName()))
+                if (!reAddGroups.contains(group.getName()))
                     reAddGroups.add(group.getName());
             }
         }
 
-        for(ShopItem item : removeItems)
+        for (ShopItem item : removeItems)
             page.removeShopItem(item);
 
-        for(String string : reAddGroups)
+        Collections.reverse(reAddGroups);
+
+        // TODO force set force slot to config values (maybe when loading do this)
+
+        for (String string : reAddGroups)
             page.addShopItem(ToolSwordHelper.getNextTierButton(string, player));
 
     }
+
+    // Reorder items after one slot tools does its thing
     /*
+    @EventHandler
+    public void onPostProcess(ShopGUIPostProcessEvent event) {
+        if (!ConfigValue.one_slot_tools_enabled)
+            return;
+
+        final Player player = event.getPlayer();
+        final Arena arena = GameAPI.get().getArenaByPlayer(player);
+
+        if (arena == null || event.getLayout().getType() != ShopLayoutType.HYPIXEL_V2 || !(event.getGUI() instanceof ChestGUI))
+            return;
+
+        final ChestGUI chestGUI = (ChestGUI) event.getGUI();
+
+        chestGUI.
+
+        for (int i = chestGUI.getSize() - 1; i > 0; i--) {
+            final GUIItem item = chestGUI.getItem(i);
+            if (item == null || item.getAttachement() == null)
+                continue;
+
+            final Object attachment = item.getAttachement();
+            if (attachment instanceof ShopItem) {
+                final ShopItem shopItem = (ShopItem) attachment;
+                final BuyGroup group = shopItem.getBuyGroup();
+
+            }
+        }
+    }
+
+
     @EventHandler
     public void onBuy(PlayerBuyInShopEvent e) {
         final BuyGroup group = e.getItem().getBuyGroup();

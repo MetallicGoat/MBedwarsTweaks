@@ -46,16 +46,13 @@ public class ToolSwordHelper implements Listener {
 
             WOOD_SWORD = sword;
         }
-        System.out.println("Load");
+
         // Get all items that are in ONE SLOT TOOLS
         for (String buyGroupName : ConfigValue.oneSlotItemBuyGroups) {
-            System.out.println("Load " + buyGroupName);
             final BuyGroup buyGroup = GameAPI.get().getBuyGroup(buyGroupName);
 
             if (buyGroup == null || buyGroup.getLevels().isEmpty())
                 continue;
-
-            System.out.println("Pre-add " + buyGroupName);
 
             final HashMap<Integer, ShopItem> groupMap = new HashMap<>();
 
@@ -70,8 +67,6 @@ public class ToolSwordHelper implements Listener {
 
             oneSlotItemGroups.put(buyGroup.getName(), groupMap);
         }
-
-        System.out.println(oneSlotItemGroups.keySet());
     }
 
     // TODO on reload/on player leave/rejoin
