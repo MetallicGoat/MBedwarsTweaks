@@ -3,33 +3,17 @@ package me.metallicgoat.tweaksaddon.tweaks.advancedswords;
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
-import de.marcely.bedwars.api.event.arena.RoundStartEvent;
-import de.marcely.bedwars.api.event.player.PlayerBuyInShopEvent;
-import de.marcely.bedwars.api.event.player.PlayerIngameDeathEvent;
 import de.marcely.bedwars.api.event.player.PlayerIngameRespawnEvent;
 import de.marcely.bedwars.api.game.shop.BuyGroup;
 import de.marcely.bedwars.api.game.shop.ShopItem;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import java.util.Collection;
-import java.util.HashMap;
 
 public class DowngradeTools implements Listener {
-
-    public static final HashMap<Player, Integer> pickaxeHashMap = new HashMap<>();
-    public static final HashMap<Player, Integer> axeHashMap = new HashMap<>();
-
-    @EventHandler
-    public void onStart(RoundStartEvent event) {
-        for (Player player : event.getArena().getPlayers()) {
-            pickaxeHashMap.put(player, 0);
-            axeHashMap.put(player, 0);
-        }
-    }
 
     @EventHandler
     public void onRespawn(PlayerIngameRespawnEvent event) {
@@ -38,74 +22,32 @@ public class DowngradeTools implements Listener {
 
         final Player player = event.getPlayer();
         final Arena arena = event.getArena();
-        final Collection<BuyGroup> buyGroups = GameAPI.get().getBuyGroups();
 
-        for (BuyGroup buyGroup : buyGroups) {
-
+        for (BuyGroup buyGroup : GameAPI.get().getBuyGroups()) {
             final String buyGroupName = buyGroup.getName();
 
-            if (buyGroupName.equalsIgnoreCase("pickaxe")
-                    || buyGroup.getName().equalsIgnoreCase("axe")) {
+            // TODO case sensitive
+            if(!ConfigValue.degrading_buygroups.contains(buyGroupName))
+                continue;
 
-                final int level = buyGroupName.equalsIgnoreCase("pickaxe") ? pickaxeHashMap.getOrDefault(player, 0) : axeHashMap.getOrDefault(player, 0);
-                final Collection<? extends ShopItem> shopItems = buyGroup.getItems(level);
+            int level = ToolSwordHelper.trackBuyGroupMap.get(player).getOrDefault(buyGroupName, 0);
+            // TODO set min level here
 
-                if (shopItems == null)
-                    return;
-
-                final Team team = arena.getPlayerTeam(player);
-
-                for (ShopItem item : shopItems)
-                    ToolSwordHelper.givePlayerShopItem(arena, team, player, item);
-
+            if(level > 1) {
+                level -= 1;
+                ToolSwordHelper.trackBuyGroupMap.get(player).put(buyGroupName, level);
                 arena.setBuyGroupLevel(player, buyGroup, level);
             }
-        }
-    }
 
-    @EventHandler(priority = EventPriority.HIGH)
-    public void levelOneBuy(PlayerBuyInShopEvent event) {
-        final Player player = event.getPlayer();
-
-        //If enabled, and item has buy-group
-        if (event.getProblems().isEmpty() && event.getItem().hasBuyGroup()) {
-            final BuyGroup group = event.getItem().getBuyGroup();
-            final int level = event.getItem().getBuyGroupLevel();
-
-            if (group == null)
+            // Give item
+            final Collection<? extends ShopItem> shopItems = buyGroup.getItems(level);
+            if (shopItems == null)
                 return;
 
-            //if proper buy-group
-            if (group.getName().equalsIgnoreCase("pickaxe"))
-                pickaxeHashMap.put(player, level);
-            else if (group.getName().equalsIgnoreCase("axe"))
-                axeHashMap.put(player, level);
-        }
-    }
+            final Team team = arena.getPlayerTeam(player);
+            for (ShopItem item : shopItems)
+                ToolSwordHelper.givePlayerShopItem(arena, team, player, item);
 
-    @EventHandler
-    public void onRespawn(PlayerIngameDeathEvent event) {
-        if (!ConfigValue.degrading_tool_groups || !ConfigValue.advanced_tool_replacement_enabled)
-            return;
-
-        final Player player = event.getPlayer();
-        final Arena arena = event.getArena();
-        final Collection<BuyGroup> buyGroups = GameAPI.get().getBuyGroups();
-
-        for (BuyGroup buyGroup : buyGroups) {
-            if (buyGroup.getName().contains("axe")) {
-                final int level = arena.getBuyGroupLevel(player, buyGroup);
-
-                if (level > 1) {
-                    if (buyGroup.getName().equalsIgnoreCase("pickaxe")) {
-                        pickaxeHashMap.put(player, level - 1);
-                        arena.setBuyGroupLevel(player, buyGroup, level - 1);
-                    } else if (buyGroup.getName().equalsIgnoreCase("axe")) {
-                        axeHashMap.put(player, level - 1);
-                        arena.setBuyGroupLevel(player, buyGroup, level - 1);
-                    }
-                }
-            }
         }
     }
 }

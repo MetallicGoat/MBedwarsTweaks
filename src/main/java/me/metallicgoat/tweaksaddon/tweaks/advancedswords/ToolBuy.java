@@ -26,7 +26,6 @@ public class ToolBuy implements Listener {
 
             final Player player = event.getPlayer();
             final Arena arena = event.getArena();
-
             int currentLevel = arena.getBuyGroupLevel(player, event.getItem().getBuyGroup());
 
             if(group.getName().equalsIgnoreCase("pickaxe")){

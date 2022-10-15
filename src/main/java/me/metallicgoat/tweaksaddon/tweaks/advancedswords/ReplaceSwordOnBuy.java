@@ -13,7 +13,6 @@ import org.bukkit.inventory.PlayerInventory;
 public class ReplaceSwordOnBuy implements Listener {
     @EventHandler
     public void onSwordBuy(PlayerBuyInShopEvent event) {
-
         if (!ConfigValue.replace_sword_on_buy_enabled || !event.getProblems().isEmpty())
             return;
 

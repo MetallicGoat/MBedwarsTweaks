@@ -16,7 +16,6 @@ public class SwordDrop implements Listener {
 
     @EventHandler
     public void giveSwordOnDrop(PlayerDropItemEvent event) {
-
         if (!ConfigValue.sword_drop_enabled)
             return;
 
@@ -24,10 +23,8 @@ public class SwordDrop implements Listener {
         final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
         final PlayerInventory pi = player.getInventory();
 
-
         if (arena == null || arena.getStatus() != ArenaStatus.RUNNING)
             return;
-
 
         if (event.getItemDrop().getItemStack().getType() == ToolSwordHelper.WOOD_SWORD) {
             event.setCancelled(true);
@@ -48,7 +45,6 @@ public class SwordDrop implements Listener {
 
     @EventHandler
     public void replaceSwordOnCollect(PlayerPickupItemEvent event) {
-
         if (!ConfigValue.sword_drop_enabled)
             return;
 
@@ -61,10 +57,8 @@ public class SwordDrop implements Listener {
                 ToolSwordHelper.isNotToIgnore(sword)) {
 
             final PlayerInventory pi = player.getInventory();
-
-            if (pi.contains(ToolSwordHelper.WOOD_SWORD)) {
+            if (pi.contains(ToolSwordHelper.WOOD_SWORD))
                 pi.remove(ToolSwordHelper.WOOD_SWORD);
-            }
 
             event.setCancelled(true);
             pi.addItem(sword);

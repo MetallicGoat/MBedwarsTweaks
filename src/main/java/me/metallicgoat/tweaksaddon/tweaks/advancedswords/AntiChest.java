@@ -20,9 +20,8 @@ public class AntiChest implements Listener {
             if (e.getClick().isShiftClick() && inArena((Player) e.getWhoClicked())) {
 
                 final Inventory clicked = e.getClickedInventory();
-
                 if (clicked == e.getWhoClicked().getInventory()) {
-                    ItemStack clickedOn = e.getCurrentItem();
+                    final ItemStack clickedOn = e.getCurrentItem();
                     if (clickedOn != null
                             && ConfigValue.anti_chest_materials.contains(clickedOn.getType())
                             && ToolSwordHelper.isNotToIgnore(clickedOn)) {
@@ -35,9 +34,7 @@ public class AntiChest implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-
         final Inventory clicked = e.getClickedInventory();
-
         if(!(e.getInventory().getSize() > 26))
             return;
 
@@ -48,11 +45,9 @@ public class AntiChest implements Listener {
             if(inventory != null){
 
                 final int swapSlot = e.getHotbarButton();
-
                 if(swapSlot >= 0) {
 
                     final ItemStack itemStack = inventory.getItem(swapSlot);
-
                     if (itemStack != null
                             && ConfigValue.anti_chest_materials.contains(itemStack.getType())
                             && ToolSwordHelper.isNotToIgnore(itemStack)) {
@@ -82,7 +77,6 @@ public class AntiChest implements Listener {
                 && ToolSwordHelper.isNotToIgnore(dragged)) {
 
             final int inventorySize = e.getInventory().getSize();
-
             for (int i : e.getRawSlots()) {
                 if (i < inventorySize) {
                     e.setCancelled(true);

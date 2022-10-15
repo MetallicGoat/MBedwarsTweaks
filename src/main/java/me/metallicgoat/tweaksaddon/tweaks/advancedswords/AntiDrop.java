@@ -12,7 +12,6 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 public class AntiDrop implements Listener {
     @EventHandler
     public void onToolDrop(PlayerDropItemEvent event){
-
         if(!ConfigValue.anti_drop_enabled)
             return;
 

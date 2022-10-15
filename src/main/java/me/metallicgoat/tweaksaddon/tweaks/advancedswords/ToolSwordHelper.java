@@ -33,10 +33,9 @@ public class ToolSwordHelper implements Listener {
 
     public static Material WOOD_SWORD;
     public static final HashMap<String, HashMap<Integer, ShopItem>> oneSlotItemGroups = new HashMap<>();
-    private static final HashMap<Player, HashMap<String, Integer>> trackBuyGroupMap = new HashMap<>();
+    public static final HashMap<Player, HashMap<String, Integer>> trackBuyGroupMap = new HashMap<>();
 
     public static void load() {
-
         // Get wooden sword given on spawn
         {
             Material sword = Helper.get().getMaterialByName("WOODEN_SWORD");
@@ -48,12 +47,13 @@ public class ToolSwordHelper implements Listener {
         }
 
         // Get all items that are in ONE SLOT TOOLS
-        for (String buyGroupName : ConfigValue.oneSlotItemBuyGroups) {
+        for (String buyGroupName : ConfigValue.one_slot_buygroups) {
             final BuyGroup buyGroup = GameAPI.get().getBuyGroup(buyGroupName);
 
             if (buyGroup == null || buyGroup.getLevels().isEmpty())
                 continue;
 
+            final int forceSlot = ConfigValue.one_slot_buygroups_forceslot.getOrDefault(buyGroupName, -1);
             final HashMap<Integer, ShopItem> groupMap = new HashMap<>();
 
             for (Integer level : buyGroup.getLevels()) {
@@ -61,6 +61,10 @@ public class ToolSwordHelper implements Listener {
                     continue;
 
                 final ShopItem item = buyGroup.getItems(level).iterator().next();
+
+                if(forceSlot >= 0)
+                    item.setForceSlot(forceSlot);
+
                 if(item != null)
                     groupMap.put(level, item);
             }
@@ -90,14 +94,24 @@ public class ToolSwordHelper implements Listener {
         }
 
         // Increment if necessary
-        final int level = map.getOrDefault(group.getName(), 0);
-        if(group.getLevels().contains(level + 1))
-            map.put(group.getName(), level + 1);
+        map.put(group.getName(), event.getItem().getBuyGroupLevel());
 
         // TODO test on other layouts. Should not refresh other layouts
-        if (event.getProblems().isEmpty())
-            GameAPI.get().openShop(player, GameAPI.get().getDefaultShopLayout(), ShopOpenCause.PLUGIN, event.getItem().getPage());
+        GameAPI.get().openShop(player, GameAPI.get().getDefaultShopLayout(), ShopOpenCause.PLUGIN, event.getItem().getPage());
+    }
 
+    public static void downgradeBuyGroup(Arena arena, Player player, String buyGroupName, int minLevel){
+        final BuyGroup buyGroup = GameAPI.get().getBuyGroup(buyGroupName);
+
+        if(buyGroup == null)
+            return;
+
+        final int level = trackBuyGroupMap.get(player).getOrDefault(buyGroupName, 0);
+
+        if(level > minLevel) {
+            trackBuyGroupMap.get(player).put(buyGroupName, level - 1);
+            arena.setBuyGroupLevel(player, buyGroup, level - 1);
+        }
     }
 
     public static ShopItem getNextTierButton(String buyGroup, Player player){

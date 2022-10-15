@@ -180,8 +180,12 @@ public class ConfigValue {
 
     // Advanced Swords Tools
     // TODO
-    public static List<String> oneSlotItemBuyGroups = Arrays.asList("axe", "pickaxe");
-
+    public static List<String> one_slot_buygroups = Arrays.asList("axe", "pickaxe");
+    public static HashMap<String, Integer> one_slot_buygroups_forceslot = new HashMap<String, Integer>() {{
+        put("pickaxe", 20);
+        put("axe", 21);
+    }};
+    public static List<String> degrading_buygroups = Arrays.asList("axe", "pickaxe");
 
     public static List<String> tools_swords_do_not_effect = new ArrayList<>();
 
