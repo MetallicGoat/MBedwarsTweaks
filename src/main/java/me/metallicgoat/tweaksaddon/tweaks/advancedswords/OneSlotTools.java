@@ -43,6 +43,13 @@ public class OneSlotTools implements Listener {
 
         // TODO force set force slot to config values (maybe when loading do this)
         for (String string : reAddGroups)
-            page.addShopItem(ToolSwordHelper.getNextTierButton(string, player));
+            page.addShopItem(getNextTierButton(string, player));
+    }
+
+    public static ShopItem getNextTierButton(String buyGroup, Player player){
+        final HashMap<Integer, ShopItem> map = ToolSwordHelper.oneSlotItemGroups.get(buyGroup);
+        final int currLevel = ToolSwordHelper.getBuyGroupLevel(buyGroup, player);
+
+        return map.get(currLevel + (map.containsKey(currLevel + 1) ? 1 : 0));
     }
 }

@@ -14,13 +14,13 @@ public class ToolBuy implements Listener {
 
     @EventHandler
     public void onToolBuy(PlayerBuyInShopEvent event) {
-        if(!ConfigValue.advanced_tool_replacement_enabled)
+        if (!ConfigValue.advanced_tool_replacement_enabled)
             return;
 
         final BuyGroup group = event.getItem().getBuyGroup();
 
         //If enabled, and item has buy-group
-        if(group != null
+        if (group != null
                 && event.getProblems().isEmpty()
                 && group.getName().contains("axe")) {
 
@@ -28,12 +28,12 @@ public class ToolBuy implements Listener {
             final Arena arena = event.getArena();
             int currentLevel = arena.getBuyGroupLevel(player, event.getItem().getBuyGroup());
 
-            if(group.getName().equalsIgnoreCase("pickaxe")){
-                if(!ToolSwordHelper.doesInventoryContain(player.getInventory(), "_PICKAXE")){
+            if (group.getName().equalsIgnoreCase("pickaxe")) {
+                if (!ToolSwordHelper.doesInventoryContain(player.getInventory(), "_PICKAXE")) {
                     currentLevel = 0;
                 }
-            }else if(group.getName().equalsIgnoreCase("axe")){
-                if(!ToolSwordHelper.doesInventoryContain(player.getInventory(), "_AXE")){
+            } else if (group.getName().equalsIgnoreCase("axe")) {
+                if (!ToolSwordHelper.doesInventoryContain(player.getInventory(), "_AXE")) {
                     currentLevel = 0;
                 }
             }
@@ -50,7 +50,7 @@ public class ToolBuy implements Listener {
                 } else {
                     clearOld(ToolSwordHelper.getToolInShopProduct(event.getItem()), player);
                 }
-            //Lower or same tier
+                //Lower or same tier
             } else {
                 ToolSwordHelper.addShopProblem(event, ConfigValue.advanced_tool_replacement_regular_problem);
             }
@@ -58,16 +58,18 @@ public class ToolBuy implements Listener {
     }
 
     private void clearOld(Material tool, Player p) {
-        boolean pickaxe = tool.name().endsWith("PICKAXE");
-        for(ItemStack itemStack : p.getInventory()) {
-            if (itemStack != null && itemStack.getType().name().endsWith("AXE")) {
-                if ((itemStack.getType().name().endsWith("PICKAXE") && pickaxe) ||
-                        (!itemStack.getType().name().endsWith("PICKAXE") && !pickaxe)) {
-                    if (ToolSwordHelper.getSwordToolLevel(tool) > ToolSwordHelper.getSwordToolLevel(itemStack.getType())) {
-                        p.getInventory().remove(itemStack.getType());
-                    }
-                }
-            }
+        final boolean isClearingPickaxe = ToolSwordHelper.isPickaxe(tool);
+
+        for (ItemStack itemStack : p.getInventory()) {
+            if (itemStack == null || !ToolSwordHelper.isTool(itemStack.getType()))
+                continue;
+
+            final boolean isCheckingPickaxe = ToolSwordHelper.isPickaxe(itemStack.getType());
+            final boolean match = (isCheckingPickaxe && isClearingPickaxe) || (!isCheckingPickaxe && !isClearingPickaxe);
+
+            if (match && ToolSwordHelper.getSwordToolLevel(tool) > ToolSwordHelper.getSwordToolLevel(itemStack.getType()))
+                p.getInventory().remove(itemStack.getType());
+
         }
     }
 }

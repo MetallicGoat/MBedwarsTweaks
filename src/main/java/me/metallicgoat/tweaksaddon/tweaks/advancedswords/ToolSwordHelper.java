@@ -114,13 +114,6 @@ public class ToolSwordHelper implements Listener {
         }
     }
 
-    public static ShopItem getNextTierButton(String buyGroup, Player player){
-        final HashMap<Integer, ShopItem> map = ToolSwordHelper.oneSlotItemGroups.get(buyGroup);
-        final int currLevel = ToolSwordHelper.getBuyGroupLevel(buyGroup, player);
-
-        return map.get(currLevel + (map.containsKey(currLevel + 1) ? 1 : 0));
-    }
-
     public static int getBuyGroupLevel(String buyGroupName, Player player){
         return trackBuyGroupMap.get(player).getOrDefault(buyGroupName, 0);
     }
@@ -150,6 +143,22 @@ public class ToolSwordHelper implements Listener {
         return new ItemStack(WOOD_SWORD);
     }
 
+    public static boolean isSword(Material material){
+        return material.name().contains("SWORD");
+    }
+
+    public static boolean isTool(Material material){
+        return material.name().contains("AXE");
+    }
+
+    public static boolean isAxe(Material material){
+        return isTool(material) && !material.name().contains("PICK");
+    }
+
+    public static boolean isPickaxe(Material material){
+        return material.name().contains("PICKAXE");
+    }
+
     public static int getSwordToolLevel(Material tool) {
 
         final String toolName = tool.name();
@@ -177,7 +186,7 @@ public class ToolSwordHelper implements Listener {
             if (rawProduct instanceof ItemShopProduct) {
                 final ItemStack[] is = ((ItemShopProduct) rawProduct).getItemStacks();
                 for (ItemStack item : is) {
-                    if (item.getType().name().contains("AXE") &&
+                    if (isTool(item.getType()) &&
                             isNotToIgnore(ChatColor.stripColor(shopItem.getDisplayName()))) {
                         return item.getType();
                     }
@@ -226,7 +235,7 @@ public class ToolSwordHelper implements Listener {
     public static int getSwordsAmount(Player player) {
         int count = 0;
         for (ItemStack item : player.getInventory().getContents()) {
-            if (item != null && item.getType().name().endsWith("SWORD")
+            if (item != null && isSword(item.getType())
                     && ToolSwordHelper.isNotToIgnore(item)) {
                 count++;
             }
@@ -239,8 +248,8 @@ public class ToolSwordHelper implements Listener {
         final Inventory pi = player.getInventory();
         for (ItemStack itemStack : pi.getContents()) {
             if (itemStack != null
-                    && itemStack.getType().name().endsWith("SWORD")
-                    && ToolSwordHelper.isNotToIgnore(itemStack)
+                    && isSword(itemStack.getType())
+                    && isNotToIgnore(itemStack)
                     && itemStack.getType() == ToolSwordHelper.WOOD_SWORD) {
 
                 return true;
