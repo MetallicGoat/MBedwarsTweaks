@@ -14,7 +14,6 @@ import org.bukkit.inventory.PlayerInventory;
 public class OrderedSwordBuy implements Listener {
     @EventHandler
     public void onSwordBuy(PlayerBuyInShopEvent event) {
-
         if (!ConfigValue.ordered_sword_buy_enabled || !event.getProblems().isEmpty())
             return;
 
@@ -22,29 +21,31 @@ public class OrderedSwordBuy implements Listener {
         final PlayerInventory pi = player.getInventory();
 
         for (ShopProduct rawProduct : event.getItem().getProducts()) {
-            if (rawProduct instanceof ItemShopProduct) {
-                final ItemStack[] is = ((ItemShopProduct) rawProduct).getItemStacks();
-                for (ItemStack item : is) {
+            if (!(rawProduct instanceof ItemShopProduct))
+                continue;
 
-                    if (item.getType().name().endsWith("SWORD") &&
-                            ToolSwordHelper.isNotToIgnore(event.getItem().getDisplayName())) {
+            final ItemStack[] is = ((ItemShopProduct) rawProduct).getItemStacks();
 
-                        if (!isPurchasable(item, pi))
-                            ToolSwordHelper.addShopProblem(event, ConfigValue.ordered_sword_buy_problem);
-                        else
-                            clearOld(item.getType(), player);
-                    }
-                }
+            for (ItemStack item : is) {
+                if (!ToolSwordHelper.isSword(item.getType()) || !ToolSwordHelper.isNotToIgnore(event.getItem().getDisplayName()))
+                    continue;
+
+                if (!isPurchasable(item, pi))
+                    ToolSwordHelper.addShopProblem(event, ConfigValue.ordered_sword_buy_problem);
+                else
+                    clearOld(item.getType(), player);
+
             }
         }
     }
 
     private void clearOld(Material tool, Player player) {
         for (ItemStack itemStack : player.getInventory()) {
-            if (itemStack != null && itemStack.getType().name().endsWith("SWORD")
-                    && ToolSwordHelper.getSwordToolLevel(tool) > ToolSwordHelper.getSwordToolLevel(itemStack.getType())) {
-                player.getInventory().remove(itemStack);
-            }
+            if (itemStack == null || !ToolSwordHelper.isSword(itemStack.getType()) ||
+                    ToolSwordHelper.getSwordToolLevel(tool) <= ToolSwordHelper.getSwordToolLevel(itemStack.getType()))
+                continue;
+
+            player.getInventory().remove(itemStack);
         }
     }
 
@@ -53,11 +54,12 @@ public class OrderedSwordBuy implements Listener {
             return false;
 
         for (ItemStack itemStack : pi) {
-            if (itemStack != null && itemStack.getType().name().endsWith("SWORD")
+            if (itemStack != null && ToolSwordHelper.isSword(itemStack.getType())
                     && ToolSwordHelper.getSwordToolLevel(itemStack.getType()) > ToolSwordHelper.getSwordToolLevel(product.getType())) {
                 return false;
             }
         }
+
         return true;
     }
 }

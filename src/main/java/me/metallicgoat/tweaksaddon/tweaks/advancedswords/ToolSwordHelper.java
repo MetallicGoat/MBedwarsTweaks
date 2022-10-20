@@ -57,15 +57,15 @@ public class ToolSwordHelper implements Listener {
             final HashMap<Integer, ShopItem> groupMap = new HashMap<>();
 
             for (Integer level : buyGroup.getLevels()) {
-                if(buyGroup.getItems(level).isEmpty())
+                if (buyGroup.getItems(level).isEmpty())
                     continue;
 
                 final ShopItem item = buyGroup.getItems(level).iterator().next();
 
-                if(forceSlot >= 0)
+                if (forceSlot >= 0)
                     item.setForceSlot(forceSlot);
 
-                if(item != null)
+                if (item != null)
                     groupMap.put(level, item);
             }
 
@@ -75,7 +75,7 @@ public class ToolSwordHelper implements Listener {
 
     // TODO on reload/on player leave/rejoin
     @EventHandler
-    public static void onRoundStart(RoundStartEvent event){
+    public static void onRoundStart(RoundStartEvent event) {
         for (Player player : event.getArena().getPlayers())
             loadDefaultPlayerBuyGroups(player);
     }
@@ -83,12 +83,12 @@ public class ToolSwordHelper implements Listener {
     @EventHandler
     public void onShopBuy(PlayerBuyInShopEvent event) {
         final BuyGroup group = event.getItem().getBuyGroup();
-        if(group == null || !event.getProblems().isEmpty())
+        if (group == null || !event.getProblems().isEmpty())
             return;
 
         final Player player = event.getPlayer();
         final HashMap<String, Integer> map = trackBuyGroupMap.get(player);
-        if(map == null) {
+        if (map == null) {
             loadDefaultPlayerBuyGroups(player);
             return;
         }
@@ -100,28 +100,28 @@ public class ToolSwordHelper implements Listener {
         GameAPI.get().openShop(player, GameAPI.get().getDefaultShopLayout(), ShopOpenCause.PLUGIN, event.getItem().getPage());
     }
 
-    public static void downgradeBuyGroup(Arena arena, Player player, String buyGroupName, int minLevel){
+    public static void downgradeBuyGroup(Arena arena, Player player, String buyGroupName, int minLevel) {
         final BuyGroup buyGroup = GameAPI.get().getBuyGroup(buyGroupName);
 
-        if(buyGroup == null)
+        if (buyGroup == null)
             return;
 
         final int level = trackBuyGroupMap.get(player).getOrDefault(buyGroupName, 0);
 
-        if(level > minLevel) {
+        if (level > minLevel) {
             trackBuyGroupMap.get(player).put(buyGroupName, level - 1);
             arena.setBuyGroupLevel(player, buyGroup, level - 1);
         }
     }
 
-    public static int getBuyGroupLevel(String buyGroupName, Player player){
+    public static int getBuyGroupLevel(String buyGroupName, Player player) {
         return trackBuyGroupMap.get(player).getOrDefault(buyGroupName, 0);
     }
 
-    private static void loadDefaultPlayerBuyGroups(Player player){
+    private static void loadDefaultPlayerBuyGroups(Player player) {
         final HashMap<String, Integer> map = new HashMap<>();
 
-        for(BuyGroup group : GameAPI.get().getBuyGroups())
+        for (BuyGroup group : GameAPI.get().getBuyGroups())
             map.put(group.getName(), 0);
 
         trackBuyGroupMap.put(player, map);
@@ -143,19 +143,19 @@ public class ToolSwordHelper implements Listener {
         return new ItemStack(WOOD_SWORD);
     }
 
-    public static boolean isSword(Material material){
+    public static boolean isSword(Material material) {
         return material.name().contains("SWORD");
     }
 
-    public static boolean isTool(Material material){
+    public static boolean isTool(Material material) {
         return material.name().contains("AXE");
     }
 
-    public static boolean isAxe(Material material){
+    public static boolean isAxe(Material material) {
         return isTool(material) && !material.name().contains("PICK");
     }
 
-    public static boolean isPickaxe(Material material){
+    public static boolean isPickaxe(Material material) {
         return material.name().contains("PICKAXE");
     }
 
@@ -183,14 +183,15 @@ public class ToolSwordHelper implements Listener {
 
     public static Material getToolInShopProduct(ShopItem shopItem) {
         for (ShopProduct rawProduct : shopItem.getProducts()) {
-            if (rawProduct instanceof ItemShopProduct) {
-                final ItemStack[] is = ((ItemShopProduct) rawProduct).getItemStacks();
-                for (ItemStack item : is) {
-                    if (isTool(item.getType()) &&
-                            isNotToIgnore(ChatColor.stripColor(shopItem.getDisplayName()))) {
-                        return item.getType();
-                    }
-                }
+            if (!(rawProduct instanceof ItemShopProduct))
+                continue;
+
+            final ItemStack[] is = ((ItemShopProduct) rawProduct).getItemStacks();
+            for (ItemStack item : is) {
+                if (!isTool(item.getType()) || !isNotToIgnore(ChatColor.stripColor(shopItem.getDisplayName())))
+                    continue;
+
+                return item.getType();
             }
         }
         return Material.AIR;
