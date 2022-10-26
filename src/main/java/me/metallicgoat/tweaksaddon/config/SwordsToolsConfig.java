@@ -84,15 +84,15 @@ public class SwordsToolsConfig {
 
         ConfigValue.advanced_tool_replacement_enabled = config.getBoolean("Advanced-Tool-Replacement.Enabled", false);
         ConfigValue.advanced_tool_replacement_force_ordered = config.getBoolean("Advanced-Tool-Replacement.Force-Ordered", false);
-        ConfigValue.advanced_tool_replacement_regular_problem = config.getString("Advanced-Tool-Replacement.Problem", ConfigValue.advanced_tool_replacement_regular_problem);
+        //ConfigValue.advanced_tool_replacement_regular_problem = config.getString("Advanced-Tool-Replacement.Problem", ConfigValue.advanced_tool_replacement_regular_problem);
         ConfigValue.advanced_tool_replacement_force_ordered_problem = config.getString("Advanced-Tool-Replacement.Force-Ordered-Problem", ConfigValue.advanced_tool_replacement_force_ordered_problem);
 
         ConfigValue.degrading_tool_groups = config.getBoolean("Degraded-Tool-BuyGroups", false);
 
         ConfigValue.one_slot_tools_enabled = config.getBoolean("One-Slot-Tools.Enabled", false);
-        ConfigValue.one_slot_tools_shears = config.getInt("One-Slot-Tools.Slots.Shears-Slot", 19);
-        ConfigValue.one_slot_tools_pickaxe = config.getInt("One-Slot-Tools.Slots.Pickaxe-Slot", 20);
-        ConfigValue.one_slot_tools_axe = config.getInt("One-Slot-Tools.Slots.Axe-Slot", 21);
+        //ConfigValue.one_slot_tools_shears = config.getInt("One-Slot-Tools.Slots.Shears-Slot", 19);
+        //ConfigValue.one_slot_tools_pickaxe = config.getInt("One-Slot-Tools.Slots.Pickaxe-Slot", 20);
+        //ConfigValue.one_slot_tools_axe = config.getInt("One-Slot-Tools.Slots.Axe-Slot", 21);
 
         ConfigValue.ordered_sword_buy_enabled = config.getBoolean("Ordered-Sword-Buy.Enabled", false);
         ConfigValue.ordered_sword_buy_problem = config.getString("Ordered-Sword-Buy.Problem", ConfigValue.ordered_sword_buy_problem);
@@ -175,7 +175,7 @@ public class SwordsToolsConfig {
         config.addComment("REQUIRED Buy-Group names are 'axe', and 'pickaxe'");
         config.set("Advanced-Tool-Replacement.Enabled", ConfigValue.advanced_tool_replacement_enabled);
         config.set("Advanced-Tool-Replacement.Force-Ordered", ConfigValue.advanced_tool_replacement_force_ordered);
-        config.set("Advanced-Tool-Replacement.Problem", ConfigValue.advanced_tool_replacement_regular_problem);
+        //config.set("Advanced-Tool-Replacement.Problem", ConfigValue.advanced_tool_replacement_regular_problem);
         config.set("Advanced-Tool-Replacement.Force-Ordered-Problem", ConfigValue.advanced_tool_replacement_force_ordered_problem);
 
         config.addEmptyLine();
@@ -190,9 +190,6 @@ public class SwordsToolsConfig {
         config.addComment("One slot tools");
         config.addComment("REQUIRED Buy-group names are 'axe', and 'pickaxe'");
         config.set("One-Slot-Tools.Enabled", ConfigValue.one_slot_tools_enabled);
-        config.set("One-Slot-Tools.Slots.Shears-Slot", ConfigValue.one_slot_tools_shears);
-        config.set("One-Slot-Tools.Slots.Pickaxe-Slot", ConfigValue.one_slot_tools_pickaxe);
-        config.set("One-Slot-Tools.Slots.Axe-Slot", ConfigValue.one_slot_tools_axe);
 
         config.addEmptyLine();
 

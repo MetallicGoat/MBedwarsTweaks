@@ -180,14 +180,15 @@ public class ConfigValue {
 
     // Advanced Swords Tools
     // TODO
+    public static boolean one_slot_tools_enabled = false;
     public static List<String> one_slot_buygroups = Arrays.asList("axe", "pickaxe");
     public static HashMap<String, Integer> one_slot_buygroups_forceslot = new HashMap<String, Integer>() {{
         put("pickaxe", 20);
         put("axe", 21);
     }};
-    public static List<String> degrading_buygroups = Arrays.asList("axe", "pickaxe");
 
-    public static List<String> tools_swords_do_not_effect = new ArrayList<>();
+    public static boolean degrading_tool_groups = false;
+    public static List<String> degrading_buygroups = Arrays.asList("axe", "pickaxe");
 
     public static boolean always_sword_enabled = false;
 
@@ -211,17 +212,12 @@ public class ConfigValue {
     public static boolean replace_sword_on_buy_enabled = false;
     public static boolean replace_sword_on_buy_all_type = false;
 
+    public static List<String> advanced_tool_replacement_buygroups = Arrays.asList("axe", "pickaxe");
     public static boolean advanced_tool_replacement_enabled = false;
     public static boolean advanced_tool_replacement_force_ordered = false;
-    public static String advanced_tool_replacement_regular_problem = "You already have the same, or higher tier";
     public static String advanced_tool_replacement_force_ordered_problem = "You need to have a previous tier first";
 
-    public static boolean degrading_tool_groups = false;
-
-    public static boolean one_slot_tools_enabled = false;
-    public static int one_slot_tools_shears = 19;
-    public static int one_slot_tools_pickaxe = 20;
-    public static int one_slot_tools_axe = 21;
+    public static List<String> tools_swords_do_not_effect = new ArrayList<>();
 
     // PAPI
     public static String papi_next_tier_lobby_starting = "&fStarting in &a{time}s";

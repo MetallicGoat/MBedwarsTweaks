@@ -17,7 +17,7 @@ public class DowngradeTools implements Listener {
 
     @EventHandler
     public void onRespawn(PlayerIngameRespawnEvent event) {
-        if (!ConfigValue.degrading_tool_groups || !ConfigValue.advanced_tool_replacement_enabled)
+        if (!ConfigValue.degrading_tool_groups)
             return;
 
         final Player player = event.getPlayer();
@@ -31,8 +31,8 @@ public class DowngradeTools implements Listener {
                 continue;
 
             int level = ToolSwordHelper.trackBuyGroupMap.get(player).getOrDefault(buyGroupName, 0);
-            // TODO set min level here
 
+            // TODO config to set min level here?
             if(level > 1) {
                 level -= 1;
                 ToolSwordHelper.trackBuyGroupMap.get(player).put(buyGroupName, level);

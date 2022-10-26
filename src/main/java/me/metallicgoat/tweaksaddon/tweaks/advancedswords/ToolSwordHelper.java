@@ -274,15 +274,15 @@ public class ToolSwordHelper implements Listener {
     }
 
     public static void givePlayerShopItem(Arena arena, Team team, Player player, ShopItem item) {
-        if (MBedwarsTweaksPlugin.getInstance().isHotbarManagerEnabled()) {
-            for (ShopProduct product : item.getProducts()) {
-                for (ItemStack itemStack : product.getGivingItems(player, team, arena, 1))
-                    HotbarManagerTools.giveItemsProperly(itemStack, player, item.getPage(), null, true);
-            }
-        } else {
-            Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> item.getProducts().forEach(shopProduct -> {
+        Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> item.getProducts().forEach(shopProduct -> {
+            if (MBedwarsTweaksPlugin.getInstance().isHotbarManagerEnabled()) {
+                for (ShopProduct product : item.getProducts()) {
+                    for (ItemStack itemStack : product.getGivingItems(player, team, arena, 1))
+                        HotbarManagerTools.giveItemsProperly(itemStack, player, item.getPage(), null, true);
+                }
+            } else {
                 shopProduct.give(player, arena.getPlayerTeam(player), arena, 1);
-            }), 1L);
-        }
+            }
+        }), 1L);
     }
 }

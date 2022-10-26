@@ -43,7 +43,7 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
         manager.registerEvents(new OrderedSwordBuy(), plugin);
         manager.registerEvents(new ReplaceSwordOnBuy(), plugin);
         manager.registerEvents(new SwordDrop(), plugin);
-        manager.registerEvents(new ToolBuy(), plugin);
+        manager.registerEvents(new ReplaceToolOnBuy(), plugin);
 
         // Cosmetic
         manager.registerEvents(new ActionBar(), plugin);
