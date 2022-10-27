@@ -5,6 +5,7 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
+import de.marcely.bedwars.api.event.arena.SpawnerDropEvent;
 import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.api.game.spawner.SpawnerDurationModifier;
 import de.marcely.bedwars.api.message.Message;
@@ -128,11 +129,17 @@ public class GenTiers implements Listener {
                         for (Spawner s : arena.getSpawners()) {
                             if (currentLevel.getType() != null && s.getDropType() == currentLevel.getType()) {
                                 // Set drop time
-                                s.addDropDurationModifier("GEN_UPGRADE", MBedwarsTweaksPlugin.getInstance(), SpawnerDurationModifier.Operation.SET, currentLevel.getSpeed());
+                                if(currentLevel.getSpeed() != null)
+                                    s.addDropDurationModifier("GEN_UPGRADE", MBedwarsTweaksPlugin.getInstance(), SpawnerDurationModifier.Operation.SET, currentLevel.getSpeed());
+
+                                // Set new limit
+                                //if(currentLevel.getLimit() != null)
+                                //    s.getDropType().se
+
                                 // Add custom Holo tiles
-                                if (ConfigValue.gen_tiers_custom_holo_enabled) {
+                                if (ConfigValue.gen_tiers_custom_holo_enabled)
                                     s.setOverridingHologramLines(formatHoloTiles(currentLevel.getTierLevel(), s).toArray(new String[0]));
-                                }
+
                             }
                         }
                     } else {

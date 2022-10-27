@@ -71,6 +71,7 @@ public class GenTiersConfig {
                 final String actionString = config.getString(configKey + "Action");
                 final String typeString = config.getString(configKey + "Drop-Type");
                 final double speed = config.getDouble(configKey + "Drop-Speed");
+                final int limit = config.getInt(configKey + "Max-Nearby-Items");
                 final long time = config.getLong(configKey + "Time");
                 final String message = config.getString(configKey + "Message");
                 final String soundString = config.getString(configKey + "Earn-Sound");
@@ -103,9 +104,6 @@ public class GenTiersConfig {
 
                 if(action == TierAction.GEN_UPGRADE) {
 
-                    //final DropType dropType = Util.getDropType(typeString);
-                    //if (dropType == null)
-                    //    Console.printConfigInfo("The gen tier + [" + tierName + "]. May not work properly, as '" + typeString + "' is not a valid DropType", "gen-tiers");
                     final GenTierLevel genTierLevel = new GenTierLevel(
                             tierName,
                             tierLevel,
@@ -113,6 +111,7 @@ public class GenTiersConfig {
                             action,
                             time,
                             speed,
+                            limit,
                             message,
                             earnSound
                     );
@@ -184,6 +183,7 @@ public class GenTiersConfig {
             if(level.getAction() == TierAction.GEN_UPGRADE) {
                 config.set(configKey + "Drop-Type", level.getTypeId());
                 config.set(configKey + "Drop-Speed", level.getSpeed());
+                // config.set(configKey + "Max-Nearby-Items", level.getLimit());
             }
 
             config.set(configKey + "Time", level.getTime());
@@ -244,16 +244,6 @@ public class GenTiersConfig {
                 if(levelNum > val)
                     val = levelNum;
 
-                /*
-                final DropType dropType = Util.getDropType(typeString);
-
-                if (dropType == null){
-                    Console.printConfigWarn("Failed to load gen-tier + [" + tierName + "]. '" + typeString + "' is not a valid DropType", "gen-tiers");
-                    continue;
-                }
-
-                 */
-
                 final GenTierLevel genTierLevel = new GenTierLevel(
                         tierName,
                         tierLevel,
@@ -261,6 +251,7 @@ public class GenTiersConfig {
                         TierAction.GEN_UPGRADE,
                         time,
                         speed,
+                        30,
                         message,
                         null
                 );

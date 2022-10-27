@@ -50,28 +50,28 @@ public class LoadConfigs implements Listener {
             put(1, new GenTierLevel(
                     "Diamond II", "&eTier &cII",
                     "diamond",
-                    TierAction.GEN_UPGRADE, 6, 30,
+                    TierAction.GEN_UPGRADE, 6, 30D, null,
                     "&bDiamond Generators &ehave been upgraded to Tier &4II",
                     null
             ));
             put(2, new GenTierLevel(
                     "Emerald II", "&eTier &cII",
                     "emerald",
-                    TierAction.GEN_UPGRADE, 6, 40,
+                    TierAction.GEN_UPGRADE, 6, 40D, null,
                     "&aEmerald Generators &ehave been upgraded to Tier &4II",
                     null
             ));
             put(3, new GenTierLevel(
                     "Diamond III", "&eTier &cIII",
                     "diamond",
-                    TierAction.GEN_UPGRADE, 6, 20,
+                    TierAction.GEN_UPGRADE, 6, 20D, null,
                     "&bDiamond Generators &ehave been upgraded to Tier &4III",
                     null
             ));
             put(4, new GenTierLevel(
                     "Emerald III", "&eTier &cIII",
                     "emerald",
-                    TierAction.GEN_UPGRADE, 6, 30,
+                    TierAction.GEN_UPGRADE, 6, 30D, null,
                     "&aEmerald Generators &ehave been upgraded to Tier &4III",
                     null
             ));

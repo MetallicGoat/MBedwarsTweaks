@@ -4,6 +4,7 @@ import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.game.spawner.DropType;
 import lombok.Getter;
 import org.bukkit.Sound;
+import org.jetbrains.annotations.Nullable;
 
 public class GenTierLevel {
 
@@ -11,8 +12,9 @@ public class GenTierLevel {
     @Getter private final String tierLevel;
     @Getter private final String typeId;
     @Getter private final TierAction action;
-    @Getter private final Long time;
-    @Getter private final Double speed;
+    @Getter private final long time;
+    @Getter @Nullable private final Double speed;
+    //@Getter @Nullable private final Integer limit;
     @Getter private final String earnMessage;
     @Getter private final Sound earnSound;
 
@@ -30,6 +32,7 @@ public class GenTierLevel {
         this.action = action;
         this.time = time;
         this.speed = null;
+        //this.limit = null;
         this.earnMessage = earnMessage;
         this.earnSound = earnSound;
     }
@@ -40,7 +43,8 @@ public class GenTierLevel {
             String typeId, // Spawners with this drop-type should update
             TierAction action, // Action (eg bed break or upgrade)
             long time, // Time until the update happens (After Last Event)
-            double speed, // New drop speed
+            @Nullable Double speed, // New drop speed
+            @Nullable Integer limit, // New drop speed
             String earnMessage, // The chat message displayed on update
             Sound earnSound // Sound played when a tier is earned
     ) {
@@ -50,6 +54,7 @@ public class GenTierLevel {
         this.action = action;
         this.time = time;
         this.speed = speed;
+        //this.limit = limit;
         this.earnMessage = earnMessage;
         this.earnSound = earnSound;
     }
