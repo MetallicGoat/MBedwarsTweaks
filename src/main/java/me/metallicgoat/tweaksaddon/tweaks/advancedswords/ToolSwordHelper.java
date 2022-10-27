@@ -27,7 +27,9 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ToolSwordHelper implements Listener {
 
@@ -47,20 +49,22 @@ public class ToolSwordHelper implements Listener {
         }
 
         // Get all items that are in ONE SLOT TOOLS
-        for (String buyGroupName : ConfigValue.one_slot_buygroups) {
-            final BuyGroup buyGroup = GameAPI.get().getBuyGroup(buyGroupName);
+        for (Map.Entry<String, Integer> buyGroupInfo : ConfigValue.one_slot_buygroups.entrySet()) {
+            final BuyGroup buyGroup = GameAPI.get().getBuyGroup(buyGroupInfo.getKey());
 
             if (buyGroup == null || buyGroup.getLevels().isEmpty())
                 continue;
 
-            final int forceSlot = ConfigValue.one_slot_buygroups_forceslot.getOrDefault(buyGroupName, -1);
+            final int forceSlot = buyGroupInfo.getValue();
             final HashMap<Integer, ShopItem> groupMap = new HashMap<>();
 
             for (Integer level : buyGroup.getLevels()) {
-                if (buyGroup.getItems(level).isEmpty())
+                final Collection<? extends ShopItem> shopItems = buyGroup.getItems(level);
+
+                if (shopItems == null || shopItems.isEmpty())
                     continue;
 
-                final ShopItem item = buyGroup.getItems(level).iterator().next();
+                final ShopItem item = shopItems.iterator().next();
 
                 if (forceSlot >= 0)
                     item.setForceSlot(forceSlot);
@@ -152,11 +156,11 @@ public class ToolSwordHelper implements Listener {
     }
 
     public static boolean isAxe(Material material) {
-        return isTool(material) && !material.name().contains("PICK");
+        return isTool(material) && !material.name().contains("_AXE");
     }
 
     public static boolean isPickaxe(Material material) {
-        return material.name().contains("PICKAXE");
+        return material.name().contains("_PICKAXE");
     }
 
     public static int getSwordToolLevel(Material tool) {

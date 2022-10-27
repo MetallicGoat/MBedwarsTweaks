@@ -11,8 +11,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 public class AlwaysSword implements Listener {
 
@@ -20,7 +23,7 @@ public class AlwaysSword implements Listener {
     @EventHandler
     public void onClick(InventoryClickEvent e) {
 
-        if(!ConfigValue.always_sword_enabled)
+        if(!ConfigValue.always_sword_chest_enabled)
             return;
 
         final Player player = (Player) e.getWhoClicked();
@@ -55,6 +58,58 @@ public class AlwaysSword implements Listener {
 
                 }
             }, 25L);
+        }
+    }
+
+    @EventHandler
+    public void giveSwordOnDrop(PlayerDropItemEvent event) {
+        if (!ConfigValue.always_sword_drop_enabled)
+            return;
+
+        final Player player = event.getPlayer();
+        final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
+        final PlayerInventory pi = player.getInventory();
+
+        if (arena == null || arena.getStatus() != ArenaStatus.RUNNING)
+            return;
+
+        if (event.getItemDrop().getItemStack().getType() == ToolSwordHelper.WOOD_SWORD) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (ToolSwordHelper.getSwordsAmount(event.getPlayer()) == 0) {
+
+            final ItemStack is = ToolSwordHelper.getDefaultWoodSword(player, arena);
+
+            // tries to put sword in slot player dropped sword from
+            if (pi.getItem(pi.getHeldItemSlot()) == null)
+                pi.setItem(pi.getHeldItemSlot(), is);
+            else
+                pi.addItem(is);
+        }
+    }
+
+    @EventHandler
+    public void replaceSwordOnCollect(PlayerPickupItemEvent event) {
+        if (!ConfigValue.always_sword_drop_enabled)
+            return;
+
+        final Player player = event.getPlayer();
+        final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
+        final ItemStack sword = event.getItem().getItemStack();
+
+        if (arena != null &&
+                ToolSwordHelper.isSword(sword.getType()) &&
+                ToolSwordHelper.isNotToIgnore(sword)) {
+
+            final PlayerInventory pi = player.getInventory();
+            if (pi.contains(ToolSwordHelper.WOOD_SWORD))
+                pi.remove(ToolSwordHelper.WOOD_SWORD);
+
+            pi.addItem(sword);
+            event.getItem().remove();
+            event.setCancelled(true);
         }
     }
 }

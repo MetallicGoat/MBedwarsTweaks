@@ -179,43 +179,31 @@ public class ConfigValue {
     public static List<String> block_stat_change_arenas = new ArrayList<>();
 
     // Advanced Swords Tools
-    // TODO
-    public static boolean one_slot_tools_enabled = false;
-    public static List<String> one_slot_buygroups = Arrays.asList("axe", "pickaxe");
-    public static HashMap<String, Integer> one_slot_buygroups_forceslot = new HashMap<String, Integer>() {{
-        put("pickaxe", 20);
-        put("axe", 21);
-    }};
-
-    public static boolean degrading_tool_groups = false;
-    public static List<String> degrading_buygroups = Arrays.asList("axe", "pickaxe");
-
-    public static boolean always_sword_enabled = false;
-
     public static boolean anti_chest_enabled = false;
     public static List<Material> anti_chest_materials = defaultMaterials;
 
     public static boolean anti_drop_enabled = true;
     public static List<Material> anti_drop_materials = defaultMaterials;
 
-    public static boolean sword_drop_enabled = true;
-    public static List<Material> sword_drop_materials = Arrays.asList(
-            Helper.get().getMaterialByName("STONE_SWORD"),
-            Helper.get().getMaterialByName("IRON_SWORD"),
-            Helper.get().getMaterialByName("GOLDEN_SWORD"),
-            Helper.get().getMaterialByName("DIAMOND_SWORD")
-    );
+    public static boolean one_slot_tools_enabled = false;
+    public static HashMap<String, Integer> one_slot_buygroups = new HashMap<String, Integer>() {{
+        put("pickaxe", 20);
+        put("axe", 21);
+    }};
 
-    public static boolean ordered_sword_buy_enabled = false;
-    public static String ordered_sword_buy_problem= "You already have the same, or higher tier";
+    public static boolean degrading_buygroups_enabled = false;
+    public static List<String> degrading_buygroups = Arrays.asList("pickaxe", "axe");
+
+    public static List<String> advanced_tool_replacement_buygroups = Arrays.asList("pickaxe", "axe");
+    public static boolean advanced_tool_replacement_enabled = false;
+    public static boolean advanced_tool_replacement_force_ordered = false;
+    public static String advanced_tool_replacement_force_ordered_problem = "&cYou need to have a previous tier first";
 
     public static boolean replace_sword_on_buy_enabled = false;
     public static boolean replace_sword_on_buy_all_type = false;
 
-    public static List<String> advanced_tool_replacement_buygroups = Arrays.asList("axe", "pickaxe");
-    public static boolean advanced_tool_replacement_enabled = false;
-    public static boolean advanced_tool_replacement_force_ordered = false;
-    public static String advanced_tool_replacement_force_ordered_problem = "You need to have a previous tier first";
+    public static boolean always_sword_chest_enabled = false;
+    public static boolean always_sword_drop_enabled = true;
 
     public static List<String> tools_swords_do_not_effect = new ArrayList<>();
 

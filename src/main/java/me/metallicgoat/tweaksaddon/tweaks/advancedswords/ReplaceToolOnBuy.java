@@ -38,19 +38,20 @@ public class ReplaceToolOnBuy implements Listener {
         }
     }
 
-    // TODO this might ignore "not to ignore"
     private void clearOld(Material tool, Player p) {
         final boolean isClearingPickaxe = ToolSwordHelper.isPickaxe(tool);
 
         for (ItemStack itemStack : p.getInventory()) {
-            if (itemStack == null || !ToolSwordHelper.isTool(itemStack.getType()))
+            if (itemStack == null ||
+                    !ToolSwordHelper.isTool(itemStack.getType()) ||
+                    !ToolSwordHelper.isNotToIgnore(itemStack))
                 continue;
 
             final boolean isCheckingPickaxe = ToolSwordHelper.isPickaxe(itemStack.getType());
             final boolean match = (isCheckingPickaxe && isClearingPickaxe) || (!isCheckingPickaxe && !isClearingPickaxe);
 
             if (match && ToolSwordHelper.getSwordToolLevel(tool) > ToolSwordHelper.getSwordToolLevel(itemStack.getType()))
-                p.getInventory().remove(itemStack.getType());
+                p.getInventory().remove(itemStack);
 
         }
     }

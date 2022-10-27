@@ -41,7 +41,6 @@ public class OneSlotTools implements Listener {
         for (ShopItem item : removeItems)
             page.removeShopItem(item);
 
-        // TODO force set force slot to config values (maybe when loading do this)
         for (String string : reAddGroups)
             page.addShopItem(getNextTierButton(string, player));
     }

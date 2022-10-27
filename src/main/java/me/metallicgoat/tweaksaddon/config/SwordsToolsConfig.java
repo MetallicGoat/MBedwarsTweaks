@@ -9,7 +9,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SwordsToolsConfig {
 
@@ -82,43 +84,39 @@ public class SwordsToolsConfig {
             }
         }
 
+        ConfigValue.one_slot_tools_enabled = config.getBoolean("One-Slot-Tools.Enabled", false);
+        if(config.contains("One-Slot-Tools.BuyGroups")) {
+            final HashMap<String, Integer> oneToolBuyGroups = new HashMap<>();
+
+            for (String configFormat : config.getStringList("One-Slot-Tools.BuyGroups")) {
+                final String[] configSplit = configFormat.split(":");
+                Integer forceSlot = Helper.get().parseInt(configSplit[1]);
+
+                if(forceSlot == null)
+                    forceSlot = -1;
+
+                oneToolBuyGroups.put(configSplit[0], forceSlot);
+            }
+
+            ConfigValue.one_slot_buygroups = oneToolBuyGroups;
+        }
+
+        ConfigValue.degrading_buygroups_enabled = config.getBoolean("Degrading-BuyGroups.Enabled", false);
+        if(config.contains("Degrading-BuyGroups.BuyGroups"))
+            ConfigValue.degrading_buygroups = config.getStringList("Degrading-BuyGroups.BuyGroups");
+
+
         ConfigValue.advanced_tool_replacement_enabled = config.getBoolean("Advanced-Tool-Replacement.Enabled", false);
         ConfigValue.advanced_tool_replacement_force_ordered = config.getBoolean("Advanced-Tool-Replacement.Force-Ordered", false);
-        //ConfigValue.advanced_tool_replacement_regular_problem = config.getString("Advanced-Tool-Replacement.Problem", ConfigValue.advanced_tool_replacement_regular_problem);
-        ConfigValue.advanced_tool_replacement_force_ordered_problem = config.getString("Advanced-Tool-Replacement.Force-Ordered-Problem", ConfigValue.advanced_tool_replacement_force_ordered_problem);
-
-        ConfigValue.degrading_tool_groups = config.getBoolean("Degraded-Tool-BuyGroups", false);
-
-        ConfigValue.one_slot_tools_enabled = config.getBoolean("One-Slot-Tools.Enabled", false);
-        //ConfigValue.one_slot_tools_shears = config.getInt("One-Slot-Tools.Slots.Shears-Slot", 19);
-        //ConfigValue.one_slot_tools_pickaxe = config.getInt("One-Slot-Tools.Slots.Pickaxe-Slot", 20);
-        //ConfigValue.one_slot_tools_axe = config.getInt("One-Slot-Tools.Slots.Axe-Slot", 21);
-
-        ConfigValue.ordered_sword_buy_enabled = config.getBoolean("Ordered-Sword-Buy.Enabled", false);
-        ConfigValue.ordered_sword_buy_problem = config.getString("Ordered-Sword-Buy.Problem", ConfigValue.ordered_sword_buy_problem);
-
-        ConfigValue.always_sword_enabled = config.getBoolean("Always-Sword", false);
-
-        ConfigValue.sword_drop_enabled = config.getBoolean("Advanced-Sword-Drop.Enabled", false);
-        {
-            if(config.contains("Advanced-Sword-Drop.Materials")) {
-
-                final List<Material> mats = new ArrayList<>();
-
-                for (String materialName : config.getStringList("Advanced-Sword-Drop.Materials")) {
-                    final Material material = Helper.get().getMaterialByName(materialName);
-
-                    if (material != null)
-                        mats.add(material);
-
-                }
-
-                ConfigValue.sword_drop_materials = mats;
-            }
-        }
+        ConfigValue.advanced_tool_replacement_force_ordered_problem = config.getString("Advanced-Tool-Replacement.Force-Ordered-Problem", "&cMissing Problem");
+        if(config.contains("Advanced-Tool-Replacement.BuyGroups"))
+            ConfigValue.degrading_buygroups = config.getStringList("Advanced-Tool-Replacement.BuyGroups");
 
         ConfigValue.replace_sword_on_buy_enabled = config.getBoolean("Replace-Sword-On-Buy.Enabled", false);
         ConfigValue.replace_sword_on_buy_all_type = config.getBoolean("Replace-Sword-On-Buy.All-Type", false);
+
+        ConfigValue.always_sword_chest_enabled = config.getBoolean("Always-Sword.Chest-Deposit", false);
+        ConfigValue.always_sword_drop_enabled = config.getBoolean("Always-Sword.On-Drop", false);
 
         if(config.contains("Do-Not-Effect"))
             ConfigValue.tools_swords_do_not_effect = config.getStringList("Do-Not-Effect");
@@ -169,62 +167,47 @@ public class SwordsToolsConfig {
 
         config.addEmptyLine();
 
+        config.addComment("Adds the ability to display all buy-group items in a single GUI slot");
+        config.set("One-Slot-Tools.Enabled", ConfigValue.one_slot_tools_enabled);
+        {
+            final List<String> configList = new ArrayList<>();
+
+            for(Map.Entry<String, Integer> entry : ConfigValue.one_slot_buygroups.entrySet())
+                configList.add(entry.getKey() + (entry.getValue() >= 0 ? ":" + entry.getValue() : ""));
+
+            config.set("One-Slot-Tools.BuyGroups", configList);
+        }
+
+        config.addEmptyLine();
+
+        config.addComment("When you die with a tool, you will get one tier lower when you respawn");
+        config.set("Degrading-BuyGroups.Enabled", ConfigValue.degrading_buygroups_enabled);
+        config.set("Degrading-BuyGroups.BuyGroups", ConfigValue.degrading_buygroups);
+
+        config.addEmptyLine();
+
         config.addComment("With this feature enabled players can only have one tool of a specific type at a time");
         config.addComment("Players will not be able to downgrade their tool if the is enabled");
-        config.addComment("If force ordered is true, you must buy every tier in order");
-        config.addComment("REQUIRED Buy-Group names are 'axe', and 'pickaxe'");
+        config.addComment("If force ordered is true, players MUST buy every tier in order");
         config.set("Advanced-Tool-Replacement.Enabled", ConfigValue.advanced_tool_replacement_enabled);
         config.set("Advanced-Tool-Replacement.Force-Ordered", ConfigValue.advanced_tool_replacement_force_ordered);
-        //config.set("Advanced-Tool-Replacement.Problem", ConfigValue.advanced_tool_replacement_regular_problem);
         config.set("Advanced-Tool-Replacement.Force-Ordered-Problem", ConfigValue.advanced_tool_replacement_force_ordered_problem);
-
-        config.addEmptyLine();
-
-        config.addComment("Advanced-Tool-Replacement MUST be enabled");
-        config.addComment("When you die with a tool, you will get one tier lower when you respawn");
-        config.addComment("REQUIRED Buy-group names are 'axe', and 'pickaxe'");
-        config.set("Degraded-Tool-BuyGroups", ConfigValue.degrading_tool_groups);
-
-        config.addEmptyLine();
-
-        config.addComment("One slot tools");
-        config.addComment("REQUIRED Buy-group names are 'axe', and 'pickaxe'");
-        config.set("One-Slot-Tools.Enabled", ConfigValue.one_slot_tools_enabled);
-
-        config.addEmptyLine();
-
-        config.addComment("Prevents players from buying multiple of the same swords, or lower tier swords");
-        config.set("Ordered-Sword-Buy.Enabled", ConfigValue.ordered_sword_buy_enabled);
-        config.set("Ordered-Sword-Buy.Problem", ConfigValue.ordered_sword_buy_problem);
-
-        config.addEmptyLine();
-
-        config.addComment("If you add your sword to a chest, and have no other sword");
-        config.addComment("You will be given a wooden sword");
-        config.set("Always-Sword", ConfigValue.always_sword_enabled);
-
-        config.addEmptyLine();
-
-        config.addComment("Players will always have a sword if this is enabled");
-        config.addComment("Gives you a Wooden Sword if no sword is detected");
-        config.set("Advanced-Sword-Drop.Enabled", ConfigValue.sword_drop_enabled);
-        {
-            final List<String> materials = new ArrayList<>();
-
-            for(Material mat : ConfigValue.sword_drop_materials){
-                materials.add(mat.name());
-            }
-
-            config.set("Advanced-Sword-Drop.Materials", materials);
-        }
+        config.set("Advanced-Tool-Replacement.BuyGroups", ConfigValue.advanced_tool_replacement_buygroups);
 
         config.addEmptyLine();
 
         config.addComment("Removes a Wooden-Sword if you buy a better sword");
         config.addComment("If 'all-type' is set to TRUE, ALL sword types will get replaced.");
-        config.addComment("Otherwise, only wooden swords will get replaced (Like Hypixel)");
+        config.addComment("If false, only wooden swords will get replaced (Like Hypixel)");
         config.set("Replace-Sword-On-Buy.Enabled", ConfigValue.replace_sword_on_buy_enabled);
         config.set("Replace-Sword-On-Buy.All-Type", ConfigValue.replace_sword_on_buy_all_type);
+
+        config.addEmptyLine();
+
+        config.addComment("Chest-Deposit: If you add your sword to a chest, and have no other sword, you will be given a wooden sword");
+        config.addComment("On-Drop: Gives players a Wooden Sword if no sword is detected, after they drop a sword");
+        config.set("Always-Sword.Chest-Deposit", ConfigValue.always_sword_chest_enabled);
+        config.set("Always-Sword.On-Drop", ConfigValue.always_sword_drop_enabled);
 
         config.addEmptyLine();
 
@@ -238,7 +221,10 @@ public class SwordsToolsConfig {
     }
 
     private static void updateV2Configs(FileConfiguration config){
-        // No updates yet :)
+        ConfigValue.degrading_buygroups_enabled = config.getBoolean("Degraded-Tool-BuyGroups", false);
+
+        ConfigValue.always_sword_chest_enabled = config.getBoolean("Always-Sword", false);
+        ConfigValue.always_sword_drop_enabled = config.getBoolean("Advanced-Sword-Drop.Enabled", false);
     }
 
     private static void updateV1Configs(FileConfiguration config){
@@ -268,19 +254,6 @@ public class SwordsToolsConfig {
 
                     if (material != null)
                         ConfigValue.anti_drop_materials.add(material);
-                }
-            }
-        }
-
-        {
-            if(config.contains("Advanced-Sword-Drop.List")) {
-                ConfigValue.sword_drop_materials.clear();
-
-                for (String materialName : config.getStringList("Advanced-Sword-Drop.List")) {
-                    final Material material = Helper.get().getMaterialByName(materialName);
-
-                    if (material != null)
-                        ConfigValue.sword_drop_materials.add(material);
                 }
             }
         }

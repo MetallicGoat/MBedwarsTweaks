@@ -13,11 +13,11 @@ import org.bukkit.event.Listener;
 
 import java.util.Collection;
 
-public class DowngradeTools implements Listener {
+public class DegradingBuyGroups implements Listener {
 
     @EventHandler
     public void onRespawn(PlayerIngameRespawnEvent event) {
-        if (!ConfigValue.degrading_tool_groups)
+        if (!ConfigValue.degrading_buygroups_enabled)
             return;
 
         final Player player = event.getPlayer();

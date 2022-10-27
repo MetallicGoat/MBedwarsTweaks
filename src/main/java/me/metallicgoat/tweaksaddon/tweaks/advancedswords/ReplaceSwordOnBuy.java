@@ -6,23 +6,22 @@ import de.marcely.bedwars.api.game.shop.product.ShopProduct;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
 
 public class ReplaceSwordOnBuy implements Listener {
-    // TODO cleanup
-    @EventHandler
+
+    @EventHandler(priority = EventPriority.HIGH)
     public void onSwordBuy(PlayerBuyInShopEvent event) {
         if (!ConfigValue.replace_sword_on_buy_enabled || !event.getProblems().isEmpty())
             return;
 
-        final Player p = event.getPlayer();
-        final PlayerInventory pi = p.getInventory();
-        final List<ItemStack> removeItems = new ArrayList<>();
+        final Player player = event.getPlayer();
+        final PlayerInventory pi = player.getInventory();
 
         // Checks if player bought a sword
         for (ShopProduct rawProduct : event.getItem().getProducts()) {
@@ -30,35 +29,31 @@ public class ReplaceSwordOnBuy implements Listener {
                 continue;
 
             final ItemStack[] is = ((ItemShopProduct) rawProduct).getItemStacks();
+
             for (ItemStack item : is) {
                 if (!ToolSwordHelper.isSword(item.getType()) || !ToolSwordHelper.isNotToIgnore(item))
                     continue;
 
-                //Clear Wooden Swords
+                // Clear Wooden Swords
+                // TODO check ignore list for wood swords
                 if (!ConfigValue.replace_sword_on_buy_all_type) {
                     pi.remove(ToolSwordHelper.WOOD_SWORD);
                     break;
                 }
 
-                for (ItemStack itemStack : pi) {
+                final Iterator<ItemStack> it = pi.iterator();
+                while(it.hasNext()){
+                    final ItemStack itemStack = it.next();
+
                     if (itemStack == null
                             || !ToolSwordHelper.isSword(itemStack.getType())
                             || !ToolSwordHelper.isNotToIgnore(itemStack))
                         continue;
 
                     if (ToolSwordHelper.getSwordToolLevel(itemStack.getType()) < ToolSwordHelper.getSwordToolLevel(item.getType()))
-                        removeItems.add(itemStack);
-                    else
-                        ToolSwordHelper.addShopProblem(event, ConfigValue.ordered_sword_buy_problem);
+                        it.remove();
                 }
             }
-            break;
         }
-
-        if(event.getProblems().isEmpty() || removeItems.isEmpty())
-            return;
-
-        for(ItemStack itemStack : removeItems)
-            pi.remove(itemStack);
     }
 }
