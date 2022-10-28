@@ -4,6 +4,8 @@ import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.tools.Helper;
+import de.marcely.bedwars.tools.NMSHelper;
+import de.marcely.bedwars.tools.VarParticle;
 import de.marcely.bedwars.tools.YamlConfigurationDescriptor;
 import me.metallicgoat.tweaksaddon.Console;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
@@ -318,6 +320,21 @@ public class MainConfig {
         }
 
         ConfigValue.sponge_particles_enabled = config.getBoolean("Sponge-Particles", true);
+
+        ConfigValue.heal_pool_particle_enabled = config.getBoolean("Heal-Pool-Particles.Enabled", true);
+        ConfigValue.heal_pool_particle_team_view_only = config.getBoolean("Heal-Pool-Particles.Team-View-Only", true);
+        ConfigValue.heal_pool_particle_range = config.getInt("Heal-Pool-Particles.Range", 15);
+        {
+            final String particleName = config.getString("Heal-Pool-Particles.Particle");
+
+            if(particleName != null) {
+                try {
+                    ConfigValue.heal_pool_particle = VarParticle.newInstanceByName(particleName);
+                } catch (IllegalArgumentException exception) {
+                    Console.printConfigWarn("Failed to parse heal pool particle \"" + particleName + "\". ", "Main");
+                }
+            }
+        }
 
         ConfigValue.prevent_liquid_build_up = config.getBoolean("Prevent-Liquid-Build-Up", true);
 
@@ -687,6 +704,13 @@ public class MainConfig {
 
         config.addComment("Cool particle effect when you place a sponge");
         config.set("Sponge-Particles", ConfigValue.sponge_particles_enabled);
+
+        config.addEmptyLine();
+
+        config.set("Heal-Pool-Particles.Enabled", ConfigValue.heal_pool_particle_enabled);
+        config.set("Heal-Pool-Particles.Team-View-Only", ConfigValue.heal_pool_particle_team_view_only);
+        config.set("Heal-Pool-Particles.Range", ConfigValue.heal_pool_particle_range);
+        config.set("Heal-Pool-Particles.Particle", ConfigValue.heal_pool_particle.getName());
 
         config.addEmptyLine();
 

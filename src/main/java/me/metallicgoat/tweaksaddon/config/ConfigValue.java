@@ -3,6 +3,8 @@ package me.metallicgoat.tweaksaddon.config;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.tools.Helper;
+import de.marcely.bedwars.tools.NMSHelper;
+import de.marcely.bedwars.tools.VarParticle;
 import me.metallicgoat.tweaksaddon.Util;
 import me.metallicgoat.tweaksaddon.tweaks.gentiers.GenTierLevel;
 import org.bukkit.ChatColor;
@@ -10,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -34,6 +37,11 @@ public class ConfigValue {
 
     // Main Tweaks Config
     public static boolean sponge_particles_enabled = true;
+
+    public static boolean heal_pool_particle_enabled = true;
+    public static boolean heal_pool_particle_team_view_only = true;
+    public static int heal_pool_particle_range = 15;
+    public static VarParticle heal_pool_particle = VarParticle.newInstanceByName(NMSHelper.get().getVersion() > 8 ? "VILLAGER_HAPPY" : "HAPPY_VILLAGER");
 
     public static boolean remove_empty_buckets = true;
     public static boolean remove_empty_potions = true;

@@ -23,18 +23,7 @@ public class ReplaceToolOnBuy implements Listener {
                 && event.getProblems().isEmpty()
                 && ConfigValue.advanced_tool_replacement_buygroups.contains(group.getName())) {
 
-            final Player player = event.getPlayer();
-            final int currentLevel = ToolSwordHelper.getBuyGroupLevel(group.getName(), player);
-
-            // If getting higher tier
-            if (ConfigValue.advanced_tool_replacement_force_ordered) {
-                // current + 1 = buying level
-                if (event.getItem().getBuyGroupLevel() != currentLevel + 1)
-                    ToolSwordHelper.addShopProblem(event, ConfigValue.advanced_tool_replacement_force_ordered_problem);
-
-            }
-
-            clearOld(ToolSwordHelper.getToolInShopProduct(event.getItem()), player);
+            clearOld(ToolSwordHelper.getToolInShopProduct(event.getItem()), event.getPlayer());
         }
     }
 

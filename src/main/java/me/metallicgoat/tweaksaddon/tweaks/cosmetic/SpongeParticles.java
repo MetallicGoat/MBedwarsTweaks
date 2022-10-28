@@ -29,10 +29,10 @@ public class SpongeParticles implements Listener {
                 !block.getType().equals(Material.SPONGE))
             return;
 
-        new SpongeParticleTask(block).runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 0L, 8L);
+        new SpongeParticleTask(block).runTaskTimerAsynchronously(MBedwarsTweaksPlugin.getInstance(), 0L, 8L);
     }
 }
-class SpongeParticleTask extends BukkitRunnable{
+class SpongeParticleTask extends BukkitRunnable {
 
     private final Block block;
 
@@ -48,31 +48,29 @@ class SpongeParticleTask extends BukkitRunnable{
             cancel();
             return;
         }
-        for(Location location:getParticles(block.getLocation(), radius)) {
-            location.add(.5, .5, .5);
+
+        for(Location location : getParticles(block.getLocation(), radius)) {
             VarParticle.PARTICLE_CLOUD.play(location);
-            location.add(.15, .15, .15);
-            VarParticle.PARTICLE_CLOUD.play(location);
+            VarParticle.PARTICLE_CLOUD.play(location.add(.15, .15, .15));
         }
+
         radius++;
     }
 
-    //Credit to MherZaqaryan from his open source sponge addon
-    public List<Location> getParticles(Location loc, int radius) {
-        final List<Location> result = new ArrayList<>();
-        final Block start = loc.getWorld().getBlockAt(loc);
-        final int iterations = (radius * 2) + 1;
-        final List<Block> blocks = new ArrayList<>(iterations * iterations * iterations);
+    public List<Location> getParticles(Location start, int radius) {
+        final List<Location> locations = new ArrayList<>();
 
-        for (int x = -radius; x <= radius; x++) {
-            for (int y = -radius; y <= radius; y++) {
-                for (int z = -radius; z <= radius; z++) {
-                    blocks.add(start.getRelative(x, y, z));
+        for(double x = start.getX() - radius; x <= start.getX() + radius; x++){
+            for(double y = start.getY() - radius; y <= start.getY() + radius; y++){
+                for(double z = start.getZ() - radius; z <= start.getZ() + radius; z++){
+                    final Location location = new Location(start.getWorld(), x + .5, y + .5, z + .5);
+
+                    if(location.getBlock().getType() == Material.AIR)
+                        locations.add(location);
                 }
             }
         }
 
-        blocks.stream().filter(b -> b.getType().equals(Material.AIR)).forEach(b -> result.add(b.getLocation()));
-        return result;
+        return locations;
     }
 }

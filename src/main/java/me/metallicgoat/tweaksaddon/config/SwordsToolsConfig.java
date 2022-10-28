@@ -190,8 +190,6 @@ public class SwordsToolsConfig {
         config.addComment("Players will not be able to downgrade their tool if the is enabled");
         config.addComment("If force ordered is true, players MUST buy every tier in order");
         config.set("Advanced-Tool-Replacement.Enabled", ConfigValue.advanced_tool_replacement_enabled);
-        config.set("Advanced-Tool-Replacement.Force-Ordered", ConfigValue.advanced_tool_replacement_force_ordered);
-        config.set("Advanced-Tool-Replacement.Force-Ordered-Problem", ConfigValue.advanced_tool_replacement_force_ordered_problem);
         config.set("Advanced-Tool-Replacement.BuyGroups", ConfigValue.advanced_tool_replacement_buygroups);
 
         config.addEmptyLine();
