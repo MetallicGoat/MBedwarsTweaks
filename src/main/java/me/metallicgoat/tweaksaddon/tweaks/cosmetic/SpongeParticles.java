@@ -29,7 +29,7 @@ public class SpongeParticles implements Listener {
                 !block.getType().equals(Material.SPONGE))
             return;
 
-        new SpongeParticleTask(block).runTaskTimerAsynchronously(MBedwarsTweaksPlugin.getInstance(), 0L, 8L);
+        new SpongeParticleTask(block).runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 0L, 8L);
     }
 }
 class SpongeParticleTask extends BukkitRunnable {

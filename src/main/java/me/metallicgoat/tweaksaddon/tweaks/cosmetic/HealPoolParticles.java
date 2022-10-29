@@ -16,8 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 public class HealPoolParticles implements Listener {
 
@@ -37,20 +36,20 @@ public class HealPoolParticles implements Listener {
 
         if(teamSpawn != null)
             new HealPoolParticlesTask(arena, team, teamSpawn.toLocation(arena.getGameWorld()))
-                    .runTaskTimerAsynchronously(MBedwarsTweaksPlugin.getInstance(), 20L, 20L);
+                    .runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 0L, 20L);
     }
 }
 
 class HealPoolParticlesTask extends BukkitRunnable {
 
-    private final Location teamSpawn;
+    private final ArrayList<Location> locs;
     private final Team team;
     private final Arena arena;
 
     public HealPoolParticlesTask(Arena arena, Team team, Location teamSpawn){
+        this.locs = getParticleLocations(teamSpawn, ConfigValue.heal_pool_particle_range);
         this.arena = arena;
         this.team = team;
-        this.teamSpawn = teamSpawn;
     }
 
     @Override
@@ -60,7 +59,10 @@ class HealPoolParticlesTask extends BukkitRunnable {
             return;
         }
 
-        for(Location location : getParticleLocations(teamSpawn, ConfigValue.heal_pool_particle_range)){
+        Collections.shuffle(locs);
+        final List<Location> locationsRandomized = locs.subList(0, locs.size() / 4);
+
+        for(Location location : locationsRandomized){
             if(ConfigValue.heal_pool_particle != null){
                 if(ConfigValue.heal_pool_particle_team_view_only) {
                     for (Player player : arena.getPlayersInTeam(team))
