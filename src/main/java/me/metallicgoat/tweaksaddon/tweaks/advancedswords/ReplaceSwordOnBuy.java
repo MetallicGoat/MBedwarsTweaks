@@ -11,8 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.util.Iterator;
-
 public class ReplaceSwordOnBuy implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -41,17 +39,15 @@ public class ReplaceSwordOnBuy implements Listener {
                     break;
                 }
 
-                final Iterator<ItemStack> it = pi.iterator();
-                while(it.hasNext()){
-                    final ItemStack itemStack = it.next();
-
+                final ItemStack[] contents = pi.getContents();
+                for(ItemStack itemStack : contents){
                     if (itemStack == null
                             || !ToolSwordHelper.isSword(itemStack.getType())
                             || !ToolSwordHelper.isNotToIgnore(itemStack))
                         continue;
 
                     if (ToolSwordHelper.getSwordToolLevel(itemStack.getType()) < ToolSwordHelper.getSwordToolLevel(item.getType()))
-                        it.remove();
+                        pi.remove(itemStack);
                 }
             }
         }
