@@ -4,7 +4,6 @@ import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.tools.Helper;
-import de.marcely.bedwars.tools.NMSHelper;
 import de.marcely.bedwars.tools.VarParticle;
 import de.marcely.bedwars.tools.YamlConfigurationDescriptor;
 import me.metallicgoat.tweaksaddon.Console;
