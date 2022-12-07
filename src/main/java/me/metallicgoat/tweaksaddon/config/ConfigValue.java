@@ -193,12 +193,6 @@ public class ConfigValue {
     public static boolean anti_drop_enabled = true;
     public static List<Material> anti_drop_materials = defaultMaterials;
 
-    public static boolean one_slot_tools_enabled = false;
-    public static HashMap<String, Integer> one_slot_buygroups = new HashMap<String, Integer>() {{
-        put("pickaxe", 20);
-        put("axe", 21);
-    }};
-
     public static boolean degrading_buygroups_enabled = false;
     public static List<String> degrading_buygroups = Arrays.asList("pickaxe", "axe");
 

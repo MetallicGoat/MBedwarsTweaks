@@ -84,23 +84,6 @@ public class SwordsToolsConfig {
             }
         }
 
-        ConfigValue.one_slot_tools_enabled = config.getBoolean("One-Slot-Tools.Enabled", false);
-        if(config.contains("One-Slot-Tools.BuyGroups")) {
-            final HashMap<String, Integer> oneToolBuyGroups = new HashMap<>();
-
-            for (String configFormat : config.getStringList("One-Slot-Tools.BuyGroups")) {
-                final String[] configSplit = configFormat.split(":");
-                Integer forceSlot = Helper.get().parseInt(configSplit[1]);
-
-                if(forceSlot == null)
-                    forceSlot = -1;
-
-                oneToolBuyGroups.put(configSplit[0], forceSlot);
-            }
-
-            ConfigValue.one_slot_buygroups = oneToolBuyGroups;
-        }
-
         ConfigValue.degrading_buygroups_enabled = config.getBoolean("Degrading-BuyGroups.Enabled", false);
         if(config.contains("Degrading-BuyGroups.BuyGroups"))
             ConfigValue.degrading_buygroups = config.getStringList("Degrading-BuyGroups.BuyGroups");
@@ -163,19 +146,6 @@ public class SwordsToolsConfig {
             }
 
             config.set("Anti-Drop.Materials", materials);
-        }
-
-        config.addEmptyLine();
-
-        config.addComment("Adds the ability to display all buy-group items in a single GUI slot");
-        config.set("One-Slot-Tools.Enabled", ConfigValue.one_slot_tools_enabled);
-        {
-            final List<String> configList = new ArrayList<>();
-
-            for(Map.Entry<String, Integer> entry : ConfigValue.one_slot_buygroups.entrySet())
-                configList.add(entry.getKey() + (entry.getValue() >= 0 ? ":" + entry.getValue() : ""));
-
-            config.set("One-Slot-Tools.BuyGroups", configList);
         }
 
         config.addEmptyLine();
