@@ -1,4 +1,4 @@
 # Project exclude paths
 /target/
-/libs/
+/libs/private
 /.idea/
