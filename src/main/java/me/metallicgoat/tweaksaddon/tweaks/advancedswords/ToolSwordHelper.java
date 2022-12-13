@@ -27,14 +27,11 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 
 public class ToolSwordHelper implements Listener {
 
     public static Material WOOD_SWORD;
-    public static final HashMap<String, HashMap<Integer, ShopItem>> oneSlotItemGroups = new HashMap<>();
     public static final HashMap<Player, HashMap<String, Integer>> trackBuyGroupMap = new HashMap<>();
 
     public static void load() {
@@ -46,34 +43,6 @@ public class ToolSwordHelper implements Listener {
                 sword = Material.AIR;
 
             WOOD_SWORD = sword;
-        }
-
-        // Get all items that are in ONE SLOT TOOLS
-        for (Map.Entry<String, Integer> buyGroupInfo : ConfigValue.one_slot_buygroups.entrySet()) {
-            final BuyGroup buyGroup = GameAPI.get().getBuyGroup(buyGroupInfo.getKey());
-
-            if (buyGroup == null || buyGroup.getLevels().isEmpty())
-                continue;
-
-            final int forceSlot = buyGroupInfo.getValue();
-            final HashMap<Integer, ShopItem> groupMap = new HashMap<>();
-
-            for (Integer level : buyGroup.getLevels()) {
-                final Collection<? extends ShopItem> shopItems = buyGroup.getItems(level);
-
-                if (shopItems == null || shopItems.isEmpty())
-                    continue;
-
-                final ShopItem item = shopItems.iterator().next();
-
-                if (forceSlot >= 0)
-                    item.setForceSlot(forceSlot);
-
-                if (item != null)
-                    groupMap.put(level, item);
-            }
-
-            oneSlotItemGroups.put(buyGroup.getName(), groupMap);
         }
     }
 
