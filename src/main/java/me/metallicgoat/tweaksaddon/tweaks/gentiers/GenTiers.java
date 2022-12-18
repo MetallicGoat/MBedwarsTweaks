@@ -22,7 +22,6 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.*;
 
 public class GenTiers implements Listener {
-
     public static HashMap<Arena, String> nextTierMap = new HashMap<>();
     public static HashMap<Arena, Long> timeToNextUpdate = new HashMap<>();
     private final HashMap<Arena, BukkitTask> tasksToKill = new HashMap<>();
@@ -30,7 +29,6 @@ public class GenTiers implements Listener {
 
     @EventHandler
     public void onGameStart(RoundStartEvent event) {
-
         if (!ConfigValue.gen_tiers_enabled)
             return;
 
@@ -55,7 +53,6 @@ public class GenTiers implements Listener {
 
     @EventHandler
     public void onGameStop(RoundEndEvent event) {
-
         // Kill Gen Tiers on round end
         final BukkitTask task = tasksToKill.get(event.getArena());
 
@@ -79,13 +76,11 @@ public class GenTiers implements Listener {
     }
 
     private void scheduleTier(Arena arena, int key) {
-
         // Check if tier exists
         if (ConfigValue.gen_tier_levels.get(key) == null)
             return;
 
         final GenTierLevel currentLevel = ConfigValue.gen_tier_levels.get(key);
-
         int nextTierLevel = key + 1;
 
         // Update Placeholder

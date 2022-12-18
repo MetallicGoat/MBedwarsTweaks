@@ -22,7 +22,6 @@ public class AlwaysSword implements Listener {
     // TODO keep track of running instances
     @EventHandler
     public void onClick(InventoryClickEvent e) {
-
         if(!ConfigValue.always_sword_chest_enabled)
             return;
 

@@ -696,6 +696,7 @@ public class MainConfig {
 
         config.addEmptyLine();
 
+        config.addComment("Blocks stats from changing in certain arenas");
         config.set("Block-Stat-Change.Enabled", ConfigValue.block_stat_change_enabled);
         config.set("Block-Stat-Change.Arenas", ConfigValue.block_stat_change_arenas);
 
@@ -706,6 +707,7 @@ public class MainConfig {
 
         config.addEmptyLine();
 
+        config.addComment("Spawns green particles around team base when a team purchases Heal Pool");
         config.set("Heal-Pool-Particles.Enabled", ConfigValue.heal_pool_particle_enabled);
         config.set("Heal-Pool-Particles.Team-View-Only", ConfigValue.heal_pool_particle_team_view_only);
         config.set("Heal-Pool-Particles.Range", ConfigValue.heal_pool_particle_range);
@@ -757,7 +759,6 @@ public class MainConfig {
     }
 
     public static void updateV1Configs(FileConfiguration config) {
-
         {
             if(config.contains("Tier-One-Titles.Spawners")) {
                 ConfigValue.gen_tiers_start_spawners.clear();

@@ -26,7 +26,6 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     }
 
     public static void registerEvents(){
-
         final MBedwarsTweaksPlugin plugin = MBedwarsTweaksPlugin.getInstance();
         final PluginManager manager = plugin.getServer().getPluginManager();
 
@@ -82,6 +81,5 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
         // Server
         manager.registerEvents(new PlayerLimitBypass(), plugin);
         manager.registerEvents(new PluginLoad(), plugin);
-
     }
 }

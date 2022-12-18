@@ -13,7 +13,6 @@ import org.bukkit.event.Listener;
 public class FinalKillSuffix implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerIngameDeathEvent e){
-
         if(!ConfigValue.final_kill_suffix_enabled)
             return;
 

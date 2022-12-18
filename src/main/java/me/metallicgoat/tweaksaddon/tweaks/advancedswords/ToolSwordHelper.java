@@ -68,27 +68,6 @@ public class ToolSwordHelper implements Listener {
 
         // Increment if necessary
         map.put(group.getName(), event.getItem().getBuyGroupLevel());
-
-        // TODO test on other layouts. Should not refresh other layouts
-        GameAPI.get().openShop(player, GameAPI.get().getDefaultShopLayout(), ShopOpenCause.PLUGIN, event.getItem().getPage());
-    }
-
-    public static void downgradeBuyGroup(Arena arena, Player player, String buyGroupName, int minLevel) {
-        final BuyGroup buyGroup = GameAPI.get().getBuyGroup(buyGroupName);
-
-        if (buyGroup == null)
-            return;
-
-        final int level = trackBuyGroupMap.get(player).getOrDefault(buyGroupName, 0);
-
-        if (level > minLevel) {
-            trackBuyGroupMap.get(player).put(buyGroupName, level - 1);
-            arena.setBuyGroupLevel(player, buyGroup, level - 1);
-        }
-    }
-
-    public static int getBuyGroupLevel(String buyGroupName, Player player) {
-        return trackBuyGroupMap.get(player).getOrDefault(buyGroupName, 0);
     }
 
     private static void loadDefaultPlayerBuyGroups(Player player) {

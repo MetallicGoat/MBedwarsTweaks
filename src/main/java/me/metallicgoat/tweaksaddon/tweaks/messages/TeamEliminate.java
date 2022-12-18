@@ -13,7 +13,6 @@ public class TeamEliminate implements Listener {
 
     @EventHandler
     public void onEliminate(TeamEliminateEvent event){
-
         if(!ConfigValue.team_eliminate_message_enabled)
             return;
 
