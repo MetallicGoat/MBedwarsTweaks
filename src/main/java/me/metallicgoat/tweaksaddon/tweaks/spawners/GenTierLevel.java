@@ -1,4 +1,4 @@
-package me.metallicgoat.tweaksaddon.tweaks.gentiers;
+package me.metallicgoat.tweaksaddon.tweaks.spawners;
 
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.game.spawner.DropType;

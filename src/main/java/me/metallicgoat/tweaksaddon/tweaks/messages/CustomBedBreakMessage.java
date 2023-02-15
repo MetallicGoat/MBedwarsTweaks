@@ -2,7 +2,7 @@ package me.metallicgoat.tweaksaddon.tweaks.messages;
 
 import de.marcely.bedwars.api.event.arena.ArenaBedBreakEvent;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
-import me.metallicgoat.tweaksaddon.tweaks.gentiers.BedBreakTier;
+import me.metallicgoat.tweaksaddon.tweaks.spawners.BedBreakTier;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 

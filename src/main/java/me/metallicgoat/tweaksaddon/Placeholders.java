@@ -9,7 +9,7 @@ import de.marcely.bedwars.api.exception.ArenaConditionParseException;
 import de.marcely.bedwars.api.message.Message;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
-import me.metallicgoat.tweaksaddon.tweaks.gentiers.GenTiers;
+import me.metallicgoat.tweaksaddon.tweaks.spawners.GenTiers;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;

@@ -1,4 +1,4 @@
-package me.metallicgoat.tweaksaddon.tweaks.gameplay;
+package me.metallicgoat.tweaksaddon.tweaks.misc;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
@@ -16,7 +16,6 @@ import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 public class EmptyContainers implements Listener {
 
     // Keep in mind 1.8 does not have an off-hand
-
     @EventHandler
     public void onBucketEmpty(PlayerBucketEmptyEvent event) {
 

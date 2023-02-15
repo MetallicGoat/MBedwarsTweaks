@@ -3,9 +3,12 @@ package me.metallicgoat.tweaksaddon;
 import de.marcely.bedwars.api.BedwarsAddon;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.*;
 import me.metallicgoat.tweaksaddon.tweaks.cosmetic.*;
-import me.metallicgoat.tweaksaddon.tweaks.gameplay.*;
-import me.metallicgoat.tweaksaddon.tweaks.gentiers.*;
-import me.metallicgoat.tweaksaddon.tweaks.mechanics.*;
+import me.metallicgoat.tweaksaddon.tweaks.explosives.DisableFireballOutsideArena;
+import me.metallicgoat.tweaksaddon.tweaks.explosives.FireballBlockBreakWhitelist;
+import me.metallicgoat.tweaksaddon.tweaks.explosives.FireballThrowEffects;
+import me.metallicgoat.tweaksaddon.tweaks.explosives.FireballUseCoolDown;
+import me.metallicgoat.tweaksaddon.tweaks.misc.*;
+import me.metallicgoat.tweaksaddon.tweaks.spawners.*;
 import me.metallicgoat.tweaksaddon.tweaks.messages.*;
 import me.metallicgoat.tweaksaddon.tweaks.server.*;
 import org.bukkit.plugin.PluginManager;
@@ -77,6 +80,8 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
         manager.registerEvents(new FinalKillSuffix(), plugin);
         manager.registerEvents(new TeamEliminate(), plugin);
         manager.registerEvents(new TopKillerMessage(), plugin);
+
+        manager.registerEvents(new SpawnerUpgrade(), plugin);
 
         // Server
         manager.registerEvents(new PlayerLimitBypass(), plugin);

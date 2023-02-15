@@ -1,4 +1,4 @@
-package me.metallicgoat.tweaksaddon.tweaks.mechanics;
+package me.metallicgoat.tweaksaddon.tweaks.explosives;
 
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import org.bukkit.block.Block;

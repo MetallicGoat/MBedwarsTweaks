@@ -1,4 +1,4 @@
-package me.metallicgoat.tweaksaddon.tweaks.gentiers;
+package me.metallicgoat.tweaksaddon.tweaks.spawners;
 
 public enum TierAction {
     GEN_UPGRADE,

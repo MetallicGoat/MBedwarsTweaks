@@ -5,8 +5,8 @@ import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import me.metallicgoat.tweaksaddon.config.GenTiersConfig;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import me.metallicgoat.tweaksaddon.config.SwordsToolsConfig;
-import me.metallicgoat.tweaksaddon.tweaks.gentiers.GenTierLevel;
-import me.metallicgoat.tweaksaddon.tweaks.gentiers.TierAction;
+import me.metallicgoat.tweaksaddon.tweaks.spawners.GenTierLevel;
+import me.metallicgoat.tweaksaddon.tweaks.spawners.TierAction;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 

@@ -6,13 +6,12 @@ import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.NMSHelper;
 import de.marcely.bedwars.tools.VarParticle;
 import me.metallicgoat.tweaksaddon.Util;
-import me.metallicgoat.tweaksaddon.tweaks.gentiers.GenTierLevel;
+import me.metallicgoat.tweaksaddon.tweaks.spawners.GenTierLevel;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 

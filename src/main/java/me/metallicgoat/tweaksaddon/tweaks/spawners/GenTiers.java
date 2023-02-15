@@ -1,4 +1,4 @@
-package me.metallicgoat.tweaksaddon.tweaks.gentiers;
+package me.metallicgoat.tweaksaddon.tweaks.spawners;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;

@@ -8,7 +8,7 @@ import de.marcely.bedwars.api.event.player.PlayerJoinArenaEvent;
 import de.marcely.bedwars.api.event.player.PlayerQuitArenaEvent;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
-import me.metallicgoat.tweaksaddon.tweaks.gentiers.GenTiers;
+import me.metallicgoat.tweaksaddon.tweaks.spawners.GenTiers;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

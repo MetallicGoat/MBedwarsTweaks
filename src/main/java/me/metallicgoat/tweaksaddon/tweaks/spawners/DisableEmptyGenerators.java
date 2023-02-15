@@ -1,4 +1,4 @@
-package me.metallicgoat.tweaksaddon.tweaks.gameplay;
+package me.metallicgoat.tweaksaddon.tweaks.spawners;
 
 
 import de.marcely.bedwars.api.arena.Arena;

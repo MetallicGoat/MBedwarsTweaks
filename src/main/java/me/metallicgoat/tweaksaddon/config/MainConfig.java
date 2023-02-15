@@ -530,7 +530,7 @@ public class MainConfig {
 
         config.addEmptyLine();
 
-        config.addComment("PAPI Placeholder: %tweaks_team-status-{TeamName}%");
+        config.addComment("PAPI Placeholder: %tweaks_team-status-{name}%");
         config.addComment("To be used on the scoreboard as is above");
         config.set("Team-Status-Placeholder.Has-Bed", ConfigValue.papi_team_status_has_bed);
         config.set("Team-Status-Placeholder.No-Bed", ConfigValue.papi_team_status_no_bed);
