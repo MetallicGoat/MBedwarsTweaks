@@ -1,6 +1,7 @@
 package me.metallicgoat.tweaksaddon;
 
 import de.marcely.bedwars.api.BedwarsAddon;
+import me.metallicgoat.tweaksaddon.tweaks.BedwarsLevelOnExperienceBar;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.*;
 import me.metallicgoat.tweaksaddon.tweaks.cosmetic.*;
 import me.metallicgoat.tweaksaddon.tweaks.gameplay.*;
@@ -61,6 +62,9 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
         // GenTiers
         manager.registerEvents(new BedBreakTier(), plugin);
         manager.registerEvents(new GenTiers(), plugin);
+
+        // Bedwars level on experience
+        manager.registerEvents(new BedwarsLevelOnExperienceBar(), plugin);
 
         // Mechanics
         manager.registerEvents(new BlockArenaStats(), plugin);
