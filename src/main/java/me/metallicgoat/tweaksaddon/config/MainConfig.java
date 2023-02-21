@@ -322,6 +322,7 @@ public class MainConfig {
 
         ConfigValue.heal_pool_particle_enabled = config.getBoolean("Heal-Pool-Particles.Enabled", true);
         ConfigValue.heal_pool_particle_team_view_only = config.getBoolean("Heal-Pool-Particles.Team-View-Only", true);
+        ConfigValue.bedwars_level_on_exp_bar = config.getBoolean("Bedwars-Level-On-Experience-Bar", false);
         ConfigValue.heal_pool_particle_range = config.getInt("Heal-Pool-Particles.Range", 15);
         {
             final String particleName = config.getString("Heal-Pool-Particles.Particle");
@@ -724,6 +725,14 @@ public class MainConfig {
         config.addComment("Remove items on use");
         config.set("Empty-Buckets", ConfigValue.remove_empty_buckets);
         config.set("Empty-Potions", ConfigValue.remove_empty_buckets);
+
+        config.addEmptyLine();
+
+        config.addComment("========================================================================");
+        config.addComment("   Y O U  M U S T  H A V E  P R E S T I G E  A D D O N  F O R  T H I S ");
+        config.addComment("==========================================================================");
+        config.addComment("Sets your bedwars level on experience bar");
+        config.set("Bedwars-Level-On-Experience-Bar", ConfigValue.bedwars_level_on_exp_bar);
 
         config.addEmptyLine();
 
