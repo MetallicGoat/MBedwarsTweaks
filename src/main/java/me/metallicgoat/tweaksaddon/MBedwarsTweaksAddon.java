@@ -1,7 +1,7 @@
 package me.metallicgoat.tweaksaddon;
 
 import de.marcely.bedwars.api.BedwarsAddon;
-import me.metallicgoat.tweaksaddon.tweaks.BedwarsLevelOnExperienceBar;
+import me.metallicgoat.tweaksaddon.tweaks.hooks.PrestigesLevelOnExperienceBar;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.*;
 import me.metallicgoat.tweaksaddon.tweaks.cosmetic.*;
 import me.metallicgoat.tweaksaddon.tweaks.explosives.DisableFireballOutsideArena;
@@ -26,16 +26,16 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
 
     @Override
     public String getName(){
-        return "MBedwarsTweaks";
+        return plugin.getName();
     }
 
     public static void registerEvents(){
         final MBedwarsTweaksPlugin plugin = MBedwarsTweaksPlugin.getInstance();
         final PluginManager manager = plugin.getServer().getPluginManager();
 
-        // Utils
-        manager.registerEvents(new LoadConfigs(), plugin);
-        manager.registerEvents(new ToolSwordHelper(), plugin);
+        // CONTRIBUTORS: PLEASE READ
+        // NOTE: Please keep the following categories and classes in alphabetical order
+        // NOTE: If you are adding support for your own plugin, please add your class to the hooks folder
 
         // Advanced Swords
         manager.registerEvents(new AlwaysSword(), plugin);
@@ -44,6 +44,7 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
         manager.registerEvents(new DegradingBuyGroups(), plugin);
         manager.registerEvents(new ReplaceSwordOnBuy(), plugin);
         manager.registerEvents(new ReplaceToolOnBuy(), plugin);
+        manager.registerEvents(new ToolSwordHelper(), plugin);
 
         // Cosmetic
         manager.registerEvents(new ActionBar(), plugin);
@@ -54,29 +55,14 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
         manager.registerEvents(new HealPoolParticles(), plugin);
         manager.registerEvents(new SpongeParticles(), plugin);
 
-        // Gameplay
-        manager.registerEvents(new DisableEmptyGenerators(), plugin);
-        manager.registerEvents(new EmptyContainers(), plugin);
-        manager.registerEvents(new HeightCap(), plugin);
-        manager.registerEvents(new LockTeamChest(), plugin);
-        manager.registerEvents(new PermanentEffects(), plugin);
-        manager.registerEvents(new PersonalChests(), plugin);
-
-        // GenTiers
-        manager.registerEvents(new BedBreakTier(), plugin);
-        manager.registerEvents(new GenTiers(), plugin);
-
-        // Bedwars level on experience
-        manager.registerEvents(new BedwarsLevelOnExperienceBar(), plugin);
-
-        // Mechanics
-        manager.registerEvents(new BlockArenaStats(), plugin);
+        // Explosives
         manager.registerEvents(new DisableFireballOutsideArena(), plugin);
         manager.registerEvents(new FireballBlockBreakWhitelist(), plugin);
         manager.registerEvents(new FireballThrowEffects(), plugin);
         manager.registerEvents(new FireballUseCoolDown(), plugin);
-        manager.registerEvents(new PreventLiquidBuildUp(), plugin);
-        manager.registerEvents(new RemoveInvisOnDamage(), plugin);
+
+        // Hooks
+        manager.registerEvents(new PrestigesLevelOnExperienceBar(), plugin);
 
         // Messages
         manager.registerEvents(new BuyMessage(), plugin);
@@ -85,10 +71,27 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
         manager.registerEvents(new TeamEliminate(), plugin);
         manager.registerEvents(new TopKillerMessage(), plugin);
 
-        manager.registerEvents(new SpawnerUpgrade(), plugin);
+        // Misc
+        manager.registerEvents(new BlockArenaStats(), plugin);
+        manager.registerEvents(new EmptyContainers(), plugin);
+        manager.registerEvents(new HeightCap(), plugin);
+        manager.registerEvents(new LockTeamChest(), plugin);
+        manager.registerEvents(new PermanentEffects(), plugin);
+        manager.registerEvents(new PersonalChests(), plugin);
+        manager.registerEvents(new PreventLiquidBuildUp(), plugin);
+        manager.registerEvents(new RemoveInvisOnDamage(), plugin);
 
         // Server
         manager.registerEvents(new PlayerLimitBypass(), plugin);
         manager.registerEvents(new PluginLoad(), plugin);
+
+        // Spawners
+        manager.registerEvents(new BedBreakTier(), plugin);
+        manager.registerEvents(new DisableEmptyGenerators(), plugin);
+        manager.registerEvents(new GenTiers(), plugin);
+        manager.registerEvents(new SpawnerUpgrade(), plugin);
+
+        // Others
+        manager.registerEvents(new LoadConfigs(), plugin);
     }
 }
