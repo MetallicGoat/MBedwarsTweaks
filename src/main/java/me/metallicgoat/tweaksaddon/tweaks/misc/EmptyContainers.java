@@ -18,7 +18,6 @@ public class EmptyContainers implements Listener {
     // Keep in mind 1.8 does not have an off-hand
     @EventHandler
     public void onBucketEmpty(PlayerBucketEmptyEvent event) {
-
         if (!ConfigValue.remove_empty_buckets)
             return;
 

@@ -78,7 +78,6 @@ public class AlwaysSword implements Listener {
         }
 
         if (ToolSwordHelper.getSwordsAmount(event.getPlayer()) == 0) {
-
             final ItemStack is = ToolSwordHelper.getDefaultWoodSword(player, arena);
 
             // tries to put sword in slot player dropped sword from
@@ -103,6 +102,7 @@ public class AlwaysSword implements Listener {
                 ToolSwordHelper.isNotToIgnore(sword)) {
 
             final PlayerInventory pi = player.getInventory();
+
             if (pi.contains(ToolSwordHelper.WOOD_SWORD))
                 pi.remove(ToolSwordHelper.WOOD_SWORD);
 

@@ -55,7 +55,7 @@ public class PersonalChests implements Listener {
         inventoryArenaHashMap.values().removeAll(Collections.singleton(e.getArena()));
     }
 
-    //TODO Do we need to cancel this event?
+    // TODO Do we need to cancel this event?
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onChestOpen(PlayerInteractEvent event){
@@ -67,7 +67,7 @@ public class PersonalChests implements Listener {
         final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
         final Block block = event.getClickedBlock();
 
-        //Check if player is opening chest in an arena
+        // Check if player is opening chest in an arena
         if (arena == null || block == null ||
                 arena.getStatus() != ArenaStatus.RUNNING ||
                 event.getAction() != Action.RIGHT_CLICK_BLOCK)

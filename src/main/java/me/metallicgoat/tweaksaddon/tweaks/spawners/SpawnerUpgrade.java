@@ -31,7 +31,6 @@ public class SpawnerUpgrade implements Listener {
 
         if(level == 3)
             (new SpawnerUpgradeTask(arena, team)).runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 80, 120);
-
     }
 }
 

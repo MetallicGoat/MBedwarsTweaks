@@ -17,11 +17,11 @@ public class RemoveInvisOnDamage implements Listener {
             return;
 
         if (e.getEntity().getType() == EntityType.PLAYER) {
-            final Player p = (Player) e.getEntity();
-            final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(p);
+            final Player player = (Player) e.getEntity();
+            final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
 
             if(arena != null && ConfigValue.remove_invis_damge_causes.contains(e.getCause()))
-                p.removePotionEffect(PotionEffectType.INVISIBILITY);
+                player.removePotionEffect(PotionEffectType.INVISIBILITY);
         }
     }
 }

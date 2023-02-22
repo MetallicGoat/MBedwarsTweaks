@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SpongeParticles implements Listener {
-
     @EventHandler
     public void onSpongePlace(BlockPlaceEvent e) {
         final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(e.getPlayer());
@@ -35,7 +34,6 @@ public class SpongeParticles implements Listener {
 class SpongeParticleTask extends BukkitRunnable {
 
     private final Block block;
-
     private int radius = 1;
 
     public SpongeParticleTask(Block block){

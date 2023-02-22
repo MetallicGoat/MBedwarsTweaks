@@ -33,7 +33,6 @@ public class GenTiersConfig {
     }
 
     public static void loadUnchecked() throws Exception {
-
         final File file = getFile();
 
         if(!file.exists()){

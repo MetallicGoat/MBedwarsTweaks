@@ -27,8 +27,7 @@ public class LockTeamChest implements Listener {
         final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
         final Block block = e.getClickedBlock();
 
-
-        //Check if player is opening chest in an arena
+        // Check if player is opening chest in an arena
         if (arena == null ||
                 arena.getStatus() != ArenaStatus.RUNNING ||
                 block == null ||

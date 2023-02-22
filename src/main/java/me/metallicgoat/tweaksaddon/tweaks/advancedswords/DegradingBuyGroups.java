@@ -47,7 +47,6 @@ public class DegradingBuyGroups implements Listener {
             final Team team = arena.getPlayerTeam(player);
             for (ShopItem item : shopItems)
                 ToolSwordHelper.givePlayerShopItem(arena, team, player, item);
-
         }
     }
 }

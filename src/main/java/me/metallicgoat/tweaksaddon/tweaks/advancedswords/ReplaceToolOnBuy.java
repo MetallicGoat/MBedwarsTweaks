@@ -18,7 +18,7 @@ public class ReplaceToolOnBuy implements Listener {
 
         final BuyGroup group = event.getItem().getBuyGroup();
 
-        //If enabled, and item has buy-group
+        // If enabled, and item has buy-group
         if (group != null
                 && event.getProblems().isEmpty()
                 && ConfigValue.advanced_tool_replacement_buygroups.contains(group.getName())) {
@@ -41,7 +41,6 @@ public class ReplaceToolOnBuy implements Listener {
 
             if (match && ToolSwordHelper.getSwordToolLevel(tool) > ToolSwordHelper.getSwordToolLevel(itemStack.getType()))
                 p.getInventory().remove(itemStack);
-
         }
     }
 }

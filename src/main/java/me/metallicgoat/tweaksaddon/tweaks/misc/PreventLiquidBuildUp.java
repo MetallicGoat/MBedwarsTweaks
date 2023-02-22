@@ -14,8 +14,7 @@ import java.util.Collection;
 
 public class PreventLiquidBuildUp implements Listener {
 
-    //TODO Possibly cause issues if region arenas intersect?
-
+    // TODO Possibly cause issues if region arenas intersect?
     @EventHandler
     public void onFlow(BlockFromToEvent event) {
         if (!ConfigValue.prevent_liquid_build_up)
@@ -25,17 +24,17 @@ public class PreventLiquidBuildUp implements Listener {
         final Collection<Arena> fromArena = BedwarsAPI.getGameAPI().getArenaByLocation(event.getBlock().getLocation());
 
         if (toArena != null && fromArena != null) {
-            //Check if water is moving from a location in an arena to outside an arena
+            // Check if water is moving from a location in an arena to outside an arena
             if (toArena.isEmpty() && !fromArena.isEmpty())
                 event.setCancelled(true);
 
-            //Flowing into an arena
+            // Flowing into an arena
             if (fromArena.isEmpty())
                 return;
 
-            //For all possible arenas
+            // For all possible arenas
             for (Arena arena : fromArena) {
-                //Check if we can place block at position
+                // Check if we can place block at position
                 if (!arena.canPlaceBlockAt(event.getToBlock().getLocation())) {
                     event.setCancelled(true);
                     return;
@@ -58,13 +57,12 @@ public class PreventLiquidBuildUp implements Listener {
         final Location location = event.getBlockClicked().getRelative(event.getBlockFace()).getLocation();
         final Collection<Arena> placed = BedwarsAPI.getGameAPI().getArenaByLocation(location);
 
-        //Check if block is inside arena
+        // Check if block is inside arena
         if (placed != null && placed.isEmpty())
             event.setCancelled(true);
 
-        //check if block is placeable at location
+        // Check if block is placeable at location
         if (!arena.canPlaceBlockAt(location))
             event.setCancelled(true);
-
     }
 }

@@ -19,7 +19,7 @@ public class ForceScoreboardUpdating implements Listener {
     private static BukkitTask scoreboardUpdatingTask = null;
 
     @EventHandler
-    public void onGameStart(PlayerJoinArenaEvent e) {
+    public void onGameStart(PlayerJoinArenaEvent event) {
         final boolean enabled = (ConfigValue.gen_tiers_scoreboard_updating_enabled_in_game || ConfigValue.gen_tiers_scoreboard_updating_enabled_in_lobby);
 
         if (!enabled || scoreboardUpdatingTask != null)

@@ -18,7 +18,6 @@ public class FireballUseCoolDown implements Listener {
 
     @EventHandler
     public void onPlayerUseSpecialItem(PlayerUseSpecialItemEvent event) {
-
         if (!ConfigValue.fireball_cooldown_enabled || event.getSpecialItem().getType() != SpecialItemType.FIREBALL)
             return;
 
@@ -30,9 +29,7 @@ public class FireballUseCoolDown implements Listener {
         }
 
         coolDownPlayers.add(player);
-
         Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () ->
                 coolDownPlayers.remove(player), ConfigValue.fireball_cooldown_time);
-
     }
 }
