@@ -83,7 +83,7 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
 
         // Server
         manager.registerEvents(new PlayerLimitBypass(), plugin);
-        manager.registerEvents(new PluginLoad(), plugin);
+        manager.registerEvents(new DependencyLoad(plugin), plugin);
 
         // Spawners
         manager.registerEvents(new BedBreakTier(), plugin);

@@ -16,6 +16,7 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
     @Getter private static MBedwarsTweaksPlugin instance;
     @Getter private static MBedwarsTweaksAddon addon;
     @Getter @Setter private boolean hotbarManagerEnabled = false;
+    @Getter @Setter private boolean prestigesAddonEnabled = false;
 
     public static boolean papiEnabled = false;
 
@@ -45,14 +46,20 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
             LoadConfigs.loadTweaksConfigs();
             ToolSwordHelper.load();
 
-            if(Bukkit.getPluginManager().isPluginEnabled("MBedwarsHotbarManager"))
-                setHotbarManagerEnabled(true);
+            // TODO - Move to a single depend manager class
+            {
+                if (Bukkit.getPluginManager().isPluginEnabled("MBedwarsHotbarManager"))
+                    setHotbarManagerEnabled(true);
 
-            if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-                new Placeholders().register();
-                papiEnabled = true;
-            } else {
-                Console.printInfo("PlaceholderAPI was not Found! PAPI placeholders won't work!");
+                if (Bukkit.getPluginManager().isPluginEnabled("PrestigeAddon"))
+                    setPrestigesAddonEnabled(true);
+
+                if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+                    new Placeholders().register();
+                    papiEnabled = true;
+                } else {
+                    Console.printInfo("PlaceholderAPI was not Found! PAPI placeholders won't work!");
+                }
             }
 
             if (Bukkit.getPluginManager().isPluginEnabled("FireBallKnockback")) {

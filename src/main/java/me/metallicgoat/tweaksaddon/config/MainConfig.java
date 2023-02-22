@@ -322,7 +322,7 @@ public class MainConfig {
 
         ConfigValue.heal_pool_particle_enabled = config.getBoolean("Heal-Pool-Particles.Enabled", true);
         ConfigValue.heal_pool_particle_team_view_only = config.getBoolean("Heal-Pool-Particles.Team-View-Only", true);
-        ConfigValue.bedwars_level_on_exp_bar = config.getBoolean("Bedwars-Level-On-Experience-Bar", false);
+        ConfigValue.prestiges_level_on_exp_bar = config.getBoolean("Bedwars-Level-On-Experience-Bar", false);
         ConfigValue.heal_pool_particle_range = config.getInt("Heal-Pool-Particles.Range", 15);
         {
             final String particleName = config.getString("Heal-Pool-Particles.Particle");
@@ -340,6 +340,8 @@ public class MainConfig {
 
         ConfigValue.remove_empty_buckets = config.getBoolean("Empty-Buckets", true);
         ConfigValue.remove_empty_potions = config.getBoolean("Empty-Potions", true);
+
+        ConfigValue.prestiges_level_on_exp_bar = config.getBoolean("Prestiges-Level-On-Experience-Bar", false);
 
         ConfigValue.custom_height_cap_enabled = config.getBoolean("Height-Cap.Enabled", false);
         ConfigValue.custom_height_cap_warn = config.getString("Height-Cap.Message", ConfigValue.custom_height_cap_warn);
@@ -728,11 +730,18 @@ public class MainConfig {
 
         config.addEmptyLine();
 
-        config.addComment("========================================================================");
-        config.addComment("   Y O U  M U S T  H A V E  P R E S T I G E  A D D O N  F O R  T H I S ");
-        config.addComment("==========================================================================");
-        config.addComment("Sets your bedwars level on experience bar");
-        config.set("Bedwars-Level-On-Experience-Bar", ConfigValue.bedwars_level_on_exp_bar);
+        config.addComment("############### EXTERNAL PLUGINS/ADDON INTEGRATION ###############");
+
+        config.addEmptyLine();
+
+        config.addComment("Note: The following configs are from external addons which may or may not be by me (MetallicGoat)");
+
+        config.addEmptyLine();
+
+        config.addComment("REQUIRED DEPENDENCY: PrestigesAddon (By WhoHarsh)");
+        config.addComment("DOWNLOAD: https://mbedwars.com/product/hypixel-prestiges-addon/");
+        config.addComment("Sets your prestiges bedwars level on experience bar during a game");
+        config.set("Prestiges-Level-On-Experience-Bar", ConfigValue.prestiges_level_on_exp_bar);
 
         config.addEmptyLine();
 

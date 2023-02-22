@@ -39,7 +39,7 @@ public class ConfigValue {
 
     public static boolean heal_pool_particle_enabled = true;
     public static boolean heal_pool_particle_team_view_only = true;
-    public static boolean bedwars_level_on_exp_bar = false;
+    public static boolean prestiges_level_on_exp_bar = false;
     public static int heal_pool_particle_range = 15;
     public static VarParticle heal_pool_particle = VarParticle.newInstanceByName(NMSHelper.get().getVersion() > 8 ? "VILLAGER_HAPPY" : "HAPPY_VILLAGER");
 
