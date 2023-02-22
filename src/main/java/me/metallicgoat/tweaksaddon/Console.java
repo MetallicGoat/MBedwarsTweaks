@@ -15,19 +15,11 @@ public class Console {
             printInfo(s);
     }
 
-    private static void printInfo(String tag, String msg){
-        printInfo("(" + tag + ") " + msg);
-    }
-
-    private static void printWarn(String tag, String msg){
-        printWarn("(" + tag + ") " + msg);
-    }
-
     public static void printConfigWarn(String warn, String config){
-        printWarn("[config][" + config + "]", warn);
+        printWarn("[Config-" + config + "] " + warn);
     }
 
     public static void printConfigInfo(String info, String config){
-        printInfo("[config][" + config + "]", info);
+        printInfo("[Config-" + config + "] " + info);
     }
 }

@@ -103,17 +103,9 @@ public class SwordsToolsConfig {
             ConfigValue.tools_swords_do_not_effect = config.getStringList("Do-Not-Effect");
 
         // auto update file if newer version
-        {
-            if(MainConfig.CURRENT_CONFIG_VERSION == null) {
-                updateV1Configs(config);
-                save();
-                return;
-            }
-
-            if(!MainConfig.CURRENT_CONFIG_VERSION.equals(MainConfig.ADDON_VERSION)) {
-                updateV2Configs(config);
-                save();
-            }
+        if(!MainConfig.CURRENT_CONFIG_VERSION.equals(MainConfig.ADDON_VERSION)) {
+            updateOldConfigs(config);
+            save();
         }
     }
 
@@ -186,65 +178,10 @@ public class SwordsToolsConfig {
 
     }
 
-    private static void updateV2Configs(FileConfiguration config){
+    private static void updateOldConfigs(FileConfiguration config){
         ConfigValue.degrading_buygroups_enabled = config.getBoolean("Degraded-Tool-BuyGroups", false);
 
         ConfigValue.always_sword_chest_enabled = config.getBoolean("Always-Sword", false);
         ConfigValue.always_sword_drop_enabled = config.getBoolean("Advanced-Sword-Drop.Enabled", false);
-    }
-
-    private static void updateV1Configs(FileConfiguration config){
-
-        if(!isV1Config(config))
-            return;
-
-        {
-            if(config.contains("Anti-Chest")) {
-                ConfigValue.anti_chest_materials.clear();
-
-                for (String materialName : config.getStringList("Anti-Chest")) {
-                    final Material material = Helper.get().getMaterialByName(materialName);
-
-                    if (material != null)
-                        ConfigValue.anti_chest_materials.add(material);
-                }
-            }
-        }
-
-        {
-            if(config.contains("Anti-Drop.List")) {
-                ConfigValue.anti_drop_materials.clear();
-
-                for (String materialName : config.getStringList("Anti-Drop.List")) {
-                    final Material material = Helper.get().getMaterialByName(materialName);
-
-                    if (material != null)
-                        ConfigValue.anti_drop_materials.add(material);
-                }
-            }
-        }
-    }
-
-    /*
-     *
-     * We are doing this because if the
-     * main config fails to load the config
-     * version will not be set, and therefor
-     * we will try and update it as a v1 config
-     * when we should not.
-     *
-     */
-    private static boolean isV1Config(FileConfiguration config){
-
-        if(config.contains("Anti-Chest.Enabled"))
-            return true;
-
-        if(config.contains("Anti-Drop.List"))
-            return true;
-
-        if(config.contains("Advanced-Sword-Drop.List"))
-            return true;
-
-        return false;
     }
 }

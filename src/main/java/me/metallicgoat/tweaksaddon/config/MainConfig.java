@@ -372,16 +372,9 @@ public class MainConfig {
         {
             CURRENT_CONFIG_VERSION = config.getString("file-version");
 
-            if(CURRENT_CONFIG_VERSION == null) {
-                Console.printConfigInfo("An update has just been detected. Seems like you are updating from V1. Updating configs to V2 format!", "Updater");
-                updateV1Configs(config);
-                save();
-                return;
-            }
-
-            if(!CURRENT_CONFIG_VERSION.equals(ADDON_VERSION)) {
+            if(!MainConfig.CURRENT_CONFIG_VERSION.equals(MainConfig.ADDON_VERSION)) {
                 Console.printConfigInfo("An update has just been detected. Updating configs!", "Updater");
-                updateV2Configs(config);
+                updateOldConfigs(config);
                 save();
             }
         }
@@ -772,67 +765,8 @@ public class MainConfig {
     }
 
     // Use when the name of a config changes or something
-    public static void updateV2Configs(FileConfiguration config) {
+    public static void updateOldConfigs(FileConfiguration config) {
         // No updates yet :)
-    }
-
-    public static void updateV1Configs(FileConfiguration config) {
-        {
-            if(config.contains("Tier-One-Titles.Spawners")) {
-                ConfigValue.gen_tiers_start_spawners.clear();
-
-                for (String string : config.getStringList("Tier-One-Titles.Spawners")) {
-                    final Material material = Helper.get().getMaterialByName(string);
-
-                    if (material == null)
-                        continue;
-
-                    for (DropType type : GameAPI.get().getDropTypes()) {
-                        final ItemStack[] droppingItemStacks = type.getDroppingMaterials();
-
-                        for (ItemStack itemStack : droppingItemStacks) {
-                            if (itemStack.getType() == material) {
-                                ConfigValue.gen_tiers_start_spawners.add(type);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        ConfigValue.custom_action_bar_in_game = config.getBoolean("Action-Bar-Enabled-In-Game", false);
-        ConfigValue.custom_action_bar_in_lobby = config.getBoolean("Action-Bar-Enabled-In-Lobby", false);
-        ConfigValue.custom_action_bar_message = config.getString("Action-Bar-Message", ConfigValue.custom_action_bar_message);
-
-        ConfigValue.final_kill_suffix_enabled = config.getBoolean("Final-Kill-Message", true);
-
-        if(config.contains("Player-Destroy-Message"))
-            ConfigValue.custom_bed_break_message = config.getStringList("Player-Destroy-Message");
-        if(config.contains("Auto-Destroy-Message"))
-            ConfigValue.auto_bed_break_message = config.getStringList("Auto-Destroy-Message");
-
-        ConfigValue.bed_destroy_title = config.getString("Notification.Big-Title", ConfigValue.bed_destroy_title);
-        ConfigValue.bed_destroy_subtitle = config.getString("Notification.Small-Title", ConfigValue.bed_destroy_subtitle);
-
-        ConfigValue.team_eliminate_message_enabled = config.getBoolean("Team-Eliminate-Message-Enabled", true);
-        if(config.contains("Team-Eliminate-Message"))
-            ConfigValue.team_eliminate_message = config.getStringList("Team-Eliminate-Message");
-
-        if(config.contains("No-Top-Killers-Message"))
-            ConfigValue.no_top_killer_message = config.getStringList("No-Top-Killers-Message");
-
-        ConfigValue.gen_tiers_scoreboard_updating_enabled_in_game = config.getBoolean("Scoreboard-Updating");
-        ConfigValue.gen_tiers_scoreboard_updating_interval = config.getInt("Scoreboard-Updating-Interval", 5);
-
-        ConfigValue.lock_team_chest_enabled = config.getBoolean("Lock-Team-Chest", false);
-        ConfigValue.lock_team_chest_range = config.getDouble("Team-Chest-Distance", 8);
-        ConfigValue.lock_team_chest_fail_open = config.getString("Prevent-Chest-Open-Message", ConfigValue.lock_team_chest_fail_open);
-
-        ConfigValue.personal_ender_chests_enabled = config.getBoolean("Personal-Ender-Chests");
-
-        loadPermanentEffects(config, "Permanent-Effects");
-
     }
 
     public static void loadPermanentEffects(FileConfiguration config, String path){
