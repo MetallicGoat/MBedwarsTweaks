@@ -39,7 +39,6 @@ public class GenTiers implements Listener {
         final Arena arena = event.getArena();
 
         if (ConfigValue.gen_tiers_custom_holo_enabled) {
-
             // Add custom Holo titles
             for (Spawner spawner : arena.getSpawners()) {
                 if(ConfigValue.gen_tiers_start_spawners.contains(spawner.getDropType())) {
@@ -127,8 +126,8 @@ public class GenTiers implements Listener {
                                     s.addDropDurationModifier("GEN_UPGRADE", MBedwarsTweaksPlugin.getInstance(), SpawnerDurationModifier.Operation.SET, currentLevel.getSpeed());
 
                                 // Set new limit
-                                //if(currentLevel.getLimit() != null)
-                                //    s.getDropType().se
+                                if(currentLevel.getLimit() != null)
+                                    s.setMaxNearbyItems(currentLevel.getLimit());
 
                                 // Add custom Holo tiles
                                 if (ConfigValue.gen_tiers_custom_holo_enabled)
@@ -152,22 +151,15 @@ public class GenTiers implements Listener {
                 return;
 
             timeToNextUpdate.forEach((arena, integer) -> {
-
-                if (arena.getStatus() == ArenaStatus.RUNNING) {
-
-                    if (MBedwarsTweaksPlugin.papiEnabled)
-                        timeToNextUpdate.replace(arena, integer, integer - 20);
-
-                }
+                if (MBedwarsTweaksPlugin.papiEnabled && arena.getStatus() == ArenaStatus.RUNNING)
+                    timeToNextUpdate.replace(arena, integer, integer - 20);
             });
         }, 0L, 20L);
     }
 
     // Format time for placeholder
     public static String[] timeLeft(Arena arena) {
-        final int timeoutTicks = timeToNextUpdate.getOrDefault(arena, 0L).intValue();
-        final int timeoutSeconds = (timeoutTicks / 20);
-
+        final int timeoutSeconds = (timeToNextUpdate.getOrDefault(arena, 0L).intValue() / 20);
         final int minutes = (timeoutSeconds / 60) % 60;
         final int seconds = timeoutSeconds % 60;
 

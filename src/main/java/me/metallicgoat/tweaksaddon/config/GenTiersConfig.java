@@ -13,7 +13,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.Map;
-import java.util.Set;
 
 public class GenTiersConfig {
 
@@ -134,22 +133,13 @@ public class GenTiersConfig {
 
 
         // auto update file if newer version
-        {
-            if(MainConfig.CURRENT_CONFIG_VERSION == null) {
-                updateV1Configs(config);
-                save();
-                return;
-            }
-
-            if(!MainConfig.CURRENT_CONFIG_VERSION.equals(MainConfig.ADDON_VERSION)) {
-                updateV2Configs(config);
-                save();
-            }
+        if(!MainConfig.CURRENT_CONFIG_VERSION.equals(MainConfig.ADDON_VERSION)) {
+            updateOldConfigs(config);
+            save();
         }
     }
 
     private static void save() throws Exception{
-
         final YamlConfigurationDescriptor config = new YamlConfigurationDescriptor();
 
         config.addComment("MAKE SURE Gen-Tiers are enabled in the config.yml!");
@@ -182,7 +172,9 @@ public class GenTiersConfig {
             if(level.getAction() == TierAction.GEN_UPGRADE) {
                 config.set(configKey + "Drop-Type", level.getTypeId());
                 config.set(configKey + "Drop-Speed", level.getSpeed());
-                // config.set(configKey + "Max-Nearby-Items", level.getLimit());
+
+                if(level.getLimit() != null)
+                    config.set(configKey + "Max-Nearby-Items", level.getLimit());
             }
 
             config.set(configKey + "Time", level.getTime());
@@ -193,109 +185,9 @@ public class GenTiersConfig {
         }
 
         config.save(getFile());
-
     }
 
-    private static void updateV2Configs(FileConfiguration config){
+    private static void updateOldConfigs(FileConfiguration config){
         // No updates yet :)
-    }
-
-    private static void updateV1Configs(FileConfiguration config){
-        final ConfigurationSection tiersSection = config.getConfigurationSection("Gen-Tiers");
-
-        int val = -1;
-        GenTierLevel bedBreakTier = null;
-        GenTierLevel gameOverTier = null;
-
-        if (tiersSection != null && isV1Config(config)) {
-
-            Console.printConfigInfo("Detected Gen-Tiers v1 Config. Updating...", "gen-tiers");
-
-            for (String levelNumString : tiersSection.getKeys(false)) {
-
-                final String configKey = "Gen-Tiers." + levelNumString + ".";
-
-                final String tierName = config.getString(configKey + "TierName");
-                final String tierLevel = config.getString(configKey + "TierLevel");
-                final String typeString = config.getString(configKey + "Type");
-                final long time = config.getLong(configKey + "Time", 8);
-                final double speed = config.getDouble(configKey + "Speed", 8.0);
-                final String message = config.getString(configKey + "Chat");
-
-                if(tierName == null){
-                    Console.printConfigWarn("Failed to load tier with level num of: " + levelNumString, "gen-tiers");
-                    continue;
-                }
-
-                if(levelNumString.equalsIgnoreCase("bed-break"))
-                    bedBreakTier = new GenTierLevel(tierName, tierLevel != null ? tierLevel : "Bed Gone", TierAction.BED_DESTROY, time, message != null ? message : "All beds have been broken", null);
-
-                if(levelNumString.equalsIgnoreCase("game-over"))
-                    gameOverTier = new GenTierLevel(tierName, tierLevel != null ? tierLevel : "Game Over", TierAction.GAME_OVER, time, message != null ? message : "Game Ended", null);
-
-                final Integer levelNum = Helper.get().parseInt(levelNumString);
-
-                if (levelNum == null){
-                    Console.printConfigWarn("Failed to load tier: [" + tierName  + "]. Level number is null.", "gen-tiers");
-                    continue;
-                }
-
-                if(levelNum > val)
-                    val = levelNum;
-
-                final GenTierLevel genTierLevel = new GenTierLevel(
-                        tierName,
-                        tierLevel,
-                        typeString,
-                        TierAction.GEN_UPGRADE,
-                        time,
-                        speed,
-                        30,
-                        message,
-                        null
-                );
-
-                ConfigValue.gen_tier_levels.put(levelNum, genTierLevel);
-            }
-        }
-
-        if(bedBreakTier != null){
-            val++;
-            ConfigValue.gen_tier_levels.put(val, bedBreakTier);
-        }
-
-        if(gameOverTier != null){
-            val++;
-            ConfigValue.gen_tier_levels.put(val, gameOverTier);
-        }
-    }
-
-    /*
-     *
-     * We are doing this because if the
-     * main config fails to load the config
-     * version will not be set, and therefor
-     * we will try and update it as a v1 config
-     * when we should not.
-     *
-     */
-    private static boolean isV1Config(ConfigurationSection section){
-
-        final Set<String> list  = section.getKeys(false);
-
-        if(list.contains("bed-break") || list.contains("game-over"))
-            return true;
-
-        for(String key : list){
-
-            if(key.equals("Type"))
-                return true;
-
-            if(key.equals("TierName")){
-                return true;
-            }
-        }
-
-        return false;
     }
 }

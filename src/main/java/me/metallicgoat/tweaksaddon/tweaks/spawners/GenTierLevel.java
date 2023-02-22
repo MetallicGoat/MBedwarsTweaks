@@ -14,7 +14,7 @@ public class GenTierLevel {
     @Getter private final TierAction action;
     @Getter private final long time;
     @Getter @Nullable private final Double speed;
-    //@Getter @Nullable private final Integer limit;
+    @Getter @Nullable private final Integer limit;
     @Getter private final String earnMessage;
     @Getter private final Sound earnSound;
 
@@ -32,7 +32,7 @@ public class GenTierLevel {
         this.action = action;
         this.time = time;
         this.speed = null;
-        //this.limit = null;
+        this.limit = null;
         this.earnMessage = earnMessage;
         this.earnSound = earnSound;
     }
@@ -54,7 +54,7 @@ public class GenTierLevel {
         this.action = action;
         this.time = time;
         this.speed = speed;
-        //this.limit = limit;
+        this.limit = limit;
         this.earnMessage = earnMessage;
         this.earnSound = earnSound;
     }
