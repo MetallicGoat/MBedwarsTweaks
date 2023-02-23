@@ -2,7 +2,8 @@ package me.metallicgoat.tweaksaddon;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import lombok.Getter;
-import lombok.Setter;
+import me.metallicgoat.tweaksaddon.serverevents.DependManager;
+import me.metallicgoat.tweaksaddon.serverevents.LoadConfigs;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -15,10 +16,6 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
 
     @Getter private static MBedwarsTweaksPlugin instance;
     @Getter private static MBedwarsTweaksAddon addon;
-    @Getter @Setter private boolean hotbarManagerEnabled = false;
-    @Getter @Setter private boolean prestigesAddonEnabled = false;
-
-    public static boolean papiEnabled = false;
 
     public void onEnable() {
 
@@ -42,33 +39,9 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
         );
 
         BedwarsAPI.onReady(() -> {
-
+            DependManager.load();
             LoadConfigs.loadTweaksConfigs();
             ToolSwordHelper.load();
-
-            // TODO - Move to a single depend manager class
-            {
-                if (Bukkit.getPluginManager().isPluginEnabled("MBedwarsHotbarManager"))
-                    setHotbarManagerEnabled(true);
-
-                if (Bukkit.getPluginManager().isPluginEnabled("PrestigeAddon"))
-                    setPrestigesAddonEnabled(true);
-
-                if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-                    new Placeholders().register();
-                    papiEnabled = true;
-                } else {
-                    Console.printInfo("PlaceholderAPI was not Found! PAPI placeholders won't work!");
-                }
-            }
-
-            if (Bukkit.getPluginManager().isPluginEnabled("FireBallKnockback")) {
-                Console.printInfo("I noticed you are using my Fireball jumping addon. " +
-                        "As of 5.0.13, you do not need it anymore! Fireball jumping " +
-                        "is now built into core MBedwars. Features such as throw cooldown and throw " +
-                        "effects have been added to this addon (MBedwarsTweaks). - MetallicGoat"
-                );
-            }
         });
     }
 

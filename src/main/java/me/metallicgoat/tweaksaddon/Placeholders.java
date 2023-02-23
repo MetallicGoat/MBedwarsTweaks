@@ -19,6 +19,12 @@ import java.util.Map;
 
 public class Placeholders extends PlaceholderExpansion {
 
+    private final MBedwarsTweaksPlugin plugin;
+
+    public Placeholders(MBedwarsTweaksPlugin plugin){
+        this.plugin = plugin;
+    }
+
     @Override
     public @NotNull String getIdentifier() {
         return "tweaks";
@@ -31,15 +37,13 @@ public class Placeholders extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return MBedwarsTweaksPlugin.getInstance().getDescription().getVersion();
+        return plugin.getDescription().getVersion();
     }
 
     @Override
     public String onRequest(OfflinePlayer offlinePlayer, @NotNull String params) {
-
-        final Player player1 = Bukkit.getPlayer(offlinePlayer.getUniqueId());
-        final Arena arena = BedwarsAPI.getGameAPI().getSpectatingPlayers().contains(player1) ? BedwarsAPI.getGameAPI().getArenaBySpectator(player1) : BedwarsAPI.getGameAPI().getArenaByPlayer(player1);
-
+        final Player player = Bukkit.getPlayer(offlinePlayer.getUniqueId());
+        final Arena arena = BedwarsAPI.getGameAPI().getSpectatingPlayers().contains(player) ? BedwarsAPI.getGameAPI().getArenaBySpectator(player) : BedwarsAPI.getGameAPI().getArenaByPlayer(player);
 
         switch (params.toLowerCase()) {
             case "next-tier": {
@@ -71,7 +75,7 @@ public class Placeholders extends PlaceholderExpansion {
                         final String[] nextTierTime = GenTiers.timeLeft(arena);
                         final String minutes = nextTierTime[0];
                         final String seconds = nextTierTime[1];
-                        //Old format
+                        // Old format
                         final String fullTime = minutes + ":" + seconds;
 
                         return Message.build(ConfigValue.papi_next_tier_lobby_running)
@@ -121,7 +125,7 @@ public class Placeholders extends PlaceholderExpansion {
                 if (arena == null)
                     return "";
 
-                final Team team = arena.getPlayerTeam(player1);
+                final Team team = arena.getPlayerTeam(player);
 
                 if (team == null)
                     return "";
@@ -135,7 +139,7 @@ public class Placeholders extends PlaceholderExpansion {
                 if (arena == null)
                     return "";
 
-                final Team team = arena.getPlayerTeam(player1);
+                final Team team = arena.getPlayerTeam(player);
 
                 if (team == null)
                     return "";
@@ -182,7 +186,7 @@ public class Placeholders extends PlaceholderExpansion {
 
                 String output;
                 final String teamName = params.replace("team-status-", "");
-                final Team playerTeam = arena.getPlayerTeam(player1);
+                final Team playerTeam = arena.getPlayerTeam(player);
                 final Team scoreTeam = Team.getByName(teamName);
 
                 if (scoreTeam == null)
@@ -208,7 +212,7 @@ public class Placeholders extends PlaceholderExpansion {
             final String teamName = params.replace("team-you-", "");
 
             if (arena != null && (arena.getStatus() == ArenaStatus.RUNNING || arena.getStatus() == ArenaStatus.END_LOBBY)) {
-                final Team playerTeam = arena.getPlayerTeam(player1);
+                final Team playerTeam = arena.getPlayerTeam(player);
                 final Team placeholderTeam = Team.getByName(teamName);
 
                 if (placeholderTeam != null && playerTeam == placeholderTeam) {
@@ -217,18 +221,17 @@ public class Placeholders extends PlaceholderExpansion {
             }
             return "";
         }
-        return "";
+
+        return null;
     }
 
     private String getPlayerAmount(ArenaStatus status) {
         int count = 0;
 
         // Iterate through every arena and check arena status
-        for (Arena arena : GameAPI.get().getArenas()) {
-            if (arena.getStatus() == status) {
+        for (Arena arena : GameAPI.get().getArenas())
+            if (arena.getStatus() == status)
                 count += (ConfigValue.papi_count_spectators_as_players ? arena.getPlayers().size() + arena.getSpectators().size() : arena.getPlayers().size());
-            }
-        }
 
         return Integer.toString(count);
     }
@@ -237,9 +240,8 @@ public class Placeholders extends PlaceholderExpansion {
         int count = 0;
 
         // Iterate through every arena
-        for (Arena arena : GameAPI.get().getArenas()) {
+        for (Arena arena : GameAPI.get().getArenas())
             count += (ConfigValue.papi_count_spectators_as_players ? arena.getPlayers().size() + arena.getSpectators().size() : arena.getPlayers().size());
-        }
 
         return Integer.toString(count);
     }

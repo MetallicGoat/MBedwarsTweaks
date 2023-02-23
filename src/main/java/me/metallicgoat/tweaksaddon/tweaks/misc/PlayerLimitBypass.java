@@ -1,4 +1,4 @@
-package me.metallicgoat.tweaksaddon.tweaks.server;
+package me.metallicgoat.tweaksaddon.tweaks.misc;
 
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import org.bukkit.event.EventHandler;

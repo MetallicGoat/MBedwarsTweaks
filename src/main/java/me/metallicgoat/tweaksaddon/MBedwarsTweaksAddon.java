@@ -1,17 +1,14 @@
 package me.metallicgoat.tweaksaddon;
 
 import de.marcely.bedwars.api.BedwarsAddon;
-import me.metallicgoat.tweaksaddon.tweaks.hooks.PrestigesLevelOnExperienceBar;
+import me.metallicgoat.tweaksaddon.tweaks.hooks.*;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.*;
 import me.metallicgoat.tweaksaddon.tweaks.cosmetic.*;
-import me.metallicgoat.tweaksaddon.tweaks.explosives.DisableFireballOutsideArena;
-import me.metallicgoat.tweaksaddon.tweaks.explosives.FireballBlockBreakWhitelist;
-import me.metallicgoat.tweaksaddon.tweaks.explosives.FireballThrowEffects;
-import me.metallicgoat.tweaksaddon.tweaks.explosives.FireballUseCoolDown;
+import me.metallicgoat.tweaksaddon.tweaks.explosives.*;
 import me.metallicgoat.tweaksaddon.tweaks.misc.*;
 import me.metallicgoat.tweaksaddon.tweaks.spawners.*;
 import me.metallicgoat.tweaksaddon.tweaks.messages.*;
-import me.metallicgoat.tweaksaddon.tweaks.server.*;
+import me.metallicgoat.tweaksaddon.serverevents.*;
 import org.bukkit.plugin.PluginManager;
 
 public class MBedwarsTweaksAddon extends BedwarsAddon {
@@ -78,12 +75,9 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
         manager.registerEvents(new LockTeamChest(), plugin);
         manager.registerEvents(new PermanentEffects(), plugin);
         manager.registerEvents(new PersonalChests(), plugin);
+        manager.registerEvents(new PlayerLimitBypass(), plugin);
         manager.registerEvents(new PreventLiquidBuildUp(), plugin);
         manager.registerEvents(new RemoveInvisOnDamage(), plugin);
-
-        // Server
-        manager.registerEvents(new PlayerLimitBypass(), plugin);
-        manager.registerEvents(new DependencyLoad(plugin), plugin);
 
         // Spawners
         manager.registerEvents(new BedBreakTier(), plugin);
@@ -91,7 +85,8 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
         manager.registerEvents(new GenTiers(), plugin);
         manager.registerEvents(new SpawnerUpgrade(), plugin);
 
-        // Others
+        // Server Events
+        manager.registerEvents(new DependManager(), plugin);
         manager.registerEvents(new LoadConfigs(), plugin);
     }
 }

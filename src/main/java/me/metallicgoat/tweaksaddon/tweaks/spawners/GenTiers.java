@@ -8,9 +8,11 @@ import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.api.game.spawner.SpawnerDurationModifier;
 import de.marcely.bedwars.api.message.Message;
+import me.metallicgoat.tweaksaddon.DependType;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.Util;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
+import me.metallicgoat.tweaksaddon.serverevents.DependManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -19,7 +21,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class GenTiers implements Listener {
     public static HashMap<Arena, String> nextTierMap = new HashMap<>();
@@ -165,7 +169,7 @@ public class GenTiers implements Listener {
 
     // TODO improve (why is this a part of gen-tier?) (shit code)
     private void startUpdatingTime() {
-        if(!MBedwarsTweaksPlugin.papiEnabled || placeHolderTask != null)
+        if(!DependManager.isPresent(DependType.PLACEHOLDER_API) || placeHolderTask != null)
             return;
 
         placeHolderTask = Bukkit.getServer().getScheduler().runTaskTimer(MBedwarsTweaksPlugin.getInstance(), () -> {

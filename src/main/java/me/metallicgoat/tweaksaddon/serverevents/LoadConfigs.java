@@ -1,6 +1,8 @@
-package me.metallicgoat.tweaksaddon;
+package me.metallicgoat.tweaksaddon.serverevents;
 
 import de.marcely.bedwars.api.event.ConfigsLoadEvent;
+import me.metallicgoat.tweaksaddon.Console;
+import me.metallicgoat.tweaksaddon.Util;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import me.metallicgoat.tweaksaddon.config.GenTiersConfig;
 import me.metallicgoat.tweaksaddon.config.MainConfig;

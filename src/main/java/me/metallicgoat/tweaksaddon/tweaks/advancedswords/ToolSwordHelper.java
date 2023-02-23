@@ -12,8 +12,10 @@ import de.marcely.bedwars.api.game.shop.product.ShopProduct;
 import de.marcely.bedwars.api.message.Message;
 import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.hotbarmanageraddon.HotbarManagerTools;
+import me.metallicgoat.tweaksaddon.DependType;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
+import me.metallicgoat.tweaksaddon.serverevents.DependManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -226,7 +228,7 @@ public class ToolSwordHelper implements Listener {
 
     public static void givePlayerShopItem(Arena arena, Team team, Player player, ShopItem item) {
         Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> item.getProducts().forEach(shopProduct -> {
-            if (MBedwarsTweaksPlugin.getInstance().isHotbarManagerEnabled()) {
+            if (DependManager.isPresent(DependType.HOTBAR_MANAGER)) {
                 for (ShopProduct product : item.getProducts()) {
                     for (ItemStack itemStack : product.getGivingItems(player, team, arena, 1))
                         HotbarManagerTools.giveItemsProperly(itemStack, player, item.getPage(), null, true);
