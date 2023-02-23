@@ -1,6 +1,5 @@
 package me.metallicgoat.tweaksaddon.config;
 
-import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.tools.Helper;
@@ -15,7 +14,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -187,6 +185,8 @@ public class MainConfig {
         ConfigValue.gen_tiers_scoreboard_updating_enabled_in_lobby = config.getBoolean("Force-Scoreboard-Updating.Enabled-In-Lobby", false);
         ConfigValue.gen_tiers_scoreboard_updating_interval = config.getInt("Force-Scoreboard-Updating.Interval", 5);
 
+        ConfigValue.papi_arena_version = config.getString("Display-Arena-Mode.default", "&7NORMAL");
+
         ConfigValue.fireball_whitelist_enabled = config.getBoolean("FireballWhitelist.Enabled", false);
         {
             if(config.contains("FireballWhitelist.Blocks")) {
@@ -322,7 +322,7 @@ public class MainConfig {
 
         ConfigValue.heal_pool_particle_enabled = config.getBoolean("Heal-Pool-Particles.Enabled", true);
         ConfigValue.heal_pool_particle_team_view_only = config.getBoolean("Heal-Pool-Particles.Team-View-Only", true);
-        ConfigValue.prestiges_level_on_exp_bar = config.getBoolean("Bedwars-Level-On-Experience-Bar", false);
+//        ConfigValue.prestiges_level_on_exp_bar = config.getBoolean("Bedwars-Level-On-Experience-Bar", false);
         ConfigValue.heal_pool_particle_range = config.getInt("Heal-Pool-Particles.Range", 15);
         {
             final String particleName = config.getString("Heal-Pool-Particles.Particle");
@@ -342,6 +342,7 @@ public class MainConfig {
         ConfigValue.remove_empty_potions = config.getBoolean("Empty-Potions", true);
 
         ConfigValue.prestiges_level_on_exp_bar = config.getBoolean("Prestiges-Level-On-Experience-Bar", false);
+        ConfigValue.private_game_addon_support = config.getBoolean("Check-for-private-game", false);
 
         ConfigValue.custom_height_cap_enabled = config.getBoolean("Height-Cap.Enabled", false);
         ConfigValue.custom_height_cap_warn = config.getString("Height-Cap.Message", ConfigValue.custom_height_cap_warn);
@@ -557,6 +558,11 @@ public class MainConfig {
 
         config.addEmptyLine();
 
+        config.addComment("PAPI Placeholder: %tweaks_arena-version%");
+        config.addComment("Displays the version your playing which is configurable");
+        config.addComment("for eg:- NORMAL MODE or ULTIMATE MODE");
+        config.set("Display-Arena-Mode.default", ConfigValue.papi_arena_version);
+
         config.addComment("############### FIREBALLS ###############");
 
         config.addEmptyLine();
@@ -737,6 +743,12 @@ public class MainConfig {
         config.set("Prestiges-Level-On-Experience-Bar", ConfigValue.prestiges_level_on_exp_bar);
 
         config.addEmptyLine();
+
+        config.addComment("REQUIRED DEPENDENCY: Private games addon (By WhoHarsh)");
+        config.addComment("DOWNLOAD: https://mbedwars.com/product/private-games-addon/");
+        config.addComment("Changes: %tweaks_arena-version%");
+        config.addComment("Returns the private game addon's placeholder if arena is private ");
+        config.set("private_game_addon_support", ConfigValue.private_game_addon_support);
 
         config.addComment("############### UNSUPPORTED ###############");
 

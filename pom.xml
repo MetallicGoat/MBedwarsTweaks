@@ -48,7 +48,14 @@
             <artifactId>PrestigesAddon</artifactId>
             <version>1.1.0</version>
             <scope>system</scope>
-            <systemPath>${basedir}/libs/private/prestiges.jar</systemPath>
+            <systemPath>${basedir}/libs/private/prestigesaddon.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>me.harsh</groupId>
+            <artifactId>PrivateGamesAddon</artifactId>
+            <version>2.2.6</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/libs/public/PrivateGamesAddon.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>de.marcely.bedwars</groupId>
@@ -57,6 +64,7 @@
             <scope>system</scope>
             <systemPath>${basedir}/libs/private/MBedwars.jar</systemPath>
         </dependency>
+        <!-- reload -->
         <!-- USED FOR BETA TESTING
         <dependency>
             <groupId>de.marcely.bedwars</groupId>

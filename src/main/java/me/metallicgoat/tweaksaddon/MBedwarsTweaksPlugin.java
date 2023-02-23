@@ -3,6 +3,8 @@ package me.metallicgoat.tweaksaddon;
 import de.marcely.bedwars.api.BedwarsAPI;
 import lombok.Getter;
 import lombok.Setter;
+import me.metallicgoat.tweaksaddon.config.ConfigValue;
+import me.metallicgoat.tweaksaddon.config.MainConfig;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -48,13 +50,15 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
 
             // TODO - Move to a single depend manager class
             {
-                if (Bukkit.getPluginManager().isPluginEnabled("MBedwarsHotbarManager"))
+                if (isEnabled("MBedwarsHotbarManager"))
                     setHotbarManagerEnabled(true);
 
-                if (Bukkit.getPluginManager().isPluginEnabled("PrestigeAddon"))
+                if (isEnabled("PrestigeAddon"))
                     setPrestigesAddonEnabled(true);
+                if (isEnabled("PrivateGamesAddon"))
+                    ConfigValue.private_game_addon_support = true;
 
-                if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+                if (isEnabled("PlaceholderAPI")) {
                     new Placeholders().register();
                     papiEnabled = true;
                 } else {
@@ -100,5 +104,9 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
         }
 
         return true;
+    }
+
+    private boolean isEnabled(String plugin){
+        return Bukkit.getPluginManager().isPluginEnabled(plugin);
     }
 }

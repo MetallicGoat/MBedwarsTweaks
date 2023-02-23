@@ -40,6 +40,7 @@ public class ConfigValue {
     public static boolean heal_pool_particle_enabled = true;
     public static boolean heal_pool_particle_team_view_only = true;
     public static boolean prestiges_level_on_exp_bar = false;
+    public static boolean private_game_addon_support = false;
     public static int heal_pool_particle_range = 15;
     public static VarParticle heal_pool_particle = VarParticle.newInstanceByName(NMSHelper.get().getVersion() > 8 ? "VILLAGER_HAPPY" : "HAPPY_VILLAGER");
 
@@ -232,4 +233,7 @@ public class ConfigValue {
         put("[players_per_team=3]", "Trios");
         put("[players_per_team=4]", "Quads");
     }};
+
+
+    public static String papi_arena_version = "&7NORMAL";
 }

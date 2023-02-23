@@ -8,6 +8,7 @@ import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.exception.ArenaConditionParseException;
 import de.marcely.bedwars.api.message.Message;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import me.harsh.privategamesaddon.api.PrivateGameAPI;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import me.metallicgoat.tweaksaddon.tweaks.spawners.GenTiers;
 import org.bukkit.Bukkit;
@@ -172,6 +173,16 @@ public class Placeholders extends PlaceholderExpansion {
                 return getPlayerAmount(ArenaStatus.LOBBY);
             case "players-endlobby":
                 return getPlayerAmount(ArenaStatus.END_LOBBY);
+
+            case "arena-version":
+                if (ConfigValue.private_game_addon_support){
+                    final Player player = offlinePlayer.getPlayer();
+                    if (player == null || !player.isOnline()) return null;
+                    final Arena ar = GameAPI.get().getArenaByPlayer(player);
+                    if (PrivateGameAPI.isPrivateGame(ar))
+                        return PrivateGameAPI.getPrivateGamePlaceholder(ar);
+                    return ConfigValue.papi_arena_version;
+                }
         }
 
         // TODO Build into core MBedwars {Heart} placeholder
