@@ -33,8 +33,7 @@ public class GenTiers implements Listener {
             return;
 
         // Start updating placeholders
-        if (placeHolderTask == null)
-            placeHolderTask = startUpdatingTime();
+        startUpdatingTime();
 
         final Arena arena = event.getArena();
 
@@ -42,7 +41,7 @@ public class GenTiers implements Listener {
             // Add custom Holo titles
             for (Spawner spawner : arena.getSpawners()) {
                 if(ConfigValue.gen_tiers_start_spawners.contains(spawner.getDropType())) {
-                    spawner.setOverridingHologramLines(formatHoloTiles(ConfigValue.gen_tiers_start_tier, spawner).toArray(new String[0]));
+                    formatHoloTiles(ConfigValue.gen_tiers_start_tier, spawner);
                 }
             }
         }
@@ -80,7 +79,7 @@ public class GenTiers implements Listener {
             return;
 
         final GenTierLevel currentLevel = ConfigValue.gen_tier_levels.get(key);
-        int nextTierLevel = key + 1;
+        final int nextTierLevel = key + 1;
 
         // Update Placeholder
         nextTierMap.put(arena, currentLevel.getTierName());
@@ -116,22 +115,22 @@ public class GenTiers implements Listener {
 
                         scheduleTier(arena, nextTierLevel);
                         arena.broadcast(Message.build(currentLevel.getEarnMessage()));
-
                         playTierSound(arena, currentLevel);
+
                         // For all spawners
-                        for (Spawner s : arena.getSpawners()) {
-                            if (currentLevel.getType() != null && s.getDropType() == currentLevel.getType()) {
+                        for (Spawner spawner : arena.getSpawners()) {
+                            if (currentLevel.getType() != null && spawner.getDropType() == currentLevel.getType()) {
                                 // Set drop time
                                 if(currentLevel.getSpeed() != null)
-                                    s.addDropDurationModifier("GEN_UPGRADE", MBedwarsTweaksPlugin.getInstance(), SpawnerDurationModifier.Operation.SET, currentLevel.getSpeed());
+                                    spawner.addDropDurationModifier("GEN_UPGRADE", MBedwarsTweaksPlugin.getInstance(), SpawnerDurationModifier.Operation.SET, currentLevel.getSpeed());
 
                                 // Set new limit
                                 if(currentLevel.getLimit() != null)
-                                    s.setMaxNearbyItems(currentLevel.getLimit());
+                                    spawner.setMaxNearbyItems(currentLevel.getLimit());
 
                                 // Add custom Holo tiles
                                 if (ConfigValue.gen_tiers_custom_holo_enabled)
-                                    s.setOverridingHologramLines(formatHoloTiles(currentLevel.getTierLevel(), s).toArray(new String[0]));
+                                    formatHoloTiles(currentLevel.getTierLevel(), spawner);
 
                             }
                         }
@@ -144,15 +143,39 @@ public class GenTiers implements Listener {
         }
     }
 
+    // Custom format for hologram titles
+    public void formatHoloTiles(String tierName, Spawner spawner) {
+        final String spawnerName = spawner.getDropType().getConfigName();
+        final String colorCode = spawnerName.substring(0, 2);
+        final String strippedSpawnerName = ChatColor.stripColor(spawnerName);
+        final List<String> formatted = new ArrayList<>();
+
+        // Dont use placeholder, use REPLACE
+        for(String string : ConfigValue.gen_tiers_spawner_holo_titles){
+            final String formattedString = string
+                    .replace("{tier}", tierName)
+                    .replace("{spawner-color}", colorCode)
+                    .replace("{spawner}", strippedSpawnerName);
+
+            formatted.add(ChatColor.translateAlternateColorCodes('&', formattedString));
+        }
+
+        spawner.setOverridingHologramLines(formatted.toArray(new String[0]));
+    }
+
     // TODO improve (why is this a part of gen-tier?) (shit code)
-    private static BukkitTask startUpdatingTime() {
-        return Bukkit.getServer().getScheduler().runTaskTimer(MBedwarsTweaksPlugin.getInstance(), () -> {
+    private void startUpdatingTime() {
+        if(!MBedwarsTweaksPlugin.papiEnabled || placeHolderTask != null)
+            return;
+
+        placeHolderTask = Bukkit.getServer().getScheduler().runTaskTimer(MBedwarsTweaksPlugin.getInstance(), () -> {
             if (timeToNextUpdate.isEmpty())
                 return;
 
             timeToNextUpdate.forEach((arena, integer) -> {
-                if (MBedwarsTweaksPlugin.papiEnabled && arena.getStatus() == ArenaStatus.RUNNING)
+                if (arena.getStatus() == ArenaStatus.RUNNING)
                     timeToNextUpdate.replace(arena, integer, integer - 20);
+
             });
         }, 0L, 20L);
     }
@@ -164,26 +187,6 @@ public class GenTiers implements Listener {
         final int seconds = timeoutSeconds % 60;
 
         return Util.formatMinSec(minutes, seconds);
-    }
-
-    // Format custom holo titles
-    private List<String> formatHoloTiles(String tier, Spawner spawner) {
-        final String spawnerName = spawner.getDropType().getConfigName();
-        final String colorCode = "&" + spawnerName.charAt(1);
-        final String strippedSpawnerName = spawnerName.substring(2);
-        final List<String> formatted = new ArrayList<>();
-
-        // Dont use placeholder, use REPLACE
-        for(String string : ConfigValue.gen_tiers_spawner_holo_titles){
-            final String formattedString = string
-                    .replace("{tier}", tier)
-                    .replace("{spawner-color}", colorCode)
-                    .replace("{spawner}", strippedSpawnerName);
-
-            formatted.add(ChatColor.translateAlternateColorCodes('&', formattedString));
-        }
-
-        return formatted;
     }
 
     private void playTierSound(Arena arena, GenTierLevel level){
