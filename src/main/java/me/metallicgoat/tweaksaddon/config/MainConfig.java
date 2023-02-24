@@ -255,6 +255,13 @@ public class MainConfig {
             }
         }
 
+        ConfigValue.advanced_forge_enabled = config.getBoolean("Advanced-Forge-Upgrade.Enabled");
+        ConfigValue.advanced_forge_range = config.getInt("Advanced-Forge-Upgrade.Range", 20);
+        ConfigValue.advanced_forge_level = config.getInt("Advanced-Forge-Upgrade.Upgrade-Level", 3);
+        ConfigValue.advanced_forge_drop_rate = config.getInt("Advanced-Forge-Upgrade.New-Drop-Rate", 15);
+        ConfigValue.advanced_forge_new_drop = config.getString("Advanced-Forge-Upgrade.New-Drop-Type", ConfigValue.advanced_forge_new_drop);
+        ConfigValue.advanced_forge_effected_spawner = config.getString("Advanced-Forge-Upgrade.Effected-Spawner", ConfigValue.advanced_forge_effected_spawner);
+
         ConfigValue.lock_team_chest_enabled = config.getBoolean("Lock-Team-Chest.Enabled", false);
         ConfigValue.lock_team_chest_range = config.getInt("Lock-Team-Chest.Range", 10);
         ConfigValue.lock_team_chest_fail_open = config.getString("Lock-Team-Chest.Fail-Open", ConfigValue.lock_team_chest_fail_open);
@@ -596,17 +603,7 @@ public class MainConfig {
 
         config.addEmptyLine();
 
-        config.addComment("############### MISCELLANEOUS ###############");
-
-        config.addEmptyLine();
-
-        config.addComment("If this is enabled, MBedwars dealers/upgrade-dealers will look at the closest players,");
-        config.addComment("rather than stay in one position. Their position will reset when the round ends");
-        config.addComment("Range is how close players must be for Friendly Villagers to activate");
-        config.addComment("If Check-Visibility is enabled, the npc will only look at a player if it has direct line of sight");
-        config.set("Friendly-Villagers.Enabled", ConfigValue.friendly_villagers_enabled);
-        config.set("Friendly-Villagers.Range", ConfigValue.friendly_villagers_range);
-        config.set("Friendly-Villagers.Check-Visibility", ConfigValue.friendly_villagers_check_visibility);
+        config.addComment("############### SPAWNERS ###############");
 
         config.addEmptyLine();
 
@@ -623,6 +620,30 @@ public class MainConfig {
 
             config.set("Disable-Unused-Gens.Gen-Types", dropType);
         }
+
+        config.addEmptyLine();
+
+        config.addComment("Adds the ability to setup Emerald forge (or something custom)");
+        config.set("Advanced-Forge-Upgrade.Enabled", ConfigValue.advanced_forge_enabled);
+        config.set("Advanced-Forge-Upgrade.Range", ConfigValue.advanced_forge_range);
+        config.set("Advanced-Forge-Upgrade.Upgrade-Level", ConfigValue.advanced_forge_level);
+        config.set("Advanced-Forge-Upgrade.New-Drop-Rate", ConfigValue.advanced_forge_drop_rate);
+        config.set("Advanced-Forge-Upgrade.New-Drop-Type", ConfigValue.advanced_forge_new_drop);
+        config.set("Advanced-Forge-Upgrade.Effected-Spawner", ConfigValue.advanced_forge_effected_spawner);
+
+        config.addEmptyLine();
+
+        config.addComment("############### MISCELLANEOUS ###############");
+
+        config.addEmptyLine();
+
+        config.addComment("If this is enabled, MBedwars dealers/upgrade-dealers will look at the closest players,");
+        config.addComment("rather than stay in one position. Their position will reset when the round ends");
+        config.addComment("Range is how close players must be for Friendly Villagers to activate");
+        config.addComment("If Check-Visibility is enabled, the npc will only look at a player if it has direct line of sight");
+        config.set("Friendly-Villagers.Enabled", ConfigValue.friendly_villagers_enabled);
+        config.set("Friendly-Villagers.Range", ConfigValue.friendly_villagers_range);
+        config.set("Friendly-Villagers.Check-Visibility", ConfigValue.friendly_villagers_check_visibility);
 
         config.addEmptyLine();
 

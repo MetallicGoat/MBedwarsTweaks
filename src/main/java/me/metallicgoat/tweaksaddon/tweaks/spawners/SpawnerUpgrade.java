@@ -9,6 +9,7 @@ import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.api.game.upgrade.UpgradeTriggerHandlerType;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
+import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,7 +22,7 @@ public class SpawnerUpgrade implements Listener {
         final Arena arena = event.getArena();
         final Team team = event.getTeam();
 
-        if(arena == null || team == null || !event.getProblems().isEmpty())
+        if(!ConfigValue.advanced_forge_enabled || arena == null || team == null || !event.getProblems().isEmpty())
             return;
 
         if(event.getUpgradeLevel().getTriggerHandler().getType() != UpgradeTriggerHandlerType.SPAWNER_MULTIPLIER)
@@ -37,6 +38,8 @@ public class SpawnerUpgrade implements Listener {
 class SpawnerUpgradeTask extends BukkitRunnable {
     private final Arena arena;
     private final Team team;
+    private final DropType dropType = GameAPI.get().getDropTypeById(ConfigValue.advanced_forge_new_drop);
+    private final DropType affectingType = GameAPI.get().getDropTypeById(ConfigValue.advanced_forge_effected_spawner);
 
     public SpawnerUpgradeTask(Arena arena, Team team){
         this.arena = arena;
@@ -50,8 +53,7 @@ class SpawnerUpgradeTask extends BukkitRunnable {
             return;
         }
 
-        final Spawner spawner = getAffectingSpawner(arena, team);
-        final DropType dropType = GameAPI.get().getDropTypeById("emerald");
+        final Spawner spawner = getAffectingSpawner(arena, team, affectingType);
 
         if(spawner == null || dropType == null)
             return;
@@ -59,16 +61,15 @@ class SpawnerUpgradeTask extends BukkitRunnable {
         spawner.drop(false, dropType.getDroppingMaterials());
     }
 
-    private Spawner getAffectingSpawner(Arena arena, Team team){
+    private Spawner getAffectingSpawner(Arena arena, Team team, DropType affectingType){
         final Location baseLocation = arena.getTeamSpawn(team).toLocation(arena.getGameWorld());
 
         for(Spawner spawner : arena.getSpawners()){
             if(baseLocation.distance(spawner.getLocation().toLocation(arena.getGameWorld())) > 30)
                 continue;
 
-            if(spawner.getDropType().getId().equalsIgnoreCase("iron"))
+            if(spawner.getDropType() == affectingType)
                 return spawner;
-
         }
 
         return null;

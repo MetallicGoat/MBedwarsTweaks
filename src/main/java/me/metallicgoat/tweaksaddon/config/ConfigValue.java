@@ -209,6 +209,13 @@ public class ConfigValue {
 
     public static List<String> tools_swords_do_not_effect = new ArrayList<>();
 
+    public static boolean advanced_forge_enabled = false;
+    public static int advanced_forge_range = 20;
+    public static int advanced_forge_level = 3;
+    public static String advanced_forge_effected_spawner = "iron";
+    public static String advanced_forge_new_drop = "emerald";
+    public static int advanced_forge_drop_rate = 15;
+
     // PAPI
     public static String papi_next_tier_lobby_starting = "&fStarting in &a{time}s";
     public static String papi_next_tier_lobby_waiting = "&fWaiting...";
