@@ -33,10 +33,7 @@ public class LoadConfigs implements Listener {
                         && Util.getDropType("emerald") != null
         );
 
-        if(!ConfigValue.defaultDropTypesExist)
-            Console.printConfigInfo("Not all default DropTypes are present. This causes issues if you are generating configs for the first time. If you already have your configs setup, ignore this.", "gen-tiers");
-        else
-            ConfigValue.gen_tier_levels = getDefaultGenTiers();
+        ConfigValue.gen_tier_levels = getDefaultGenTiers();
 
         MainConfig.load();
         SwordsToolsConfig.load();
