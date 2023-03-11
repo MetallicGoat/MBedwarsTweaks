@@ -313,6 +313,9 @@ public class MainConfig {
                 ConfigValue.custom_team_colors = map;
             }
         }
+        ConfigValue.goldenGG = config.getBoolean("Golden-GG", false);
+        ConfigValue.arenaLeaveDelayEnabled = config.getBoolean("Arena-Leave-Delay-Enabled", false);
+        ConfigValue.arenaLeaveDelay = config.getInt("Arena-Leave-Delay", 3);
 
         ConfigValue.permanent_effects_enabled = config.getBoolean("Permanent-Effects.Enabled", false);
         loadPermanentEffects(config, "Permanent-Effects.Effects");
@@ -741,6 +744,17 @@ public class MainConfig {
         config.addComment("Remove items on use");
         config.set("Empty-Buckets", ConfigValue.remove_empty_buckets);
         config.set("Empty-Potions", ConfigValue.remove_empty_buckets);
+
+        config.addEmptyLine();
+
+        config.addComment("Changes the winner's [gg] text to golden color");
+        config.set("Golden-GG", ConfigValue.goldenGG);
+
+        config.addEmptyLine();
+
+        config.addComment("Leave Delay Like Hypixel!");
+        config.set("Arena-Leave-Delay-Enabled", ConfigValue.arenaLeaveDelayEnabled);
+        config.set("Arena-Leave-Delay", ConfigValue.arenaLeaveDelay);
 
         config.addEmptyLine();
 

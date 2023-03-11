@@ -17,6 +17,9 @@ import java.util.*;
 
 public class ConfigValue {
 
+    public static boolean goldenGG = false;
+    public static boolean arenaLeaveDelayEnabled = false;
+    public static int arenaLeaveDelay = 3;
     public static boolean defaultDropTypesExist = false;
 
     private static final List<Material> defaultMaterials = Arrays.asList(
@@ -239,4 +242,5 @@ public class ConfigValue {
         put("[players_per_team=3]", "Trios");
         put("[players_per_team=4]", "Quads");
     }};
+
 }
