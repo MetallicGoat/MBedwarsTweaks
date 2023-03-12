@@ -26,6 +26,7 @@ public class LeaveDelayListener implements Listener {
         final UUID playerUUID = player.getUniqueId();
         final Arena arena = event.getArena();
         if (event.getLobbyItem().getHandler().getId().equalsIgnoreCase("bedwars:leave")){
+            event.setCancelled(true);
             if (cancelablePLayers.contains(playerUUID)){
                 stopTask(playerUUID);
                 cancelablePLayers.remove(playerUUID);
