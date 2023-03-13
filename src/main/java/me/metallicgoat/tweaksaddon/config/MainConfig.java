@@ -314,8 +314,6 @@ public class MainConfig {
             }
         }
         ConfigValue.goldenGG = config.getBoolean("Golden-GG", false);
-        ConfigValue.arenaLeaveDelayEnabled = config.getBoolean("Arena-Leave-Delay-Enabled", false);
-        ConfigValue.arenaLeaveDelay = config.getInt("Arena-Leave-Delay", 3);
 
         ConfigValue.permanent_effects_enabled = config.getBoolean("Permanent-Effects.Enabled", false);
         loadPermanentEffects(config, "Permanent-Effects.Effects");
@@ -752,11 +750,6 @@ public class MainConfig {
 
         config.addEmptyLine();
 
-        config.addComment("Leave Delay Like Hypixel!");
-        config.set("Arena-Leave-Delay-Enabled", ConfigValue.arenaLeaveDelayEnabled);
-        config.set("Arena-Leave-Delay", ConfigValue.arenaLeaveDelay);
-
-        config.addEmptyLine();
 
         config.addComment("############### EXTERNAL PLUGINS/ADDON INTEGRATION ###############");
 
