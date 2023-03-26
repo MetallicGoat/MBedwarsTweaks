@@ -10,12 +10,25 @@ import de.marcely.bedwars.api.player.PlayerStats;
 import me.metallicgoat.tweaksaddon.config.ConfigValue;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.*;
 
 public class TopKillerMessage implements Listener {
+
+    public static HashMap<Arena, Collection<Player>> arenaPlayers = new HashMap<>();
+
+    @EventHandler
+    public void onRoundStart(RoundEndEvent event){
+        if (!ConfigValue.top_killer_message_enabled)
+            return;
+
+        final Arena arena = event.getArena();
+
+        arenaPlayers.put(arena, arena.getPlayers());
+    }
 
     @EventHandler
     public void onGameOver(RoundEndEvent event) {
@@ -26,7 +39,7 @@ public class TopKillerMessage implements Listener {
         final HashMap<OfflinePlayer, Integer> nameIntMap = new HashMap<>();
 
         // Online Players
-        for (OfflinePlayer player : arena.getPlayers())
+        for (OfflinePlayer player : arenaPlayers.get(arena))
             addStatsToMap(nameIntMap, player);
 
         // Offline Players
@@ -34,6 +47,7 @@ public class TopKillerMessage implements Listener {
             addStatsToMap(nameIntMap, Bukkit.getOfflinePlayer(memory.getUniqueId()));
 
         printMessage(arena, sortHashMapByValue(nameIntMap));
+        arenaPlayers.remove(arena);
     }
 
     // TODO this bad
@@ -42,7 +56,6 @@ public class TopKillerMessage implements Listener {
 
         // There is Killers
         if (!playerIntegerMap.isEmpty()) {
-
             for (String line : ConfigValue.top_killer_pre_lines)
                 formattedList.add(Message.build(line).done());
 
@@ -84,7 +97,7 @@ public class TopKillerMessage implements Listener {
         if(player == null)
             return;
 
-        final Optional<PlayerStats> stats =  PlayerDataAPI.get().getStatsNow(player);
+        final Optional<PlayerStats> stats = PlayerDataAPI.get().getStatsNow(player);
 
         if(!stats.isPresent())
             return;
