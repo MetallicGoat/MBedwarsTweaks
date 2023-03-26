@@ -1,10 +1,13 @@
 package me.metallicgoat.tweaksaddon.tweaks.cosmetic;
 
 import de.marcely.bedwars.api.BedwarsAPI;
+import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
+import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.event.player.PlayerJoinArenaEvent;
+import de.marcely.bedwars.api.event.player.PlayerQuitArenaEvent;
 import de.marcely.bedwars.api.message.Message;
 import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
@@ -66,5 +69,34 @@ public class ActionBar implements Listener {
                 }
             }
         }, 0L, 20L);
+    }
+
+    @EventHandler
+    public void onLeave(PlayerQuitArenaEvent event){
+        final Arena arena = event.getArena();
+        final Player player = event.getPlayer();
+        final Team team = arena.getPlayerTeam(player);
+
+        // The arena is over so it doesn't matter
+        if(team == null || arena.getStatus() != ArenaStatus.RUNNING)
+            return;
+
+        Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
+            // Maybe they left by now
+            if(!player.isOnline())
+                return;
+
+            // Get the new arena they are in
+            final Arena currPlayerArena = GameAPI.get().getArenaByPlayer(player);
+
+            // The player has rejoined, so do nothing
+            if(arena == currPlayerArena)
+                return;
+
+            // The bed is not already gone, and no other players are on the team
+            if(!arena.isBedDestroyed(team) && arena.getPlayersInTeam(team).size() == 0)
+                arena.destroyBed(team);
+
+        }, 20 * 60 * 3);
     }
 }

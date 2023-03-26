@@ -11,8 +11,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class MBedwarsTweaksPlugin extends JavaPlugin {
 
-    public static final int MIN_MBEDWARS_API_VER = 15;
-    public static final String MIN_MBEDWARS_VER_NAME = "5.1";
+    public static final int MIN_MBEDWARS_API_VER = 17;
+    public static final String MIN_MBEDWARS_VER_NAME = "5.2.1";
 
     @Getter private static MBedwarsTweaksPlugin instance;
     @Getter private static MBedwarsTweaksAddon addon;

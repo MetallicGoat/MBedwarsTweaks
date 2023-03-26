@@ -6,7 +6,7 @@
 
     <groupId>me.metallicgoat</groupId>
     <artifactId>MBedwarsTweaks</artifactId>
-    <version>2.1.1</version>
+    <version>2.2.0</version>
 
     <repositories>
         <repository>
@@ -53,9 +53,7 @@
         <dependency>
             <groupId>de.marcely.bedwars</groupId>
             <artifactId>API</artifactId>
-            <version>5.1.1</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/libs/private/MBedwars.jar</systemPath>
+            <version>5.2</version>
         </dependency>
         <!-- USED FOR BETA TESTING
         <dependency>
@@ -74,7 +72,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.24</version>
+            <version>1.18.26</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
