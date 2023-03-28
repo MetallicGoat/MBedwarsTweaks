@@ -42,9 +42,9 @@ public class DependManager implements Listener {
 
             if(type == DependType.PLACEHOLDER_API) {
                 if(enabled)
-                    Console.printInfo("PlaceholderAPI was not Found! PAPI placeholders won't work!");
-                else
                     new Placeholders(MBedwarsTweaksPlugin.getInstance()).register();
+                else
+                    Console.printInfo("PlaceholderAPI was not Found! PAPI placeholders won't work!");
             }
         }
     }

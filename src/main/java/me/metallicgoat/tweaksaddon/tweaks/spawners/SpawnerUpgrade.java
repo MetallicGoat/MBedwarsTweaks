@@ -38,7 +38,7 @@ public class SpawnerUpgrade implements Listener {
 
         // Start upgrade
         if(event.getUpgradeLevel().getLevel() == ConfigValue.advanced_forge_level) {
-            final BukkitTask task = (new SpawnerUpgradeTask(arena, team)).runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 80, 20L * ConfigValue.advanced_forge_level);
+            final BukkitTask task = (new SpawnerUpgradeTask(arena, team)).runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 80, 20L * ConfigValue.advanced_forge_drop_rate);
             final List<BukkitTask> arenaTasks = runningTasks.get(arena);
 
             if(arenaTasks != null)
