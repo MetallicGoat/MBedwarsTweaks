@@ -3,6 +3,7 @@ package me.metallicgoat.tweaksaddon.tweaks.messages;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.QuitPlayerMemory;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
+import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.message.Message;
 import de.marcely.bedwars.api.player.DefaultPlayerStatSet;
 import de.marcely.bedwars.api.player.PlayerDataAPI;
@@ -21,7 +22,7 @@ public class TopKillerMessage implements Listener {
     public static HashMap<Arena, Collection<Player>> arenaPlayers = new HashMap<>();
 
     @EventHandler
-    public void onRoundStart(RoundEndEvent event){
+    public void onRoundStart(RoundStartEvent event){
         if (!ConfigValue.top_killer_message_enabled)
             return;
 

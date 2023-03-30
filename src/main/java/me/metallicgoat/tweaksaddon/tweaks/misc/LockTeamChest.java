@@ -42,6 +42,7 @@ public class LockTeamChest implements Listener {
 
                 final String failOpen = Message.build(ConfigValue.lock_team_chest_fail_open)
                         .placeholder("team-name", chestTeam.getDisplayName())
+                        .placeholder("team", chestTeam.getDisplayName())
                         .done();
 
                 player.sendMessage(failOpen);

@@ -19,7 +19,7 @@ public class TeamEliminate implements Listener {
         final Arena arena = event.getArena();
         final Team team = event.getTeam();
         final String teamName = ChatColor.stripColor(team.getDisplayName());
-        final String teamColor = "&" + team.getChatColor().getChar();
+        final String teamColor = String.valueOf(team.getBungeeChatColor());
 
         for (String message : ConfigValue.team_eliminate_message) {
             final String messageFormatted = Message.build(message)

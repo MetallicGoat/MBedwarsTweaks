@@ -54,12 +54,12 @@ public class BedBreakTier implements Listener {
         for (String message : ConfigValue.custom_bed_break_message) {
             final String teamName = team.getDisplayName();
             final String playerName = BedwarsAPI.getHelper().getPlayerDisplayName(destroyer);
-            final String destroyerColor = arena.getPlayerTeam(destroyer) != null ? "&" + arena.getPlayerTeam(destroyer).getChatColor().getChar() : "";
+            final String destroyerColor = arena.getPlayerTeam(destroyer) != null ? String.valueOf(arena.getPlayerTeam(destroyer).getBungeeChatColor()) : "";
             final String destroyerTeam = arena.getPlayerTeam(destroyer) != null ? ChatColor.stripColor(arena.getPlayerTeam(destroyer).getDisplayName()) : "";
 
             final String messageFormatted = Message.build(message)
                     .placeholder("team-name", teamName)
-                    .placeholder("team-color", "&" + team.getChatColor().getChar())
+                    .placeholder("team-color", String.valueOf(team.getBungeeChatColor()))
                     .placeholder("destroyer-name", playerName)
                     .placeholder("destroyer-team-name", destroyerTeam)
                     .placeholder("destroyer-color", destroyerColor)

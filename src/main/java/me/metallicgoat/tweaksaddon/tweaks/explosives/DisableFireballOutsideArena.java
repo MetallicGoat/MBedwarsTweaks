@@ -11,7 +11,6 @@ import org.bukkit.projectiles.ProjectileSource;
 public class DisableFireballOutsideArena implements Listener {
 
     // TODO config?
-
     @EventHandler
     public void onImpact(ProjectileHitEvent event){
         final ProjectileSource shooter = event.getEntity().getShooter();
