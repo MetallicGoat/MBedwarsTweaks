@@ -71,6 +71,7 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
         // Misc
         manager.registerEvents(new BlockArenaStats(), plugin);
         manager.registerEvents(new EmptyContainers(), plugin);
+        manager.registerEvents(new GoldenGGListener(), plugin);
         manager.registerEvents(new HeightCap(), plugin);
         manager.registerEvents(new LockTeamChest(), plugin);
         manager.registerEvents(new PermanentEffects(), plugin);

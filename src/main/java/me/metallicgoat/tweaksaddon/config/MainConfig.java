@@ -313,6 +313,7 @@ public class MainConfig {
                 ConfigValue.custom_team_colors = map;
             }
         }
+        ConfigValue.goldenGG = config.getBoolean("Golden-GG", false);
 
         ConfigValue.permanent_effects_enabled = config.getBoolean("Permanent-Effects.Enabled", false);
         loadPermanentEffects(config, "Permanent-Effects.Effects");
@@ -743,6 +744,12 @@ public class MainConfig {
         config.set("Empty-Potions", ConfigValue.remove_empty_buckets);
 
         config.addEmptyLine();
+
+        config.addComment("Changes the winner's [gg] text to golden color");
+        config.set("Golden-GG", ConfigValue.goldenGG);
+
+        config.addEmptyLine();
+
 
         config.addComment("############### EXTERNAL PLUGINS/ADDON INTEGRATION ###############");
 
