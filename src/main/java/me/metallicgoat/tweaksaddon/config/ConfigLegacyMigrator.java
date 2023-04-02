@@ -43,7 +43,7 @@ public class ConfigLegacyMigrator {
     }
 
     if (config.contains("Spawner-Title"))
-      MainConfig.gen_tiers_spawner_holo_titles = config.getStringList("Spawner-Title");
+      MainConfig.gen_tiers_custom_holo_titles = config.getStringList("Spawner-Title");
 
     MainConfig.custom_action_bar_in_game = config.getBoolean("Action-Bar.Enabled-In-Game", false);
     MainConfig.custom_action_bar_in_lobby = config.getBoolean("Action-Bar.Enabled-In-Lobby", false);
@@ -295,7 +295,7 @@ public class ConfigLegacyMigrator {
 
       if (particleName != null) {
         try {
-          MainConfig.heal_pool_particle = VarParticle.newInstanceByName(particleName);
+          MainConfig.heal_pool_particle_type = VarParticle.newInstanceByName(particleName);
         } catch (IllegalArgumentException exception) {
           Console.printConfigWarn("Failed to parse heal pool particle \"" + particleName + "\". ", "Main");
         }

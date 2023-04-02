@@ -65,12 +65,12 @@ class HealPoolParticlesTask extends BukkitRunnable {
     final List<Location> locationsRandomized = locs.subList(0, locs.size() / 4);
 
     for (Location location : locationsRandomized) {
-      if (MainConfig.heal_pool_particle != null) {
+      if (MainConfig.heal_pool_particle_type != null) {
         if (MainConfig.heal_pool_particle_team_view_only) {
           for (Player player : arena.getPlayersInTeam(team))
-            MainConfig.heal_pool_particle.play(location, player);
+            MainConfig.heal_pool_particle_type.play(location, player);
         } else
-          MainConfig.heal_pool_particle.play(location);
+          MainConfig.heal_pool_particle_type.play(location);
       }
     }
   }

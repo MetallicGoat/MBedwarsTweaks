@@ -165,7 +165,7 @@ public class GenTiers implements Listener {
     final List<String> formatted = new ArrayList<>();
 
     // Dont use placeholder, use REPLACE
-    for (String string : MainConfig.gen_tiers_spawner_holo_titles) {
+    for (String string : MainConfig.gen_tiers_custom_holo_titles) {
       final String formattedString = Message.build(string)
           .placeholder("tier", tierName)
           .placeholder("spawner-color", colorCode)

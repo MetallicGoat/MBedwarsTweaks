@@ -190,13 +190,13 @@ public class ConfigManager {
 
   public static Object deserializeObject(Field field, Class<?> type, String stringObject, Object configObject) {
     // Primitives
-    if (type == boolean.class)
+    if (type == boolean.class || type == Boolean.class)
       return configObject instanceof Boolean ? configObject : null;
-    else if (type == int.class)
+    else if (type == int.class || type == Integer.class)
       return Helper.get().parseInt(stringObject);
-    else if (type == double.class)
+    else if (type == double.class || type == Double.class)
       return Helper.get().parseDouble(stringObject);
-    else if (type == long.class)
+    else if (type == long.class || type == Long.class)
       return Helper.get().parseLong(stringObject);
 
       // Strings
@@ -289,12 +289,11 @@ public class ConfigManager {
   // Returning this as an Object just so it looks nicer in yml (for example ints dont need quotes)
   public static @Nullable Object serializeObject(Field field, Class<?> type, Object fieldObject) {
     // Primitives
-    if (type == boolean.class ||
-        type == int.class ||
-        type == double.class ||
-        type == float.class ||
-        type == long.class ||
-        type == Integer.class
+    if (type == boolean.class || type == Boolean.class ||
+        type == int.class || type == Integer.class ||
+        type == double.class || type == Double.class ||
+        type == float.class || type == Float.class ||
+        type == long.class || type == Long.class
     ) {
 
       return fieldObject;
@@ -414,18 +413,54 @@ public class ConfigManager {
     String[] oldNames() default {};
   }
 
-//  public String getColorNameOrHex(ChatColor bungeeColor) {
-//    java.awt.Color awtColor = bungeeColor.getColor();
+//  public static String getColorNameOrHex(ChatColor bungeeColor) {
+//    String bungeeColorString = bungeeColor.toString();
 //
 //    // Check if the color is a default Minecraft color
 //    for (org.bukkit.ChatColor bukkitColor : org.bukkit.ChatColor.values()) {
-//      if (bukkitColor.isColor() && bukkitColor.asBungee().equals(bungeeColor)) {
+//      if (bukkitColor.isColor() && bukkitColor.toString().equals(bungeeColorString)) {
 //        return bukkitColor.name();
 //      }
 //    }
 //
 //    // If the color is not a default Minecraft color, return its hex color code
-//    String hex = String.format("#%02X%02X%02X", awtColor.getRed(), awtColor.getGreen(), awtColor.getBlue());
-//    return hex;
+//    if (NMSHelper.get().getVersion() >= 16) {
+//      try {
+//        Field colorField = bungeeColor.getClass().getDeclaredField("color");
+//        colorField.setAccessible(true);
+//        final int colorValue = (int) colorField.get(bungeeColor);
+//
+//        return String.format("#%06X", colorValue);
+//      } catch (Exception e) {
+//        return null;
+//      }
+//
+//    }
+//    return null;
+//  }
+//
+//  public static ChatColor getBungeeChatColor(String input) {
+//    ChatColor bungeeColor = null;
+//
+//    try {
+//      // Check if input is a Minecraft color name
+//      for (org.bukkit.ChatColor bukkitColor : org.bukkit.ChatColor.values()) {
+//        if (bukkitColor.isColor() && bukkitColor.name().equalsIgnoreCase(input)) {
+//          bungeeColor = ChatColor.getByChar(bukkitColor.getChar());
+//          return bungeeColor;
+//        }
+//      }
+//
+//      // Check if input is a hex color code and server version is 1.16 or higher
+//      if (input.startsWith("#") && NMSHelper.get().getVersion() >= 16) {
+//        Method ofMethod = ChatColor.class.getMethod("of", String.class);
+//        bungeeColor = (ChatColor) ofMethod.invoke(null, input);
+//        return bungeeColor;
+//      }
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//    }
+//
+//    return bungeeColor;
 //  }
 }

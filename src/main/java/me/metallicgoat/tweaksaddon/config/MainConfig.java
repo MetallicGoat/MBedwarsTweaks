@@ -52,18 +52,12 @@ public class MainConfig {
 
   @Config(
       description = {
-          "Override MBedwars Holo's"
-      }
-  )
-  public static boolean gen_tiers_custom_holo_enabled = false;
-
-  @Config(
-      description = {
-          "Message shown above spawners",
+          "Set custom holo tiles for spawners with Gen Tiers",
           "Placeholders: {spawner} {spawner-color} {time} {tier}"
       }
   )
-  public static List<String> gen_tiers_spawner_holo_titles = Arrays.asList(
+  public static boolean gen_tiers_custom_holo_enabled = false;
+  @Config public static List<String> gen_tiers_custom_holo_titles = Arrays.asList(
       "{spawner-color}{spawner}",
       "{tier}",
       "&eSpawning in &c{time} &eseconds!"
@@ -127,7 +121,7 @@ public class MainConfig {
   public static boolean heal_pool_particle_enabled = true;
   @Config public static boolean heal_pool_particle_team_view_only = true;
   @Config public static int heal_pool_particle_range = 15;
-  @Config public static VarParticle heal_pool_particle = VarParticle.newInstanceByName(NMSHelper.get().getVersion() > 8 ? "VILLAGER_HAPPY" : "HAPPY_VILLAGER");
+  @Config public static VarParticle heal_pool_particle_type = VarParticle.newInstanceByName(NMSHelper.get().getVersion() > 8 ? "VILLAGER_HAPPY" : "HAPPY_VILLAGER");
 
   // ===== EXPLOSIVES
   @SectionTitle(title = "EXPLOSIVES")
