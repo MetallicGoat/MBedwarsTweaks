@@ -2,34 +2,33 @@ package me.metallicgoat.tweaksaddon.tweaks.explosives;
 
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemType;
+import java.util.ArrayList;
+import java.util.List;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
-import me.metallicgoat.tweaksaddon.config.ConfigValue;
+import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class FireballUseCoolDown implements Listener {
 
-    private final List<Player> coolDownPlayers = new ArrayList<>();
+  private final List<Player> coolDownPlayers = new ArrayList<>();
 
-    @EventHandler
-    public void onPlayerUseSpecialItem(PlayerUseSpecialItemEvent event) {
-        if (!ConfigValue.fireball_cooldown_enabled || event.getSpecialItem().getType() != SpecialItemType.FIREBALL)
-            return;
+  @EventHandler
+  public void onPlayerUseSpecialItem(PlayerUseSpecialItemEvent event) {
+    if (!MainConfig.fireball_cooldown_enabled || event.getSpecialItem().getType() != SpecialItemType.FIREBALL)
+      return;
 
-        final Player player = event.getPlayer();
+    final Player player = event.getPlayer();
 
-        if (coolDownPlayers.contains(player)) {
-            event.setCancelled(true);
-            return;
-        }
-
-        coolDownPlayers.add(player);
-        Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () ->
-                coolDownPlayers.remove(player), ConfigValue.fireball_cooldown_time);
+    if (coolDownPlayers.contains(player)) {
+      event.setCancelled(true);
+      return;
     }
+
+    coolDownPlayers.add(player);
+    Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () ->
+        coolDownPlayers.remove(player), MainConfig.fireball_cooldown_time);
+  }
 }
