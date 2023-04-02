@@ -124,7 +124,7 @@ public class ConfigManager {
       }
     }
 
-    if (configVersion.equals(pluginVer))
+    if (!configVersion.equals(pluginVer))
       save(configValueClass, pluginVer, configFile);
 
   }
