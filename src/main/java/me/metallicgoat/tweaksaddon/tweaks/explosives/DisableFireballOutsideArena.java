@@ -10,18 +10,18 @@ import org.bukkit.projectiles.ProjectileSource;
 
 public class DisableFireballOutsideArena implements Listener {
 
-    // TODO config?
-    @EventHandler
-    public void onImpact(ProjectileHitEvent event){
-        final ProjectileSource shooter = event.getEntity().getShooter();
+  // TODO config?
+  @EventHandler
+  public void onImpact(ProjectileHitEvent event) {
+    final ProjectileSource shooter = event.getEntity().getShooter();
 
-        if(shooter instanceof Player){
-            final Player player = (Player) shooter;
-            final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
+    if (shooter instanceof Player) {
+      final Player player = (Player) shooter;
+      final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
 
-            if(arena != null && !arena.isInside(event.getEntity().getLocation())){
-                event.getEntity().remove();
-            }
-        }
+      if (arena != null && !arena.isInside(event.getEntity().getLocation())) {
+        event.getEntity().remove();
+      }
     }
+  }
 }

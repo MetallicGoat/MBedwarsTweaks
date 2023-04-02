@@ -1,7 +1,7 @@
 package me.metallicgoat.tweaksaddon.tweaks.advancedswords;
 
 import de.marcely.bedwars.api.BedwarsAPI;
-import me.metallicgoat.tweaksaddon.config.ConfigValue;
+import me.metallicgoat.tweaksaddon.config.SwordsToolsConfig;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,80 +14,80 @@ import org.bukkit.inventory.ItemStack;
 
 public class AntiChest implements Listener {
 
-    @EventHandler
-    public void onShiftClick(InventoryClickEvent e) {
-        if(e.getInventory().getSize() > 26) {
-            if (e.getClick().isShiftClick() && inArena((Player) e.getWhoClicked())) {
-                final Inventory clicked = e.getClickedInventory();
-
-                if (clicked == e.getWhoClicked().getInventory()) {
-                    final ItemStack clickedOn = e.getCurrentItem();
-
-                    if (clickedOn != null
-                            && ConfigValue.anti_chest_materials.contains(clickedOn.getType())
-                            && ToolSwordHelper.isNotToIgnore(clickedOn)) {
-                        e.setCancelled(true);
-                    }
-                }
-            }
-        }
-    }
-
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent e) {
+  @EventHandler
+  public void onShiftClick(InventoryClickEvent e) {
+    if (e.getInventory().getSize() > 26) {
+      if (e.getClick().isShiftClick() && inArena((Player) e.getWhoClicked())) {
         final Inventory clicked = e.getClickedInventory();
-        if(!(e.getInventory().getSize() > 26))
+
+        if (clicked == e.getWhoClicked().getInventory()) {
+          final ItemStack clickedOn = e.getCurrentItem();
+
+          if (clickedOn != null
+              && SwordsToolsConfig.anti_chest_materials.contains(clickedOn.getType())
+              && ToolSwordHelper.isNotToIgnore(clickedOn)) {
+            e.setCancelled(true);
+          }
+        }
+      }
+    }
+  }
+
+  @EventHandler
+  public void onInventoryClick(InventoryClickEvent e) {
+    final Inventory clicked = e.getClickedInventory();
+    if (!(e.getInventory().getSize() > 26))
+      return;
+
+    if (e.getAction() == InventoryAction.HOTBAR_SWAP || e.getAction() == InventoryAction.HOTBAR_MOVE_AND_READD) {
+      final HumanEntity player = e.getWhoClicked();
+      final Inventory inventory = player != null ? player.getInventory() : null;
+
+      if (inventory != null) {
+        final int swapSlot = e.getHotbarButton();
+
+        if (swapSlot >= 0) {
+          final ItemStack itemStack = inventory.getItem(swapSlot);
+
+          if (itemStack != null
+              && SwordsToolsConfig.anti_chest_materials.contains(itemStack.getType())
+              && ToolSwordHelper.isNotToIgnore(itemStack)) {
+            e.setCancelled(true);
             return;
-
-        if(e.getAction() == InventoryAction.HOTBAR_SWAP || e.getAction() == InventoryAction.HOTBAR_MOVE_AND_READD){
-            final HumanEntity player = e.getWhoClicked();
-            final Inventory inventory = player != null ? player.getInventory() : null;
-
-            if(inventory != null){
-                final int swapSlot = e.getHotbarButton();
-
-                if(swapSlot >= 0) {
-                    final ItemStack itemStack = inventory.getItem(swapSlot);
-
-                    if (itemStack != null
-                            && ConfigValue.anti_chest_materials.contains(itemStack.getType())
-                            && ToolSwordHelper.isNotToIgnore(itemStack)) {
-                        e.setCancelled(true);
-                        return;
-                    }
-                }
-            }
+          }
         }
-
-        if (clicked != e.getWhoClicked().getInventory() && inArena((Player) e.getWhoClicked())) {
-            // The cursor item is going into the top inventory
-            final ItemStack onCursor = e.getCursor();
-            if (onCursor != null
-                    && ConfigValue.anti_chest_materials.contains(onCursor.getType())
-                    && ToolSwordHelper.isNotToIgnore(onCursor)) {
-                e.setCancelled(true);
-            }
-        }
+      }
     }
 
-    @EventHandler
-    public void onInventoryDrag(InventoryDragEvent e) {
-        final ItemStack dragged = e.getOldCursor();
-        if (ConfigValue.anti_chest_materials.contains(dragged.getType())
-                && inArena((Player) e.getWhoClicked())
-                && ToolSwordHelper.isNotToIgnore(dragged)) {
+    if (clicked != e.getWhoClicked().getInventory() && inArena((Player) e.getWhoClicked())) {
+      // The cursor item is going into the top inventory
+      final ItemStack onCursor = e.getCursor();
+      if (onCursor != null
+          && SwordsToolsConfig.anti_chest_materials.contains(onCursor.getType())
+          && ToolSwordHelper.isNotToIgnore(onCursor)) {
+        e.setCancelled(true);
+      }
+    }
+  }
 
-            final int inventorySize = e.getInventory().getSize();
-            for (int i : e.getRawSlots()) {
-                if (i < inventorySize) {
-                    e.setCancelled(true);
-                    break;
-                }
-            }
+  @EventHandler
+  public void onInventoryDrag(InventoryDragEvent e) {
+    final ItemStack dragged = e.getOldCursor();
+    if (SwordsToolsConfig.anti_chest_materials.contains(dragged.getType())
+        && inArena((Player) e.getWhoClicked())
+        && ToolSwordHelper.isNotToIgnore(dragged)) {
+
+      final int inventorySize = e.getInventory().getSize();
+      for (int i : e.getRawSlots()) {
+        if (i < inventorySize) {
+          e.setCancelled(true);
+          break;
         }
+      }
     }
+  }
 
-    private boolean inArena(Player p){
-        return BedwarsAPI.getGameAPI().getArenaByPlayer(p) != null;
-    }
+  private boolean inArena(Player p) {
+    return BedwarsAPI.getGameAPI().getArenaByPlayer(p) != null;
+  }
 }

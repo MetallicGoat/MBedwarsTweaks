@@ -6,7 +6,7 @@ import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.message.Message;
 import de.marcely.bedwars.tools.location.XYZYP;
-import me.metallicgoat.tweaksaddon.config.ConfigValue;
+import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -18,53 +18,53 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class LockTeamChest implements Listener {
 
-    @EventHandler
-    public void onChestOpen(PlayerInteractEvent e) {
-        if (!ConfigValue.lock_team_chest_enabled)
-            return;
+  private static Team getChestTeam(Arena arena, Block chest) {
+    if (arena.getGameWorld() == chest.getWorld()) {
+      for (Team team : arena.getEnabledTeams()) {
+        final XYZYP spawn = arena.getTeamSpawn(team);
 
-        final Player player = e.getPlayer();
-        final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
-        final Block block = e.getClickedBlock();
+        if (spawn != null) {
+          final Location bukkitSpawn = spawn.toLocation(arena.getGameWorld());
 
-        // Check if player is opening chest in an arena
-        if (arena == null ||
-                arena.getStatus() != ArenaStatus.RUNNING ||
-                block == null ||
-                e.getAction() != Action.RIGHT_CLICK_BLOCK)
-            return;
-
-        if (block.getType() == Material.CHEST) {
-            final Team playerTeam = arena.getPlayerTeam(player);
-            final Team chestTeam = getChestTeam(arena, block);
-
-            if (chestTeam != null && !arena.getPlayersInTeam(chestTeam).isEmpty() && chestTeam != playerTeam) {
-
-                final String failOpen = Message.build(ConfigValue.lock_team_chest_fail_open)
-                        .placeholder("team-name", chestTeam.getDisplayName())
-                        .placeholder("team", chestTeam.getDisplayName())
-                        .done();
-
-                player.sendMessage(failOpen);
-                e.setCancelled(true);
-            }
+          if (MainConfig.lock_team_chest_range >= bukkitSpawn.distance(chest.getLocation())) {
+            return team;
+          }
         }
+      }
     }
+    return null;
+  }
 
-    private static Team getChestTeam(Arena arena, Block chest) {
-        if (arena.getGameWorld() == chest.getWorld()) {
-            for (Team team : arena.getEnabledTeams()) {
-                final XYZYP spawn = arena.getTeamSpawn(team);
+  @EventHandler
+  public void onChestOpen(PlayerInteractEvent e) {
+    if (!MainConfig.lock_team_chest_enabled)
+      return;
 
-                if (spawn != null) {
-                    final Location bukkitSpawn = spawn.toLocation(arena.getGameWorld());
+    final Player player = e.getPlayer();
+    final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
+    final Block block = e.getClickedBlock();
 
-                    if (ConfigValue.lock_team_chest_range >= bukkitSpawn.distance(chest.getLocation())) {
-                        return team;
-                    }
-                }
-            }
-        }
-        return null;
+    // Check if player is opening chest in an arena
+    if (arena == null ||
+        arena.getStatus() != ArenaStatus.RUNNING ||
+        block == null ||
+        e.getAction() != Action.RIGHT_CLICK_BLOCK)
+      return;
+
+    if (block.getType() == Material.CHEST) {
+      final Team playerTeam = arena.getPlayerTeam(player);
+      final Team chestTeam = getChestTeam(arena, block);
+
+      if (chestTeam != null && !arena.getPlayersInTeam(chestTeam).isEmpty() && chestTeam != playerTeam) {
+
+        final String failOpen = Message.build(MainConfig.lock_team_chest_fail_open)
+            .placeholder("team-name", chestTeam.getDisplayName())
+            .placeholder("team", chestTeam.getDisplayName())
+            .done();
+
+        player.sendMessage(failOpen);
+        e.setCancelled(true);
+      }
     }
+  }
 }

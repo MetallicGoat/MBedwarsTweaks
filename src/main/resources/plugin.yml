@@ -1,8 +1,8 @@
 name: MBedwarsTweaks
-version: 2.2.1-Dev-C
+version: 3.0.0
 author: MetallicGoat
 main: me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin
 description: Adds some extra customizability to MBedwars
 api-version: 1.13
-depend: [MBedwars]
-softdepend: [PlaceholderAPI, MBedwarsHotbarManager, PrestigeAddon]
+depend: [ MBedwars ]
+softdepend: [ PlaceholderAPI, MBedwarsHotbarManager, PrestigeAddon ]

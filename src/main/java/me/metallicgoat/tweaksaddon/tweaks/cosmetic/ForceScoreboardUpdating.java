@@ -7,7 +7,7 @@ import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.event.player.PlayerJoinArenaEvent;
 import de.marcely.bedwars.api.event.player.PlayerQuitArenaEvent;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
-import me.metallicgoat.tweaksaddon.config.ConfigValue;
+import me.metallicgoat.tweaksaddon.config.MainConfig;
 import me.metallicgoat.tweaksaddon.tweaks.spawners.GenTiers;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -16,75 +16,75 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class ForceScoreboardUpdating implements Listener {
 
-    private static BukkitTask scoreboardUpdatingTask = null;
+  private static BukkitTask scoreboardUpdatingTask = null;
 
-    @EventHandler
-    public void onGameStart(PlayerJoinArenaEvent event) {
-        final boolean enabled = (ConfigValue.gen_tiers_scoreboard_updating_enabled_in_game || ConfigValue.gen_tiers_scoreboard_updating_enabled_in_lobby);
+  public static void checkIfUsed() {
+    final boolean enabled = (MainConfig.scoreboard_updating_enabled_in_game || MainConfig.scoreboard_updating_enabled_in_lobby);
 
-        if (!enabled || scoreboardUpdatingTask != null)
-            return;
+    if (!enabled)
+      return;
 
-        // Start updating scoreboard
-        scoreboardUpdatingTask = startUpdatingTime();
+    // Dont kill task if players are playing
+    for (Arena arena : BedwarsAPI.getGameAPI().getArenas()) {
+      if (!arena.getPlayers().isEmpty()) {
+        return;
+      }
     }
 
-    // If someone leaves during lobby
-    @EventHandler
-    public void onPlayerLeave(PlayerQuitArenaEvent event) {
-        checkIfUsed();
+    // Kill task
+    if (scoreboardUpdatingTask != null) {
+      scoreboardUpdatingTask.cancel();
+      scoreboardUpdatingTask = null;
     }
+  }
 
-    @EventHandler
-    public void onGameEnd(RoundEndEvent event) {
-        checkIfUsed();
-    }
+  private static BukkitTask startUpdatingTime() {
+    return Bukkit.getServer().getScheduler().runTaskTimer(MBedwarsTweaksPlugin.getInstance(), () -> {
+      for (Arena arena : BedwarsAPI.getGameAPI().getArenas()) {
+        if ((arena.getStatus() == ArenaStatus.RUNNING && MainConfig.scoreboard_updating_enabled_in_game)) {
 
-    public static void checkIfUsed(){
-        final boolean enabled = (ConfigValue.gen_tiers_scoreboard_updating_enabled_in_game || ConfigValue.gen_tiers_scoreboard_updating_enabled_in_lobby);
+          if (GenTiers.timeToNextUpdate.containsKey(arena)) {
+            final long integer = GenTiers.timeToNextUpdate.get(arena);
 
-        if (!enabled)
-            return;
+            if (((integer - 20) / 20) % MainConfig.scoreboard_updating_interval == 0)
+              arena.updateScoreboard();
 
-        // Dont kill task if players are playing
-        for (Arena arena : BedwarsAPI.getGameAPI().getArenas()) {
-            if (!arena.getPlayers().isEmpty()) {
-                return;
-            }
+            continue;
+          }
+
+          final int integer = arena.getIngameTimeRemaining();
+          if (integer % MainConfig.scoreboard_updating_interval == 0)
+            arena.updateScoreboard();
+
+        } else if (arena.getStatus() == ArenaStatus.LOBBY && MainConfig.scoreboard_updating_enabled_in_lobby) {
+          final long integer = Math.round(arena.getLobbyTimeRemaining());
+
+          if (integer % MainConfig.scoreboard_updating_interval == 0)
+            arena.updateScoreboard();
         }
+      }
+    }, 0L, 20L);
+  }
 
-        // Kill task
-        if (scoreboardUpdatingTask != null) {
-            scoreboardUpdatingTask.cancel();
-            scoreboardUpdatingTask = null;
-        }
-    }
+  @EventHandler
+  public void onGameStart(PlayerJoinArenaEvent event) {
+    final boolean enabled = (MainConfig.scoreboard_updating_enabled_in_game || MainConfig.scoreboard_updating_enabled_in_lobby);
 
-    private static BukkitTask startUpdatingTime() {
-        return Bukkit.getServer().getScheduler().runTaskTimer(MBedwarsTweaksPlugin.getInstance(), () -> {
-            for (Arena arena : BedwarsAPI.getGameAPI().getArenas()) {
-                if ((arena.getStatus() == ArenaStatus.RUNNING && ConfigValue.gen_tiers_scoreboard_updating_enabled_in_game)) {
+    if (!enabled || scoreboardUpdatingTask != null)
+      return;
 
-                    if (GenTiers.timeToNextUpdate.containsKey(arena)){
-                        final long integer = GenTiers.timeToNextUpdate.get(arena);
+    // Start updating scoreboard
+    scoreboardUpdatingTask = startUpdatingTime();
+  }
 
-                        if (((integer - 20) / 20) % ConfigValue.gen_tiers_scoreboard_updating_interval == 0)
-                            arena.updateScoreboard();
+  // If someone leaves during lobby
+  @EventHandler
+  public void onPlayerLeave(PlayerQuitArenaEvent event) {
+    checkIfUsed();
+  }
 
-                        continue;
-                    }
-
-                    final int integer = arena.getIngameTimeRemaining();
-                    if (integer % ConfigValue.gen_tiers_scoreboard_updating_interval == 0)
-                        arena.updateScoreboard();
-
-                } else if (arena.getStatus() == ArenaStatus.LOBBY && ConfigValue.gen_tiers_scoreboard_updating_enabled_in_lobby){
-                    final long integer = Math.round(arena.getLobbyTimeRemaining());
-
-                    if (integer % ConfigValue.gen_tiers_scoreboard_updating_interval == 0)
-                        arena.updateScoreboard();
-                }
-            }
-        }, 0L, 20L);
-    }
+  @EventHandler
+  public void onGameEnd(RoundEndEvent event) {
+    checkIfUsed();
+  }
 }
