@@ -52,6 +52,7 @@ public class GenTiersConfig {
 
     if (tiersSection != null) {
       gen_tier_levels.clear();
+
       for (String levelNumString : tiersSection.getKeys(false)) {
         final Integer levelNum = Helper.get().parseInt(levelNumString);
 
@@ -67,8 +68,8 @@ public class GenTiersConfig {
         final String actionString = config.getString(configKey + "Action");
         final String typeString = config.getString(configKey + "Drop-Type");
         final double speed = config.getDouble(configKey + "Drop-Speed");
-        final int limit = config.getInt(configKey + "Max-Nearby-Items");
-        final long time = config.getLong(configKey + "Time");
+        final int limit = config.getInt(configKey + "Max-Nearby-Items", -1);
+        final double time = config.getLong(configKey + "Time");
         final String message = config.getString(configKey + "Message");
         final String soundString = config.getString(configKey + "Earn-Sound");
 
@@ -107,7 +108,7 @@ public class GenTiersConfig {
               action,
               time,
               speed,
-              limit,
+              limit > 0 ? limit : null,
               message,
               earnSound
           );
@@ -154,6 +155,7 @@ public class GenTiersConfig {
     config.addComment("Action (gen-upgrade, bed-destroy, game-over)");
     config.addComment("Type (Type of spawner that will be updated)");
     config.addComment("Speed (How often an item drops (in seconds))");
+    config.addComment("Max-Nearby-Items (how many items the spawner will produce before it goes on hold)");
     config.addComment("Time (time until action - NOTE time starts after the last action)");
     config.addComment("Message (chat message sent on trigger)");
     config.addComment("Earn-Sound (sound played on trigger) (You have to add this config if you want it)");

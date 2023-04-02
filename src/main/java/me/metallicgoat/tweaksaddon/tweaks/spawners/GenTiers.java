@@ -97,7 +97,7 @@ public class GenTiers implements Listener {
 
     // Update Placeholder
     nextTierMap.put(arena, currentLevel.getTierName());
-    timeToNextUpdate.put(arena, currentLevel.getTime() * 20 * 60);
+    timeToNextUpdate.put(arena, (long) currentLevel.getTime() * 20 * 60);
 
     // Kill previous task if running for some reason
     BukkitTask task = tasksToKill.get(arena);
@@ -119,7 +119,7 @@ public class GenTiers implements Listener {
             scheduleTier(arena, nextTierLevel);
             BedBreakTier.breakArenaBeds(arena, currentLevel.getTierName());
           }
-        }, currentLevel.getTime() * 20 * 60));
+        }, (long) currentLevel.getTime() * 20 * 60));
         break;
       }
 
@@ -151,7 +151,7 @@ public class GenTiers implements Listener {
           } else {
             nextTierMap.remove(arena);
           }
-        }, currentLevel.getTime() * 20 * 60));
+        }, (long) currentLevel.getTime() * 20 * 60));
         break;
       }
     }
@@ -166,12 +166,13 @@ public class GenTiers implements Listener {
 
     // Dont use placeholder, use REPLACE
     for (String string : MainConfig.gen_tiers_spawner_holo_titles) {
-      final String formattedString = string
-          .replace("{tier}", tierName)
-          .replace("{spawner-color}", colorCode)
-          .replace("{spawner}", strippedSpawnerName);
+      final String formattedString = Message.build(string)
+          .placeholder("tier", tierName)
+          .placeholder("spawner-color", colorCode)
+          .placeholder("spawner", strippedSpawnerName)
+          .done(true);
 
-      formatted.add(ChatColor.translateAlternateColorCodes('&', formattedString));
+      formatted.add(formattedString);
     }
 
     spawner.setOverridingHologramLines(formatted.toArray(new String[0]));

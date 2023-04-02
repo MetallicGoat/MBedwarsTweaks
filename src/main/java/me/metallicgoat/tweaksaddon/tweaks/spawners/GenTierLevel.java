@@ -12,7 +12,7 @@ public class GenTierLevel {
   @Getter private final String tierLevel;
   @Getter private final String typeId;
   @Getter private final TierAction action;
-  @Getter private final long time;
+  @Getter private final double time;
   @Getter @Nullable private final Double speed;
   @Getter @Nullable private final Integer limit;
   @Getter private final String earnMessage;
@@ -22,7 +22,7 @@ public class GenTierLevel {
       String tierName,
       String tierLevel,
       TierAction action,
-      long time,
+      double time,
       String earnMessage,
       Sound earnSound
   ) {
@@ -42,7 +42,7 @@ public class GenTierLevel {
       String tierLevel, // Example '&eTier &cII'
       String typeId, // Spawners with this drop-type should update
       TierAction action, // Action (eg bed break or upgrade)
-      long time, // Time until the update happens (After Last Event)
+      double time, // Time until the update happens (After Last Event)
       @Nullable Double speed, // New drop speed
       @Nullable Integer limit, // New drop speed
       String earnMessage, // The chat message displayed on update
