@@ -31,12 +31,12 @@ public class DegradingBuyGroups implements Listener {
 
       int level = ToolSwordHelper.trackBuyGroupMap.get(player).getOrDefault(buyGroupName, 0);
 
-      // TODO config to set min level here?
       if (level > 1) {
         level -= 1;
         ToolSwordHelper.trackBuyGroupMap.get(player).put(buyGroupName, level);
-        arena.setBuyGroupLevel(player, buyGroup, level);
       }
+
+      arena.setBuyGroupLevel(player, buyGroup, level);
 
       // Give item
       final Collection<? extends ShopItem> shopItems = buyGroup.getItems(level);
@@ -46,6 +46,7 @@ public class DegradingBuyGroups implements Listener {
       final Team team = arena.getPlayerTeam(player);
       for (ShopItem item : shopItems)
         ToolSwordHelper.givePlayerShopItem(arena, team, player, item);
+
     }
   }
 }

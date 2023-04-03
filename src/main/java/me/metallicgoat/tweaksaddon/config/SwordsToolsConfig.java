@@ -26,7 +26,8 @@ public class SwordsToolsConfig {
 
   @Config(
       description = {
-          "When you die with a tool, you will get one tier lower when you respawn"
+          "When you die with a tool, you will get one tier lower when you respawn",
+          "WARNING: May not work properly with keep-on-death enabled"
       }
   )
   public static boolean degrading_buygroups_enabled = false;
