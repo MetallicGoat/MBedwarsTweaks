@@ -29,11 +29,11 @@ public class DegradingBuyGroups implements Listener {
       if (!SwordsToolsConfig.degrading_buygroups.contains(buyGroupName))
         continue;
 
-      int level = ToolSwordHelper.trackBuyGroupMap.get(player).getOrDefault(buyGroupName, 0);
+      int level = ToolSwordHelper.getBuyGroupLevel(player, buyGroupName);
 
       if (level > 1) {
         level -= 1;
-        ToolSwordHelper.trackBuyGroupMap.get(player).put(buyGroupName, level);
+        ToolSwordHelper.setBuyGroupLevel(player, buyGroupName, level);
       }
 
       arena.setBuyGroupLevel(player, buyGroup, level);

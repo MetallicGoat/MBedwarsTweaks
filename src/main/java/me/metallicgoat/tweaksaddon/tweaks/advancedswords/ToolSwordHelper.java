@@ -9,7 +9,6 @@ import de.marcely.bedwars.api.game.shop.BuyGroup;
 import de.marcely.bedwars.api.game.shop.ShopItem;
 import de.marcely.bedwars.api.game.shop.product.ItemShopProduct;
 import de.marcely.bedwars.api.game.shop.product.ShopProduct;
-import de.marcely.bedwars.api.message.Message;
 import de.marcely.bedwars.tools.Helper;
 import java.util.HashMap;
 import me.metallicgoat.hotbarmanageraddon.HotbarManagerTools;
@@ -25,13 +24,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 
 public class ToolSwordHelper implements Listener {
 
-  public static final HashMap<Player, HashMap<String, Integer>> trackBuyGroupMap = new HashMap<>();
+  private static final HashMap<Arena, BuyGroupTracker> buyGroupTrackerMap = new HashMap<>();
   public static Material WOOD_SWORD;
 
   public static void load() {
@@ -46,20 +43,44 @@ public class ToolSwordHelper implements Listener {
     }
   }
 
-  // TODO on reload/on player leave/rejoin
   @EventHandler
   public static void onRoundStart(RoundStartEvent event) {
-    for (Player player : event.getArena().getPlayers())
-      loadDefaultPlayerBuyGroups(player);
+    final Arena arena = event.getArena();
+
+    buyGroupTrackerMap.put(arena, new BuyGroupTracker(arena));
   }
 
-  private static void loadDefaultPlayerBuyGroups(Player player) {
-    final HashMap<String, Integer> map = new HashMap<>();
+  @EventHandler
+  public void onShopBuy(PlayerBuyInShopEvent event) {
+    final BuyGroup group = event.getItem().getBuyGroup();
 
-    for (BuyGroup group : GameAPI.get().getBuyGroups())
-      map.put(group.getName(), 0);
+    if (group == null || !event.getProblems().isEmpty())
+      return;
 
-    trackBuyGroupMap.put(player, map);
+    final BuyGroupTracker tracker = buyGroupTrackerMap.get(event.getArena());
+
+    if(tracker != null)
+      tracker.upgradeLevel(group, event.getItem().getBuyGroupLevel(), event.getPlayer());
+  }
+
+  public static int getBuyGroupLevel(Player player, String buyGroup){
+    final Arena arena = GameAPI.get().getArenaByPlayer(player);
+    final BuyGroupTracker tracker = arena != null ? buyGroupTrackerMap.get(arena) : null;
+
+    if(arena == null || tracker == null)
+      return 0;
+
+    return tracker.getBuyGroupLevel(player, buyGroup);
+  }
+
+  public static void setBuyGroupLevel(Player player, String buyGroup, int newLevel){
+    final Arena arena = GameAPI.get().getArenaByPlayer(player);
+    final BuyGroupTracker tracker = arena != null ? buyGroupTrackerMap.get(arena) : null;
+
+    if(arena == null || tracker == null)
+      return;
+
+    tracker.setBuyGroupLevel(player, buyGroup, newLevel);
   }
 
   public static ItemStack getDefaultWoodSword(Player player, Arena arena) {
@@ -156,16 +177,6 @@ public class ToolSwordHelper implements Listener {
     return isNotToIgnore;
   }
 
-  public static boolean doesInventoryContain(PlayerInventory playerInventory, String material) {
-    for (ItemStack itemStack : playerInventory) {
-      if (itemStack != null && itemStack.getType().name().contains(material)
-          && isNotToIgnore(itemStack.getItemMeta() != null ? itemStack.getItemMeta().getDisplayName() : "NOTHING")) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   // Checks how many swords a player has
   public static int getSwordsAmount(Player player) {
     int count = 0;
@@ -193,20 +204,6 @@ public class ToolSwordHelper implements Listener {
     return false;
   }
 
-  public static void addShopProblem(PlayerBuyInShopEvent event, String problem) {
-    event.addProblem(new PlayerBuyInShopEvent.Problem() {
-      @Override
-      public Plugin getPlugin() {
-        return MBedwarsTweaksPlugin.getInstance();
-      }
-
-      @Override
-      public void handleNotification(PlayerBuyInShopEvent e) {
-        e.getPlayer().sendMessage(Message.build(problem).done());
-      }
-    });
-  }
-
   public static void givePlayerShopItem(Arena arena, Team team, Player player, ShopItem item) {
     Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> item.getProducts().forEach(shopProduct -> {
       if (DependManager.isPresent(DependType.HOTBAR_MANAGER)) {
@@ -218,22 +215,5 @@ public class ToolSwordHelper implements Listener {
         shopProduct.give(player, arena.getPlayerTeam(player), arena, 1);
       }
     }), 1L);
-  }
-
-  @EventHandler
-  public void onShopBuy(PlayerBuyInShopEvent event) {
-    final BuyGroup group = event.getItem().getBuyGroup();
-    if (group == null || !event.getProblems().isEmpty())
-      return;
-
-    final Player player = event.getPlayer();
-    final HashMap<String, Integer> map = trackBuyGroupMap.get(player);
-    if (map == null) {
-      loadDefaultPlayerBuyGroups(player);
-      return;
-    }
-
-    // Increment if necessary
-    map.put(group.getName(), event.getItem().getBuyGroupLevel());
   }
 }
