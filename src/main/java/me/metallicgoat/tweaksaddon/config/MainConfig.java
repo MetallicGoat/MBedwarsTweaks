@@ -303,7 +303,7 @@ public class MainConfig {
   @Config(
       description = {
           "Change default team chat colors",
-          "Add teams like: \"DefaultTeamName: ChatColor\""
+          "Add teams like: \"DefaultTeamName: ChatColorName\"",
       })
   public static boolean custom_team_colors_enabled = false;
   @Config public static HashMap<Team, ChatColor> custom_team_colors = new HashMap<Team, ChatColor>() {{
