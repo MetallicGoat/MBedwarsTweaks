@@ -1,12 +1,15 @@
 package me.metallicgoat.tweaksaddon.config;
 
+import de.marcely.bedwars.api.arena.Team;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import me.metallicgoat.tweaksaddon.Console;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.Util;
 import me.metallicgoat.tweaksaddon.config.ConfigManager.FileType;
 import me.metallicgoat.tweaksaddon.tweaks.spawners.GenTierLevel;
 import me.metallicgoat.tweaksaddon.tweaks.spawners.TierAction;
+import net.md_5.bungee.api.ChatColor;
 
 public class ConfigLoader {
 
@@ -25,6 +28,8 @@ public class ConfigLoader {
     ConfigManager.load(plugin, MainConfig.class, FileType.MAIN);
     ConfigManager.load(plugin, SwordsToolsConfig.class, FileType.SWORDS_TOOLS);
     GenTiersConfig.load(); // We load gen tiers a special way
+
+    applyCustomTeamColors();
 
     final long end = System.currentTimeMillis();
 
@@ -64,5 +69,13 @@ public class ConfigLoader {
       put(5, new GenTierLevel("Auto-Break", "Bed Destroy", TierAction.BED_DESTROY, 7, "All beds have been broken", null));
       put(6, new GenTierLevel("Game-Over", "Game Over", TierAction.GAME_OVER, 10, "Game Ended", null));
     }};
+  }
+
+  private static void applyCustomTeamColors() {
+    if (!MainConfig.custom_team_colors_enabled)
+      return;
+
+    for(Entry<Team, ChatColor> entry : MainConfig.custom_team_colors.entrySet())
+      entry.getKey().setBungeeChatColor(entry.getValue());
   }
 }
