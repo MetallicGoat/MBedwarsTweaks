@@ -152,7 +152,7 @@ public class MainConfig {
   @Config public static List<Material> fireball_whitelist_blocks = Collections.singletonList(Helper.get().getMaterialByName("END_STONE"));
 
   // ===== MESSAGES
-  @SectionTitle(title = "Messages")
+  @SectionTitle(title = "MESSAGES")
 
   @Config(
       description = {
@@ -286,6 +286,13 @@ public class MainConfig {
           "Will not affect other gamemodes"
       })
   public static boolean prevent_liquid_build_up = true;
+
+  @Config(
+      description = {
+          "Allows players to place blocks on a bed WITHOUT crouching"
+      }
+  )
+  public static boolean allow_block_place_on_bed = false;
 
   @Config(
       description = {

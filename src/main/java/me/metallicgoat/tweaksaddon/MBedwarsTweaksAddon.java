@@ -29,6 +29,7 @@ import me.metallicgoat.tweaksaddon.tweaks.misc.HeightCap;
 import me.metallicgoat.tweaksaddon.tweaks.misc.LockTeamChest;
 import me.metallicgoat.tweaksaddon.tweaks.misc.PermanentEffects;
 import me.metallicgoat.tweaksaddon.tweaks.misc.PersonalChests;
+import me.metallicgoat.tweaksaddon.tweaks.misc.PlaceBlocksOnBed;
 import me.metallicgoat.tweaksaddon.tweaks.misc.PlayerLimitBypass;
 import me.metallicgoat.tweaksaddon.tweaks.misc.PreventLiquidBuildUp;
 import me.metallicgoat.tweaksaddon.tweaks.misc.RemoveInvisOnDamage;
@@ -95,6 +96,7 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     manager.registerEvents(new LockTeamChest(), plugin);
     manager.registerEvents(new PermanentEffects(), plugin);
     manager.registerEvents(new PersonalChests(), plugin);
+    manager.registerEvents(new PlaceBlocksOnBed(), plugin);
     manager.registerEvents(new PlayerLimitBypass(), plugin);
     manager.registerEvents(new PreventLiquidBuildUp(), plugin);
     manager.registerEvents(new RemoveInvisOnDamage(), plugin);
