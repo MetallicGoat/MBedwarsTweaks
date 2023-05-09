@@ -12,6 +12,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import lombok.Getter;
 import me.metallicgoat.tweaksaddon.Console;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -129,7 +131,6 @@ public class ConfigManager {
 
   }
 
-
   public static void save(Class<?> configValueClass, String version, File configFile) {
     final YamlConfigurationDescriptor config = new YamlConfigurationDescriptor();
 
@@ -206,6 +207,10 @@ public class ConfigManager {
       // ItemStack
     } else if (type == ItemStack.class) {
       return Helper.get().parseItemStack(stringObject);
+
+      // Material
+    } else if (type == Material.class) {
+      return Helper.get().getMaterialByName(stringObject);
 
       // Particle
     } else if (type == VarParticle.class) {
@@ -306,6 +311,11 @@ public class ConfigManager {
     } else if (type == ItemStack.class) {
       final ItemStack itemStack = (ItemStack) fieldObject;
       return Helper.get().composeItemStack(itemStack);
+
+      // ItemStack
+    } else if (type == Method.class) {
+      final Material material = (Material) fieldObject;
+      return material.name();
 
       // Particle
     } else if (type == VarParticle.class) {
