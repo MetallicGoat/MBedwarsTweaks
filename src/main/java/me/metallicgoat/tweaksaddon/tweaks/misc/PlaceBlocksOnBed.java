@@ -2,6 +2,8 @@ package me.metallicgoat.tweaksaddon.tweaks.misc;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
+import de.marcely.bedwars.api.arena.Team;
+import de.marcely.bedwars.tools.PersistentBlockData;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -23,19 +25,34 @@ public class PlaceBlocksOnBed implements Listener {
 
     final Player player = event.getPlayer();
     final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
+    final Team team = arena != null ? arena.getPlayerTeam(player) : null;
     final Block block = event.getClickedBlock();
     final BlockFace face = event.getBlockFace();
 
-    if(arena == null || block == null || face == null || !block.getType().name().contains("BED"))
+    if(arena == null ||
+        block == null ||
+        face == null ||
+        team == null ||
+        !block.getType().name().contains("BED"))
       return;
 
     final Block placeBlockLoc = block.getRelative(face);
     final ItemStack itemStack = player.getItemInHand();
 
-    if(placeBlockLoc.getType() != Material.AIR || itemStack == null || !itemStack.getType().isBlock())
+    if(itemStack == null ||
+        placeBlockLoc.getType() != Material.AIR ||
+        !arena.canPlaceBlockAt(placeBlockLoc) ||
+        !itemStack.getType().isBlock())
       return;
 
-    placeBlockLoc.setType(itemStack.getType());
-    itemStack.setAmount(itemStack.getAmount() - 1);
+    // Dye the block (1.8 -> 1.12 support)
+    final PersistentBlockData data = PersistentBlockData.fromMaterial(itemStack.getType());
+
+    // Place it
+    data.getDyedData(team.getDyeColor()).place(placeBlockLoc, true);
+    arena.setBlockPlayerPlaced(placeBlockLoc, true);
+    itemStack.setAmount(itemStack.getAmount() - 1); // take item, as it not an actual event
+
+    // TODO call an event?
   }
 }
