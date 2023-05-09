@@ -6,7 +6,7 @@
 
     <groupId>me.metallicgoat</groupId>
     <artifactId>MBedwarsTweaks</artifactId>
-    <version>3.0.1-Dev-C</version>
+    <version>3.1.0</version>
 
     <repositories>
         <repository>
