@@ -1,6 +1,7 @@
 package me.metallicgoat.tweaksaddon.tweaks.cosmetic;
 
 import de.marcely.bedwars.api.BedwarsAPI;
+import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.world.WorldStorage;
@@ -96,10 +97,14 @@ public class FriendlyVillagers implements Listener {
 
           // Get players in range of villager
           final List<Player> visiblePlayers = new ArrayList<>();
+
           for (Player player : hologramEntity.getSeeingPlayers()) {
 
             // Check for same world & within range
-            if (player.getWorld() != hologramEntity.getWorld().asBukkit() || player.getLocation().distance(hologramEntity.getLocation()) > MainConfig.friendly_villagers_range)
+            if (player.getWorld() != hologramEntity.getWorld().asBukkit() ||
+                    GameAPI.get().getArenaByPlayer(player) == null ||
+                    GameAPI.get().getSpectatingPlayers().contains(player) ||
+                    player.getLocation().distance(hologramEntity.getLocation()) > MainConfig.friendly_villagers_range)
               continue;
 
             // Check if villager can even see player

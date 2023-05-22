@@ -62,7 +62,7 @@ public class SwordsToolsConfig {
       }
   )
   public static boolean always_sword_chest_enabled = false;
-  @Config public static boolean always_sword_drop_enabled = true;
+  @Config public static boolean always_sword_drop_enabled = false;
 
   @Config(
       description = {
