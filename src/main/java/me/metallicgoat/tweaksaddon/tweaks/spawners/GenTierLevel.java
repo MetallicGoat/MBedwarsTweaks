@@ -1,9 +1,12 @@
 package me.metallicgoat.tweaksaddon.tweaks.spawners;
 
 import de.marcely.bedwars.api.GameAPI;
+import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.game.spawner.DropType;
+import de.marcely.bedwars.api.message.Message;
 import lombok.Getter;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 public class GenTierLevel {
@@ -15,16 +18,17 @@ public class GenTierLevel {
   @Getter private final double time;
   @Getter @Nullable private final Double speed;
   @Getter @Nullable private final Integer limit;
-  @Getter private final String earnMessage;
-  @Getter private final Sound earnSound;
+
+  private final String earnMessage;
+  private final Sound earnSound;
 
   public GenTierLevel(
       String tierName,
       String tierLevel,
       TierAction action,
       double time,
-      String earnMessage,
-      Sound earnSound
+      @Nullable String earnMessage,
+      @Nullable Sound earnSound
   ) {
     this.tierName = tierName;
     this.tierLevel = tierLevel;
@@ -45,8 +49,8 @@ public class GenTierLevel {
       double time, // Time until the update happens (After Last Event)
       @Nullable Double speed, // New drop speed
       @Nullable Integer limit, // New drop speed
-      String earnMessage, // The chat message displayed on update
-      Sound earnSound // Sound played when a tier is earned
+      @Nullable String earnMessage, // The chat message displayed on update
+      @Nullable Sound earnSound // Sound played when a tier is earned
   ) {
     this.tierName = tierName;
     this.tierLevel = tierLevel;
@@ -57,6 +61,17 @@ public class GenTierLevel {
     this.limit = limit;
     this.earnMessage = earnMessage;
     this.earnSound = earnSound;
+  }
+
+  public void broadcastEarn(Arena arena, boolean messageSupported) {
+    if (earnSound != null) {
+      for (Player p : arena.getPlayers())
+        p.playSound(p.getLocation(), earnSound, 1F, 1F);
+    }
+
+    if(messageSupported && earnMessage != null){
+      arena.broadcast(Message.build(earnMessage));
+    }
   }
 
   public DropType getType() {

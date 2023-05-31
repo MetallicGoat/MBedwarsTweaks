@@ -106,7 +106,7 @@ public class GenTiers implements Listener {
 
     switch (currentLevel.getAction()) {
       case GAME_OVER: {
-        playTierSound(arena, currentLevel);
+        currentLevel.broadcastEarn(arena, false);
         arena.setIngameTimeRemaining((int) (currentLevel.getTime() * 60));
         break;
       }
@@ -115,7 +115,7 @@ public class GenTiers implements Listener {
         tasksToKill.put(arena, Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
           if (arena.getStatus() == ArenaStatus.RUNNING) {
             // Break beds, start next tier
-            playTierSound(arena, currentLevel);
+            currentLevel.broadcastEarn(arena, false);
             scheduleTier(arena, nextTierLevel);
             BedBreakTier.breakArenaBeds(arena, currentLevel.getTierName());
           }
@@ -126,10 +126,8 @@ public class GenTiers implements Listener {
       case GEN_UPGRADE: {
         tasksToKill.put(arena, Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
           if (arena.getStatus() == ArenaStatus.RUNNING) {
-
+            currentLevel.broadcastEarn(arena, true);
             scheduleTier(arena, nextTierLevel);
-            arena.broadcast(Message.build(currentLevel.getEarnMessage()));
-            playTierSound(arena, currentLevel);
 
             // For all spawners
             for (Spawner spawner : arena.getSpawners()) {
@@ -193,15 +191,5 @@ public class GenTiers implements Listener {
 
       });
     }, 0L, 20L);
-  }
-
-  private void playTierSound(Arena arena, GenTierLevel level) {
-    final Sound sound = level.getEarnSound();
-
-    if (sound == null || arena == null)
-      return;
-
-    for (Player p : arena.getPlayers())
-      p.playSound(p.getLocation(), sound, 1F, 1F);
   }
 }
