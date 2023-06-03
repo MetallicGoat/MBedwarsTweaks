@@ -282,13 +282,6 @@ public class MainConfig {
 
   @Config(
       description = {
-          "Prevents liquids from going outside the arena border",
-          "Will not affect other gamemodes"
-      })
-  public static boolean prevent_liquid_build_up = true;
-
-  @Config(
-      description = {
           "Allows players to place blocks on a bed WITHOUT crouching"
       }
   )
