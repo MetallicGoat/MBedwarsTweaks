@@ -3,6 +3,7 @@ package me.metallicgoat.tweaksaddon;
 import de.marcely.bedwars.api.BedwarsAPI;
 import lombok.Getter;
 import me.metallicgoat.tweaksaddon.config.ConfigLoader;
+import me.metallicgoat.tweaksaddon.schedular.ArenaScheduler;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -15,9 +16,9 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
 
   @Getter private static MBedwarsTweaksPlugin instance;
   @Getter private static MBedwarsTweaksAddon addon;
+  @Getter private static ArenaScheduler scheduler;
 
   public void onEnable() {
-
     instance = this;
 
     if (!checkMBedwars())
@@ -28,9 +29,9 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
     new Metrics(this, 11928);
 
     MBedwarsTweaksAddon.registerEvents();
+    scheduler = new ArenaScheduler(this);
 
     final PluginDescriptionFile pdf = this.getDescription();
-
     Console.printInfo(
         "------------------------------",
         pdf.getName() + " For MBedwars",

@@ -31,6 +31,8 @@ public class ConfigLoader {
 
     applyCustomTeamColors();
 
+
+
     final long end = System.currentTimeMillis();
 
     Console.printInfo("Configs loaded in " + (end - start) + "ms.");

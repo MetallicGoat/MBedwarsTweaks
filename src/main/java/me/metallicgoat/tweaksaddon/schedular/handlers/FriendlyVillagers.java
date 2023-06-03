@@ -1,9 +1,8 @@
-package me.metallicgoat.tweaksaddon.tweaks.cosmetic;
+package me.metallicgoat.tweaksaddon.schedular.handlers;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.GameAPI;
-import de.marcely.bedwars.api.event.arena.RoundEndEvent;
-import de.marcely.bedwars.api.event.arena.RoundStartEvent;
+import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.world.WorldStorage;
 import de.marcely.bedwars.api.world.hologram.HologramControllerType;
 import de.marcely.bedwars.api.world.hologram.HologramEntity;
@@ -11,81 +10,33 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
-import org.bukkit.Bukkit;
+import me.metallicgoat.tweaksaddon.schedular.ArenaScheduler;
+import me.metallicgoat.tweaksaddon.schedular.ArenaSchedulerHandler;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.BlockIterator;
 
-public class FriendlyVillagers implements Listener {
+public class FriendlyVillagers extends ArenaSchedulerHandler {
+
+  private final List<WorldStorage> worldStorageList = new ArrayList<>();
+
+  public FriendlyVillagers(ArenaScheduler scheduler) {
+    super(scheduler);
+  }
 
   // 6+ hours has been spent on this. Rewritten like 6 times
-  private final MBedwarsTweaksPlugin plugin = MBedwarsTweaksPlugin.getInstance();
-  private final List<World> worlds = new ArrayList<>();
-  private BukkitTask task;
-  private boolean isRunning = false;
-
-  @EventHandler
-  public void onRoundStart(RoundStartEvent e) {
-    if (!MainConfig.friendly_villagers_enabled)
-      return;
-
-    // Add arena to update list
-    final World world = e.getArena().getGameWorld();
-    if (world != null && !worlds.contains(world))
-      worlds.add(world);
-
-    // Start task if not running
-    if (!isRunning && !worlds.isEmpty()) {
-      startLooking();
-      isRunning = true;
-    }
+  @Override
+  public long getUpdateInterval() {
+    return 2;
   }
 
-  @EventHandler
-  public void onRoundEnd(RoundEndEvent e) {
-    final World world = e.getArena().getGameWorld();
-    if (world == null || !worlds.contains(world))
-      return;
+  @Override
+  public void execute() {
 
-    final WorldStorage worldStorage = BedwarsAPI.getWorldStorage(world);
-
-    if (worldStorage == null)
-      return;
-
-    // Reset Position
-    for (HologramEntity hologramEntity : worldStorage.getHolograms()) {
-      if (hologramEntity.getControllerType() == HologramControllerType.DEALER
-          || hologramEntity.getControllerType() == HologramControllerType.UPGRADE_DEALER) {
-        hologramEntity.teleport(hologramEntity.getSpawnLocation(), false);
-      }
-    }
-
-    // Dont update it anymore
-    worlds.remove(world);
-
-    // Dont update at all if no arenas are running
-    if (worlds.isEmpty() && task != null) {
-      task.cancel();
-      isRunning = false;
-    }
-  }
-
-
-  private void startLooking() {
-    // For each active world (Every Tick)
-    task = Bukkit.getScheduler().runTaskTimer(plugin, () -> worlds.forEach(world -> {
-
-      final WorldStorage worldStorage = BedwarsAPI.getWorldStorage(world);
-      if (worldStorage == null)
-        return;
-
+    for (WorldStorage worldStorage : worldStorageList) {
       final Collection<HologramEntity> entities = worldStorage.getHolograms();
 
       // For each villager
@@ -102,9 +53,9 @@ public class FriendlyVillagers implements Listener {
 
             // Check for same world & within range
             if (player.getWorld() != hologramEntity.getWorld().asBukkit() ||
-                    GameAPI.get().getArenaByPlayer(player) == null ||
-                    GameAPI.get().getSpectatingPlayers().contains(player) ||
-                    player.getLocation().distance(hologramEntity.getLocation()) > MainConfig.friendly_villagers_range)
+                GameAPI.get().getArenaByPlayer(player) == null ||
+                GameAPI.get().getSpectatingPlayers().contains(player) ||
+                player.getLocation().distance(hologramEntity.getLocation()) > MainConfig.friendly_villagers_range)
               continue;
 
             // Check if villager can even see player
@@ -169,6 +120,49 @@ public class FriendlyVillagers implements Listener {
           }
         }
       }
-    }), 0L, 2L);
+    }
+  }
+
+  @Override
+  public void roundStart(Arena arena){
+    updateStorageList();
+  }
+
+  @Override
+  public void roundEnd(Arena arena) {
+    final World world = arena.getGameWorld();
+    if (world == null)
+      return;
+
+    final WorldStorage worldStorage = BedwarsAPI.getWorldStorage(world);
+
+    if (worldStorage == null)
+      return;
+
+    // Reset Position
+    for (HologramEntity hologramEntity : worldStorage.getHolograms()) {
+      if (hologramEntity.getControllerType() == HologramControllerType.DEALER
+          || hologramEntity.getControllerType() == HologramControllerType.UPGRADE_DEALER) {
+        hologramEntity.teleport(hologramEntity.getSpawnLocation(), false);
+      }
+    }
+
+    updateStorageList();
+  }
+
+  private void updateStorageList() {
+    worldStorageList.clear();
+
+    for (Arena arena : scheduler.getArenas()) {
+      final World world = arena.getGameWorld();
+
+      if (world == null)
+        continue;
+
+      final WorldStorage worldStorage = BedwarsAPI.getWorldStorage(arena.getGameWorld());
+
+      if (worldStorage != null && !worldStorageList.contains(worldStorage))
+        worldStorageList.add(worldStorage);
+    }
   }
 }
