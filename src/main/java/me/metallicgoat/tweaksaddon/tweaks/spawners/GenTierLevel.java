@@ -19,8 +19,8 @@ public class GenTierLevel {
   @Getter @Nullable private final Double speed;
   @Getter @Nullable private final Integer limit;
 
-  private final String earnMessage;
-  private final Sound earnSound;
+  @Getter private final String earnMessage;
+  @Getter private final Sound earnSound;
 
   public GenTierLevel(
       String tierName,

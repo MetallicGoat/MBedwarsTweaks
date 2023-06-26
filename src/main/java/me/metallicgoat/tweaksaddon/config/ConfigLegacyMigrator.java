@@ -302,8 +302,6 @@ public class ConfigLegacyMigrator {
       }
     }
 
-    MainConfig.prevent_liquid_build_up = config.getBoolean("Prevent-Liquid-Build-Up", true);
-
     MainConfig.remove_empty_buckets = config.getBoolean("Empty-Buckets", true);
     MainConfig.remove_empty_potions = config.getBoolean("Empty-Potions", true);
 

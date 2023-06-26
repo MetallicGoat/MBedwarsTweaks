@@ -63,24 +63,15 @@ public class ToolSwordHelper implements Listener {
       tracker.upgradeLevel(group, event.getItem().getBuyGroupLevel(), event.getPlayer());
   }
 
-  public static int getBuyGroupLevel(Player player, String buyGroup){
-    final Arena arena = GameAPI.get().getArenaByPlayer(player);
-    final BuyGroupTracker tracker = arena != null ? buyGroupTrackerMap.get(arena) : null;
-
-    if(arena == null || tracker == null)
-      return 0;
-
-    return tracker.getBuyGroupLevel(player, buyGroup);
+  public static BuyGroupTracker getBuyGroupTracker(Player player) {
+    return getBuyGroupTracker(GameAPI.get().getArenaByPlayer(player));
   }
 
-  public static void setBuyGroupLevel(Player player, String buyGroup, int newLevel){
-    final Arena arena = GameAPI.get().getArenaByPlayer(player);
-    final BuyGroupTracker tracker = arena != null ? buyGroupTrackerMap.get(arena) : null;
+  public static BuyGroupTracker getBuyGroupTracker(Arena arena) {
+    if(arena == null || !buyGroupTrackerMap.containsKey(arena))
+      return new BuyGroupTracker(null);
 
-    if(arena == null || tracker == null)
-      return;
-
-    tracker.setBuyGroupLevel(player, buyGroup, newLevel);
+    return buyGroupTrackerMap.get(arena);
   }
 
   public static ItemStack getDefaultWoodSword(Player player, Arena arena) {
