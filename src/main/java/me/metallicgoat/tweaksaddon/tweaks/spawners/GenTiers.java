@@ -1,6 +1,4 @@
 package me.metallicgoat.tweaksaddon.tweaks.spawners;
-
-import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
@@ -11,43 +9,25 @@ import de.marcely.bedwars.api.message.Message;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import me.metallicgoat.tweaksaddon.DependType;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
-import me.metallicgoat.tweaksaddon.Util;
 import me.metallicgoat.tweaksaddon.config.GenTiersConfig;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
-import me.metallicgoat.tweaksaddon.DependManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitTask;
 
 public class GenTiers implements Listener {
 
-  public static HashMap<Arena, String> nextTierMap = new HashMap<>();
-  public static HashMap<Arena, Long> timeToNextUpdate = new HashMap<>();
-  private final HashMap<Arena, BukkitTask> tasksToKill = new HashMap<>();
-  private BukkitTask placeHolderTask = null;
-
-  // Format time for placeholder
-  public static String[] timeLeft(Arena arena) {
-    final int timeoutSeconds = (timeToNextUpdate.getOrDefault(arena, 0L).intValue() / 20);
-    final int minutes = (timeoutSeconds / 60) % 60;
-    final int seconds = timeoutSeconds % 60;
-
-    return Util.formatMinSec(minutes, seconds);
-  }
+  private static final HashMap<Arena, String> nextTierMap = new HashMap<>();
+  private static final HashMap<Arena, Long> nextUpdateTime = new HashMap<>();
+  private final HashMap<Arena, BukkitTask> genTierTasks = new HashMap<>();
 
   @EventHandler
   public void onGameStart(RoundStartEvent event) {
     if (!MainConfig.gen_tiers_enabled)
       return;
-
-    // Start updating placeholders
-    startUpdatingTime();
 
     final Arena arena = event.getArena();
 
@@ -66,24 +46,11 @@ public class GenTiers implements Listener {
   @EventHandler
   public void onGameStop(RoundEndEvent event) {
     // Kill Gen Tiers on round end
-    final BukkitTask task = tasksToKill.get(event.getArena());
+    final BukkitTask task = genTierTasks.get(event.getArena());
 
     if (task != null) {
       task.cancel();
-      tasksToKill.remove(event.getArena());
-    }
-
-    // Dont kill task if
-    for (Arena arena : BedwarsAPI.getGameAPI().getArenas()) {
-      if (arena.getStatus() == ArenaStatus.RUNNING) {
-        return;
-      }
-    }
-
-    // Kill task
-    if (placeHolderTask != null) {
-      placeHolderTask.cancel();
-      placeHolderTask = null;
+      genTierTasks.remove(event.getArena());
     }
   }
 
@@ -97,10 +64,10 @@ public class GenTiers implements Listener {
 
     // Update Placeholder
     nextTierMap.put(arena, currentLevel.getTierName());
-    timeToNextUpdate.put(arena, (long) currentLevel.getTime() * 20 * 60);
+    nextUpdateTime.put(arena, System.currentTimeMillis() + ((long) currentLevel.getTime() * 60 * 1000));
 
     // Kill previous task if running for some reason
-    BukkitTask task = tasksToKill.get(arena);
+    final BukkitTask task = genTierTasks.get(arena);
     if (task != null)
       task.cancel();
 
@@ -112,7 +79,7 @@ public class GenTiers implements Listener {
       }
 
       case BED_DESTROY: {
-        tasksToKill.put(arena, Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
+        genTierTasks.put(arena, Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
           if (arena.getStatus() == ArenaStatus.RUNNING) {
             // Break beds, start next tier
             currentLevel.broadcastEarn(arena, false);
@@ -124,7 +91,7 @@ public class GenTiers implements Listener {
       }
 
       case GEN_UPGRADE: {
-        tasksToKill.put(arena, Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
+        genTierTasks.put(arena, Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
           if (arena.getStatus() == ArenaStatus.RUNNING) {
             currentLevel.broadcastEarn(arena, true);
             scheduleTier(arena, nextTierLevel);
@@ -156,7 +123,7 @@ public class GenTiers implements Listener {
   }
 
   // Custom format for hologram titles
-  public void formatHoloTiles(String tierName, Spawner spawner) {
+  private void formatHoloTiles(String tierName, Spawner spawner) {
     final String spawnerName = spawner.getDropType().getConfigName();
     final String colorCode = spawnerName.substring(0, 2);
     final String strippedSpawnerName = ChatColor.stripColor(spawnerName);
@@ -176,20 +143,12 @@ public class GenTiers implements Listener {
     spawner.setOverridingHologramLines(formatted.toArray(new String[0]));
   }
 
-  // TODO improve (why is this a part of gen-tier?) (shit code)
-  private void startUpdatingTime() {
-    if (!DependManager.isPresent(DependType.PLACEHOLDER_API) || placeHolderTask != null)
-      return;
+  public static String getNextTierName(Arena arena){
+    return nextTierMap.get(arena);
+  }
 
-    placeHolderTask = Bukkit.getServer().getScheduler().runTaskTimer(MBedwarsTweaksPlugin.getInstance(), () -> {
-      if (timeToNextUpdate.isEmpty())
-        return;
-
-      timeToNextUpdate.forEach((arena, integer) -> {
-        if (arena.getStatus() == ArenaStatus.RUNNING)
-          timeToNextUpdate.replace(arena, integer, integer - 20);
-
-      });
-    }, 0L, 20L);
+  // Format time for placeholder
+  public static int getSecondsToNextUpdate(Arena arena) {
+    return Math.max((int) (nextUpdateTime.getOrDefault(arena, 0L) - System.currentTimeMillis()) / 1000, 0);
   }
 }
