@@ -5,6 +5,7 @@ import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.arena.Team;
+import de.marcely.bedwars.api.arena.picker.ArenaPickerAPI;
 import de.marcely.bedwars.api.exception.ArenaConditionParseException;
 import de.marcely.bedwars.api.message.Message;
 import java.util.Map;
@@ -70,18 +71,22 @@ public class Placeholders extends PlaceholderExpansion {
           case RESETTING:
             return Message.build(MainConfig.papi_next_tier_lobby_resetting).done();
           case RUNNING:
-            final String nextTierName = GenTiers.nextTierMap.get(arena);
-            final String[] nextTierTime = GenTiers.timeLeft(arena);
-            final String minutes = nextTierTime[0];
-            final String seconds = nextTierTime[1];
+            final String nextTierName = GenTiers.getNextTierName(arena);
+            final int totalSeconds = GenTiers.getSecondsToNextUpdate(arena);
+            final int min = totalSeconds / 60;
+            String sec = String.valueOf(totalSeconds - (min * 60));
+
+            if (sec.length() == 1)
+              sec = "0" + sec;
+
             // Old format
-            final String fullTime = minutes + ":" + seconds;
+            final String fullTime = min + ":" + sec;
 
             return Message.build(MainConfig.papi_next_tier_lobby_running)
                 .placeholder("next-tier", nextTierName)
                 .placeholder("time", fullTime)
-                .placeholder("min", minutes)
-                .placeholder("sec", seconds)
+                .placeholder("min", min)
+                .placeholder("sec", sec)
                 .done();
         }
 
@@ -93,7 +98,7 @@ public class Placeholders extends PlaceholderExpansion {
           return "";
 
         if (arena != null && arena.getStatus() == ArenaStatus.RUNNING) {
-          final String nextTierName = GenTiers.nextTierMap.get(arena);
+          final String nextTierName = GenTiers.getNextTierName(arena);
           return Message.build(nextTierName).done();
         }
 
@@ -107,7 +112,7 @@ public class Placeholders extends PlaceholderExpansion {
 
         for (Map.Entry<String, String> entries : MainConfig.papi_arena_mode.entrySet()) {
           try {
-            if (GameAPI.get().getArenasByPickerCondition(entries.getKey()).contains(arena)) {
+            if (ArenaPickerAPI.get().getArenasByCondition(entries.getKey()).contains(arena)) {
               return Message.build(entries.getValue()).done();
             }
           } catch (ArenaConditionParseException ignored) { }

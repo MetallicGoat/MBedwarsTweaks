@@ -127,7 +127,7 @@ public class FriendlyVillagers implements Listener {
               visiblePlayers.add(player);
           }
 
-          if (visiblePlayers.size() > 0) {
+          if (!visiblePlayers.isEmpty()) {
             // Get the closest player
             final Player lookAtPlayer = visiblePlayers.stream().min(Comparator.comparingDouble(p -> p.getLocation().distance(hologramEntity.getLocation()))).get();
 
