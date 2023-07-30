@@ -39,20 +39,11 @@ public class ForceScoreboardUpdating implements Listener {
   }
 
   private static BukkitTask startUpdatingTime() {
-    return Bukkit.getServer().getScheduler().runTaskTimer(MBedwarsTweaksPlugin.getInstance(), () -> {
+    return Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(MBedwarsTweaksPlugin.getInstance(), () -> {
       for (Arena arena : BedwarsAPI.getGameAPI().getArenas()) {
         if ((arena.getStatus() == ArenaStatus.RUNNING && MainConfig.scoreboard_updating_enabled_in_game)) {
-
-          if (GenTiers.timeToNextUpdate.containsKey(arena)) {
-            final long integer = GenTiers.timeToNextUpdate.get(arena);
-
-            if (((integer - 20) / 20) % MainConfig.scoreboard_updating_interval == 0)
-              arena.updateScoreboard();
-
-            continue;
-          }
-
           final int integer = arena.getIngameTimeRemaining();
+
           if (integer % MainConfig.scoreboard_updating_interval == 0)
             arena.updateScoreboard();
 
