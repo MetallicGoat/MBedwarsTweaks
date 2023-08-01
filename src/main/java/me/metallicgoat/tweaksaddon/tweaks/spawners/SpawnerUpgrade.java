@@ -8,6 +8,7 @@ import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.event.player.PlayerBuyUpgradeEvent;
 import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.api.game.spawner.Spawner;
+import de.marcely.bedwars.api.game.upgrade.UpgradeTriggerHandler;
 import de.marcely.bedwars.api.game.upgrade.UpgradeTriggerHandlerType;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,13 +30,14 @@ public class SpawnerUpgrade implements Listener {
   public void onPlayerBuyUpgrade(PlayerBuyUpgradeEvent event) {
     final Arena arena = event.getArena();
     final Team team = event.getTeam();
+    final UpgradeTriggerHandler handler = event.getUpgradeLevel().getTriggerHandler();
 
     // Check enable
-    if (!MainConfig.advanced_forge_enabled || arena == null || team == null || !event.getProblems().isEmpty())
+    if (!MainConfig.advanced_forge_enabled || arena == null || team == null || handler == null || !event.getProblems().isEmpty())
       return;
 
     // Check upgrade type
-    if (event.getUpgradeLevel().getTriggerHandler().getType() != UpgradeTriggerHandlerType.SPAWNER_MULTIPLIER)
+    if (handler.getType() != UpgradeTriggerHandlerType.SPAWNER_MULTIPLIER)
       return;
 
     // Start upgrade
@@ -63,45 +65,47 @@ public class SpawnerUpgrade implements Listener {
 
     runningTasks.remove(arena);
   }
-}
 
-class SpawnerUpgradeTask extends BukkitRunnable {
 
-  private final Arena arena;
-  private final Location baseLocation;
-  private final DropType dropType = GameAPI.get().getDropTypeById(MainConfig.advanced_forge_new_drop);
-  private final DropType affectingType = GameAPI.get().getDropTypeById(MainConfig.advanced_forge_effected_spawner);
 
-  public SpawnerUpgradeTask(Arena arena, Team team) {
-    this.arena = arena;
-    this.baseLocation = arena.getTeamSpawn(team).toLocation(arena.getGameWorld());
-  }
+  private static class SpawnerUpgradeTask extends BukkitRunnable {
 
-  @Override
-  public void run() {
-    if (arena.getStatus() != ArenaStatus.RUNNING) {
-      cancel();
-      return;
+    private final Arena arena;
+    private final Location baseLocation;
+    private final DropType dropType = GameAPI.get().getDropTypeById(MainConfig.advanced_forge_new_drop);
+    private final DropType affectingType = GameAPI.get().getDropTypeById(MainConfig.advanced_forge_effected_spawner);
+
+    public SpawnerUpgradeTask(Arena arena, Team team) {
+      this.arena = arena;
+      this.baseLocation = arena.getTeamSpawn(team).toLocation(arena.getGameWorld());
     }
 
-    if (affectingType == null || dropType == null)
-      return;
+    @Override
+    public void run() {
+      if (arena.getStatus() != ArenaStatus.RUNNING) {
+        cancel();
+        return;
+      }
 
-    for (Spawner spawner : getAffectingSpawners())
-      spawner.drop(false, dropType.getDroppingMaterials());
-  }
+      if (affectingType == null || dropType == null)
+        return;
 
-  private List<Spawner> getAffectingSpawners() {
-    final List<Spawner> spawnerList = new ArrayList<>();
-
-    for (Spawner spawner : this.arena.getSpawners()) {
-      if (spawner.getDropType() != affectingType)
-        continue;
-
-      if (baseLocation.distance(spawner.getLocation().toLocation(this.arena.getGameWorld())) <= MainConfig.advanced_forge_range)
-        spawnerList.add(spawner);
+      for (Spawner spawner : getAffectingSpawners())
+        spawner.drop(false, dropType.getDroppingMaterials());
     }
 
-    return spawnerList;
+    private List<Spawner> getAffectingSpawners() {
+      final List<Spawner> spawnerList = new ArrayList<>();
+
+      for (Spawner spawner : this.arena.getSpawners()) {
+        if (spawner.getDropType() != affectingType)
+          continue;
+
+        if (baseLocation.distance(spawner.getLocation().toLocation(this.arena.getGameWorld())) <= MainConfig.advanced_forge_range)
+          spawnerList.add(spawner);
+      }
+
+      return spawnerList;
+    }
   }
 }

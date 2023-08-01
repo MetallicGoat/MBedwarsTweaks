@@ -23,7 +23,7 @@ public class DisableEmptyGenerators implements Listener {
     final Arena arena = event.getArena();
 
     for (Team team : arena.getEnabledTeams()) {
-      if (arena.getPlayersInTeam(team).size() == 0) {
+      if (arena.getPlayersInTeam(team).isEmpty()) {
         final XYZYP spawnPoint = arena.getTeamSpawn(team);
 
         if (spawnPoint != null)

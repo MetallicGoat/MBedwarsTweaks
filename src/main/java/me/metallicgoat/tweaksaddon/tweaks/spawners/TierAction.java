@@ -6,15 +6,6 @@ public enum TierAction {
   GAME_OVER;
 
   public String getId() {
-    switch (this) {
-      case GEN_UPGRADE:
-        return "gen-upgrade";
-      case BED_DESTROY:
-        return "bed-destroy";
-      case GAME_OVER:
-        return "game-over";
-      default:
-        return null;
-    }
+    return TierAction.BED_DESTROY.name().toLowerCase().replace("_", "-");
   }
 }

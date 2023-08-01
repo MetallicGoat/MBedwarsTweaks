@@ -144,7 +144,6 @@ public class ConfigLegacyMigrator {
 
     MainConfig.scoreboard_updating_enabled_in_game = config.getBoolean("Force-Scoreboard-Updating.Enabled-In-Game", false);
     MainConfig.scoreboard_updating_enabled_in_lobby = config.getBoolean("Force-Scoreboard-Updating.Enabled-In-Lobby", false);
-    MainConfig.scoreboard_updating_interval = config.getInt("Force-Scoreboard-Updating.Interval", 5);
 
     MainConfig.fireball_whitelist_enabled = config.getBoolean("FireballWhitelist.Enabled", false);
     {

@@ -9,18 +9,19 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
+@Getter
 public class GenTierLevel {
 
-  @Getter private final String tierName;
-  @Getter private final String tierLevel;
-  @Getter private final String typeId;
-  @Getter private final TierAction action;
-  @Getter private final double time;
-  @Getter @Nullable private final Double speed;
-  @Getter @Nullable private final Integer limit;
+  private final String tierName;
+  private final String tierLevel;
+  private final String typeId;
+  private final TierAction action;
+  private final double time;
+  @Nullable private final Double speed;
+  @Nullable private final Integer limit;
 
-  @Getter private final String earnMessage;
-  @Getter private final Sound earnSound;
+  private final String earnMessage;
+  private final Sound earnSound;
 
   public GenTierLevel(
       String tierName,

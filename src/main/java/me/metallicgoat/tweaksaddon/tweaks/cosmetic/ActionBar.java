@@ -70,33 +70,4 @@ public class ActionBar implements Listener {
       actionBarTask = null;
     }
   }
-
-  @EventHandler
-  public void onLeave(PlayerQuitArenaEvent event) {
-    final Arena arena = event.getArena();
-    final Player player = event.getPlayer();
-    final Team team = arena.getPlayerTeam(player);
-
-    // The arena is over so it doesn't matter
-    if (team == null || arena.getStatus() != ArenaStatus.RUNNING)
-      return;
-
-    Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
-      // Maybe they left by now
-      if (!player.isOnline())
-        return;
-
-      // Get the new arena they are in
-      final Arena currPlayerArena = GameAPI.get().getArenaByPlayer(player);
-
-      // The player has rejoined, so do nothing
-      if (arena == currPlayerArena)
-        return;
-
-      // The bed is not already gone, and no other players are on the team
-      if (!arena.isBedDestroyed(team) && arena.getPlayersInTeam(team).size() == 0)
-        arena.destroyBed(team);
-
-    }, 20 * 60 * 3);
-  }
 }

@@ -8,15 +8,14 @@ import de.marcely.bedwars.api.event.player.PlayerJoinArenaEvent;
 import de.marcely.bedwars.api.event.player.PlayerQuitArenaEvent;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
-import me.metallicgoat.tweaksaddon.tweaks.spawners.GenTiers;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitTask;
 
-public class ForceScoreboardUpdating implements Listener {
+public class PlaceholderUpdating implements Listener {
 
-  private static BukkitTask scoreboardUpdatingTask = null;
+  private static BukkitTask asyncUpdatingTask = null;
 
   public static void checkIfUsed() {
     final boolean enabled = (MainConfig.scoreboard_updating_enabled_in_game || MainConfig.scoreboard_updating_enabled_in_lobby);
@@ -32,27 +31,20 @@ public class ForceScoreboardUpdating implements Listener {
     }
 
     // Kill task
-    if (scoreboardUpdatingTask != null) {
-      scoreboardUpdatingTask.cancel();
-      scoreboardUpdatingTask = null;
+    if (asyncUpdatingTask != null) {
+      asyncUpdatingTask.cancel();
+      asyncUpdatingTask = null;
     }
   }
 
   private static BukkitTask startUpdatingTime() {
     return Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(MBedwarsTweaksPlugin.getInstance(), () -> {
       for (Arena arena : BedwarsAPI.getGameAPI().getArenas()) {
-        if ((arena.getStatus() == ArenaStatus.RUNNING && MainConfig.scoreboard_updating_enabled_in_game)) {
-          final int integer = arena.getIngameTimeRemaining();
+        if ((arena.getStatus() == ArenaStatus.RUNNING && MainConfig.scoreboard_updating_enabled_in_game))
+          arena.updateScoreboard();
+        else if (arena.getStatus() == ArenaStatus.LOBBY && MainConfig.scoreboard_updating_enabled_in_lobby)
+          arena.updateScoreboard();
 
-          if (integer % MainConfig.scoreboard_updating_interval == 0)
-            arena.updateScoreboard();
-
-        } else if (arena.getStatus() == ArenaStatus.LOBBY && MainConfig.scoreboard_updating_enabled_in_lobby) {
-          final long integer = Math.round(arena.getLobbyTimeRemaining());
-
-          if (integer % MainConfig.scoreboard_updating_interval == 0)
-            arena.updateScoreboard();
-        }
       }
     }, 0L, 20L);
   }
@@ -61,11 +53,11 @@ public class ForceScoreboardUpdating implements Listener {
   public void onGameStart(PlayerJoinArenaEvent event) {
     final boolean enabled = (MainConfig.scoreboard_updating_enabled_in_game || MainConfig.scoreboard_updating_enabled_in_lobby);
 
-    if (!enabled || scoreboardUpdatingTask != null)
+    if (!enabled || asyncUpdatingTask != null)
       return;
 
     // Start updating scoreboard
-    scoreboardUpdatingTask = startUpdatingTime();
+    asyncUpdatingTask = startUpdatingTime();
   }
 
   // If someone leaves during lobby

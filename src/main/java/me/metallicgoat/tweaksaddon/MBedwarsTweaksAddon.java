@@ -9,7 +9,7 @@ import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ReplaceSwordOnBuy;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ReplaceToolOnBuy;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
 import me.metallicgoat.tweaksaddon.tweaks.cosmetic.ActionBar;
-import me.metallicgoat.tweaksaddon.tweaks.cosmetic.ForceScoreboardUpdating;
+import me.metallicgoat.tweaksaddon.tweaks.cosmetic.PlaceholderUpdating;
 import me.metallicgoat.tweaksaddon.tweaks.cosmetic.FriendlyVillagers;
 import me.metallicgoat.tweaksaddon.tweaks.cosmetic.HealPoolParticles;
 import me.metallicgoat.tweaksaddon.tweaks.cosmetic.SpongeParticles;
@@ -67,9 +67,9 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
 
     // Cosmetic
     manager.registerEvents(new ActionBar(), plugin);
-    manager.registerEvents(new ForceScoreboardUpdating(), plugin);
     manager.registerEvents(new FriendlyVillagers(), plugin);
     manager.registerEvents(new HealPoolParticles(), plugin);
+    manager.registerEvents(new PlaceholderUpdating(), plugin);
     manager.registerEvents(new SpongeParticles(), plugin);
 
     // Explosives

@@ -402,14 +402,10 @@ public class MainConfig {
 
   @Config(
       description = {
-          "If set to true, the scoreboard will be force updated to refresh PAPI placeholders",
-          "Scoreboard will update every X amount of seconds",
-          "We recommended keeping at 5 or 10 seconds to reduce flicker",
-          "WARNING: Force updating the MBedwars scoreboard may cause scoreboard flicker"
+          "If set to true, the scoreboard will be force updated to refresh PAPI placeholders"
       })
   public static boolean scoreboard_updating_enabled_in_game = false;
   @Config public static boolean scoreboard_updating_enabled_in_lobby = false;
-  @Config public static int scoreboard_updating_interval = 5;
 
   // ===== HOOKS
   @SectionTitle(title = "HOOKS")
