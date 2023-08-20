@@ -5,6 +5,7 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.tools.PersistentBlockData;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -12,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -53,6 +55,8 @@ public class PlaceBlocksOnBed implements Listener {
     arena.setBlockPlayerPlaced(placeBlockLoc, true);
     itemStack.setAmount(itemStack.getAmount() - 1); // take item, as it not an actual event
 
-    // TODO call an event?
+    // Calls the bukkit event (for MBedwars & other plugins/addons)
+    final BlockPlaceEvent placeEvent = new BlockPlaceEvent(placeBlockLoc, placeBlockLoc.getState(), block, itemStack, player, true);
+    Bukkit.getPluginManager().callEvent(placeEvent);
   }
 }
