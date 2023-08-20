@@ -81,12 +81,11 @@ public class GenTiersConfig {
 
         TierAction action = null;
 
-        for (TierAction action1 : TierAction.values()) {
-          final String actionId = action1.getId();
+        for (TierAction cAction : TierAction.values()) {
+          final String actionId = cAction.getId();
 
-          if (actionId != null && action1.getId().equalsIgnoreCase(actionString)) {
-            action = action1;
-          }
+          if (actionId.equalsIgnoreCase(actionString))
+            action = cAction;
         }
 
         if (action == null) {
