@@ -413,7 +413,6 @@ public class MainConfig {
   @Config(
       description = {
           "REQUIRED DEPENDENCY: PrestigesAddon (By WhoHarsh)",
-          "DOWNLOAD: https://mbedwars.com/product/hypixel-prestiges-addon/",
           "Sets your prestiges bedwars level on experience bar during a game"
       })
   public static boolean prestiges_level_on_exp_bar = false;

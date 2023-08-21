@@ -16,7 +16,6 @@ import me.metallicgoat.tweaksaddon.tweaks.explosives.DisableFireballOutsideArena
 import me.metallicgoat.tweaksaddon.tweaks.explosives.FireballBlockBreakWhitelist;
 import me.metallicgoat.tweaksaddon.tweaks.explosives.FireballThrowEffects;
 import me.metallicgoat.tweaksaddon.tweaks.explosives.FireballUseCoolDown;
-import me.metallicgoat.tweaksaddon.tweaks.hooks.PrestigesLevelOnExperienceBar;
 import me.metallicgoat.tweaksaddon.tweaks.messages.BuyMessage;
 import me.metallicgoat.tweaksaddon.tweaks.messages.CustomBedBreakMessage;
 import me.metallicgoat.tweaksaddon.tweaks.messages.FinalKillSuffix;
@@ -77,7 +76,8 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     manager.registerEvents(new FireballUseCoolDown(), plugin);
 
     // Hooks
-    manager.registerEvents(new PrestigesLevelOnExperienceBar(), plugin);
+    // NOTE: Prestiges update has broken support
+    // manager.registerEvents(new PrestigesLevelOnExperienceBar(), plugin);
 
     // Messages
     manager.registerEvents(new BuyMessage(), plugin);
