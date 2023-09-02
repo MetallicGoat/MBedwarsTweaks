@@ -44,16 +44,17 @@
             <systemPath>${basedir}/libs/public/HotbarManager-1.0-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>de.marcely.bedwars</groupId>
+            <artifactId>API</artifactId>
+            <version>5.2.7</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>me.harsh</groupId>
             <artifactId>PrestigesAddon</artifactId>
             <version>1.1.0</version>
             <scope>system</scope>
             <systemPath>${basedir}/libs/private/prestiges.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>de.marcely.bedwars</groupId>
-            <artifactId>API</artifactId>
-            <version>5.2.3</version>
         </dependency>
         <!-- USED FOR BETA TESTING
         <dependency>
