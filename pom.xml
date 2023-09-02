@@ -6,7 +6,7 @@
 
     <groupId>me.metallicgoat</groupId>
     <artifactId>MBedwarsTweaks</artifactId>
-    <version>3.2.0-Dev-A</version>
+    <version>3.2.0</version>
 
     <repositories>
         <repository>
@@ -37,17 +37,17 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>de.marcely.bedwars</groupId>
+            <artifactId>API</artifactId>
+            <version>5.3</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>me.metallicgoat.hotbarmanageraddon</groupId>
             <artifactId>API</artifactId>
             <version>1.0</version>
             <scope>system</scope>
             <systemPath>${basedir}/libs/public/HotbarManager-1.0-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>de.marcely.bedwars</groupId>
-            <artifactId>API</artifactId>
-            <version>5.2.7</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.harsh</groupId>
