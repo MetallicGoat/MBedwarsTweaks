@@ -2,7 +2,10 @@ package me.metallicgoat.tweaksaddon.tweaks.hooks;
 
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.event.player.PlayerIngameRespawnEvent;
-import me.harsh.prestigesaddon.storage.PlayerData;
+import de.marcely.bedwars.tools.Helper;
+import java.util.function.Consumer;
+import me.harsh.prestigesaddon.PrestigeAddon;
+import me.harsh.prestigesaddon.api.PrestigePlayer;
 import me.metallicgoat.tweaksaddon.DependType;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import me.metallicgoat.tweaksaddon.DependManager;
@@ -34,9 +37,25 @@ public class PrestigesLevelOnExperienceBar implements Listener {
     if (!DependManager.isPresent(DependType.PRESTIGE_ADDON))
       return;
 
-    final PlayerData data = PlayerData.from(player);
+    getPrestigePlayer(player, data -> {
+      player.setLevel(data.getStars());
+      player.setExp(data.getProgress() /* It goes from 0 - 100 */ / 100F);
+    });
+  }
 
-    player.setLevel(data.getStars());
-    player.setExp((float) data.getProgressDouble());
+  private static void getPrestigePlayer(Player player, Consumer<PrestigePlayer> callback) {
+    {
+      final PrestigePlayer cached = PrestigeAddon.getInstance().getPlayer(player);
+
+      if (cached != null) {
+        callback.accept(cached);
+        return;
+      }
+    }
+
+    PrestigeAddon.getInstance().getFromStorage(
+        player.getUniqueId(),
+        player.getName(),
+        data -> Helper.get().synchronize(() -> callback.accept(data)));
   }
 }
