@@ -105,6 +105,14 @@ public class MainConfig {
   @Config public static String advanced_forge_new_drop = "emerald";
   @Config public static int advanced_forge_drop_rate = 15;
 
+  @Config(
+      description = {
+          "Prevents players from picking up spawner drops if they are AFK for a certain amount of time"
+      }
+  )
+  public static boolean afk_spawners_enabled = false;
+  public static int afk_spawners_time = 40;
+
   // ===== PARTICLE EFFECTS
   @SectionTitle(title = "PARTICLE EFFECTS")
 
