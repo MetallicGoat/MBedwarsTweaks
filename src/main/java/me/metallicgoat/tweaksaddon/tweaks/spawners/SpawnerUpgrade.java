@@ -10,10 +10,6 @@ import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.api.game.upgrade.UpgradeTriggerHandler;
 import de.marcely.bedwars.api.game.upgrade.UpgradeTriggerHandlerType;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Location;
@@ -22,9 +18,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 public class SpawnerUpgrade implements Listener {
 
-  public static HashMap<Arena, List<BukkitTask>> runningTasks = new HashMap<>();
+  public static Map<Arena, List<BukkitTask>> runningTasks = new ConcurrentHashMap<>();
 
   @EventHandler
   public void onPlayerBuyUpgrade(PlayerBuyUpgradeEvent event) {
@@ -47,8 +49,11 @@ public class SpawnerUpgrade implements Listener {
 
       if (arenaTasks != null)
         arenaTasks.add(task);
-      else
-        runningTasks.put(arena, Collections.singletonList(task));
+      else {
+        final List<BukkitTask> list = new CopyOnWriteArrayList<>();
+        list.add(task);
+        runningTasks.put(arena, list);
+      }
     }
   }
 
@@ -69,7 +74,6 @@ public class SpawnerUpgrade implements Listener {
 
 
   private static class SpawnerUpgradeTask extends BukkitRunnable {
-
     private final Arena arena;
     private final Location baseLocation;
     private final DropType dropType = GameAPI.get().getDropTypeById(MainConfig.advanced_forge_new_drop);
