@@ -16,6 +16,7 @@ import me.metallicgoat.tweaksaddon.tweaks.explosives.DisableFireballOutsideArena
 import me.metallicgoat.tweaksaddon.tweaks.explosives.FireballBlockBreakWhitelist;
 import me.metallicgoat.tweaksaddon.tweaks.explosives.FireballThrowEffects;
 import me.metallicgoat.tweaksaddon.tweaks.explosives.FireballUseCoolDown;
+import me.metallicgoat.tweaksaddon.tweaks.hooks.PrestigesLevelOnExperienceBar;
 import me.metallicgoat.tweaksaddon.tweaks.messages.BuyMessage;
 import me.metallicgoat.tweaksaddon.tweaks.messages.CustomBedBreakMessage;
 import me.metallicgoat.tweaksaddon.tweaks.messages.FinalKillSuffix;
@@ -30,10 +31,7 @@ import me.metallicgoat.tweaksaddon.tweaks.misc.PersonalChests;
 import me.metallicgoat.tweaksaddon.tweaks.misc.PlaceBlocksOnBed;
 import me.metallicgoat.tweaksaddon.tweaks.misc.PlayerLimitBypass;
 import me.metallicgoat.tweaksaddon.tweaks.misc.RemoveInvisOnDamage;
-import me.metallicgoat.tweaksaddon.tweaks.spawners.BedBreakTier;
-import me.metallicgoat.tweaksaddon.tweaks.spawners.DisableEmptyGenerators;
-import me.metallicgoat.tweaksaddon.tweaks.spawners.GenTiers;
-import me.metallicgoat.tweaksaddon.tweaks.spawners.SpawnerUpgrade;
+import me.metallicgoat.tweaksaddon.tweaks.spawners.*;
 import org.bukkit.plugin.PluginManager;
 
 public class MBedwarsTweaksAddon extends BedwarsAddon {
@@ -76,8 +74,7 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     manager.registerEvents(new FireballUseCoolDown(), plugin);
 
     // Hooks
-    // NOTE: Prestiges update has broken support
-    // manager.registerEvents(new PrestigesLevelOnExperienceBar(), plugin);
+    manager.registerEvents(new PrestigesLevelOnExperienceBar(), plugin);
 
     // Messages
     manager.registerEvents(new BuyMessage(), plugin);
@@ -98,6 +95,7 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     manager.registerEvents(new RemoveInvisOnDamage(), plugin);
 
     // Spawners
+    manager.registerEvents(new AFKSpawners(), plugin);
     manager.registerEvents(new BedBreakTier(), plugin);
     manager.registerEvents(new DisableEmptyGenerators(), plugin);
     manager.registerEvents(new GenTiers(), plugin);
