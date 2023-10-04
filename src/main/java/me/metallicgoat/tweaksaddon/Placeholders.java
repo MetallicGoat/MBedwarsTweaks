@@ -42,8 +42,16 @@ public class Placeholders extends PlaceholderExpansion {
 
   @Override
   public String onRequest(OfflinePlayer offlinePlayer, @NotNull String params) {
-    final Player player = Bukkit.getPlayer(offlinePlayer.getUniqueId());
-    final Arena arena = BedwarsAPI.getGameAPI().getSpectatingPlayers().contains(player) ? BedwarsAPI.getGameAPI().getArenaBySpectator(player) : BedwarsAPI.getGameAPI().getArenaByPlayer(player);
+    if (offlinePlayer == null)
+      return "Missing player info";
+    if (!offlinePlayer.isOnline())
+      return "Player not online";
+
+    final Player player = (Player) offlinePlayer;
+    Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
+
+    if (arena == null)
+      arena = BedwarsAPI.getGameAPI().getArenaBySpectator(player);
 
     switch (params.toLowerCase()) {
       case "next-tier": {
