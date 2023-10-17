@@ -412,8 +412,8 @@ public class MainConfig {
       description = {
           "If set to true, the scoreboard will be force updated to refresh PAPI placeholders"
       })
-  public static boolean scoreboard_updating_enabled_in_game = false;
-  @Config public static boolean scoreboard_updating_enabled_in_lobby = false;
+  public static boolean scoreboard_updating_enabled_in_game = true;
+  @Config public static boolean scoreboard_updating_enabled_in_lobby = true;
 
   // ===== HOOKS
   @SectionTitle(title = "HOOKS")
