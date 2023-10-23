@@ -7,21 +7,21 @@ import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.world.WorldStorage;
 import de.marcely.bedwars.api.world.hologram.HologramControllerType;
 import de.marcely.bedwars.api.world.hologram.HologramEntity;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.util.BlockIterator;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class FriendlyVillagers implements Listener {
 
@@ -102,28 +102,26 @@ public class FriendlyVillagers implements Listener {
 
             // Check for same world & within range
             if (player.getWorld() != hologramEntity.getWorld().asBukkit() ||
-                    GameAPI.get().getArenaByPlayer(player) == null ||
-                    GameAPI.get().getSpectatingPlayers().contains(player) ||
-                    player.getLocation().distance(hologramEntity.getLocation()) > MainConfig.friendly_villagers_range)
+                GameAPI.get().getArenaByPlayer(player) == null ||
+                GameAPI.get().getSpectatingPlayers().contains(player) ||
+                player.getLocation().distance(hologramEntity.getLocation()) > MainConfig.friendly_villagers_range)
               continue;
 
             // Check if villager can even see player
-            boolean ok = true;
+            boolean canSee = true;
+
             if (MainConfig.friendly_villagers_check_visibility) {
-              final BlockIterator iterator = new BlockIterator(player.getWorld(), hologramEntity.getLocation().toVector(),
-                  player.getLocation().clone().subtract(hologramEntity.getLocation()).toVector(), 1, MainConfig.friendly_villagers_range);
+              final Set<Material> transparentMaterials = Stream.of(Material.AIR, Material.BARRIER).collect(Collectors.toSet());
+              final int distance = (int) player.getLocation().distance(hologramEntity.getLocation());
 
-              while (iterator.hasNext()) {
-                final Material type = iterator.next().getType();
+              // Blocks in the way
+              final List<Block> blocks = player.getLineOfSight(transparentMaterials, distance);
 
-                if (type != Material.AIR && type != Material.BARRIER) {
-                  ok = false;
-                  break;
-                }
-              }
+              if (!blocks.isEmpty())
+                canSee = false;
             }
 
-            if (ok)
+            if (canSee)
               visiblePlayers.add(player);
           }
 
