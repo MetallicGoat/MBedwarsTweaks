@@ -11,7 +11,7 @@ import de.marcely.bedwars.api.message.Message;
 import java.util.Map;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
-import me.metallicgoat.tweaksaddon.tweaks.spawners.GenTiers;
+import me.metallicgoat.tweaksaddon.tweaks.spawners.gentiers.GenTiers;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;

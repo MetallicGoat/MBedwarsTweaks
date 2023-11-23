@@ -1,4 +1,4 @@
-package me.metallicgoat.tweaksaddon.tweaks.spawners;
+package me.metallicgoat.tweaksaddon.tweaks.spawners.gentiers;
 
 import lombok.Getter;
 

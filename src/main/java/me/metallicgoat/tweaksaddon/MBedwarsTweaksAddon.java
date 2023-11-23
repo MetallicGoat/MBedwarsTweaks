@@ -1,37 +1,14 @@
 package me.metallicgoat.tweaksaddon;
 
 import de.marcely.bedwars.api.BedwarsAddon;
-import me.metallicgoat.tweaksaddon.tweaks.advancedswords.AlwaysSword;
-import me.metallicgoat.tweaksaddon.tweaks.advancedswords.AntiChest;
-import me.metallicgoat.tweaksaddon.tweaks.advancedswords.AntiDrop;
-import me.metallicgoat.tweaksaddon.tweaks.advancedswords.DegradingBuyGroups;
-import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ReplaceSwordOnBuy;
-import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ReplaceToolOnBuy;
-import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
-import me.metallicgoat.tweaksaddon.tweaks.cosmetic.PlaceholderUpdating;
-import me.metallicgoat.tweaksaddon.tweaks.cosmetic.FriendlyVillagers;
-import me.metallicgoat.tweaksaddon.tweaks.cosmetic.HealPoolParticles;
-import me.metallicgoat.tweaksaddon.tweaks.cosmetic.SpongeParticles;
-import me.metallicgoat.tweaksaddon.tweaks.explosives.DisableFireballOutsideArena;
-import me.metallicgoat.tweaksaddon.tweaks.explosives.FireballBlockBreakWhitelist;
-import me.metallicgoat.tweaksaddon.tweaks.explosives.FireballThrowEffects;
-import me.metallicgoat.tweaksaddon.tweaks.explosives.FireballUseCoolDown;
-import me.metallicgoat.tweaksaddon.tweaks.hooks.PrestigesLevelOnExperienceBar;
-import me.metallicgoat.tweaksaddon.tweaks.messages.BuyMessage;
-import me.metallicgoat.tweaksaddon.tweaks.messages.CustomBedBreakMessage;
-import me.metallicgoat.tweaksaddon.tweaks.messages.FinalKillSuffix;
-import me.metallicgoat.tweaksaddon.tweaks.messages.TeamEliminate;
-import me.metallicgoat.tweaksaddon.tweaks.messages.TopKillerMessage;
-import me.metallicgoat.tweaksaddon.tweaks.misc.BlockArenaStats;
-import me.metallicgoat.tweaksaddon.tweaks.misc.EmptyContainers;
-import me.metallicgoat.tweaksaddon.tweaks.misc.HeightCap;
-import me.metallicgoat.tweaksaddon.tweaks.misc.LockTeamChest;
-import me.metallicgoat.tweaksaddon.tweaks.misc.PermanentEffects;
-import me.metallicgoat.tweaksaddon.tweaks.misc.PersonalChests;
-import me.metallicgoat.tweaksaddon.tweaks.misc.PlaceBlocksOnBed;
-import me.metallicgoat.tweaksaddon.tweaks.misc.PlayerLimitBypass;
-import me.metallicgoat.tweaksaddon.tweaks.misc.RemoveInvisOnDamage;
+import me.metallicgoat.tweaksaddon.tweaks.advancedswords.*;
+import me.metallicgoat.tweaksaddon.tweaks.cosmetic.*;
+import me.metallicgoat.tweaksaddon.tweaks.explosives.*;
+import me.metallicgoat.tweaksaddon.tweaks.hooks.*;
+import me.metallicgoat.tweaksaddon.tweaks.messages.*;
+import me.metallicgoat.tweaksaddon.tweaks.misc.*;
 import me.metallicgoat.tweaksaddon.tweaks.spawners.*;
+import me.metallicgoat.tweaksaddon.tweaks.spawners.gentiers.GenTiers;
 import org.bukkit.plugin.PluginManager;
 
 public class MBedwarsTweaksAddon extends BedwarsAddon {
@@ -95,10 +72,9 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     manager.registerEvents(new RemoveInvisOnDamage(), plugin);
 
     // Spawners
-    manager.registerEvents(new AFKSpawners(), plugin);
-    manager.registerEvents(new BedBreakTier(), plugin);
-    manager.registerEvents(new DisableEmptyGenerators(), plugin);
     manager.registerEvents(new GenTiers(), plugin);
+    manager.registerEvents(new AFKSpawners(), plugin);
+    manager.registerEvents(new DisableEmptyGenerators(), plugin);
     manager.registerEvents(new SpawnerUpgrade(), plugin);
 
     // Server Events

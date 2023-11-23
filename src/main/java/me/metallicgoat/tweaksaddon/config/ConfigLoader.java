@@ -7,8 +7,8 @@ import me.metallicgoat.tweaksaddon.Console;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.Util;
 import me.metallicgoat.tweaksaddon.config.ConfigManager.FileType;
-import me.metallicgoat.tweaksaddon.tweaks.spawners.GenTierLevel;
-import me.metallicgoat.tweaksaddon.tweaks.spawners.TierAction;
+import me.metallicgoat.tweaksaddon.tweaks.spawners.gentiers.GenTierLevel;
+import me.metallicgoat.tweaksaddon.tweaks.spawners.gentiers.TierAction;
 import net.md_5.bungee.api.ChatColor;
 
 public class ConfigLoader {

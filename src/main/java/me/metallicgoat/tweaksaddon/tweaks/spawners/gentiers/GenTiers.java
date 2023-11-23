@@ -1,6 +1,7 @@
-package me.metallicgoat.tweaksaddon.tweaks.spawners;
+package me.metallicgoat.tweaksaddon.tweaks.spawners.gentiers;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
+import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.game.spawner.Spawner;
@@ -9,11 +10,14 @@ import de.marcely.bedwars.api.message.Message;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import de.marcely.bedwars.tools.location.XYZD;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.GenTiersConfig;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitTask;
@@ -84,7 +88,22 @@ public class GenTiers implements Listener {
             // Break beds, start next tier
             currentLevel.broadcastEarn(arena, false);
             scheduleTier(arena, nextTierLevel);
-            BedBreakTier.breakArenaBeds(arena, currentLevel.getTierName());
+
+            // Break all beds in an arena
+            for (Team team : arena.getEnabledTeams()) {
+              final XYZD bedLoc = arena.getBedLocation(team);
+              if (!arena.isBedDestroyed(team) && bedLoc != null) {
+                arena.destroyBedNaturally(team, Message.build(currentLevel.getTierName()).done());
+                bedLoc.toLocation(arena.getGameWorld()).getBlock().setType(Material.AIR);
+              }
+            }
+
+            // Broadcast Message
+            if (MainConfig.auto_bed_break_message_enabled) {
+              for (String s : MainConfig.auto_bed_break_message) {
+                arena.broadcast(Message.build(s).done());
+              }
+            }
           }
         }, (long) currentLevel.getTime() * 20 * 60));
         break;
