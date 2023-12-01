@@ -2,12 +2,12 @@ package me.metallicgoat.tweaksaddon;
 
 import lombok.Getter;
 
+@Getter
 public enum DependType {
   PLACEHOLDER_API("PlaceholderAPI"),
   HOTBAR_MANAGER("MBedwarsHotbarManager"),
   PRESTIGE_ADDON("PrestigeAddon");
 
-  @Getter
   private final String name;
 
   DependType(String name) {

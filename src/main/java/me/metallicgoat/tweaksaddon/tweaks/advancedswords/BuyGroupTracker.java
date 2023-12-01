@@ -4,8 +4,6 @@ import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.game.shop.BuyGroup;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;

@@ -120,7 +120,7 @@ public class TopKillerMessage implements Listener {
     if (player == null)
       return;
 
-    final Optional<PlayerStats> stats = PlayerDataAPI.get().getStatsNow(player);
+    final Optional<PlayerStats> stats = PlayerDataAPI.get().getStatsCached(player);
 
     if (!stats.isPresent())
       return;
@@ -132,7 +132,7 @@ public class TopKillerMessage implements Listener {
   }
 
   private void broadcast(Arena arena, List<String> message) {
-    if (message == null || (message.size() == 1 && message.get(0).equals("")))
+    if (message == null || (message.size() == 1 && message.get(0).isEmpty()))
       return;
 
     for (String line : message)
