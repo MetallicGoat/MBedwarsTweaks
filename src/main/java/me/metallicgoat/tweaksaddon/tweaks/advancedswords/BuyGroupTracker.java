@@ -5,12 +5,13 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.game.shop.BuyGroup;
 import java.util.HashMap;
 
+import java.util.Map;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 public class BuyGroupTracker {
 
-  private final HashMap<OfflinePlayer, HashMap<String, Integer>> trackBuyGroupMap = new HashMap<>();
+  private final Map<OfflinePlayer, Map<String, Integer>> trackBuyGroupMap = new HashMap<>();
 
   public BuyGroupTracker(Arena arena){
     if(arena == null)

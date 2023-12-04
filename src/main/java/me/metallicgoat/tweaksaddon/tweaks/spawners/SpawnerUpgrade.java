@@ -4,7 +4,8 @@ import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.arena.Team;
-import de.marcely.bedwars.api.event.arena.RoundEndEvent;
+import de.marcely.bedwars.api.event.arena.ArenaDeleteEvent;
+import de.marcely.bedwars.api.event.arena.ArenaStatusChangeEvent;
 import de.marcely.bedwars.api.event.player.PlayerBuyUpgradeEvent;
 import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.api.game.spawner.Spawner;
@@ -14,6 +15,7 @@ import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -57,18 +59,25 @@ public class SpawnerUpgrade implements Listener {
     }
   }
 
-  @EventHandler
-  public void onRoundEnd(RoundEndEvent event) {
-    final Arena arena = event.getArena();
-    final List<BukkitTask> tasks = runningTasks.get(arena);
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onArenaStatusChangeEvent(ArenaStatusChangeEvent event) {
+    if (event.getOldStatus() == ArenaStatus.RUNNING)
+      removeArena(event.getArena());
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onArenaDeleteEvent(ArenaDeleteEvent event) {
+    removeArena(event.getArena());
+  }
+
+  private void removeArena(Arena arena) {
+    final List<BukkitTask> tasks = runningTasks.remove(arena);
 
     if (tasks == null)
       return;
 
     for (BukkitTask task : tasks)
       task.cancel();
-
-    runningTasks.remove(arena);
   }
 
 

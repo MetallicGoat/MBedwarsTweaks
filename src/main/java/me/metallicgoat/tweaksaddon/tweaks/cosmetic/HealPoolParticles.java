@@ -3,7 +3,6 @@ package me.metallicgoat.tweaksaddon.tweaks.cosmetic;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.arena.Team;
-import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.event.player.PlayerBuyUpgradeEvent;
 import de.marcely.bedwars.api.game.upgrade.UpgradeTriggerHandler;
 import de.marcely.bedwars.api.game.upgrade.UpgradeTriggerHandlerType;
@@ -44,7 +43,7 @@ public class HealPoolParticles implements Listener {
 
 
 
-  private static class HealPoolParticlesTask extends BukkitRunnable implements Listener {
+  private static class HealPoolParticlesTask extends BukkitRunnable {
     private final ArrayList<Location> locs;
     private final Team team;
     private final Arena arena;
@@ -55,25 +54,26 @@ public class HealPoolParticles implements Listener {
       this.team = team;
     }
 
-    public void start(){
+    public void start() {
       if (this.arena.getStatus() == ArenaStatus.RUNNING)
         runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 0L, 20L);
     }
 
-    @EventHandler
-    public void onRoundEnd(RoundEndEvent event){
-      cancel();
-    }
-
     @Override
     public void run() {
-      Collections.shuffle(locs);
-      final List<Location> locationsRandomized = locs.subList(0, locs.size() / 4);
+      if (this.arena.getStatus() != ArenaStatus.RUNNING) {
+        cancel();
+        return;
+      }
+
+      Collections.shuffle(this.locs);
+
+      final List<Location> locationsRandomized = this.locs.subList(0, locs.size() / 4);
 
       for (Location location : locationsRandomized) {
         if (MainConfig.heal_pool_particle_type != null) {
           if (MainConfig.heal_pool_particle_team_view_only) {
-            for (Player player : arena.getPlayersInTeam(team))
+            for (Player player : this.arena.getPlayersInTeam(team))
               MainConfig.heal_pool_particle_type.play(location, player);
           } else
             MainConfig.heal_pool_particle_type.play(location);

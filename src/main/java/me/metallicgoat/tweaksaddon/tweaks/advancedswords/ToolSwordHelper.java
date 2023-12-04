@@ -2,7 +2,10 @@ package me.metallicgoat.tweaksaddon.tweaks.advancedswords;
 
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
+import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.arena.Team;
+import de.marcely.bedwars.api.event.arena.ArenaDeleteEvent;
+import de.marcely.bedwars.api.event.arena.ArenaStatusChangeEvent;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.event.player.PlayerBuyInShopEvent;
 import de.marcely.bedwars.api.game.shop.BuyGroup;
@@ -11,6 +14,7 @@ import de.marcely.bedwars.api.game.shop.product.ItemShopProduct;
 import de.marcely.bedwars.api.game.shop.product.ShopProduct;
 import de.marcely.bedwars.tools.Helper;
 import java.util.HashMap;
+import java.util.Map;
 import me.metallicgoat.hotbarmanageraddon.HotbarManagerTools;
 import me.metallicgoat.tweaksaddon.DependType;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
@@ -21,6 +25,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -28,7 +33,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class ToolSwordHelper implements Listener {
 
-  private static final HashMap<Arena, BuyGroupTracker> buyGroupTrackerMap = new HashMap<>();
+  private static final Map<Arena, BuyGroupTracker> buyGroupTrackerMap = new HashMap<>();
   public static Material WOOD_SWORD;
 
   public static void load() {
@@ -61,6 +66,21 @@ public class ToolSwordHelper implements Listener {
 
     if(tracker != null)
       tracker.upgradeLevel(group, event.getItem().getBuyGroupLevel(), event.getPlayer());
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onArenaStatusChangeEvent(ArenaStatusChangeEvent event) {
+    if (event.getOldStatus() == ArenaStatus.RUNNING)
+      removeArena(event.getArena());
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onArenaDeleteEvent(ArenaDeleteEvent event) {
+    removeArena(event.getArena());
+  }
+
+  private void removeArena(Arena arena) {
+    buyGroupTrackerMap.remove(arena);
   }
 
   public static BuyGroupTracker getBuyGroupTracker(Player player) {

@@ -2,6 +2,7 @@ package me.metallicgoat.tweaksaddon.tweaks.messages;
 
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.QuitPlayerMemory;
+import de.marcely.bedwars.api.event.arena.ArenaDeleteEvent;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.message.Message;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,13 +24,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 public class TopKillerMessage implements Listener {
 
-  public static HashMap<Arena, Collection<Player>> arenaPlayers = new HashMap<>();
+  public static Map<Arena, Collection<Player>> arenaPlayers = new IdentityHashMap<>();
 
-  public static LinkedHashMap<OfflinePlayer, Integer> sortHashMapByValue(HashMap<OfflinePlayer, Integer> hm) {
+  public static LinkedHashMap<OfflinePlayer, Integer> sortHashMapByValue(Map<OfflinePlayer, Integer> hm) {
     // creating list from elements of HashMap
     final List<Map.Entry<OfflinePlayer, Integer>> list = new LinkedList<>(hm.entrySet());
 
@@ -59,7 +62,7 @@ public class TopKillerMessage implements Listener {
       return;
 
     final Arena arena = event.getArena();
-    final HashMap<OfflinePlayer, Integer> nameIntMap = new HashMap<>();
+    final Map<OfflinePlayer, Integer> nameIntMap = new HashMap<>();
 
     // Online Players
     for (OfflinePlayer player : arenaPlayers.get(arena))
@@ -73,8 +76,13 @@ public class TopKillerMessage implements Listener {
     arenaPlayers.remove(arena);
   }
 
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onArenaDeleteEvent(ArenaDeleteEvent event) {
+    arenaPlayers.remove(event.getArena());
+  }
+
   // TODO this bad
-  private void printMessage(Arena arena, HashMap<OfflinePlayer, Integer> playerIntegerMap) {
+  private void printMessage(Arena arena, Map<OfflinePlayer, Integer> playerIntegerMap) {
     final List<String> formattedList = new ArrayList<>();
 
     // There is Killers
@@ -116,7 +124,7 @@ public class TopKillerMessage implements Listener {
     broadcast(arena, formattedList);
   }
 
-  private void addStatsToMap(HashMap<OfflinePlayer, Integer> nameIntMap, OfflinePlayer player) {
+  private void addStatsToMap(Map<OfflinePlayer, Integer> nameIntMap, OfflinePlayer player) {
     if (player == null)
       return;
 
