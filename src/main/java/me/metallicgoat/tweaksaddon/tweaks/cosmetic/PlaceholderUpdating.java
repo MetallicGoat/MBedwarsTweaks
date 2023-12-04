@@ -3,6 +3,7 @@ package me.metallicgoat.tweaksaddon.tweaks.cosmetic;
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
+import de.marcely.bedwars.api.event.arena.ArenaDeleteEvent;
 import de.marcely.bedwars.api.event.arena.ArenaStatusChangeEvent;
 import de.marcely.bedwars.api.event.player.PlayerJoinArenaEvent;
 import de.marcely.bedwars.api.event.player.PlayerQuitArenaEvent;
@@ -52,6 +53,9 @@ public class PlaceholderUpdating implements Listener {
   }
 
   private void startScheduler(Arena arena) {
+    if (!arena.exists())
+      return;
+
     this.tickingArenas.computeIfAbsent(arena, this::createScheduler);
   }
 
@@ -95,5 +99,10 @@ public class PlaceholderUpdating implements Listener {
       stopScheduler(arena);
       startScheduler(arena);
     }, 1);
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onArenaDeleteEvent(ArenaDeleteEvent event) {
+    stopScheduler(event.getArena());
   }
 }

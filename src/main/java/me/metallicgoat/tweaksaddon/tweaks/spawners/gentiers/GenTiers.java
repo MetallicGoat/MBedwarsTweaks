@@ -1,17 +1,20 @@
 package me.metallicgoat.tweaksaddon.tweaks.spawners.gentiers;
+
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.arena.Team;
-import de.marcely.bedwars.api.event.arena.RoundEndEvent;
+import de.marcely.bedwars.api.event.arena.ArenaDeleteEvent;
+import de.marcely.bedwars.api.event.arena.ArenaStatusChangeEvent;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.api.game.spawner.SpawnerDurationModifier;
 import de.marcely.bedwars.api.message.Message;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.List;
 
 import de.marcely.bedwars.tools.location.XYZD;
+import java.util.Map;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.GenTiersConfig;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
@@ -19,17 +22,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.Nullable;
 
 public class GenTiers implements Listener {
 
-  private static final HashMap<Arena, String> nextTierMap = new HashMap<>();
-  private static final HashMap<Arena, Long> nextUpdateTime = new HashMap<>();
-  private final HashMap<Arena, BukkitTask> genTierTasks = new HashMap<>();
+  private static final Map<Arena, ArenaState> arenaStates = new IdentityHashMap<>();
 
   @EventHandler
-  public void onGameStart(RoundStartEvent event) {
+  public void onRoundStartEvent(RoundStartEvent event) {
     if (!MainConfig.gen_tiers_enabled)
       return;
 
@@ -44,37 +47,44 @@ public class GenTiers implements Listener {
       }
     }
 
-    scheduleTier(arena, 1);
+    scheduleArena(arena, 1);
   }
 
-  @EventHandler
-  public void onGameStop(RoundEndEvent event) {
-    // Kill Gen Tiers on round end
-    final BukkitTask task = genTierTasks.get(event.getArena());
-
-    if (task != null) {
-      task.cancel();
-      genTierTasks.remove(event.getArena());
-    }
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onArenaStatusChangeEvent(ArenaStatusChangeEvent event) {
+    if (event.getOldStatus() == ArenaStatus.RUNNING)
+      removeArena(event.getArena());
   }
 
-  private void scheduleTier(Arena arena, int key) {
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onArenaDeleteEvent(ArenaDeleteEvent event) {
+    removeArena(event.getArena());
+  }
+
+  private void removeArena(Arena arena) {
+    final ArenaState state = arenaStates.remove(arena);
+
+    if (state != null && state.genTierTask != null)
+      state.genTierTask.cancel();
+  }
+
+  private void scheduleArena(Arena arena, int tier) {
+    final GenTierLevel currentLevel = GenTiersConfig.gen_tier_levels.get(tier);
+
     // Check if tier exists
-    if (GenTiersConfig.gen_tier_levels.get(key) == null)
+    if (currentLevel == null)
       return;
 
-    final GenTierLevel currentLevel = GenTiersConfig.gen_tier_levels.get(key);
-    final int nextTierLevel = key + 1;
-
     // Update Placeholder
-    nextTierMap.put(arena, currentLevel.getTierName());
-    nextUpdateTime.put(arena, System.currentTimeMillis() + ((long) currentLevel.getTime() * 60 * 1000));
+    final ArenaState state = new ArenaState();
+
+    removeArena(arena); // Cancel existing tasks
+    arenaStates.put(arena, state);
+
+    state.nextTierMap = currentLevel.getTierName();;
+    state.nextUpdateTime = System.currentTimeMillis() + ((long) currentLevel.getTime() * 60 * 1000);
 
     // Kill previous task if running for some reason
-    final BukkitTask task = genTierTasks.get(arena);
-    if (task != null)
-      task.cancel();
-
     switch (currentLevel.getAction()) {
       case GAME_OVER: {
         currentLevel.broadcastEarn(arena, false);
@@ -83,59 +93,55 @@ public class GenTiers implements Listener {
       }
 
       case BED_DESTROY: {
-        genTierTasks.put(arena, Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
-          if (arena.getStatus() == ArenaStatus.RUNNING) {
-            // Break beds, start next tier
-            currentLevel.broadcastEarn(arena, false);
-            scheduleTier(arena, nextTierLevel);
+        state.genTierTask = Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
+          // Break beds, start next tier
+          currentLevel.broadcastEarn(arena, false);
+          scheduleArena(arena, tier + 1);
 
-            // Break all beds in an arena
-            for (Team team : arena.getEnabledTeams()) {
-              final XYZD bedLoc = arena.getBedLocation(team);
-              if (!arena.isBedDestroyed(team) && bedLoc != null) {
-                arena.destroyBedNaturally(team, Message.build(currentLevel.getTierName()).done());
-                bedLoc.toLocation(arena.getGameWorld()).getBlock().setType(Material.AIR);
-              }
-            }
-
-            // Broadcast Message
-            if (MainConfig.auto_bed_break_message_enabled) {
-              for (String s : MainConfig.auto_bed_break_message) {
-                arena.broadcast(Message.build(s).done());
-              }
+          // Break all beds in an arena
+          for (Team team : arena.getEnabledTeams()) {
+            final XYZD bedLoc = arena.getBedLocation(team);
+            if (!arena.isBedDestroyed(team) && bedLoc != null) {
+              arena.destroyBedNaturally(team, Message.build(currentLevel.getTierName()).done());
+              bedLoc.toLocation(arena.getGameWorld()).getBlock().setType(Material.AIR);
             }
           }
-        }, (long) currentLevel.getTime() * 20 * 60));
+
+          // Broadcast Message
+          if (MainConfig.auto_bed_break_message_enabled) {
+            for (String s : MainConfig.auto_bed_break_message) {
+              arena.broadcast(Message.build(s).done());
+            }
+          }
+        }, (long) currentLevel.getTime() * 20 * 60);
+
         break;
       }
 
       case GEN_UPGRADE: {
-        genTierTasks.put(arena, Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
-          if (arena.getStatus() == ArenaStatus.RUNNING) {
-            currentLevel.broadcastEarn(arena, true);
-            scheduleTier(arena, nextTierLevel);
+        state.genTierTask = Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
+          currentLevel.broadcastEarn(arena, true);
+          scheduleArena(arena, tier + 1);
 
-            // For all spawners
-            for (Spawner spawner : arena.getSpawners()) {
-              if (currentLevel.getType() != null && spawner.getDropType() == currentLevel.getType()) {
-                // Set drop time
-                if (currentLevel.getSpeed() != null)
-                  spawner.addDropDurationModifier("GEN_UPGRADE", MBedwarsTweaksPlugin.getInstance(), SpawnerDurationModifier.Operation.SET, currentLevel.getSpeed());
+          // For all spawners
+          for (Spawner spawner : arena.getSpawners()) {
+            if (currentLevel.getType() != null && spawner.getDropType() == currentLevel.getType()) {
+              // Set drop time
+              if (currentLevel.getSpeed() != null)
+                spawner.addDropDurationModifier("GEN_UPGRADE", MBedwarsTweaksPlugin.getInstance(), SpawnerDurationModifier.Operation.SET, currentLevel.getSpeed());
 
-                // Set new limit
-                if (currentLevel.getLimit() != null)
-                  spawner.setMaxNearbyItems(currentLevel.getLimit());
+              // Set new limit
+              if (currentLevel.getLimit() != null)
+                spawner.setMaxNearbyItems(currentLevel.getLimit());
 
-                // Add custom Holo tiles
-                if (MainConfig.gen_tiers_custom_holo_enabled)
-                  formatHoloTiles(currentLevel.getTierLevel(), spawner);
+              // Add custom Holo tiles
+              if (MainConfig.gen_tiers_custom_holo_enabled)
+                formatHoloTiles(currentLevel.getTierLevel(), spawner);
 
-              }
             }
-          } else {
-            nextTierMap.remove(arena);
           }
-        }, (long) currentLevel.getTime() * 20 * 60));
+        }, (long) currentLevel.getTime() * 20 * 60);
+
         break;
       }
     }
@@ -162,12 +168,31 @@ public class GenTiers implements Listener {
     spawner.setOverridingHologramLines(formatted.toArray(new String[0]));
   }
 
+  @Nullable
   public static String getNextTierName(Arena arena){
-    return nextTierMap.get(arena);
+    final ArenaState state = arenaStates.get(arena);
+
+    if (state == null)
+      return null;
+
+    return state.nextTierMap;
   }
 
   // Format time for placeholder
   public static int getSecondsToNextUpdate(Arena arena) {
-    return Math.max((int) (nextUpdateTime.getOrDefault(arena, 0L) - System.currentTimeMillis()) / 1000, 0);
+    final ArenaState state = arenaStates.get(arena);
+
+    if (state == null)
+      return 0;
+
+    return (int) (state.nextUpdateTime - System.currentTimeMillis()) / 1000;
+  }
+
+
+  private static class ArenaState {
+
+    String nextTierMap;
+    long nextUpdateTime;
+    BukkitTask genTierTask;
   }
 }

@@ -28,6 +28,7 @@ public class FireballUseCoolDown implements Listener {
     }
 
     coolDownPlayers.add(player);
+
     Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () ->
         coolDownPlayers.remove(player), MainConfig.fireball_cooldown_time);
   }

@@ -4,12 +4,16 @@ import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.arena.Team;
+import de.marcely.bedwars.api.event.arena.ArenaDeleteEvent;
+import de.marcely.bedwars.api.event.arena.ArenaStatusChangeEvent;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.message.Message;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -26,8 +30,8 @@ import org.bukkit.inventory.Inventory;
 
 public class PersonalChests implements Listener {
 
-  private static final HashMap<Arena, List<Inventory>> inventoryArenaHashMap = new HashMap<>();
-  private static final HashMap<Player, Block> openChests = new HashMap<>();
+  private static final Map<Arena, List<Inventory>> inventoryArenaHashMap = new IdentityHashMap<>();
+  private static final Map<Player, Block> openChests = new IdentityHashMap<>();
 
   @EventHandler
   public void onRoundStart(RoundStartEvent event) {
@@ -52,9 +56,19 @@ public class PersonalChests implements Listener {
     inventoryArenaHashMap.put(arena, inventories);
   }
 
-  @EventHandler
-  public void onRoundEnd(RoundEndEvent event) {
-    inventoryArenaHashMap.remove(event.getArena());
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onArenaStatusChangeEvent(ArenaStatusChangeEvent event) {
+    if (event.getOldStatus() == ArenaStatus.RUNNING)
+      removeArena(event.getArena());
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onArenaDeleteEvent(ArenaDeleteEvent event) {
+    removeArena(event.getArena());
+  }
+
+  private void removeArena(Arena arena) {
+    inventoryArenaHashMap.remove(arena);
   }
 
   @EventHandler(priority = EventPriority.HIGH)
@@ -91,10 +105,9 @@ public class PersonalChests implements Listener {
   @EventHandler
   public void onInventoryClose(InventoryCloseEvent e) {
     final Player player = (Player) e.getPlayer();
+    final Block openBlock = openChests.remove(player);
 
-    if (openChests.containsKey(player)) {
-      BedwarsAPI.getNMSHelper().simulateChestClosing(openChests.get(player));
-      openChests.remove(player);
-    }
+    if (openBlock != null)
+      BedwarsAPI.getNMSHelper().simulateChestClosing(openBlock);
   }
 }
