@@ -6,15 +6,12 @@ import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.player.PlayerBuyUpgradeEvent;
 import de.marcely.bedwars.api.game.upgrade.UpgradeTriggerHandler;
 import de.marcely.bedwars.api.game.upgrade.UpgradeTriggerHandlerType;
+import de.marcely.bedwars.tools.VarParticle;
 import de.marcely.bedwars.tools.location.XYZYP;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.Collection;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,9 +20,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class HealPoolParticles implements Listener {
 
-  @EventHandler(priority = EventPriority.HIGHEST)
+  @EventHandler(priority = EventPriority.MONITOR)
   public void onUpgradeBuy(PlayerBuyUpgradeEvent event) {
-    if (!MainConfig.heal_pool_particle_enabled || !event.getProblems().isEmpty())
+    if (!MainConfig.heal_pool_particle_enabled || !event.getProblems().isEmpty() || MainConfig.heal_pool_particle_type == null)
       return;
 
     final UpgradeTriggerHandler handler = event.getUpgradeLevel().getTriggerHandler();
@@ -37,26 +34,42 @@ public class HealPoolParticles implements Listener {
     final Arena arena = event.getArena();
     final XYZYP teamSpawn = arena.getTeamSpawn(team);
 
-    if (teamSpawn != null)
-      new HealPoolParticlesTask(arena, team, teamSpawn.toLocation(arena.getGameWorld())).start();
+    if (teamSpawn == null)
+      return;
+
+    final VarParticle particle = MainConfig.heal_pool_particle_type.clone();
+    final int volume = MainConfig.heal_pool_particle_range*3*2;
+    final int count = Math.max(1, volume/4);
+
+    particle.setOffset(
+        MainConfig.heal_pool_particle_range,
+        MainConfig.heal_pool_particle_range,
+        MainConfig.heal_pool_particle_range
+    );
+    particle.setCount(count);
+
+    new HealPoolParticlesTask(arena, team, teamSpawn.toLocation(arena.getGameWorld()), particle).start();
   }
 
 
 
   private static class HealPoolParticlesTask extends BukkitRunnable {
-    private final ArrayList<Location> locs;
-    private final Team team;
-    private final Arena arena;
 
-    public HealPoolParticlesTask(Arena arena, Team team, Location teamSpawn) {
-      this.locs = getParticleLocations(teamSpawn, MainConfig.heal_pool_particle_range);
+    private final Arena arena;
+    private final Team team;
+    private final Location teamSpawn;
+    private final VarParticle particle;
+
+    public HealPoolParticlesTask(Arena arena, Team team, Location teamSpawn, VarParticle particle) {
       this.arena = arena;
       this.team = team;
+      this.teamSpawn = teamSpawn;
+      this.particle = particle;
     }
 
     public void start() {
       if (this.arena.getStatus() == ArenaStatus.RUNNING)
-        runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 0L, 20L);
+        runTaskTimerAsynchronously(MBedwarsTweaksPlugin.getInstance(), 0L, 20L);
     }
 
     @Override
@@ -66,36 +79,15 @@ public class HealPoolParticles implements Listener {
         return;
       }
 
-      Collections.shuffle(this.locs);
+      if (MainConfig.heal_pool_particle_team_view_only) {
+        final Collection<Player> members = this.arena.getPlayersInTeam(this.team);
 
-      final List<Location> locationsRandomized = this.locs.subList(0, locs.size() / 4);
+        for (Player member : members)
+          this.particle.play(this.teamSpawn, member);
 
-      for (Location location : locationsRandomized) {
-        if (MainConfig.heal_pool_particle_type != null) {
-          if (MainConfig.heal_pool_particle_team_view_only) {
-            for (Player player : this.arena.getPlayersInTeam(team))
-              MainConfig.heal_pool_particle_type.play(location, player);
-          } else
-            MainConfig.heal_pool_particle_type.play(location);
-        }
+      } else {
+        this.particle.play(this.teamSpawn);
       }
-    }
-
-    public ArrayList<Location> getParticleLocations(Location start, int radius) {
-      final ArrayList<Location> locations = new ArrayList<>();
-
-      for (double x = start.getX() - radius; x <= start.getX() + radius; x++) {
-        for (double y = start.getY() - radius; y <= start.getY() + radius; y++) {
-          for (double z = start.getZ() - radius; z <= start.getZ() + radius; z++) {
-            final Location location = new Location(start.getWorld(), x, y, z);
-
-            if (location.getBlock().getType() == Material.AIR && new Random().nextInt(200) == 0)
-              locations.add(location);
-          }
-        }
-      }
-
-      return locations;
     }
   }
 }
