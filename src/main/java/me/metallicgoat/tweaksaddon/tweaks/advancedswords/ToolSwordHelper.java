@@ -13,7 +13,7 @@ import de.marcely.bedwars.api.game.shop.ShopItem;
 import de.marcely.bedwars.api.game.shop.product.ItemShopProduct;
 import de.marcely.bedwars.api.game.shop.product.ShopProduct;
 import de.marcely.bedwars.tools.Helper;
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 import me.metallicgoat.hotbarmanageraddon.HotbarManagerTools;
 import me.metallicgoat.tweaksaddon.DependType;
@@ -33,7 +33,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class ToolSwordHelper implements Listener {
 
-  private static final Map<Arena, BuyGroupTracker> buyGroupTrackerMap = new HashMap<>();
+  private static final Map<Arena, BuyGroupTracker> buyGroupTrackerMap = new IdentityHashMap<>();
   public static Material WOOD_SWORD;
 
   public static void load() {
