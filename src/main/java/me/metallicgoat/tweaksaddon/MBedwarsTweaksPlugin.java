@@ -1,6 +1,7 @@
 package me.metallicgoat.tweaksaddon;
 
 import de.marcely.bedwars.api.BedwarsAPI;
+import de.marcely.bedwars.api.GameAPI;
 import lombok.Getter;
 import me.metallicgoat.tweaksaddon.config.ConfigLoader;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
@@ -9,6 +10,7 @@ import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
 import me.metallicgoat.tweaksaddon.utils.Console;
 import me.metallicgoat.tweaksaddon.utils.Metrics;
 import me.metallicgoat.tweaksaddon.utils.UpdateChecker;
+import me.metallicgoat.tweaksaddon.tweaks.spawners.gentiers.SuddenDeathUpgrade;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -45,13 +47,15 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
     );
 
     BedwarsAPI.onReady(() -> {
-      DependencyLoader.loadAll();
+      DependManager.load();
       ConfigLoader.loadTweaksConfigs(this);
       ToolSwordHelper.load();
+      GameAPI.get().registerUpgradeTriggerHandler(new SuddenDeathUpgrade());
 
       // Check Update Async
       if (MainConfig.check_update_on_load)
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> UpdateChecker.checkForUpdate(pdf.getVersion()));
+
     });
   }
 
