@@ -3,7 +3,7 @@ package me.metallicgoat.tweaksaddon.tweaks.misc;
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.event.player.PlayerStatChangeEvent;
-import me.metallicgoat.tweaksaddon.Util;
+import me.metallicgoat.tweaksaddon.utils.Util;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

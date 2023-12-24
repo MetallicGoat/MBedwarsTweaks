@@ -8,7 +8,7 @@ import me.metallicgoat.tweaksaddon.tweaks.explosives.*;
 import me.metallicgoat.tweaksaddon.tweaks.messages.*;
 import me.metallicgoat.tweaksaddon.tweaks.misc.*;
 import me.metallicgoat.tweaksaddon.tweaks.spawners.*;
-import me.metallicgoat.tweaksaddon.tweaks.spawners.gentiers.GenTiers;
+import me.metallicgoat.tweaksaddon.gentiers.GenTiers;
 import org.bukkit.plugin.PluginManager;
 
 public class MBedwarsTweaksAddon extends BedwarsAddon {
@@ -69,10 +69,12 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     manager.registerEvents(new RemoveInvisOnDamage(), plugin);
 
     // Spawners
-    manager.registerEvents(new GenTiers(), plugin);
     manager.registerEvents(new AFKSpawners(), plugin);
     manager.registerEvents(new DisableEmptyGenerators(), plugin);
     manager.registerEvents(new SpawnerUpgrade(), plugin);
+
+    // Gen Tiers
+    manager.registerEvents(new GenTiers(), plugin);
 
     // Server Events
     manager.registerEvents(new DependencyLoader(), plugin);

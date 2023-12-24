@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import lombok.Getter;
-import me.metallicgoat.tweaksaddon.Util;
 import me.metallicgoat.tweaksaddon.config.ConfigManager.Config;
 import me.metallicgoat.tweaksaddon.config.ConfigManager.SectionTitle;
 import net.md_5.bungee.api.ChatColor;

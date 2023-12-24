@@ -1,4 +1,6 @@
-package me.metallicgoat.tweaksaddon;
+package me.metallicgoat.tweaksaddon.utils;
+
+import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 
 public class Console {
 

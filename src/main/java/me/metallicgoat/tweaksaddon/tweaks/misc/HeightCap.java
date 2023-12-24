@@ -5,7 +5,7 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.message.Message;
 import java.util.Map;
-import me.metallicgoat.tweaksaddon.Util;
+import me.metallicgoat.tweaksaddon.utils.Util;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

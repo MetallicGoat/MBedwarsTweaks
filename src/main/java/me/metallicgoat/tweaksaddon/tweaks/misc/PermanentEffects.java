@@ -5,7 +5,7 @@ import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.event.player.PlayerIngameRespawnEvent;
 import java.util.Collection;
 import java.util.Map;
-import me.metallicgoat.tweaksaddon.Util;
+import me.metallicgoat.tweaksaddon.utils.Util;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -1,6 +1,6 @@
 package me.metallicgoat.tweaksaddon.integration;
 
-import me.metallicgoat.tweaksaddon.Console;
+import me.metallicgoat.tweaksaddon.utils.Console;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.Placeholders;
 import org.bukkit.Bukkit;

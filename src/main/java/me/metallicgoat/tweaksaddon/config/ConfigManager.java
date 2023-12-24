@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Getter;
-import me.metallicgoat.tweaksaddon.Console;
+import me.metallicgoat.tweaksaddon.utils.Console;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;

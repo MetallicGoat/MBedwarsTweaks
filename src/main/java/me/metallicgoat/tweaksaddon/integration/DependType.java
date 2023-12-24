@@ -1,7 +1,7 @@
 package me.metallicgoat.tweaksaddon.integration;
 
 import lombok.Getter;
-import me.metallicgoat.tweaksaddon.Console;
+import me.metallicgoat.tweaksaddon.utils.Console;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.integration.hooks.PrestigesLevelOnExperienceBar;
 import org.bukkit.Bukkit;

@@ -5,12 +5,12 @@ import de.marcely.bedwars.api.arena.Team;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import me.metallicgoat.tweaksaddon.Console;
+import me.metallicgoat.tweaksaddon.utils.Console;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
-import me.metallicgoat.tweaksaddon.Util;
+import me.metallicgoat.tweaksaddon.utils.Util;
 import me.metallicgoat.tweaksaddon.config.ConfigManager.FileType;
-import me.metallicgoat.tweaksaddon.tweaks.spawners.gentiers.GenTierLevel;
-import me.metallicgoat.tweaksaddon.tweaks.spawners.gentiers.TierAction;
+import me.metallicgoat.tweaksaddon.gentiers.GenTierLevel;
+import me.metallicgoat.tweaksaddon.gentiers.TierAction;
 import net.md_5.bungee.api.ChatColor;
 
 public class ConfigLoader {
