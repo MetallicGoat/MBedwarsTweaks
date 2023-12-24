@@ -106,7 +106,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
 
   private static List<Location> generateDefaultTargets(Arena arena, @Nullable Team team, World world) {
     final List<Location> targets = new ArrayList<>();
-    final XYZYP teamSpawn = arena.getTeamSpawn(team);
+    final XYZYP teamSpawn = team != null ? arena.getTeamSpawn(team) : null;
 
     for (Team currTeam : arena.getEnabledTeams()) {
       if (currTeam == team)
@@ -149,7 +149,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
   public void onRoundEnd(RoundEndEvent event) {
     if (event.getArena() == this.arena) {
       if (this.dragon.isValid())
-        this.dragon.setHealth(0);
+        this.dragon.remove();
 
       cancel();
     }
@@ -171,8 +171,8 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
   }
 
   private Location getNewTarget() {
-    // 25% chance the dragon will go to the middle to rest before its next move
-    if (this.state != DragonState.RETURNING_HOME && random.nextInt(4) < 1) {
+    // 20% chance the dragon will go to the middle to rest before its next move
+    if (this.state != DragonState.RETURNING_HOME && random.nextInt(5) < 1) {
       final XYZYP spectatorSpawn = this.arena.getSpectatorSpawn();
 
       if (spectatorSpawn == null) {

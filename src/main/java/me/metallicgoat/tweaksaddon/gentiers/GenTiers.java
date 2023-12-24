@@ -19,10 +19,7 @@ import me.metallicgoat.tweaksaddon.config.GenTiersConfig;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.EnderDragon;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -134,7 +131,7 @@ public class GenTiers implements Listener {
 
             // Spawn Dragon
             if (hasSuddenDeath(arena, team))
-              DragonFollowTask.init(arena, team).runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 0, 1L);;
+              DragonFollowTask.init(arena, team).runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 0, 1L);
 
           }
 
