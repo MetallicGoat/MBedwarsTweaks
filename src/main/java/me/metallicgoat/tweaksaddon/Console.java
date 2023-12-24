@@ -2,6 +2,10 @@ package me.metallicgoat.tweaksaddon;
 
 public class Console {
 
+  public static void printError(String error) {
+    MBedwarsTweaksPlugin.getInstance().getLogger().severe(error);
+  }
+
   public static void printWarn(String warn) {
     MBedwarsTweaksPlugin.getInstance().getLogger().warning(warn);
   }

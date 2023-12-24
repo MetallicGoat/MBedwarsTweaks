@@ -4,6 +4,7 @@ import de.marcely.bedwars.api.BedwarsAPI;
 import lombok.Getter;
 import me.metallicgoat.tweaksaddon.config.ConfigLoader;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
+import me.metallicgoat.tweaksaddon.integration.DependencyLoader;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -41,7 +42,7 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
     );
 
     BedwarsAPI.onReady(() -> {
-      DependManager.load();
+      DependencyLoader.loadAll();
       ConfigLoader.loadTweaksConfigs(this);
       ToolSwordHelper.load();
 

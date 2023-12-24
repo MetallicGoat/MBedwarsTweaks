@@ -1,4 +1,4 @@
-package me.metallicgoat.tweaksaddon.tweaks.hooks;
+package me.metallicgoat.tweaksaddon.integration.hooks;
 
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.event.player.PlayerIngameRespawnEvent;
@@ -6,9 +6,7 @@ import de.marcely.bedwars.tools.Helper;
 import java.util.function.Consumer;
 import me.harsh.prestigesaddon.PrestigeAddon;
 import me.harsh.prestigesaddon.api.PrestigePlayer;
-import me.metallicgoat.tweaksaddon.DependType;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
-import me.metallicgoat.tweaksaddon.DependManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,10 +29,6 @@ public class PrestigesLevelOnExperienceBar implements Listener {
   private void setPlayerLevel(Player player) {
     // Check Enabled
     if (!MainConfig.prestiges_level_on_exp_bar)
-      return;
-
-    // Check loaded
-    if (!DependManager.isPresent(DependType.PRESTIGE_ADDON))
       return;
 
     getPrestigePlayer(player, data -> {

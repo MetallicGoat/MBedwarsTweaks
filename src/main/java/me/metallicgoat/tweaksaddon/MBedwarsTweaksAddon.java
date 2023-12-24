@@ -1,10 +1,10 @@
 package me.metallicgoat.tweaksaddon;
 
 import de.marcely.bedwars.api.BedwarsAddon;
+import me.metallicgoat.tweaksaddon.integration.DependencyLoader;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.*;
 import me.metallicgoat.tweaksaddon.tweaks.cosmetic.*;
 import me.metallicgoat.tweaksaddon.tweaks.explosives.*;
-import me.metallicgoat.tweaksaddon.tweaks.hooks.*;
 import me.metallicgoat.tweaksaddon.tweaks.messages.*;
 import me.metallicgoat.tweaksaddon.tweaks.misc.*;
 import me.metallicgoat.tweaksaddon.tweaks.spawners.*;
@@ -50,9 +50,6 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     manager.registerEvents(new FireballThrowEffects(), plugin);
     manager.registerEvents(new FireballUseCoolDown(), plugin);
 
-    // Hooks
-    manager.registerEvents(new PrestigesLevelOnExperienceBar(), plugin);
-
     // Messages
     manager.registerEvents(new BuyMessage(), plugin);
     manager.registerEvents(new CustomBedBreakMessage(), plugin);
@@ -78,7 +75,7 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     manager.registerEvents(new SpawnerUpgrade(), plugin);
 
     // Server Events
-    manager.registerEvents(new DependManager(), plugin);
+    manager.registerEvents(new DependencyLoader(), plugin);
   }
 
   @Override

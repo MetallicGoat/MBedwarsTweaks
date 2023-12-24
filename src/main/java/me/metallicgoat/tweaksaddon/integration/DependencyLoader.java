@@ -1,17 +1,17 @@
-package me.metallicgoat.tweaksaddon;
+package me.metallicgoat.tweaksaddon.integration;
 
-import java.util.HashMap;
+import me.metallicgoat.tweaksaddon.Console;
+import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
+import me.metallicgoat.tweaksaddon.Placeholders;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 
-public class DependManager implements Listener {
+public class DependencyLoader implements Listener {
 
-  private static final HashMap<DependType, Boolean> loadedDepends = new HashMap<>();
-
-  public static void load() {
+  public static void loadAll() {
     if (Bukkit.getPluginManager().isPluginEnabled("FireBallKnockback")) {
       Console.printInfo("I noticed you are using my Fireball jumping addon. " +
           "As of 5.0.13, you do not need it anymore! Fireball jumping " +
@@ -21,12 +21,10 @@ public class DependManager implements Listener {
     }
 
     for (DependType type : DependType.values()) {
-      final boolean enabled = Bukkit.getPluginManager().isPluginEnabled(type.getName());
-
-      setLoaded(type, enabled);
+      type.tryLoad();
 
       if (type == DependType.PLACEHOLDER_API) {
-        if (enabled)
+        if (type.isEnabled())
           new Placeholders(MBedwarsTweaksPlugin.getInstance()).register();
         else
           Console.printInfo("PlaceholderAPI was not Found! PAPI placeholders won't work!");
@@ -34,29 +32,23 @@ public class DependManager implements Listener {
     }
   }
 
-  public static boolean isPresent(DependType type) {
-    return loadedDepends.get(type);
-  }
+  private void updateLoadedState(String pluginName, boolean enabled) {
+    final DependType type = DependType.getTypeByName(pluginName);
 
-  private static void setLoaded(String typeName, boolean enabled) {
-    setLoaded(DependType.getTypeByName(typeName), enabled);
-  }
-
-  private static void setLoaded(DependType type, boolean enabled) {
-    // Check if this is even a dependency
+    // Is this one of our soft depends?
     if (type == null)
       return;
 
-    loadedDepends.put(type, enabled);
+    type.tryLoad();
   }
 
   @EventHandler
   public void onDependLoad(PluginEnableEvent event) {
-    setLoaded(event.getPlugin().getName(), true);
+    updateLoadedState(event.getPlugin().getName(), true);
   }
 
   @EventHandler
   public void onDependUnload(PluginDisableEvent event) {
-    setLoaded(event.getPlugin().getName(), false);
+    updateLoadedState(event.getPlugin().getName(), false);
   }
 }
