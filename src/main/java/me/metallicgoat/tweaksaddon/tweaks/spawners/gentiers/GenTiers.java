@@ -41,22 +41,17 @@ public class GenTiers implements Listener {
   private static final Map<Arena, ArenaState> arenaStates = new IdentityHashMap<>();
 
   @EventHandler
-  public void testDragon(AsyncPlayerChatEvent event){
+  public void testDragon(AsyncPlayerChatEvent event) {
     Bukkit.getScheduler().runTask(MBedwarsTweaksPlugin.getInstance(), () -> {
       final Player player = event.getPlayer();
       final Arena arena = GameAPI.get().getArenaByPlayer(player);
 
-      if(arena == null)
+      if (arena == null)
         return;
 
       final Team team = arena.getPlayerTeam(player);
 
-      final Location location = arena.getTeamSpawn(team).toLocation(arena.getGameWorld()).clone();
-
-      location.add(0, 20, 0);
-
-      final EnderDragon dragon = (EnderDragon) arena.getGameWorld().spawnEntity(location, EntityType.ENDER_DRAGON);
-      new DragonFollowTask(dragon, arena, team).runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 0, 1);
+      DragonFollowTask.init(arena, team).runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 0, 1L);
     });
 
   }
@@ -138,14 +133,9 @@ public class GenTiers implements Listener {
             }
 
             // Spawn Dragon
-            if (hasSuddenDeath(arena, team)) {
-              final Location location = arena.getTeamSpawn(team).toLocation(arena.getGameWorld()).clone();
+            if (hasSuddenDeath(arena, team))
+              DragonFollowTask.init(arena, team).runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 0, 1L);;
 
-              location.add(0, 20, 0);
-
-              final EnderDragon dragon = (EnderDragon) arena.getGameWorld().spawnEntity(location, EntityType.ENDER_DRAGON);
-              new DragonFollowTask(dragon, arena, team).runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 0, 1);
-            }
           }
 
           // Broadcast Message
