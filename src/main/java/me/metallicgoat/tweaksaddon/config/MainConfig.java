@@ -38,8 +38,6 @@ public class MainConfig {
       Helper.get().getMaterialByName("DIAMOND_AXE")
   );
 
-  public static boolean defaultDropTypesExist = false;
-
   // ===== GENERAL
   @SectionTitle(title = "GENERAL")
 
@@ -80,11 +78,7 @@ public class MainConfig {
       }
   )
   public static String gen_tiers_start_tier = "&eTier &cI";
-  @Config public static List<DropType> gen_tiers_start_spawners = defaultDropTypesExist
-      ? Arrays.asList(
-      Util.getDropType("emerald"),
-      Util.getDropType("diamond")
-  ) : new ArrayList<>();
+  @Config public static List<DropType> gen_tiers_start_spawners = new ArrayList<>();
 
   // ===== SPAWNERS
   @SectionTitle(title = "SPAWNERS")
@@ -97,11 +91,7 @@ public class MainConfig {
   )
   public static boolean disable_empty_generators = false;
   @Config public static double disable_empty_generators_range = 6;
-  @Config public static List<DropType> disable_empty_generators_spawners = defaultDropTypesExist
-      ? new ArrayList<>(Arrays.asList(
-      Util.getDropType("iron"),
-      Util.getDropType("gold")
-  )) : new ArrayList<>();
+  @Config public static List<DropType> disable_empty_generators_spawners = new ArrayList<>();
 
   @Config(
       description = {

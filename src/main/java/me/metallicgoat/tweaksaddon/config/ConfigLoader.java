@@ -1,6 +1,8 @@
 package me.metallicgoat.tweaksaddon.config;
 
 import de.marcely.bedwars.api.arena.Team;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import me.metallicgoat.tweaksaddon.Console;
@@ -16,12 +18,25 @@ public class ConfigLoader {
   public static void loadTweaksConfigs(MBedwarsTweaksPlugin plugin) {
     final long start = System.currentTimeMillis();
 
-    MainConfig.defaultDropTypesExist = (
+    final boolean defaultDropTypesExist = (
         Util.getDropType("iron") != null
             && Util.getDropType("gold") != null
             && Util.getDropType("diamond") != null
             && Util.getDropType("emerald") != null
     );
+
+    // Replace with these values if we know defaults are still setup
+    if (defaultDropTypesExist) {
+      MainConfig.gen_tiers_start_spawners = Arrays.asList(
+          Util.getDropType("emerald"),
+          Util.getDropType("diamond")
+      );
+
+      MainConfig.disable_empty_generators_spawners = Arrays.asList(
+          Util.getDropType("iron"),
+          Util.getDropType("gold")
+      );
+    }
 
     GenTiersConfig.gen_tier_levels = getDefaultGenTiers();
 
