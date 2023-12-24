@@ -69,7 +69,7 @@ public class GenTiersConfig {
         final String typeString = config.getString(configKey + "Drop-Type");
         final double speed = config.getDouble(configKey + "Drop-Speed");
         final int limit = config.getInt(configKey + "Max-Nearby-Items", -1);
-        final double time = config.getLong(configKey + "Time");
+        final double time = config.getDouble(configKey + "Time");
         final String message = config.getString(configKey + "Message");
         final String soundString = config.getString(configKey + "Earn-Sound");
 

@@ -79,6 +79,15 @@ public class MainConfig {
   public static String gen_tiers_start_tier = "&eTier &cI";
   @Config public static List<DropType> gen_tiers_start_spawners = new ArrayList<>();
 
+  @Config(
+      description = {
+          "If dragons should spawn in when the gen tiers system breaks all arena beds",
+          "To allow players to purchase a team dragon, ",
+          "add the 'sudden-death' upgrade to your upgrade-shop.yml"
+      }
+  )
+  public static boolean sudden_death_dragons_enabled = true;
+
   // ===== SPAWNERS
   @SectionTitle(title = "SPAWNERS")
 

@@ -11,7 +11,7 @@ import me.metallicgoat.tweaksaddon.gentiers.GenTierLevel;
 import me.metallicgoat.tweaksaddon.gentiers.GenTiers;
 import org.bukkit.Material;
 
-public class SuddenDeathHandler extends GenTierHandler{
+public class AutoBedBreakHandler extends GenTierHandler{
   @Override
   public void run(GenTierLevel level, Arena arena) {
     // Break all beds in an arena & run team upgrades
@@ -23,8 +23,8 @@ public class SuddenDeathHandler extends GenTierHandler{
         bedLoc.toLocation(arena.getGameWorld()).getBlock().setType(Material.AIR);
       }
 
-      // Spawn Dragon
-      if (GenTiers.getState(arena).hasDragon(team))
+      // Spawn Team Dragons
+      if (MainConfig.sudden_death_dragons_enabled && GenTiers.getState(arena).hasDragon(team))
         DragonFollowTask.init(arena, team).runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 0, 1L);
 
     }

@@ -108,7 +108,7 @@ public class GenTiers implements Listener {
     final GenTierState state = getState(arena);
 
     state.nextTierName = currentLevel.getTierName();
-    state.nextUpdateTime = System.currentTimeMillis() + ((long) currentLevel.getTime() * 60 * 1000);
+    state.nextUpdateTime = System.currentTimeMillis() + (long) (currentLevel.getTime() * 60 * 1000);
 
     cancelTask(state); // Cancel existing tasks
 
@@ -124,7 +124,7 @@ public class GenTiers implements Listener {
 
         scheduleArena(arena, tier + 1);
 
-      }, (long) currentLevel.getTime() * 20 * 60);
+      }, (long) (currentLevel.getTime() * 20 * 60));
     }
   }
 

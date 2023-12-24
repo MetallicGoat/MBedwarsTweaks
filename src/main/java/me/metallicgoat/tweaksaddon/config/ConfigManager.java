@@ -110,7 +110,7 @@ public class ConfigManager {
         if (!isUpdating)
           Console.printConfigWarn("Your config seems to be missing the config called " + configName + "'. Have a look in your config.yml", "Main");
         else
-          Console.printConfigInfo("New config added during update to " + pluginVer + ": " + configName, "Main");
+          Console.printConfigWarn("New config added during update to " + pluginVer + ": '" + configName + "'", "Main");
 
         continue;
       }
