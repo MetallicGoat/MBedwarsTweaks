@@ -3,6 +3,7 @@ package me.metallicgoat.tweaksaddon;
 import de.marcely.bedwars.api.BedwarsAPI;
 import lombok.Getter;
 import me.metallicgoat.tweaksaddon.config.ConfigLoader;
+import me.metallicgoat.tweaksaddon.config.MainConfig;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -43,6 +44,10 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
       DependManager.load();
       ConfigLoader.loadTweaksConfigs(this);
       ToolSwordHelper.load();
+
+      // Check Update Async
+      if (MainConfig.check_update_on_load)
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> UpdateChecker.checkForUpdate(pdf.getVersion()));
     });
   }
 

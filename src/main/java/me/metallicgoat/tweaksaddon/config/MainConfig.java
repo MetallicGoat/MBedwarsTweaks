@@ -40,6 +40,16 @@ public class MainConfig {
 
   public static boolean defaultDropTypesExist = false;
 
+  // ===== GENERAL
+  @SectionTitle(title = "GENERAL")
+
+  @Config(
+      description = {
+          "If enabled, we will checks for a Tweaks update when the plugin is loaded."
+      }
+  )
+  public static boolean check_update_on_load = true;
+
   // ===== GEN TIERS
   @SectionTitle(title = "GEN TIERS")
 

@@ -10,6 +10,11 @@ public class Console {
     MBedwarsTweaksPlugin.getInstance().getLogger().info(info);
   }
 
+  public static void printWarn(String... strings) {
+    for (String s : strings)
+      printWarn(s);
+  }
+
   public static void printInfo(String... strings) {
     for (String s : strings)
       printInfo(s);
