@@ -17,8 +17,10 @@ public class GenTierLevel {
   private final String typeId;
   private final TierAction action;
   private final double time;
-  @Nullable private final Double speed;
-  @Nullable private final Integer limit;
+  @Nullable
+  private final Double speed;
+  @Nullable
+  private final Integer limit;
 
   private final String earnMessage;
   private final Sound earnSound;
@@ -70,9 +72,9 @@ public class GenTierLevel {
         p.playSound(p.getLocation(), earnSound, 1F, 1F);
     }
 
-    if(messageSupported && earnMessage != null){
+    if (messageSupported && earnMessage != null)
       arena.broadcast(Message.build(earnMessage));
-    }
+    
   }
 
   public DropType getType() {

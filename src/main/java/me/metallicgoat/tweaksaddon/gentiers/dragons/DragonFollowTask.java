@@ -1,4 +1,4 @@
-package me.metallicgoat.tweaksaddon.tweaks.spawners.gentiers;
+package me.metallicgoat.tweaksaddon.gentiers.dragons;
 
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
@@ -61,32 +61,35 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
 
     Location location = null;
 
-    if (team != null) {
-      final XYZYP spawn = arena.getTeamSpawn(team);
+    // Find optimal spot to spawn the dwwwagoon
+    {
+      if (team != null) {
+        final XYZYP spawn = arena.getTeamSpawn(team);
 
-      if (spawn != null)
-        location = spawn.toLocation(world).add(0, 30, 0);
+        if (spawn != null)
+          location = spawn.toLocation(world).add(0, 30, 0);
 
-    } else {
-      final XYZYP spawn = arena.getSpectatorSpawn();
+      } else {
+        final XYZYP spawn = arena.getSpectatorSpawn();
 
-      if (spawn != null && arena.isInside(spawn))
-        location = spawn.toLocation(world);
-    }
+        if (spawn != null && arena.isInside(spawn))
+          location = spawn.toLocation(world);
+      }
 
-    if (location == null) {
-      final XYZ max = arena.getMaxRegionCorner();
-      final XYZ min = arena.getMinRegionCorner();
+      if (location == null) {
+        final XYZ max = arena.getMaxRegionCorner();
+        final XYZ min = arena.getMinRegionCorner();
 
-      if (min == null || max == null)
-        throw new RuntimeException("Failed to find spot to spawn in a dragon");
+        if (min == null || max == null)
+          throw new RuntimeException("Failed to find spot to spawn in a dragon");
 
-      location = new Location(
-          world,
-          (max.getX() + min.getX()) / 2,
-          (max.getY() + min.getY()) / 2,
-          (max.getZ() + min.getZ()) / 2
-      );
+        location = new Location(
+            world,
+            (max.getX() + min.getX()) / 2,
+            (max.getY() + min.getY()) / 2,
+            (max.getZ() + min.getZ()) / 2
+        );
+      }
     }
 
     final EnderDragon dragon = (EnderDragon) world.spawnEntity(location, EntityType.ENDER_DRAGON);
@@ -204,6 +207,8 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     return generateRandomLocation();
   }
 
+  // Find a random spot anywhere in the arena
+  // TODO Check if this works on world type arenas
   private Location generateRandomLocation() {
     final XYZ max = this.arena.getMaxRegionCorner();
     final XYZ min = this.arena.getMinRegionCorner();

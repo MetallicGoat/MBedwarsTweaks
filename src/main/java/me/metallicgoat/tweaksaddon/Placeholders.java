@@ -79,8 +79,8 @@ public class Placeholders extends PlaceholderExpansion {
           case RESETTING:
             return Message.build(MainConfig.papi_next_tier_lobby_resetting).done();
           case RUNNING:
-            final String nextTierName = GenTiers.getNextTierName(arena);
-            final int totalSeconds = GenTiers.getSecondsToNextUpdate(arena);
+            final String nextTierName = GenTiers.getState(arena).getNextTierName();
+            final int totalSeconds = GenTiers.getState(arena).getSecondsToNextTier();
             final int min = totalSeconds / 60;
             String sec = String.valueOf(totalSeconds - (min * 60));
 
@@ -106,7 +106,7 @@ public class Placeholders extends PlaceholderExpansion {
           return "";
 
         if (arena != null && arena.getStatus() == ArenaStatus.RUNNING) {
-          final String nextTierName = GenTiers.getNextTierName(arena);
+          final String nextTierName = GenTiers.getState(arena).getNextTierName();
           return Message.build(nextTierName).done();
         }
 
