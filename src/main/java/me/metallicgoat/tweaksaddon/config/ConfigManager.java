@@ -76,6 +76,8 @@ public class ConfigManager {
       return;
     }
 
+    final boolean isUpdating = !configVersion.equals(pluginVer);
+
     // LOAD FILE
     for (Field field : configValueClass.getDeclaredFields()) {
       if (!field.isAnnotationPresent(Config.class))
@@ -105,7 +107,11 @@ public class ConfigManager {
       }
 
       if (configValue == null) {
-        Console.printConfigWarn("You config seems to be missing the config called '" + configName + "'. Have a look in your config.yml", "Main");
+        if (!isUpdating)
+          Console.printConfigWarn("Your config seems to be missing the config called " + configName + "'. Have a look in your config.yml", "Main");
+        else
+          Console.printConfigInfo("New config added during update to " + pluginVer + ": " + configName, "Main");
+
         continue;
       }
 
@@ -126,7 +132,7 @@ public class ConfigManager {
       }
     }
 
-    if (!configVersion.equals(pluginVer))
+    if (isUpdating)
       save(configValueClass, pluginVer, configFile);
 
   }
@@ -400,7 +406,8 @@ public class ConfigManager {
     GEN_TIERS("gen-tiers.yml"),
     SWORDS_TOOLS("swords-tools.yml");
 
-    @Getter private final String fileName;
+    @Getter
+    private final String fileName;
 
     FileType(String fileName) {
       this.fileName = fileName;
