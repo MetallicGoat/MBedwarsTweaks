@@ -1,6 +1,10 @@
 package me.metallicgoat.tweaksaddon;
 
 import de.marcely.bedwars.api.BedwarsAddon;
+import de.marcely.bedwars.api.GameAPI;
+import de.marcely.bedwars.api.message.DefaultMessageMappings;
+import de.marcely.bedwars.api.message.MessageAPI;
+import me.metallicgoat.tweaksaddon.gentiers.dragons.SuddenDeathUpgrade;
 import me.metallicgoat.tweaksaddon.integration.DependencyLoader;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.*;
 import me.metallicgoat.tweaksaddon.tweaks.cosmetic.*;
@@ -21,7 +25,17 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     this.plugin = plugin;
   }
 
-  public static void registerEvents() {
+  public void registerMessageMappings() {
+    try {
+      MessageAPI.get().registerDefaultMappings(
+          DefaultMessageMappings.loadInternalYAML(this.plugin, this.plugin.getResource("messages.yml"))
+      );
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void registerEvents() {
     final MBedwarsTweaksPlugin plugin = MBedwarsTweaksPlugin.getInstance();
     final PluginManager manager = plugin.getServer().getPluginManager();
 
@@ -78,6 +92,10 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
 
     // Server Events
     manager.registerEvents(new DependencyLoader(), plugin);
+  }
+
+  public void registerUpgrades() {
+    GameAPI.get().registerUpgradeTriggerHandler(new SuddenDeathUpgrade());
   }
 
   @Override

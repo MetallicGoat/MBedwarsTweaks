@@ -4,8 +4,12 @@ import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.picker.ArenaPickerAPI;
 import de.marcely.bedwars.api.game.spawner.DropType;
+
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+
 import org.jetbrains.annotations.Nullable;
 
 public class Util {
@@ -53,5 +57,10 @@ public class Util {
     } catch (NumberFormatException e) {
       return false;
     }
+  }
+
+  public static List<String> getLines(String string) {
+    final String[] parts = string.split("\\\\n");
+    return Arrays.asList(parts);
   }
 }

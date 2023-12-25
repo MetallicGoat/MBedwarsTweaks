@@ -81,7 +81,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
         final XYZ min = arena.getMinRegionCorner();
 
         if (min == null || max == null)
-          throw new RuntimeException("Failed to find spot to spawn in a dragon");
+          throw new RuntimeException("Failed to find spot to spawn in a dragon. This is a bug");
 
         location = new Location(
             world,
@@ -214,11 +214,16 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     final XYZ min = this.arena.getMinRegionCorner();
 
     if (min == null || max == null)
-      throw new RuntimeException("Failed to find spot to spawn in a dragon");
+      throw new RuntimeException("Failed to find spot to spawn in a dragon. This is a bug");
 
-    final int x = random.nextInt((int) Math.abs(max.getX() - min.getX()));
-    final int y = random.nextInt((int) Math.abs(max.getY() - min.getY()));
-    final int z = random.nextInt((int) Math.abs(max.getZ() - min.getZ()));
+    final double xBound = Math.abs(max.getX() - min.getX());
+    final double yBound = Math.abs(max.getY() - min.getY());
+    final double zBound = Math.abs(max.getZ() - min.getZ());
+
+    // Dont go all the way to the border
+    final double x = random.nextDouble(xBound * 0.8) + (xBound * 0.1);
+    final double y = random.nextDouble(yBound * 0.6) + (yBound * 0.3); // Shift upwards
+    final double z = random.nextDouble(zBound * 0.8) + (zBound * 0.1);
 
     return new Location(
         this.world,
@@ -243,7 +248,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
   public void run() {
     final Location dragonLocation = this.dragon.getLocation().clone();
     // The dragon has reached its target + tricks so it does not get in an 'orbit' around the target
-    if (this.targetLocation == null || dragonLocation.distance(this.targetLocation) < 10 || this.distanceTraveled > this.distanceToTarget + (this.distanceToTarget * 0.1))
+    if (this.targetLocation == null || dragonLocation.distance(this.targetLocation) < 10 || this.distanceTraveled > this.distanceToTarget * 1.2)
       updateTarget();
 
     final Vector toTarget = this.targetLocation.clone().subtract(dragonLocation).toVector().normalize();

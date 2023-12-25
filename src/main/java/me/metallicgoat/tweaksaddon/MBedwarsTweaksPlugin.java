@@ -26,7 +26,6 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
   private static MBedwarsTweaksAddon addon;
 
   public void onEnable() {
-
     instance = this;
 
     if (!checkMBedwars())
@@ -36,7 +35,9 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
 
     new Metrics(this, 11928);
 
-    MBedwarsTweaksAddon.registerEvents();
+    addon.registerMessageMappings();
+    addon.registerEvents();
+    addon.registerUpgrades();
 
     final PluginDescriptionFile pdf = this.getDescription();
 
@@ -52,7 +53,6 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
       DependencyLoader.loadAll();
       ConfigLoader.loadTweaksConfigs(this);
       ToolSwordHelper.load();
-      GameAPI.get().registerUpgradeTriggerHandler(new SuddenDeathUpgrade());
 
       // Check Update Async
       if (MainConfig.check_update_on_load)
