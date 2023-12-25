@@ -142,7 +142,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
 
     // NOTE: We do not have to worry about beds being destroyed, since they are already gone
     for (Block block : event.blockList()) {
-      if (this.arena.canPlaceBlockAt(block))
+      if (this.arena.isInside(block.getLocation()) && this.arena.canPlaceBlockAt(block))
         block.setType(Material.AIR);
     }
   }

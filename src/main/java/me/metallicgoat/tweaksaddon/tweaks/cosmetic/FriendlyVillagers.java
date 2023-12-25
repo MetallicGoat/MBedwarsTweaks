@@ -10,29 +10,29 @@ import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.world.WorldStorage;
 import de.marcely.bedwars.api.world.hologram.HologramControllerType;
 import de.marcely.bedwars.api.world.hologram.HologramEntity;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicReference;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.BlockIterator;
 
 import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class FriendlyVillagers implements Listener {
 
   private static final Set<Material> TRANSPARENT_MATERIALS = Arrays.stream(Material.values())
-      .filter(Material::isTransparent)
+      .filter(material -> material.isTransparent() || material.name().contains("SLAB"))
       .collect(Collectors.toSet());
 
   // 6+ hours has been spent on this. Rewritten like 6 times
@@ -238,22 +238,38 @@ public class FriendlyVillagers implements Listener {
 
           // Find players that can be seen
           final List<Player> seen = new ArrayList<>(rendering.size());
-          final Location loc = holo.getLocation().add(0, 1, 0);
+          final Location loc = holo.getLocation().add(0, 1.5, 0);
+          final World world = holo.getWorld().asBukkit();
 
           for (Player player : rendering) {
-            if (player.getWorld() != holo.getWorld().asBukkit())
+            if (player.getWorld() != world)
               continue;
 
-            final int distance = (int) Math.min(10, player.getEyeLocation().distance(loc));
+            final int distance = (int) player.getEyeLocation().distance(loc);
 
             if (distance == 0) {
               seen.add(player);
               continue;
             }
 
-            final List<Block> blocks = player.getLineOfSight(TRANSPARENT_MATERIALS, distance);
+            final BlockIterator blockIterator = new BlockIterator(
+                world,
+                loc.toVector(),
+                player.getEyeLocation().toVector().clone().subtract(loc.toVector()),
+                0,
+                distance
+            );
 
-            if (blocks.isEmpty() || TRANSPARENT_MATERIALS.contains(blocks.get(blocks.size()-1).getType()))
+            boolean hasLineOfSight = true;
+
+            while (blockIterator.hasNext()) {
+              if (!TRANSPARENT_MATERIALS.contains(blockIterator.next().getType())) {
+                hasLineOfSight = false;
+                break;
+              }
+            }
+
+            if (hasLineOfSight)
               seen.add(player);
           }
 

@@ -42,21 +42,6 @@ public class GenTiers implements Listener {
   }
 
   @EventHandler
-  public void testDragon(AsyncPlayerChatEvent event) {
-    Bukkit.getScheduler().runTask(MBedwarsTweaksPlugin.getInstance(), () -> {
-      final Player player = event.getPlayer();
-      final Arena arena = GameAPI.get().getArenaByPlayer(player);
-
-      if (arena == null)
-        return;
-
-      final Team team = arena.getPlayerTeam(player);
-
-      DragonFollowTask.init(arena, team).runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 0, 1L);
-    });
-  }
-
-  @EventHandler
   public void onRoundStartEvent(RoundStartEvent event) {
     if (!MainConfig.gen_tiers_enabled)
       return;
