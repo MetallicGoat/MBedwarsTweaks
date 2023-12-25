@@ -1,9 +1,11 @@
 package me.metallicgoat.tweaksaddon;
 
 import de.marcely.bedwars.api.BedwarsAPI;
+import de.marcely.bedwars.api.GameAPI;
 import lombok.Getter;
 import me.metallicgoat.tweaksaddon.config.ConfigLoader;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
+import me.metallicgoat.tweaksaddon.gentiers.dragons.SuddenDeathUpgrade;
 import me.metallicgoat.tweaksaddon.integration.DependencyLoader;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
 import me.metallicgoat.tweaksaddon.utils.Console;
@@ -18,8 +20,10 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
   public static final int MIN_MBEDWARS_API_VER = 25;
   public static final String MIN_MBEDWARS_VER_NAME = "5.3.3";
 
-  @Getter private static MBedwarsTweaksPlugin instance;
-  @Getter private static MBedwarsTweaksAddon addon;
+  @Getter
+  private static MBedwarsTweaksPlugin instance;
+  @Getter
+  private static MBedwarsTweaksAddon addon;
 
   public void onEnable() {
 
@@ -48,10 +52,12 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
       DependencyLoader.loadAll();
       ConfigLoader.loadTweaksConfigs(this);
       ToolSwordHelper.load();
+      GameAPI.get().registerUpgradeTriggerHandler(new SuddenDeathUpgrade());
 
       // Check Update Async
       if (MainConfig.check_update_on_load)
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> UpdateChecker.checkForUpdate(pdf.getVersion()));
+
     });
   }
 
