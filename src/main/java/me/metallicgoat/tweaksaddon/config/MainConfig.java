@@ -81,12 +81,20 @@ public class MainConfig {
 
   @Config(
       description = {
-          "If dragons should spawn in when the gen tiers system breaks all arena beds",
+          "If a default dragon should spawn in when the sudden death tier is reached",
+          "The default dragon will blong to no team, and could target any base or player",
           "To allow players to purchase a team dragon, ",
           "add the 'sudden-death' upgrade to your upgrade-shop.yml"
       }
   )
-  public static boolean sudden_death_dragons_enabled = true;
+  public static boolean default_sudden_death_dragon_enabled = true;
+
+  @Config(
+      description = {
+          "The speed of the dragons spawned at sudden death"
+      }
+  )
+  public static double dragon_speed = 1.0;
 
   // ===== SPAWNERS
   @SectionTitle(title = "SPAWNERS")
