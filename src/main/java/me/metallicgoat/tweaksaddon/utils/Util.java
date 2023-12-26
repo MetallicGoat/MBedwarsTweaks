@@ -2,14 +2,16 @@ package me.metallicgoat.tweaksaddon.utils;
 
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
+import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.arena.picker.ArenaPickerAPI;
 import de.marcely.bedwars.api.game.spawner.DropType;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.lang.annotation.Target;
+import java.util.*;
 
+import de.marcely.bedwars.tools.location.XYZYP;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.jetbrains.annotations.Nullable;
 
 public class Util {
@@ -57,6 +59,22 @@ public class Util {
     } catch (NumberFormatException e) {
       return false;
     }
+  }
+
+  public static List<Location> getAllTeamSpawns(Arena arena, World world, Team ignoreTeam) {
+    final List<Location> targets = new ArrayList<>();
+
+    for (Team currTeam : arena.getEnabledTeams()) {
+      if (currTeam == ignoreTeam)
+        continue;
+
+      final XYZYP spawn = arena.getTeamSpawn(currTeam);
+
+      if (spawn != null)
+        targets.add(spawn.toLocation(world));
+    }
+
+    return targets;
   }
 
   public static List<String> getLines(String string) {

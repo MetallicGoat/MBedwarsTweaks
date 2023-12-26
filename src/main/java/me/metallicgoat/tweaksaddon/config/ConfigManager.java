@@ -70,13 +70,9 @@ public class ConfigManager {
         case SWORDS_TOOLS:
           ConfigLegacyMigrator.loadOldSwordsTools(config);
       }
-
-      // re-save to new format
-      save(configValueClass, pluginVer, configFile);
-      return;
     }
 
-    final boolean isUpdating = !configVersion.equals(pluginVer);
+    final boolean isUpdating = configVersion == null || !configVersion.equals(pluginVer);
 
     // LOAD FILE
     for (Field field : configValueClass.getDeclaredFields()) {

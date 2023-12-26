@@ -1,15 +1,13 @@
 package me.metallicgoat.tweaksaddon.gentiers;
 
 import lombok.Getter;
-import me.metallicgoat.tweaksaddon.gentiers.handlers.GenTierHandler;
-import me.metallicgoat.tweaksaddon.gentiers.handlers.RoundEndHandler;
-import me.metallicgoat.tweaksaddon.gentiers.handlers.SpawnerUpgradeHandler;
-import me.metallicgoat.tweaksaddon.gentiers.handlers.AutoBedBreakHandler;
+import me.metallicgoat.tweaksaddon.gentiers.handlers.*;
 
 @Getter
 public enum TierAction {
   GEN_UPGRADE(new SpawnerUpgradeHandler(), true),
-  BED_DESTROY(new AutoBedBreakHandler(), false),
+  BED_DESTROY(new BedDestroyHandler(), false),
+  SUDDEN_DEATH(new SuddenDeathHandler(), false),
   GAME_OVER(new RoundEndHandler(), false);
 
   private final String id;

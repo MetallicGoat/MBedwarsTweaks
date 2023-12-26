@@ -7,6 +7,8 @@ import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.tools.location.XYZ;
 import de.marcely.bedwars.tools.location.XYZYP;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
+import me.metallicgoat.tweaksaddon.config.MainConfig;
+import me.metallicgoat.tweaksaddon.utils.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -40,7 +43,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
   @Nullable
   private final Team team;
 
-  private DragonState state = DragonState.RETURNING_HOME;
+  private Location lastDefaultTarget;
   private Location targetLocation = null;
   private double distanceToTarget = 0;
   private double distanceTraveled = 0;
@@ -53,46 +56,21 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     this.team = team;
   }
 
-  public static DragonFollowTask init(Arena arena, @Nullable Team team) {
+  public static DragonFollowTask init(Arena arena, @Nullable Team team, Location arenaMiddle) {
     final World world = arena.getGameWorld();
 
     if (world == null)
       throw new RuntimeException("Sudden death dragon tried to spawn in an arena with no game world?!?!?! WTF how did we get here in life?");
 
-    Location location = null;
+    Location location = getDragonSpawn(arena, world, team);
 
-    // Find optimal spot to spawn the dwwwagoon
-    {
-      if (team != null) {
-        final XYZYP spawn = arena.getTeamSpawn(team);
-
-        if (spawn != null)
-          location = spawn.toLocation(world).add(0, 30, 0);
-
-      } else {
-        final XYZYP spawn = arena.getSpectatorSpawn();
-
-        if (spawn != null && arena.isInside(spawn))
-          location = spawn.toLocation(world);
-      }
-
-      if (location == null) {
-        final XYZ max = arena.getMaxRegionCorner();
-        final XYZ min = arena.getMinRegionCorner();
-
-        if (min == null || max == null)
-          throw new RuntimeException("Failed to find spot to spawn in a dragon. This is a bug");
-
-        location = new Location(
-            world,
-            (max.getX() + min.getX()) / 2,
-            (max.getY() + min.getY()) / 2,
-            (max.getZ() + min.getZ()) / 2
-        );
-      }
-    }
+    // Just spawn at the middle otherwise
+    if (location == null)
+      location = arenaMiddle;
 
     final EnderDragon dragon = (EnderDragon) world.spawnEntity(location, EntityType.ENDER_DRAGON);
+    // TODO Use new MBedwars method to make silent
+
     final DragonFollowTask task = new DragonFollowTask(
         dragon,
         generateDefaultTargets(arena, team, world),
@@ -107,19 +85,27 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     return task;
   }
 
-  private static List<Location> generateDefaultTargets(Arena arena, @Nullable Team team, World world) {
-    final List<Location> targets = new ArrayList<>();
-    final XYZYP teamSpawn = team != null ? arena.getTeamSpawn(team) : null;
-
-    for (Team currTeam : arena.getEnabledTeams()) {
-      if (currTeam == team)
-        continue;
-
-      final XYZYP spawn = arena.getTeamSpawn(currTeam);
+  private static @Nullable Location getDragonSpawn(Arena arena, World world, Team team) {
+    // Find optimal spot to spawn the dwwwagoon
+    if (team != null) {
+      final XYZYP spawn = arena.getTeamSpawn(team);
 
       if (spawn != null)
-        targets.add(spawn.toLocation(world));
+        return spawn.toLocation(world).add(0, 30, 0);
+
+    } else {
+      final XYZYP spawn = arena.getSpectatorSpawn();
+
+      if (spawn != null && arena.isInside(spawn))
+        return spawn.toLocation(world);
     }
+
+    return null;
+  }
+
+  private static List<Location> generateDefaultTargets(Arena arena, @Nullable Team team, World world) {
+    final XYZYP teamSpawn = team != null ? arena.getTeamSpawn(team) : null;
+    final List<Location> targets = new ArrayList<>(Util.getAllTeamSpawns(arena, world, team));
 
     for (Spawner spawner : arena.getSpawners()) {
       final Location location = spawner.getLocation().toLocation(world);
@@ -151,11 +137,25 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
   @EventHandler
   public void onRoundEnd(RoundEndEvent event) {
     if (event.getArena() == this.arena) {
+
       if (this.dragon.isValid())
         this.dragon.remove();
 
       cancel();
     }
+  }
+
+  @EventHandler
+  public void onDragonDeath(EntityDeathEvent event) {
+    if (event.getEntity() != dragon)
+      return;
+
+    // TODO Find a better way... There might not be
+    //  (Possibly remove and use packet to send death effect)
+    // Hacky way to remove the dragon so the portal never gets created
+    Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
+      event.getEntity().remove();
+    }, 20L * 6);
   }
 
   // Update where the dragon should go next
@@ -174,26 +174,10 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
   }
 
   private Location getNewTarget() {
-    // 20% chance the dragon will go to the middle to rest before its next move
-    if (this.state != DragonState.RETURNING_HOME && random.nextInt(5) < 1) {
-      final XYZYP spectatorSpawn = this.arena.getSpectatorSpawn();
-
-      if (spectatorSpawn == null) {
-        this.dragon.setHealth(0);
-        cancel();
-        return null;
-      }
-
-      this.state = DragonState.RETURNING_HOME;
-      return this.arena.getSpectatorSpawn().toLocation(this.arena.getGameWorld());
-    }
-
-    this.state = DragonState.TARGET_LOCATION;
-
     final int chanceValue = random.nextInt(100);
 
     // Target a random player
-    if (chanceValue < 10) {
+    if (chanceValue < 20) {
       final List<Location> targets = getPlayerTargets();
 
       if (!targets.isEmpty())
@@ -201,36 +185,52 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     }
 
     // Chose a random base or generator
-    if (chanceValue < 50)
-      return this.defaultTargets.get(random.nextInt(this.defaultTargets.size()));
+    if (chanceValue < 40)
+      return pickRandomDefaultTarget();
 
     return generateRandomLocation();
   }
 
+  private Location pickRandomDefaultTarget() {
+    final List<Location> targets = new ArrayList<>(this.defaultTargets);
+
+    if (lastDefaultTarget != null)
+      targets.remove(lastDefaultTarget);
+
+    final Location newTarget = targets.get(random.nextInt(targets.size())).clone();
+    this.lastDefaultTarget = newTarget;
+
+    return newTarget;
+  }
+
   // Find a random spot anywhere in the arena
-  // TODO Check if this works on world type arenas
   private Location generateRandomLocation() {
     final XYZ max = this.arena.getMaxRegionCorner();
     final XYZ min = this.arena.getMinRegionCorner();
 
-    if (min == null || max == null)
-      throw new RuntimeException("Failed to find spot to spawn in a dragon. This is a bug");
+    if (min != null && max != null) {
+      final double xBound = Math.abs(max.getX() - min.getX());
+      final double yBound = Math.abs(max.getY() - min.getY());
+      final double zBound = Math.abs(max.getZ() - min.getZ());
 
-    final double xBound = Math.abs(max.getX() - min.getX());
-    final double yBound = Math.abs(max.getY() - min.getY());
-    final double zBound = Math.abs(max.getZ() - min.getZ());
+      // Dont go all the way to the border
+      final double x = random.nextInt((int) (xBound * 0.8)) + (xBound * 0.1);
+      final double y = random.nextInt((int) (yBound * 0.6)) + (yBound * 0.3); // Shift upwards
+      final double z = random.nextInt((int) (zBound * 0.8)) + (zBound * 0.1);
 
-    // Dont go all the way to the border
-    final double x = random.nextDouble(xBound * 0.8) + (xBound * 0.1);
-    final double y = random.nextDouble(yBound * 0.6) + (yBound * 0.3); // Shift upwards
-    final double z = random.nextDouble(zBound * 0.8) + (zBound * 0.1);
+      return new Location(
+          this.world,
+          Math.min(max.getX(), min.getX()) + x,
+          Math.min(max.getY(), min.getY()) + y,
+          Math.min(max.getZ(), min.getZ()) + z
+      );
+    } else { // Find random spot based on arena locations
+      final Location target = pickRandomDefaultTarget();
 
-    return new Location(
-        this.world,
-        Math.min(max.getX(), min.getX()) + x,
-        Math.min(max.getY(), min.getY()) + y,
-        Math.min(max.getZ(), min.getZ()) + z
-    );
+      target.add(random.nextInt(120) - 60, random.nextInt(80) - 10, random.nextInt(120) - 60);
+
+      return target;
+    }
   }
 
   private List<Location> getPlayerTargets() {
@@ -258,7 +258,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     this.velocity.add(gravity);
 
     // Dont let dragon infinitely accelerate towards target
-    final double maxSpeed = 1.2;
+    final double maxSpeed = MainConfig.dragon_speed;
 
     if (this.velocity.length() > maxSpeed)
       this.velocity.normalize().multiply(maxSpeed);
@@ -269,10 +269,5 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     // Move it move it move it
     teleportLocation.setDirection(this.dragon.getLocation().clone().subtract(teleportLocation).toVector());
     this.dragon.teleport(teleportLocation);
-  }
-
-  private enum DragonState {
-    RETURNING_HOME,
-    TARGET_LOCATION
   }
 }

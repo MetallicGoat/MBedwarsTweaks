@@ -11,7 +11,7 @@ import me.metallicgoat.tweaksaddon.gentiers.GenTierLevel;
 import me.metallicgoat.tweaksaddon.gentiers.GenTiers;
 import org.bukkit.Material;
 
-public class AutoBedBreakHandler extends GenTierHandler{
+public class BedDestroyHandler extends GenTierHandler{
   @Override
   public void run(GenTierLevel level, Arena arena) {
     // Break all beds in an arena & run team upgrades
@@ -22,11 +22,6 @@ public class AutoBedBreakHandler extends GenTierHandler{
         arena.destroyBedNaturally(team, Message.build(level.getTierName()).done());
         bedLoc.toLocation(arena.getGameWorld()).getBlock().setType(Material.AIR);
       }
-
-      // Spawn Team Dragons
-      if (MainConfig.sudden_death_dragons_enabled && GenTiers.getState(arena).hasDragon(team))
-        DragonFollowTask.init(arena, team).runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 0, 1L);
-
     }
 
     // Broadcast Message
