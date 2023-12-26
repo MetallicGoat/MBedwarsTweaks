@@ -12,29 +12,31 @@ import org.jetbrains.annotations.Nullable;
 @Getter
 public class GenTierLevel {
 
-  private final String tierName;
-  private final String tierLevel;
-  private final String typeId;
+  private final String papiName;
   private final TierAction action;
   private final double time;
+  @Nullable
+  private final String holoName;
+  @Nullable
+  private final String typeId;
   @Nullable
   private final Double speed;
   @Nullable
   private final Integer limit;
-
+  @Nullable
   private final String earnMessage;
+  @Nullable
   private final Sound earnSound;
 
   public GenTierLevel(
-      String tierName,
-      String tierLevel,
+      String papiName,
       TierAction action,
       double time,
       @Nullable String earnMessage,
       @Nullable Sound earnSound
   ) {
-    this.tierName = tierName;
-    this.tierLevel = tierLevel;
+    this.papiName = papiName;
+    this.holoName = null;
     this.typeId = null;
     this.action = action;
     this.time = time;
@@ -45,9 +47,9 @@ public class GenTierLevel {
   }
 
   public GenTierLevel(
-      String tierName, // Display Name
-      String tierLevel, // Example '&eTier &cII'
-      String typeId, // Spawners with this drop-type should update
+      String papiName, // Display Name
+      @Nullable String holoName, // Example '&eTier &cII'
+      @Nullable String typeId, // Spawners with this drop-type should update
       TierAction action, // Action (eg bed break or upgrade)
       double time, // Time until the update happens (After Last Event)
       @Nullable Double speed, // New drop speed
@@ -55,8 +57,8 @@ public class GenTierLevel {
       @Nullable String earnMessage, // The chat message displayed on update
       @Nullable Sound earnSound // Sound played when a tier is earned
   ) {
-    this.tierName = tierName;
-    this.tierLevel = tierLevel;
+    this.papiName = papiName;
+    this.holoName = holoName;
     this.typeId = typeId;
     this.action = action;
     this.time = time;
@@ -67,17 +69,17 @@ public class GenTierLevel {
   }
 
   public void broadcastEarn(Arena arena, boolean messageSupported) {
-    if (earnSound != null) {
+    if (this.earnSound != null) {
       for (Player p : arena.getPlayers())
-        p.playSound(p.getLocation(), earnSound, 1F, 1F);
+        p.playSound(p.getLocation(), this.earnSound, 1F, 1F);
     }
 
-    if (messageSupported && earnMessage != null)
-      arena.broadcast(Message.build(earnMessage));
+    if (messageSupported && this.earnMessage != null)
+      arena.broadcast(Message.build(this.earnMessage));
     
   }
 
   public DropType getType() {
-    return GameAPI.get().getDropTypeById(typeId);
+    return GameAPI.get().getDropTypeById(this.typeId);
   }
 }

@@ -88,19 +88,17 @@ public class GenTiers implements Listener {
 
     final GenTierState state = getState(arena);
 
-    state.nextTierName = currentLevel.getTierName();
+    state.nextTierName = currentLevel.getPapiName();
     state.nextUpdateTime = System.currentTimeMillis() + (long) (currentLevel.getTime() * 60 * 1000);
 
     cancelTask(state); // Cancel existing tasks
 
     if (currentLevel.getAction() == TierAction.GAME_OVER) {
-      currentLevel.broadcastEarn(arena, false);
-      currentLevel.getAction().getHandler().run(currentLevel, arena); // Currently does nothing
+      arena.setIngameTimeRemaining((int) (currentLevel.getTime() * 60));
 
     } else {
       state.genTierTask = Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
-
-        currentLevel.broadcastEarn(arena, true);
+        currentLevel.broadcastEarn(arena, currentLevel.getAction().isMessageSupported());
         currentLevel.getAction().getHandler().run(currentLevel, arena);
 
         scheduleArena(arena, tier + 1);

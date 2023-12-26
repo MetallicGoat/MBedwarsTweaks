@@ -4,11 +4,8 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.message.Message;
 import de.marcely.bedwars.tools.location.XYZD;
-import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
-import me.metallicgoat.tweaksaddon.gentiers.dragons.DragonFollowTask;
 import me.metallicgoat.tweaksaddon.gentiers.GenTierLevel;
-import me.metallicgoat.tweaksaddon.gentiers.GenTiers;
 import org.bukkit.Material;
 
 public class BedDestroyHandler extends GenTierHandler{
@@ -19,7 +16,7 @@ public class BedDestroyHandler extends GenTierHandler{
       final XYZD bedLoc = arena.getBedLocation(team);
 
       if (!arena.isBedDestroyed(team) && bedLoc != null) {
-        arena.destroyBedNaturally(team, Message.build(level.getTierName()).done());
+        arena.destroyBedNaturally(team, Message.build(level.getPapiName()).done());
         bedLoc.toLocation(arena.getGameWorld()).getBlock().setType(Material.AIR);
       }
     }

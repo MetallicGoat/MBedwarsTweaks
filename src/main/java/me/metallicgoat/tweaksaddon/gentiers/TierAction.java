@@ -8,7 +8,7 @@ public enum TierAction {
   GEN_UPGRADE(new SpawnerUpgradeHandler(), true),
   BED_DESTROY(new BedDestroyHandler(), false),
   SUDDEN_DEATH(new SuddenDeathHandler(), false),
-  GAME_OVER(new RoundEndHandler(), false);
+  GAME_OVER(null, false);
 
   private final String id;
   private final GenTierHandler handler;

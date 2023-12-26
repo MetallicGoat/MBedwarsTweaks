@@ -53,25 +53,27 @@ public class GenTiersConfig {
     if (tiersSection != null) {
       gen_tier_levels.clear();
 
+      int i = 1;
       for (String levelNumString : tiersSection.getKeys(false)) {
-        final Integer levelNum = Helper.get().parseInt(levelNumString);
+        final Integer levelNum = i++;
 
-        if (levelNum == null) {
-          Console.printConfigWarn("Failed to load tier with level num of: " + levelNumString, "gen-tiers");
-          continue;
+        final ConfigurationSection section = tiersSection.getConfigurationSection(levelNumString);
+
+        final String tierName = section.getString("Tier Name");
+        final String actionString = section.getString("Action");
+        final String typeString = section.getString("Drop-Type");
+        final double speed = section.getDouble("Drop-Speed");
+        final int limit = section.getInt("Max-Nearby-Items", -1);
+        final double time = section.getDouble("Time");
+        final String message = section.getString("Message");
+        final String soundString = section.getString("Earn-Sound");
+        String tierLevel = section.getString("Holo-Usage");
+
+        {
+          // OLD VALUES
+          if (tierLevel == null)
+            tierLevel = section.getString("Tier-Level");
         }
-
-        final String configKey = "Gen-Tiers." + levelNumString + ".";
-
-        final String tierName = config.getString(configKey + "Tier-Name");
-        final String tierLevel = config.getString(configKey + "Tier-Level");
-        final String actionString = config.getString(configKey + "Action");
-        final String typeString = config.getString(configKey + "Drop-Type");
-        final double speed = config.getDouble(configKey + "Drop-Speed");
-        final int limit = config.getInt(configKey + "Max-Nearby-Items", -1);
-        final double time = config.getDouble(configKey + "Time");
-        final String message = config.getString(configKey + "Message");
-        final String soundString = config.getString(configKey + "Earn-Sound");
 
         // TODO Validate other values not null
         if (actionString == null) {
@@ -117,10 +119,9 @@ public class GenTiersConfig {
 
           final GenTierLevel genTierLevel = new GenTierLevel(
               tierName,
-              action == TierAction.BED_DESTROY ? "Bed Gone" : "Game Over",
               action,
               time,
-              action == TierAction.BED_DESTROY ? "All beds have been broken" : "Game Ended",
+              null,
               earnSound
           );
 
@@ -143,37 +144,38 @@ public class GenTiersConfig {
     config.set("version", pluginVer);
 
     config.addEmptyLine();
-    config.addEmptyLine();
-
     config.addComment("MAKE SURE Gen-Tiers are enabled in the config.yml!");
-
     config.addEmptyLine();
 
-    config.addComment("Tier-Name (Used in PAPI Placeholders)");
-    config.addComment("Tier-Levels (Used in Holos)");
+    config.addComment("PAPI-Usage (The value used in our PAPI Placeholders during this tier)");
+    config.addComment("Holo-Usage (The values used in holos during this tier)");
     config.addComment("Action (gen-upgrade, bed-destroy, game-over)");
-    config.addComment("Type (Type of spawner that will be updated)");
-    config.addComment("Speed (How often an item drops (in seconds))");
-    config.addComment("Max-Nearby-Items (how many items the spawner will produce before it goes on hold)");
     config.addComment("Time (time until action - NOTE time starts after the last action)");
     config.addComment("Message (chat message sent on trigger)");
     config.addComment("Earn-Sound (sound played on trigger) (You have to add this config if you want it)");
+    config.addEmptyLine();
+    config.addComment("--- Spawner Only --- ");
+    config.addComment("Type (Type of spawner that will be updated)");
+    config.addComment("Speed (How often an item drops (in seconds))");
+    config.addComment("Max-Nearby-Items (how many items the spawner will produce before it goes on hold)");
 
     config.addEmptyLine();
 
+    int i = 1;
     for (Map.Entry<Integer, GenTierLevel> entry : gen_tier_levels.entrySet()) {
 
       if (entry.getKey() == null || entry.getValue() == null)
         continue;
 
       final GenTierLevel level = entry.getValue();
-      final String configKey = "Gen-Tiers." + entry.getKey() + ".";
+      final String configKey = "Gen-Tiers." + (i++) + ".";
 
-      config.set(configKey + "Tier-Name", level.getTierName());
-      config.set(configKey + "Tier-Level", level.getTierLevel());
       config.set(configKey + "Action", level.getAction().getId());
+      config.set(configKey + "Time", level.getTime());
+      config.set(configKey + "Tier-Name", level.getPapiName());
 
       if (level.getAction() == TierAction.GEN_UPGRADE) {
+        config.set(configKey + "Holo-Usage", level.getHoloName());
         config.set(configKey + "Drop-Type", level.getTypeId());
         config.set(configKey + "Drop-Speed", level.getSpeed());
 
@@ -181,8 +183,8 @@ public class GenTiersConfig {
           config.set(configKey + "Max-Nearby-Items", level.getLimit());
       }
 
-      config.set(configKey + "Time", level.getTime());
-      config.set(configKey + "Message", level.getEarnMessage());
+      if (level.getEarnMessage() != null)
+        config.set(configKey + "Message", level.getEarnMessage());
 
       if (level.getEarnSound() != null)
         config.set(configKey + "Earn-Sound", level.getEarnSound().name());

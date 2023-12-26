@@ -81,8 +81,9 @@ public class ConfigLoader {
           "&aEmerald Generators &ehave been upgraded to Tier &4III",
           null
       ));
-      put(5, new GenTierLevel("Auto-Break", "Bed Destroy", TierAction.BED_DESTROY, 7, "All beds have been broken", null));
-      put(6, new GenTierLevel("Game-Over", "Game Over", TierAction.GAME_OVER, 10, "Game Ended", null));
+      put(5, new GenTierLevel("Bed Destroy", TierAction.BED_DESTROY, 5, null, null));
+      put(6, new GenTierLevel("Sudden Death", TierAction.SUDDEN_DEATH, 10, null, null));
+      put(7, new GenTierLevel("Game Over", TierAction.GAME_OVER, 10, null, null));
     }};
   }
 

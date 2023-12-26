@@ -23,11 +23,6 @@ public class SuddenDeathUpgrade extends UpgradeTriggerHandler {
     if (event.isCancelled())
       return;
 
-    if (!MainConfig.sudden_death_dragons_enabled) {
-      event.getPlayer().sendMessage(ChatColor.RED + "WARNING: Sudden death dragons are disabled in the tweaks config! Report this issue to the server admin!");
-      return;
-    }
-
     GenTiers.getState(event.getArena()).addDragonTeam(event.getTeam());
   }
 

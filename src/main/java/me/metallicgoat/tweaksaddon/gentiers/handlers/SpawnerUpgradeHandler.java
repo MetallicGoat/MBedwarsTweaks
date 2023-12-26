@@ -24,7 +24,7 @@ public class SpawnerUpgradeHandler extends GenTierHandler {
 
         // Add custom Holo tiles
         if (MainConfig.gen_tiers_custom_holo_enabled)
-          GenTiers.formatHoloTiles(level.getTierLevel(), spawner);
+          GenTiers.formatHoloTiles(level.getHoloName(), spawner);
 
       }
     }
