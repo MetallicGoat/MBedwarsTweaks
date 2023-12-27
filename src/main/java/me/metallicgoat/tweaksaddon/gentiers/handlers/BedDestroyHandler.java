@@ -16,7 +16,7 @@ public class BedDestroyHandler extends GenTierHandler{
       final XYZD bedLoc = arena.getBedLocation(team);
 
       if (!arena.isBedDestroyed(team) && bedLoc != null) {
-        arena.destroyBedNaturally(team, Message.build(level.getPapiName()).done());
+        arena.destroyBedNaturally(team, Message.build(level.getTierName()).done());
         bedLoc.toLocation(arena.getGameWorld()).getBlock().setType(Material.AIR);
       }
     }

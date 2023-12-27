@@ -2,17 +2,17 @@ package me.metallicgoat.tweaksaddon.gentiers.handlers;
 
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
+import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.tools.location.XYZ;
-import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import me.metallicgoat.tweaksaddon.gentiers.GenTierLevel;
 import me.metallicgoat.tweaksaddon.gentiers.GenTiers;
 import me.metallicgoat.tweaksaddon.gentiers.dragons.DragonFollowTask;
 import me.metallicgoat.tweaksaddon.utils.Util;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SuddenDeathHandler extends GenTierHandler {
@@ -23,14 +23,30 @@ public class SuddenDeathHandler extends GenTierHandler {
     if (!arena.isInside(middle))
       throw new RuntimeException("Failed to find the center of an Arena!");
 
-    // Spawn Default Dragon
-    if (MainConfig.default_sudden_death_dragon_enabled)
-      DragonFollowTask.init(arena, null, middle).runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 0, 1L);
-
     // Spawn Team Dragons
     for (Team team : arena.getEnabledTeams()) {
+      if (arena.getPlayersInTeam(team).isEmpty())
+        continue;
+
+      // Spawn Default Dragon
+      if (MainConfig.default_sudden_death_dragon_enabled)
+        DragonFollowTask.init(arena, team, middle);
+
+      // Spawn extra dragon
       if (GenTiers.getState(arena).hasDragon(team))
-        DragonFollowTask.init(arena, team, middle).runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 0, 1L);
+        DragonFollowTask.init(arena, team, middle);
+    }
+
+    // Destroy all Generators
+    for (Spawner spawner : arena.getSpawners()) {
+      final Location location = spawner.getLocation().toLocation(arena.getGameWorld()).add(0, 3, 0);
+
+      int i = 5;
+
+      while (location.subtract(0, 1, 0).getBlock().getType() != Material.AIR || i > 0){
+        location.getBlock().setType(Material.AIR);
+        i--;
+      }
     }
   }
 

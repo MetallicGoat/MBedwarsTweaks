@@ -59,7 +59,7 @@ public class GenTiersConfig {
 
         final ConfigurationSection section = tiersSection.getConfigurationSection(levelNumString);
 
-        final String tierName = section.getString("Tier Name");
+        final String tierName = section.getString("Tier-Name");
         final String actionString = section.getString("Action");
         final String typeString = section.getString("Drop-Type");
         final double speed = section.getDouble("Drop-Speed");
@@ -172,7 +172,7 @@ public class GenTiersConfig {
 
       config.set(configKey + "Action", level.getAction().getId());
       config.set(configKey + "Time", level.getTime());
-      config.set(configKey + "Tier-Name", level.getPapiName());
+      config.set(configKey + "Tier-Name", level.getTierName());
 
       if (level.getAction() == TierAction.GEN_UPGRADE) {
         config.set(configKey + "Holo-Usage", level.getHoloName());

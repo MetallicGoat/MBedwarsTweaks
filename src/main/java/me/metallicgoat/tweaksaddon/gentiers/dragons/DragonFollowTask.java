@@ -26,13 +26,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class DragonFollowTask extends BukkitRunnable implements Listener {
 
+  private static final List<DragonFollowTask> runningDragons = new ArrayList<>();
   private static final Random random = new Random();
 
   private final Vector velocity = new Vector(0, 0, 0);
@@ -82,7 +80,19 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     // Register events for this dragon
     Bukkit.getPluginManager().registerEvents(task, MBedwarsTweaksPlugin.getInstance());
 
+    task.runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 0L, 1L);
+
+    runningDragons.add(task);
+
     return task;
+  }
+
+  public static void killAll() {
+    final Iterator<DragonFollowTask> it = runningDragons.iterator();
+
+    // DO NOT REPLACE (Like intellij says... It lies)
+    while (it.hasNext())
+      it.next().remove();
   }
 
   private static @Nullable Location getDragonSpawn(Arena arena, World world, Team team) {
@@ -136,13 +146,8 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
   // Kill dragon on round end
   @EventHandler
   public void onRoundEnd(RoundEndEvent event) {
-    if (event.getArena() == this.arena) {
-
-      if (this.dragon.isValid())
-        this.dragon.remove();
-
-      cancel();
-    }
+    if (event.getArena() == this.arena)
+      remove();
   }
 
   @EventHandler
@@ -153,9 +158,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     // TODO Find a better way... There might not be
     //  (Possibly remove and use packet to send death effect)
     // Hacky way to remove the dragon so the portal never gets created
-    Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
-      event.getEntity().remove();
-    }, 20L * 6);
+    Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), this::remove, 20L * 6);
   }
 
   // Update where the dragon should go next
@@ -174,10 +177,11 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
   }
 
   private Location getNewTarget() {
+
     final int chanceValue = random.nextInt(100);
 
     // Target a random player
-    if (chanceValue < 20) {
+    if (chanceValue < 50) {
       final List<Location> targets = getPlayerTargets();
 
       if (!targets.isEmpty())
@@ -185,7 +189,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     }
 
     // Chose a random base or generator
-    if (chanceValue < 40)
+    if (chanceValue < 90)
       return pickRandomDefaultTarget();
 
     return generateRandomLocation();
@@ -227,7 +231,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     } else { // Find random spot based on arena locations
       final Location target = pickRandomDefaultTarget();
 
-      target.add(random.nextInt(120) - 60, random.nextInt(80) - 10, random.nextInt(120) - 60);
+      target.add(random.nextInt(120) - 60, random.nextInt(50) - 10, random.nextInt(120) - 60);
 
       return target;
     }
@@ -252,7 +256,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
       updateTarget();
 
     final Vector toTarget = this.targetLocation.clone().subtract(dragonLocation).toVector().normalize();
-    final Vector gravity = toTarget.multiply(0.05); // More big = More Gravity
+    final Vector gravity = toTarget.multiply(0.07); // More big = More Gravity
 
     // simulate "gravity pull"
     this.velocity.add(gravity);
@@ -269,5 +273,14 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     // Move it move it move it
     teleportLocation.setDirection(this.dragon.getLocation().clone().subtract(teleportLocation).toVector());
     this.dragon.teleport(teleportLocation);
+  }
+
+  public void remove() {
+    if (this.dragon.isValid())
+      this.dragon.remove();
+
+    runningDragons.remove(this);
+
+    cancel();
   }
 }

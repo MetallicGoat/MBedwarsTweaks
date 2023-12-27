@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 @Getter
 public class GenTierLevel {
 
-  private final String papiName;
+  private final String tierName;
   private final TierAction action;
   private final double time;
   @Nullable
@@ -29,13 +29,13 @@ public class GenTierLevel {
   private final Sound earnSound;
 
   public GenTierLevel(
-      String papiName,
+      String tierName,
       TierAction action,
       double time,
       @Nullable String earnMessage,
       @Nullable Sound earnSound
   ) {
-    this.papiName = papiName;
+    this.tierName = tierName;
     this.holoName = null;
     this.typeId = null;
     this.action = action;
@@ -47,7 +47,7 @@ public class GenTierLevel {
   }
 
   public GenTierLevel(
-      String papiName, // Display Name
+      String tierName, // Display Name
       @Nullable String holoName, // Example '&eTier &cII'
       @Nullable String typeId, // Spawners with this drop-type should update
       TierAction action, // Action (eg bed break or upgrade)
@@ -57,7 +57,7 @@ public class GenTierLevel {
       @Nullable String earnMessage, // The chat message displayed on update
       @Nullable Sound earnSound // Sound played when a tier is earned
   ) {
-    this.papiName = papiName;
+    this.tierName = tierName;
     this.holoName = holoName;
     this.typeId = typeId;
     this.action = action;

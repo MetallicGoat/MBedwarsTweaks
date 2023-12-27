@@ -54,7 +54,7 @@ public class GenTiers implements Listener {
     }
 
     arenaStates.put(arena, new GenTierState());
-    scheduleArena(arena, 1);
+    scheduleNextTier(arena, 1);
   }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -79,7 +79,7 @@ public class GenTiers implements Listener {
       state.genTierTask.cancel();
   }
 
-  private void scheduleArena(Arena arena, int tier) {
+  private void scheduleNextTier(Arena arena, int tier) {
     final GenTierLevel currentLevel = GenTiersConfig.gen_tier_levels.get(tier);
 
     // Check if tier exists
@@ -88,7 +88,7 @@ public class GenTiers implements Listener {
 
     final GenTierState state = getState(arena);
 
-    state.nextTierName = currentLevel.getPapiName();
+    state.nextTierName = currentLevel.getTierName();
     state.nextUpdateTime = System.currentTimeMillis() + (long) (currentLevel.getTime() * 60 * 1000);
 
     cancelTask(state); // Cancel existing tasks
@@ -101,7 +101,7 @@ public class GenTiers implements Listener {
         currentLevel.broadcastEarn(arena, currentLevel.getAction().isMessageSupported());
         currentLevel.getAction().getHandler().run(currentLevel, arena);
 
-        scheduleArena(arena, tier + 1);
+        scheduleNextTier(arena, tier + 1);
 
       }, (long) (currentLevel.getTime() * 20 * 60));
     }

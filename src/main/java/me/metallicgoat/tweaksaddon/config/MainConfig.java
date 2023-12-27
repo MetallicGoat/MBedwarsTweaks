@@ -94,7 +94,7 @@ public class MainConfig {
           "The speed of the dragons spawned at sudden death"
       }
   )
-  public static double dragon_speed = 1.0;
+  public static double dragon_speed = 0.8;
 
   // ===== SPAWNERS
   @SectionTitle(title = "SPAWNERS")
@@ -380,7 +380,7 @@ public class MainConfig {
   @Config public static String papi_next_tier_lobby_end_lobby = "&rGame Over";
   @Config public static String papi_next_tier_lobby_stopped = "&rArena Stopped";
   @Config public static String papi_next_tier_lobby_resetting = "&rArena Regenerating";
-  @Config public static String papi_next_tier_lobby_running = "{next-tier} in &a{time}";
+  @Config public static String papi_next_tier_lobby_running = "&f{next-tier} in &a{time}";
 
   @Config(
       description = {
