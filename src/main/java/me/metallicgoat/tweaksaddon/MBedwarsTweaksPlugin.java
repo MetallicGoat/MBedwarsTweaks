@@ -9,6 +9,7 @@ import me.metallicgoat.tweaksaddon.integration.DependencyLoader;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
 import me.metallicgoat.tweaksaddon.utils.Console;
 import me.metallicgoat.tweaksaddon.utils.Metrics;
+import me.metallicgoat.tweaksaddon.utils.NMSClass;
 import me.metallicgoat.tweaksaddon.utils.UpdateChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -53,6 +54,18 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
       DependencyLoader.loadAll();
       ConfigLoader.loadTweaksConfigs(this);
       ToolSwordHelper.load();
+
+      if (MainConfig.disable_dragon_death_sound) {
+        try {
+          NMSClass.disableDragonSound();
+        } catch (Exception e) {
+          Console.printWarn(
+              "============================================",
+              "Failed to disable dragon death sounds! You may want to disable them in your spigot.yml",
+              "============================================"
+          );
+        }
+      }
 
       // Check Update Async
       if (MainConfig.check_update_on_load)

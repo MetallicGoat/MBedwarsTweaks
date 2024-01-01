@@ -91,6 +91,13 @@ public class MainConfig {
 
   @Config(
       description = {
+          "Tries to disable the dragon death sound by overriding the value set in the spigot.yml",
+      }
+  )
+  public static boolean disable_dragon_death_sound = true;
+
+  @Config(
+      description = {
           "The speed of the dragons spawned at sudden death"
       }
   )
