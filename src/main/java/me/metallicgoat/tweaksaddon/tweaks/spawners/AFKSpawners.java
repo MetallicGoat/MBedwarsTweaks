@@ -46,7 +46,7 @@ public class AFKSpawners implements Listener {
 
 		final Player player = event.getPlayer();
 
-		if (!event.isFromSpawner() || !moveTimes.containsKey(player))
+		if (!moveTimes.containsKey(player))
 			return;
 
 		final long secsSinceLastMove = (System.currentTimeMillis() - moveTimes.get(player)) / 1000;

@@ -134,7 +134,7 @@ public class MainConfig {
       }
   )
   public static boolean afk_spawners_enabled = false;
-  public static int afk_spawners_time = 40;
+  @Config public static int afk_spawners_time = 40;
 
   // ===== PARTICLE EFFECTS
   @SectionTitle(title = "PARTICLE EFFECTS")
