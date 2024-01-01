@@ -54,7 +54,7 @@
             <artifactId>PrestigesAddon</artifactId>
             <version>1.1.1</version>
             <scope>system</scope>
-            <systemPath>${basedir}/libs/private/prestiges.jar</systemPath>
+            <systemPath>${basedir}/libs/public/PrestigesAPI-1.0-SNAPSHOT.jar</systemPath>
         </dependency>
         <!-- USED FOR BETA TESTING
         <dependency>
