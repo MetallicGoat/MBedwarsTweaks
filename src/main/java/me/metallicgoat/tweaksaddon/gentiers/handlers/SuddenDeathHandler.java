@@ -30,11 +30,11 @@ public class SuddenDeathHandler extends GenTierHandler {
 
       // Spawn Default Dragon
       if (MainConfig.default_sudden_death_dragon_enabled)
-        DragonFollowTask.init(arena, team, middle);
+        DragonFollowTask.createNewDragon(arena, team, middle);
 
       // Spawn extra dragon
       if (GenTiers.getState(arena).hasDragon(team))
-        DragonFollowTask.init(arena, team, middle);
+        DragonFollowTask.createNewDragon(arena, team, middle);
     }
 
     // Destroy all Generators

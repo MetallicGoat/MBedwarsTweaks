@@ -41,8 +41,10 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
   @Nullable
   private final Team team;
 
-  private Location lastDefaultTarget;
-  private Location targetLocation = null;
+  private boolean targetingPlayer = false;
+  private Player currPlayerTarget = null;
+  private Location playerTargetLocation = null;
+  private Location currDefaultTarget = null;
   private double distanceToTarget = 0;
   private double distanceTraveled = 0;
 
@@ -54,7 +56,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     this.team = team;
   }
 
-  public static DragonFollowTask init(Arena arena, @Nullable Team team, Location arenaMiddle) {
+  public static void createNewDragon(Arena arena, @Nullable Team team, Location arenaMiddle) {
     final World world = arena.getGameWorld();
 
     if (world == null)
@@ -67,7 +69,6 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
       location = arenaMiddle;
 
     final EnderDragon dragon = (EnderDragon) world.spawnEntity(location, EntityType.ENDER_DRAGON);
-    // TODO Use new MBedwars method to make silent
 
     final DragonFollowTask task = new DragonFollowTask(
         dragon,
@@ -83,20 +84,20 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     task.runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 0L, 1L);
 
     runningDragons.add(task);
-
-    return task;
   }
 
   public static void killAll() {
     final Iterator<DragonFollowTask> it = runningDragons.iterator();
 
     // DO NOT REPLACE (Like intellij says... It lies)
-    while (it.hasNext())
-      it.next().remove();
+    while (it.hasNext()) {
+      it.next().remove(false);
+      it.remove();
+    }
   }
 
+  // Find optimal spot to spawn the dwwwagoon
   private static @Nullable Location getDragonSpawn(Arena arena, World world, Team team) {
-    // Find optimal spot to spawn the dwwwagoon
     if (team != null) {
       final XYZYP spawn = arena.getTeamSpawn(team);
 
@@ -161,48 +162,48 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), this::remove, 20L * 6);
   }
 
-  // Update where the dragon should go next
   private void updateTarget() {
-    this.targetLocation = getNewTarget();
+    final int chanceValue = random.nextInt(100);
+    final List<Player> playerTargets = getPlayerTargets();
 
-    if (this.targetLocation == null)
-      throw new RuntimeException("MBedwars Tweaks: Bug detected! Dragon could not find a place to go to :(");
+    // Try to target a random player
+    if (!playerTargets.isEmpty() && chanceValue < Math.min(60, playerTargets.size() * 25)) {
+      this.currPlayerTarget = playerTargets.get(random.nextInt(playerTargets.size()));
+      this.playerTargetLocation = currPlayerTarget.getLocation();
+      this.distanceToTarget = this.playerTargetLocation.distance(this.dragon.getLocation()) + 50;
+      this.targetingPlayer = true;
 
-    // Add some location randomness, so it's not always flying to the exact same spot
-    // TODO this.targetLocation.add(random.nextInt(20) - 10, random.nextInt(20) - 10, random.nextInt(20) - 10);
+    } else {
+      if (chanceValue < 90) // base or gen
+        this.currDefaultTarget = pickRandomDefaultTarget();
+      else // random cord
+        this.currDefaultTarget = generateRandomLocation();
 
-    // Reset distance tracking values
-    this.distanceToTarget = this.targetLocation.distance(this.dragon.getLocation());
+      this.distanceToTarget = this.currDefaultTarget.distance(this.dragon.getLocation());
+      this.targetingPlayer = false;
+    }
+
     this.distanceTraveled = 0;
   }
 
-  private Location getNewTarget() {
+  private List<Player> getPlayerTargets() {
+    final List<Player> locations = new ArrayList<>();
 
-    final int chanceValue = random.nextInt(100);
+    for (Player player : this.arena.getPlayers())
+      if (player != this.currPlayerTarget && this.arena.getPlayerTeam(player) != this.team && !this.arena.getSpectators().contains(player))
+        locations.add(player);
 
-    // Target a random player
-    if (chanceValue < 50) {
-      final List<Location> targets = getPlayerTargets();
-
-      if (!targets.isEmpty())
-        return targets.get(random.nextInt(targets.size()));
-    }
-
-    // Chose a random base or generator
-    if (chanceValue < 90)
-      return pickRandomDefaultTarget();
-
-    return generateRandomLocation();
+    return locations;
   }
 
   private Location pickRandomDefaultTarget() {
     final List<Location> targets = new ArrayList<>(this.defaultTargets);
 
-    if (lastDefaultTarget != null)
-      targets.remove(lastDefaultTarget);
+    if (currDefaultTarget != null)
+      targets.remove(currDefaultTarget);
 
     final Location newTarget = targets.get(random.nextInt(targets.size())).clone();
-    this.lastDefaultTarget = newTarget;
+    this.currDefaultTarget = newTarget;
 
     return newTarget;
   }
@@ -237,26 +238,32 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     }
   }
 
-  private List<Location> getPlayerTargets() {
-    final List<Location> locations = new ArrayList<>();
-
-    for (Player player : this.arena.getPlayers())
-      if (this.arena.getPlayerTeam(player) != this.team && !this.arena.getSpectators().contains(player))
-        locations.add(player.getLocation());
-
-    return locations;
-  }
-
   // Note to self: This works, don't fuck it up
   @Override
   public void run() {
     final Location dragonLocation = this.dragon.getLocation().clone();
-    // The dragon has reached its target + tricks so it does not get in an 'orbit' around the target
-    if (this.targetLocation == null || dragonLocation.distance(this.targetLocation) < 10 || this.distanceTraveled > this.distanceToTarget * 1.2)
-      updateTarget();
+    Location targetLocation;
 
-    final Vector toTarget = this.targetLocation.clone().subtract(dragonLocation).toVector().normalize();
-    final Vector gravity = toTarget.multiply(0.07); // More big = More Gravity
+    if (this.targetingPlayer) {
+      if (this.currPlayerTarget.isOnline() && arena.getPlayers().contains(this.currPlayerTarget) && !arena.getSpectators().contains(this.currPlayerTarget))
+        targetLocation = this.currPlayerTarget.getLocation();
+      else
+        targetLocation = this.playerTargetLocation;
+
+    } else {
+      targetLocation = this.currDefaultTarget;
+    }
+
+    // The dragon has reached its target + tricks so it does not get in an 'orbit' around the target
+    if (targetLocation == null || dragonLocation.distance(targetLocation) < 10 || this.distanceTraveled > this.distanceToTarget * 1.2) {
+      updateTarget();
+      return;
+    }
+
+    targetLocation = targetLocation.clone();
+
+    final Vector toTarget = targetLocation.subtract(dragonLocation).toVector().normalize();
+    final Vector gravity = toTarget.multiply(0.05); // More big = More Gravity
 
     // simulate "gravity pull"
     this.velocity.add(gravity);
@@ -275,11 +282,16 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     this.dragon.teleport(teleportLocation);
   }
 
-  public void remove() {
+  private void remove() {
+    remove(true);
+  }
+
+  private void remove(boolean removeFromList) {
     if (this.dragon.isValid())
       this.dragon.remove();
 
-    runningDragons.remove(this);
+    if (removeFromList)
+      runningDragons.remove(this);
 
     cancel();
   }
