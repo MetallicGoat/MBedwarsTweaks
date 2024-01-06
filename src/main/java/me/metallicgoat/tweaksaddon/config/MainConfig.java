@@ -182,6 +182,15 @@ public class MainConfig {
   public static boolean fireball_whitelist_enabled = false;
   @Config public static List<Material> fireball_whitelist_blocks = Collections.singletonList(Helper.get().getMaterialByName("END_STONE"));
 
+  @Config(
+      description = {
+          "Allows you to increase, or decrease the amount of fall damage you receive due to explosions",
+          "IMPORTANT: This will be applied on top of the MBedwars 'fall-damage-multiplier' config"
+      }
+  )
+  public static double tnt_fall_damage_multiplier = 1;
+  @Config public static double fireball_fall_damage_multiplier = 1;
+
   // ===== MESSAGES
   @SectionTitle(title = "MESSAGES")
 

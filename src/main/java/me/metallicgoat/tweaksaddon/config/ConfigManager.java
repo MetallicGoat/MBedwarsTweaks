@@ -204,7 +204,7 @@ public class ConfigManager {
 
       // Strings
     else if (type == String.class) {
-      return ChatColor.translateAlternateColorCodes('&', stringObject);
+      return stringObject != null ? ChatColor.translateAlternateColorCodes('&', stringObject) : null;
 
       // ItemStack
     } else if (type == ItemStack.class) {
@@ -216,7 +216,11 @@ public class ConfigManager {
 
       // Particle
     } else if (type == VarParticle.class) {
-      return VarParticle.newInstanceByName(stringObject);
+      try {
+        return VarParticle.newInstanceByName(stringObject);
+      } catch (Exception e) {
+        return null;
+      }
 
       // ChatColor
     } else if (type == ChatColor.class) {
@@ -225,6 +229,9 @@ public class ConfigManager {
       } catch (Exception e) {
         Console.printWarn("Failed to parse color \"" + stringObject + "\"");
       }
+
+    } else if (type == DropType.class) {
+      return GameAPI.get().getDropTypeById(stringObject);
 
       // PotionEffect
     } else if (type == PotionEffect.class) {
@@ -244,9 +251,6 @@ public class ConfigManager {
           Console.printConfigWarn(parts[1] + " or " + parts[2] + " isn't a valid number", "Main");
       } else
         Console.printConfigWarn(stringObject + "\" has " + parts.length + " :, but 3 are needed", "Main");
-
-    } else if (type == DropType.class) {
-      return GameAPI.get().getDropTypeById(stringObject);
 
       // Lists + Sets
     } else if (field != null && Collection.class.isAssignableFrom(type)) {
@@ -425,55 +429,4 @@ public class ConfigManager {
 
     String[] oldNames() default {};
   }
-
-//  public static String getColorNameOrHex(ChatColor bungeeColor) {
-//    String bungeeColorString = bungeeColor.toString();
-//
-//    // Check if the color is a default Minecraft color
-//    for (org.bukkit.ChatColor bukkitColor : org.bukkit.ChatColor.values()) {
-//      if (bukkitColor.isColor() && bukkitColor.toString().equals(bungeeColorString)) {
-//        return bukkitColor.name();
-//      }
-//    }
-//
-//    // If the color is not a default Minecraft color, return its hex color code
-//    if (NMSHelper.get().getVersion() >= 16) {
-//      try {
-//        Field colorField = bungeeColor.getClass().getDeclaredField("color");
-//        colorField.setAccessible(true);
-//        final int colorValue = (int) colorField.get(bungeeColor);
-//
-//        return String.format("#%06X", colorValue);
-//      } catch (Exception e) {
-//        return null;
-//      }
-//
-//    }
-//    return null;
-//  }
-//
-//  public static ChatColor getBungeeChatColor(String input) {
-//    ChatColor bungeeColor = null;
-//
-//    try {
-//      // Check if input is a Minecraft color name
-//      for (org.bukkit.ChatColor bukkitColor : org.bukkit.ChatColor.values()) {
-//        if (bukkitColor.isColor() && bukkitColor.name().equalsIgnoreCase(input)) {
-//          bungeeColor = ChatColor.getByChar(bukkitColor.getChar());
-//          return bungeeColor;
-//        }
-//      }
-//
-//      // Check if input is a hex color code and server version is 1.16 or higher
-//      if (input.startsWith("#") && NMSHelper.get().getVersion() >= 16) {
-//        Method ofMethod = ChatColor.class.getMethod("of", String.class);
-//        bungeeColor = (ChatColor) ofMethod.invoke(null, input);
-//        return bungeeColor;
-//      }
-//    } catch (Exception e) {
-//      e.printStackTrace();
-//    }
-//
-//    return bungeeColor;
-//  }
 }

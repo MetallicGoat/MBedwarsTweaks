@@ -60,6 +60,7 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
 
     // Explosives
     manager.registerEvents(new DisableFireballOutsideArena(), plugin);
+    manager.registerEvents(new ExplosiveFallDamageMultiplier(), plugin);
     manager.registerEvents(new FireballBlockBreakWhitelist(), plugin);
     manager.registerEvents(new FireballThrowEffects(), plugin);
     manager.registerEvents(new FireballUseCoolDown(), plugin);
