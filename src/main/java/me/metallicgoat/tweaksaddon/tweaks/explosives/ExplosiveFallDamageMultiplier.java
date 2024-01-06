@@ -32,7 +32,10 @@ public class ExplosiveFallDamageMultiplier implements Listener {
     if (!this.explodedPlayers.containsKey(player))
       return;
 
-    final boolean isFireball = this.explodedPlayers.get(player).isFireball;
+    final ExplodeInfo info = this.explodedPlayers.remove(player);
+    final boolean isFireball = info.isFireball;
+
+    info.removeTask.cancel();
 
     if (isFireball)
       event.setDamage(event.getDamage() * MainConfig.fireball_fall_damage_multiplier);
