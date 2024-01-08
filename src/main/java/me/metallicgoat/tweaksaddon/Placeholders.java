@@ -8,6 +8,9 @@ import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.arena.picker.ArenaPickerAPI;
 import de.marcely.bedwars.api.exception.ArenaConditionParseException;
 import de.marcely.bedwars.api.message.Message;
+
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Map;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
@@ -163,7 +166,12 @@ public class Placeholders extends PlaceholderExpansion {
         if (arena == null || arena.getStatus() != ArenaStatus.RUNNING)
           return "";
 
-        final long millis = arena.getRunningTime();
+        final Duration duration = arena.getRunningTime();
+
+        if (duration == null)
+          throw new RuntimeException("How tf is duration null if arena is running man");
+
+        final long millis = duration.toMillis();
         final long minutes = (millis / 1000) / 60;
         final long seconds = ((millis / 1000) % 60);
 

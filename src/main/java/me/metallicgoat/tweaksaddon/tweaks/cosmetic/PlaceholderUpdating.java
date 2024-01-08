@@ -33,7 +33,7 @@ public class PlaceholderUpdating implements Listener {
         delay = (int) Math.max(0, (arena.getLobbyTimeRemaining()%1)*20D);
         break;
       case RUNNING:
-        delay = (System.currentTimeMillis() - arena.getRoundStartTime())/50;
+        delay = arena.getRunningTime().toMillis()/50;
         break;
     }
 
