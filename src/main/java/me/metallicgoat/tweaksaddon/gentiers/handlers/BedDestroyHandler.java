@@ -1,6 +1,7 @@
 package me.metallicgoat.tweaksaddon.gentiers.handlers;
 
 import de.marcely.bedwars.api.arena.Arena;
+import de.marcely.bedwars.api.arena.BedDestructionInfo;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.message.Message;
 import de.marcely.bedwars.tools.location.XYZD;
@@ -8,7 +9,8 @@ import me.metallicgoat.tweaksaddon.config.MainConfig;
 import me.metallicgoat.tweaksaddon.gentiers.GenTierLevel;
 import org.bukkit.Material;
 
-public class BedDestroyHandler extends GenTierHandler{
+public class BedDestroyHandler extends GenTierHandler {
+
   @Override
   public void run(GenTierLevel level, Arena arena) {
     // Break all beds in an arena & run team upgrades
@@ -16,7 +18,11 @@ public class BedDestroyHandler extends GenTierHandler{
       final XYZD bedLoc = arena.getBedLocation(team);
 
       if (!arena.isBedDestroyed(team) && bedLoc != null) {
-        arena.destroyBedNaturally(team, Message.build(level.getTierName()).done());
+        final BedDestructionInfo info = BedDestructionInfo.construct(team);
+
+        info.setDestroyerName(Message.build(level.getTierName()).done());
+
+        arena.destroyBedNaturally(info);
         bedLoc.toLocation(arena.getGameWorld()).getBlock().setType(Material.AIR);
       }
     }
