@@ -4,6 +4,7 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.game.spawner.Spawner;
+import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.location.XYZ;
 import de.marcely.bedwars.tools.location.XYZYP;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
@@ -279,7 +280,9 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
 
     // Move it move it move it
     teleportLocation.setDirection(this.dragon.getLocation().clone().subtract(teleportLocation).toVector());
-    this.dragon.teleport(teleportLocation);
+
+    // Only async on paper 1.14.4+
+    Helper.get().teleportAsync(this.dragon, teleportLocation, null);
   }
 
   private void remove() {

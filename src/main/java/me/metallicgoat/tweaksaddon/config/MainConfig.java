@@ -92,6 +92,7 @@ public class MainConfig {
   @Config(
       description = {
           "Tries to disable the dragon death sound by overriding the value set in the spigot.yml",
+          "Disabling this will require a complete server restart (bw reload will not have an effect)"
       }
   )
   public static boolean disable_dragon_death_sound = true;
