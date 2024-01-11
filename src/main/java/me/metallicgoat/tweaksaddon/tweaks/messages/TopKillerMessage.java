@@ -83,12 +83,12 @@ public class TopKillerMessage implements Listener {
 
   // TODO this bad
   private void printMessage(Arena arena, Map<OfflinePlayer, Integer> playerIntegerMap) {
-    final List<String> formattedList = new ArrayList<>();
+    final List<Message> formattedList = new ArrayList<>();
 
     // There is Killers
     if (!playerIntegerMap.isEmpty()) {
       for (String line : MainConfig.top_killer_pre_lines)
-        formattedList.add(Message.build(line).done());
+        formattedList.add(Message.build(line));
 
       int place = 1;
       for (OfflinePlayer player : playerIntegerMap.keySet()) {
@@ -104,13 +104,13 @@ public class TopKillerMessage implements Listener {
             //.placeholder("%Winner-Members-Colored%", event.getWinnerTeam() != null ? event.getWinnerTeam().getChatColor()+event.getWinners().stream().map(Player::getName).collect(Collectors.joining(ChatColor.WHITE+", "+event.getWinnerTeam().getChatColor())) : "")
             //.placeholder("%Winner-Team-Name%", event.getWinnerTeam() != null ? event.getWinnerTeam().getDisplayName() : "")
             //.placeholder("%Winner-Team-Color%", !event.getWinners().isEmpty() ? event.getWinnerTeam().getChatColor().toString() : "")
-            .done());
+            );
 
         place++;
       }
 
       for (String line : MainConfig.top_killer_sub_lines)
-        formattedList.add(Message.build(line).done());
+        formattedList.add(Message.build(line));
 
       // There are no killers
     } else {
@@ -118,7 +118,7 @@ public class TopKillerMessage implements Listener {
         return;
 
       for (String line : MainConfig.no_top_killer_message)
-        formattedList.add(Message.build(line).done());
+        formattedList.add(Message.build(line));
     }
 
     broadcast(arena, formattedList);
@@ -139,11 +139,11 @@ public class TopKillerMessage implements Listener {
       nameIntMap.put(player, kills);
   }
 
-  private void broadcast(Arena arena, List<String> message) {
-    if (message == null || (message.size() == 1 && message.get(0).isEmpty()))
+  private void broadcast(Arena arena, List<Message> message) {
+    if (message == null || (message.size() == 1 && message.get(0).done(false).isEmpty()))
       return;
 
-    for (String line : message)
+    for (Message line : message)
       arena.broadcast(line);
   }
 }

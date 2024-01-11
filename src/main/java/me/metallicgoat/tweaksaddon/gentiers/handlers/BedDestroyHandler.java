@@ -25,6 +25,6 @@ public class BedDestroyHandler extends GenTierHandler {
       return;
       
     for (String s : MainConfig.auto_bed_break_message)
-      arena.broadcast(Message.build(s).done());
+      arena.broadcast(Message.build(s));
   }
 }
