@@ -170,14 +170,16 @@ public class FriendlyVillagers implements Listener {
 
           if (!visiblePlayers.isEmpty()) {
             // Get the closest player
-            final Player lookAtPlayer = visiblePlayers.stream()
+            final Optional<Player> optionalLookAtPlayer = visiblePlayers.stream()
                 .filter(p -> p.getWorld() == world)
-                .min(Comparator.comparingDouble(p -> p.getLocation().distance(hologramEntity.getLocation())))
-                .get();
+                .min(Comparator.comparingDouble(p -> p.getLocation().distance(hologramEntity.getLocation())));
 
-            // Final location
-            final Location moveTo = hologramEntity.getLocation().setDirection(lookAtPlayer.getLocation().subtract(hologramEntity.getLocation()).toVector());
+            // Rare case, where player has changed worlds or something
+            if (!optionalLookAtPlayer.isPresent())
+              continue;
 
+            final Player lookAtPlayer = optionalLookAtPlayer.get(); // The player to look at
+            final Location moveTo = hologramEntity.getLocation().setDirection(lookAtPlayer.getLocation().subtract(hologramEntity.getLocation()).toVector()); // final location
             final float currentYaw = hologramEntity.getLocation().getYaw(); // where the villager is currently facing
             final float targetYaw = moveTo.getYaw(); // Where we eventually want to end up
             final float difference = targetYaw - currentYaw; // How many degrees the npc needs to turn
