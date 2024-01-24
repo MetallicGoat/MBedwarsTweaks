@@ -18,6 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
@@ -28,13 +29,8 @@ public class GenTiers implements Listener {
 
   private static final Map<Arena, GenTierState> arenaStates = new IdentityHashMap<>();
 
-  public static GenTierState getState(Arena arena) {
-    final GenTierState state = arenaStates.get(arena);
-
-    if (state == null)
-      throw new RuntimeException("Failed to schedule next Gen Tier. This is a bug!");
-
-    return state;
+  public static @Nullable GenTierState getState(Arena arena) {
+    return arenaStates.get(arena);
   }
 
   @EventHandler
@@ -81,12 +77,11 @@ public class GenTiers implements Listener {
 
   private void scheduleNextTier(Arena arena, int tier) {
     final GenTierLevel currentLevel = GenTiersConfig.gen_tier_levels.get(tier);
+    final GenTierState state = getState(arena);
 
     // Check if tier exists
-    if (currentLevel == null)
+    if (currentLevel == null || state == null)
       return;
-
-    final GenTierState state = getState(arena);
 
     state.nextTierName = currentLevel.getTierName();
     state.nextUpdateTime = System.currentTimeMillis() + (long) (currentLevel.getTime() * 60 * 1000);
