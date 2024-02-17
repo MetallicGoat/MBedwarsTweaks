@@ -103,6 +103,7 @@ public class GenTiersConfig {
         if (action == TierAction.GEN_UPGRADE) {
 
           final GenTierLevel genTierLevel = new GenTierLevel(
+              levelNum,
               tierName,
               tierLevel,
               typeString,
@@ -118,6 +119,7 @@ public class GenTiersConfig {
         } else {
 
           final GenTierLevel genTierLevel = new GenTierLevel(
+              levelNum,
               tierName,
               action,
               time,

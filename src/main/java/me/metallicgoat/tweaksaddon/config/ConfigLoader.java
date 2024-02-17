@@ -54,6 +54,7 @@ public class ConfigLoader {
   public static HashMap<Integer, GenTierLevel> getDefaultGenTiers() {
     return new HashMap<Integer, GenTierLevel>() {{
       put(1, new GenTierLevel(
+          1,
           "Diamond II", "&eTier &cII",
           "diamond",
           TierAction.GEN_UPGRADE, 6, 30D, null,
@@ -61,6 +62,7 @@ public class ConfigLoader {
           null
       ));
       put(2, new GenTierLevel(
+          2,
           "Emerald II", "&eTier &cII",
           "emerald",
           TierAction.GEN_UPGRADE, 6, 40D, null,
@@ -68,6 +70,7 @@ public class ConfigLoader {
           null
       ));
       put(3, new GenTierLevel(
+          3,
           "Diamond III", "&eTier &cIII",
           "diamond",
           TierAction.GEN_UPGRADE, 6, 20D, null,
@@ -75,15 +78,16 @@ public class ConfigLoader {
           null
       ));
       put(4, new GenTierLevel(
+          4,
           "Emerald III", "&eTier &cIII",
           "emerald",
           TierAction.GEN_UPGRADE, 6, 30D, null,
           "&aEmerald Generators &ehave been upgraded to Tier &4III",
           null
       ));
-      put(5, new GenTierLevel("Bed Destroy", TierAction.BED_DESTROY, 5, null, null));
-      put(6, new GenTierLevel("Sudden Death", TierAction.SUDDEN_DEATH, 10, null, null));
-      put(7, new GenTierLevel("Game Over", TierAction.GAME_OVER, 10, null, null));
+      put(5, new GenTierLevel(5, "Bed Destroy", TierAction.BED_DESTROY, 5, null, null));
+      put(6, new GenTierLevel(6, "Sudden Death", TierAction.SUDDEN_DEATH, 10, null, null));
+      put(7, new GenTierLevel(7, "Game Over", TierAction.GAME_OVER, 10, null, null));
     }};
   }
 

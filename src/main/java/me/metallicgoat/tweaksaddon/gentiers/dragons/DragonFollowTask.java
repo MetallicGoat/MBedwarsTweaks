@@ -61,7 +61,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     final World world = arena.getGameWorld();
 
     if (world == null)
-      throw new RuntimeException("Sudden death dragon tried to spawn in an arena with no game world?!?!?! WTF how did we get here in life?");
+      throw new RuntimeException("Sudden death dragon tried to spawn in an arena with no game world?!?!?!? WTF how did we get here in life?");
 
     Location location = getDragonSpawn(arena, world, team);
 
