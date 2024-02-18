@@ -29,10 +29,6 @@ public class GenTiers implements Listener {
 
   private static final Map<Arena, GenTierState> arenaStates = new IdentityHashMap<>();
 
-  public static @Nullable GenTierState getState(Arena arena) {
-    return arenaStates.get(arena);
-  }
-
   @EventHandler
   public void onRoundStartEvent(RoundStartEvent event) {
     if (!MainConfig.gen_tiers_enabled)
@@ -64,42 +60,56 @@ public class GenTiers implements Listener {
     removeArena(event.getArena());
   }
 
-  private void removeArena(Arena arena) {
-    final GenTierState state = arenaStates.remove(arena);
-
-    cancelTask(state);
+  public static @Nullable GenTierState getState(Arena arena) {
+    return arenaStates.get(arena);
   }
 
-  private void cancelTask(GenTierState state) {
+  // Accessed by PrivateGamesAddon
+  public static void removeArena(Arena arena) {
+    final GenTierState state = arenaStates.remove(arena);
+
+    if (state != null)
+      cancelTask(state);
+  }
+
+  private static void cancelTask(GenTierState state) {
     if (state != null && state.genTierTask != null)
       state.genTierTask.cancel();
   }
 
-  private void scheduleNextTier(Arena arena, int tier) {
-    final GenTierLevel currentLevel = GenTiersConfig.gen_tier_levels.get(tier);
+  // Accessed by PrivateGamesAddon
+  public static void scheduleNextTier(Arena arena, GenTierLevel level, double time) {
     final GenTierState state = getState(arena);
 
-    // Check if tier exists
-    if (currentLevel == null || state == null)
+    if (state == null)
       return;
 
-    state.nextTierName = currentLevel.getTierName();
-    state.nextUpdateTime = System.currentTimeMillis() + (long) (currentLevel.getTime() * 60 * 1000);
+    state.nextTierName = level.getTierName();
+    state.nextUpdateTime = System.currentTimeMillis() + (long) (time * 60 * 1000);
 
     cancelTask(state); // Cancel existing tasks
 
-    if (currentLevel.getAction() == TierAction.GAME_OVER) {
-      arena.setIngameTimeRemaining((int) (currentLevel.getTime() * 60));
+    if (level.getAction() == TierAction.GAME_OVER) {
+      arena.setIngameTimeRemaining((int) (time * 60));
 
     } else {
       state.genTierTask = Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
-        currentLevel.broadcastEarn(arena, currentLevel.getAction().isMessageSupported());
-        currentLevel.getAction().getHandler().run(currentLevel, arena);
+        level.broadcastEarn(arena, level.getAction().isMessageSupported());
+        level.getAction().getHandler().run(level, arena);
 
-        scheduleNextTier(arena, tier + 1);
+        scheduleNextTier(arena, level.getTier() + 1);
 
-      }, (long) (currentLevel.getTime() * 20 * 60));
+      }, (long) (time * 20 * 60));
     }
+  }
+
+  public static void scheduleNextTier(Arena arena, int tier) {
+    final GenTierLevel level = GenTiersConfig.gen_tier_levels.get(tier);
+
+    if (level == null)
+      return;
+
+    scheduleNextTier(arena, level, level.getTime());
   }
 
   // Custom format for hologram titles
@@ -124,6 +134,7 @@ public class GenTiers implements Listener {
   }
 
   public static class GenTierState {
+
     @Getter
     private String nextTierName = null;
     private long nextUpdateTime = 0;

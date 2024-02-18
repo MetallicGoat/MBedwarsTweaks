@@ -4,68 +4,51 @@ import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.api.message.Message;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
-@Getter
+@Data
+@AllArgsConstructor
 public class GenTierLevel {
 
-  private final String tierName;
-  private final TierAction action;
-  private final double time;
+  private final int tier;
+  private final String tierName; // Display Name
   @Nullable
-  private final String holoName;
+  private final String holoName; // Example '&eTier &cII'
   @Nullable
-  private final String typeId;
+  private final String typeId; // Spawners with this drop-type should update
+  private final TierAction action; // Action (eg bed break or upgrade)
+  private final double time; // Time until the update happens (After Last Event)
   @Nullable
-  private final Double speed;
+  private final Double speed; // New drop speed
   @Nullable
-  private final Integer limit;
+  private final Integer limit; // New drop speed
   @Nullable
-  private final String earnMessage;
+  private final String earnMessage; // The chat message displayed on update
   @Nullable
-  private final Sound earnSound;
+  private final Sound earnSound; // Sound played when a tier is earned
 
   public GenTierLevel(
+      int tier,
       String tierName,
       TierAction action,
       double time,
       @Nullable String earnMessage,
-      @Nullable Sound earnSound
-  ) {
-    this.tierName = tierName;
-    this.holoName = null;
-    this.typeId = null;
-    this.action = action;
-    this.time = time;
-    this.speed = null;
-    this.limit = null;
-    this.earnMessage = earnMessage;
-    this.earnSound = earnSound;
-  }
+      @Nullable Sound earnSound) {
 
-  public GenTierLevel(
-      String tierName, // Display Name
-      @Nullable String holoName, // Example '&eTier &cII'
-      @Nullable String typeId, // Spawners with this drop-type should update
-      TierAction action, // Action (eg bed break or upgrade)
-      double time, // Time until the update happens (After Last Event)
-      @Nullable Double speed, // New drop speed
-      @Nullable Integer limit, // New drop speed
-      @Nullable String earnMessage, // The chat message displayed on update
-      @Nullable Sound earnSound // Sound played when a tier is earned
-  ) {
-    this.tierName = tierName;
-    this.holoName = holoName;
-    this.typeId = typeId;
-    this.action = action;
-    this.time = time;
-    this.speed = speed;
-    this.limit = limit;
-    this.earnMessage = earnMessage;
-    this.earnSound = earnSound;
+    this(tier,
+        tierName,
+        null,
+        null,
+        action,
+        time,
+        null,
+        null,
+        earnMessage,
+        earnSound);
   }
 
   public void broadcastEarn(Arena arena, boolean messageSupported) {
@@ -76,10 +59,10 @@ public class GenTierLevel {
 
     if (messageSupported && this.earnMessage != null)
       arena.broadcast(Message.build(this.earnMessage));
-    
+
   }
 
-  public DropType getType() {
+  public @Nullable DropType getType() {
     return GameAPI.get().getDropTypeById(this.typeId);
   }
 }
