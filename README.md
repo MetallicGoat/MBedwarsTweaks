@@ -4,21 +4,25 @@ Tweaks & Features for MBedWars
 
 [**Discord Support**](https://discord.gg/RC2mtdcEdD)
 
-**Features**
+### Features
 
- 1. AdvancedSwords (Upgrades, AntiDrop and much more)
- 2. Gen-Tiers (With Placeholder!)
- 3. Configurable Ignition time of TNT
- 4. Fireball Block Whitelist
- 5. Buy Message
- 6. Final Kill Message
- 7. Team Eliminated Message
- 8. Top Killers Message
- 9. Height Cap Message 
- 10. Villagers Look at You
- 11. Permanent Effects
- 12. Waterflow Fix
- 13. Schedule Bed Break
- 14. Disable unused Gens
- 15. Bed Break Effects (Will be replaced by Marcel's Cosmetics Addon)
- 16. And More!
+1. AdvancedSwords (Upgrades, AntiDrop and much more)
+2. Gen-Tiers (With Placeholders!)\
+3. Heal-Pool particles
+4. Sponge Particles
+5. Fall Damage Multiplier
+6. Fireball Block Whitelist
+7. Fireball use cool down
+8. Buy Message
+9. Final Kill Suffix
+10. AFK Spawners
+11. Team Eliminated Message
+12. Top Killers Message
+13. Height Cap Message 
+14. Friendly Villagers (They look at You!)
+15. Permanent Arena Effects
+16. Disable Unused Gens
+17. Remove Invis on Damage
+18. Remove empty buckets and potion bottles
+19. Force Scoreboard Updating
+20. And More!

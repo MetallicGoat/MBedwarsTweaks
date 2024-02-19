@@ -3,15 +3,24 @@ package me.metallicgoat.tweaksaddon.integration.hooks;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.event.player.PlayerIngameRespawnEvent;
 import de.marcely.bedwars.tools.Helper;
-import java.util.function.Consumer;
-import me.harsh.prestigesaddon.PrestigeAddon;
-import me.harsh.prestigesaddon.api.PrestigePlayer;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
+import me.tvhee.prestigesaddon.api.PrestigeAddonAPI;
+import me.tvhee.prestigesaddon.api.PrestigePlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.util.Optional;
+import java.util.function.Consumer;
+
 public class PrestigesLevelOnExperienceBar implements Listener {
+
+  private final PrestigeAddonAPI prestigeAddonAPI;
+
+  public PrestigesLevelOnExperienceBar() {
+    prestigeAddonAPI = (PrestigeAddonAPI) Bukkit.getServer().getPluginManager().getPlugin("PrestigeAddon");
+  }
 
   @EventHandler
   public void onArenaStart(RoundEndEvent event) {
@@ -33,23 +42,23 @@ public class PrestigesLevelOnExperienceBar implements Listener {
 
     getPrestigePlayer(player, data -> {
       player.setLevel(data.getStars());
-      player.setExp(data.getProgress() /* It goes from 0 - 100 */ / 100F);
+      player.setExp(data.getProgress() / 100F); // It goes from 0 - 100
     });
   }
 
-  private static void getPrestigePlayer(Player player, Consumer<PrestigePlayer> callback) {
+  private void getPrestigePlayer(Player player, Consumer<PrestigePlayer> callback) {
     {
-      final PrestigePlayer cached = PrestigeAddon.getInstance().getPlayer(player);
+      final Optional<PrestigePlayer> cached = prestigeAddonAPI.getPlayerDataSync(player);
 
-      if (cached != null) {
-        callback.accept(cached);
+      if (cached.isPresent()) {
+        callback.accept(cached.get());
         return;
       }
     }
 
-    PrestigeAddon.getInstance().getFromStorage(
-        player.getUniqueId(),
-        player.getName(),
-        data -> Helper.get().synchronize(() -> callback.accept(data)));
+    prestigeAddonAPI.getPlayerData(
+        player,
+        data -> Helper.get().synchronize(() -> callback.accept(data))
+    );
   }
 }
