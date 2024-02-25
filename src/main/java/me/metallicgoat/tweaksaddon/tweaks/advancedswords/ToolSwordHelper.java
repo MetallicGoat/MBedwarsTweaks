@@ -19,7 +19,6 @@ import me.metallicgoat.hotbarmanageraddon.HotbarManagerTools;
 import me.metallicgoat.tweaksaddon.integration.DependType;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.SwordsToolsConfig;
-import me.metallicgoat.tweaksaddon.integration.DependencyLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -52,7 +51,7 @@ public class ToolSwordHelper implements Listener {
   public static void onRoundStart(RoundStartEvent event) {
     final Arena arena = event.getArena();
 
-    buyGroupTrackerMap.put(arena, new BuyGroupTracker(arena));
+    buyGroupTrackerMap.put(arena, new BuyGroupTracker());
   }
 
   @EventHandler
@@ -89,7 +88,7 @@ public class ToolSwordHelper implements Listener {
 
   public static BuyGroupTracker getBuyGroupTracker(Arena arena) {
     if(arena == null || !buyGroupTrackerMap.containsKey(arena))
-      return new BuyGroupTracker(null);
+      return new BuyGroupTracker();
 
     return buyGroupTrackerMap.get(arena);
   }
