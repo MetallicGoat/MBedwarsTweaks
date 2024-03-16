@@ -82,10 +82,6 @@ public class ToolSwordHelper implements Listener {
     buyGroupTrackerMap.remove(arena);
   }
 
-  public static BuyGroupTracker getBuyGroupTracker(Player player) {
-    return getBuyGroupTracker(GameAPI.get().getArenaByPlayer(player));
-  }
-
   public static BuyGroupTracker getBuyGroupTracker(Arena arena) {
     if(arena == null || !buyGroupTrackerMap.containsKey(arena))
       return new BuyGroupTracker();
