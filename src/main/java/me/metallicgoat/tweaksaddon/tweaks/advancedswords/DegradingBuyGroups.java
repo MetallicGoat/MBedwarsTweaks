@@ -22,31 +22,31 @@ public class DegradingBuyGroups implements Listener {
     final Player player = event.getPlayer();
     final Arena arena = event.getArena();
 
-    for (BuyGroup buyGroup : GameAPI.get().getBuyGroups()) {
-      final String buyGroupName = buyGroup.getName();
+    for (String name : SwordsToolsConfig.degrading_buygroups) {
+      final BuyGroup buyGroup = GameAPI.get().getBuyGroup(name);
 
-      // TODO case sensitive
-      if (!SwordsToolsConfig.degrading_buygroups.contains(buyGroupName))
+      if (buyGroup == null)
         continue;
 
-      int level = ToolSwordHelper.getBuyGroupTracker(player).getBuyGroupLevel(player, buyGroupName);
+      final BuyGroupTracker tracker = ToolSwordHelper.getBuyGroupTracker(arena);
+      int newLevel = tracker.getBuyGroupLevel(player, name);
 
-      if (level > 1) {
-        level -= 1;
-        ToolSwordHelper.getBuyGroupTracker(player).setBuyGroupLevel(player, buyGroupName, level);
-      }
+      if (buyGroup.getLevels().contains(newLevel - 1))
+        newLevel--;
 
-      arena.setBuyGroupLevel(player, buyGroup, level);
+      tracker.setBuyGroupLevel(player, name, newLevel);
+      arena.setBuyGroupLevel(player, buyGroup, newLevel);
 
-      // Give item
-      final Collection<? extends ShopItem> shopItems = buyGroup.getItems(level);
+      // Give items
+      final Collection<? extends ShopItem> shopItems = buyGroup.getItems(newLevel);
+
       if (shopItems == null)
         continue;
 
       final Team team = arena.getPlayerTeam(player);
+
       for (ShopItem item : shopItems)
         ToolSwordHelper.givePlayerShopItem(arena, team, player, item);
-
     }
   }
 }
