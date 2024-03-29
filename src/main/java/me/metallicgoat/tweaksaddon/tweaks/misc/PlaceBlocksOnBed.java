@@ -19,19 +19,21 @@ import org.bukkit.inventory.ItemStack;
 
 public class PlaceBlocksOnBed implements Listener {
 
-  // TODO there might be issues with off hand
   @EventHandler
-  public void onBlockPlace(PlayerInteractEvent event){
-    if(!MainConfig.allow_block_place_on_bed || event.getAction() != Action.RIGHT_CLICK_BLOCK)
+  public void onBlockPlace(PlayerInteractEvent event) {
+    if (!MainConfig.allow_block_place_on_bed || event.getAction() != Action.RIGHT_CLICK_BLOCK || !event.isBlockInHand())
       return;
 
     final Player player = event.getPlayer();
+    final ItemStack itemStack = event.getItem();
     final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
     final Team team = arena != null ? arena.getPlayerTeam(player) : null;
     final Block block = event.getClickedBlock();
     final BlockFace face = event.getBlockFace();
 
-    if(arena == null ||
+    if (arena == null ||
+        itemStack == null ||
+        !itemStack.getType().isBlock() ||
         block == null ||
         face == null ||
         team == null ||
@@ -39,12 +41,8 @@ public class PlaceBlocksOnBed implements Listener {
       return;
 
     final Block placeBlockLoc = block.getRelative(face);
-    final ItemStack itemStack = player.getItemInHand();
 
-    if(itemStack == null ||
-        placeBlockLoc.getType() != Material.AIR ||
-        !arena.canPlaceBlockAt(placeBlockLoc) ||
-        !itemStack.getType().isBlock())
+    if (placeBlockLoc.getType() != Material.AIR || !arena.canPlaceBlockAt(placeBlockLoc))
       return;
 
     // Dye the block (1.8 -> 1.12 support)
