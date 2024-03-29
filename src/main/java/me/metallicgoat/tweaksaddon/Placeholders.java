@@ -43,6 +43,11 @@ public class Placeholders extends PlaceholderExpansion {
   }
 
   @Override
+  public boolean persist() {
+    return true;
+  }
+
+  @Override
   public String onRequest(OfflinePlayer offlinePlayer, @NotNull String params) {
     if (offlinePlayer == null)
       return "Missing player info";
