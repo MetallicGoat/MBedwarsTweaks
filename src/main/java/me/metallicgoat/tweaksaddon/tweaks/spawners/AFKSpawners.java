@@ -5,6 +5,7 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.event.player.PlayerPickupDropEvent;
 import de.marcely.bedwars.api.event.player.PlayerQuitArenaEvent;
+import java.util.IdentityHashMap;
 import java.util.Map;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.entity.Player;
@@ -12,11 +13,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import java.util.HashMap;
-
 public class AFKSpawners implements Listener {
 
-	private final Map<Player, Long> moveTimes = new HashMap<>();
+	private final Map<Player, Long> moveTimes = new IdentityHashMap<>();
 
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {

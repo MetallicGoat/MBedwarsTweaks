@@ -3,6 +3,7 @@ package me.metallicgoat.tweaksaddon.tweaks.explosives;
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.event.player.PlayerQuitArenaEvent;
+import java.util.IdentityHashMap;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Bukkit;
@@ -15,12 +16,11 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class ExplosiveFallDamageMultiplier implements Listener {
 
-  private final Map<Player, ExplodeInfo> explodedPlayers = new HashMap<>();
+  private final Map<Player, ExplodeInfo> explodedPlayers = new IdentityHashMap<>();
 
   @EventHandler
   public void onDamage(EntityDamageEvent event) {
@@ -45,10 +45,10 @@ public class ExplosiveFallDamageMultiplier implements Listener {
 
   @EventHandler
   public void onPlayerQuit(PlayerQuitArenaEvent event) {
-    final Player player = event.getPlayer();
+    final ExplodeInfo explodeInfo = this.explodedPlayers.remove(event.getPlayer());
 
-    if (this.explodedPlayers.containsKey(player))
-      this.explodedPlayers.remove(player).removeTask.cancel();
+    if (explodeInfo != null)
+      explodeInfo.removeTask.cancel();
   }
 
   @EventHandler
