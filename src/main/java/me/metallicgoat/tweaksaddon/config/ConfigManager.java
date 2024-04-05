@@ -5,28 +5,9 @@ import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.VarParticle;
 import de.marcely.bedwars.tools.YamlConfigurationDescriptor;
-import java.io.File;
-import java.io.IOException;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.Getter;
-import me.metallicgoat.tweaksaddon.utils.Console;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
+import me.metallicgoat.tweaksaddon.utils.Console;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -38,6 +19,19 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ConfigManager {
 
@@ -266,8 +260,14 @@ public class ConfigManager {
         return null;
 
       // Any type of Set or List
-      for (Object object : strings)
-        collection.add(deserializeObject(field, listType, (String) object, object));
+      for (Object object : strings) {
+        final Object deserializeObject = deserializeObject(field, listType, (String) object, object);
+
+        if (deserializeObject != null)
+          collection.add(deserializeObject);
+        else
+          Console.printConfigWarn("Failed to deserialize object in list/set in the config, with the name of " + object, "Main");
+      }
 
       return collection;
 
@@ -352,7 +352,8 @@ public class ConfigManager {
 
       // Any type of List or Set
       for (Object object : objectList)
-        lines.add((String) serializeObject(null, listType, object));
+        if (object != null)
+          lines.add((String) serializeObject(null, listType, object));
 
       return lines;
 
