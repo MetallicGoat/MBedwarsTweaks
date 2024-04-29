@@ -143,13 +143,15 @@ public class MainConfig {
   @Config(
       description = {
           "Cool particle effect when you place a sponge"
-      })
+      }
+  )
   public static boolean sponge_particles_enabled = true;
 
   @Config(
       description = {
           "Spawns green particles around team base when a team purchases Heal Pool"
-      })
+      }
+  )
   public static boolean heal_pool_particle_enabled = true;
   @Config public static boolean heal_pool_particle_team_view_only = true;
   @Config public static int heal_pool_particle_range = 15;
@@ -161,7 +163,8 @@ public class MainConfig {
   @Config(
       description = {
           "Fireball use cool down (20 ticks = 1 sec)"
-      })
+      }
+  )
   public static boolean fireball_cooldown_enabled = true;
   @Config public static long fireball_cooldown_time = 20L;
 
@@ -170,7 +173,8 @@ public class MainConfig {
           "Effects given when a fireball is thrown (Default is like hypixel)",
           "Specify which potion effects the player shall gain after throwing a fireball",
           "Usage: <potion effect name>:<duration in ticks (20 ticks = 1 sec):<level>"
-      })
+      }
+  )
   public static boolean fireball_throw_effects_enabled = true;
   @Config public static List<PotionEffect> fireball_throw_effects = Collections.singletonList(
       new PotionEffect(PotionEffectType.SLOW, 25, 0)
@@ -179,7 +183,8 @@ public class MainConfig {
   @Config(
       description = {
           "Blocks that fireballs will not destroy (Overrides MBedwars' BlackList)"
-      })
+      }
+  )
   public static boolean fireball_whitelist_enabled = false;
   @Config public static List<Material> fireball_whitelist_blocks = Collections.singletonList(Helper.get().getMaterialByName("END_STONE"));
 
@@ -199,7 +204,8 @@ public class MainConfig {
       description = {
           "Message displayed when any team is eliminated (to everyone in the arena)",
           "Placeholders: {team-color} {team-name}"
-      })
+      }
+  )
   public static boolean team_eliminate_message_enabled = true;
   @Config public static List<String> team_eliminate_message = new ArrayList<>(Arrays.asList(
       " ",
@@ -210,7 +216,8 @@ public class MainConfig {
   @Config(
       description = {
           "Add a suffix to the end of a message if the kill is final"
-      })
+      }
+  )
   public static boolean final_kill_suffix_enabled = true;
   @Config public static String final_kill_suffix = " &b&lFINAL KILL!";
 
@@ -218,14 +225,16 @@ public class MainConfig {
       description = {
           "Message sent to players when they purchase an item",
           "Placeholders: {amount} {product}"
-      })
+      }
+  )
   public static boolean buy_message_enabled = true;
   @Config public static String buy_message = "&aYou Purchased &6{product} x{amount}";
 
   @Config(
       description = {
           "Top killer message displayed at the end of a round"
-      })
+      }
+  )
   public static boolean top_killer_message_enabled = true;
   @Config public static List<String> top_killer_pre_lines = new ArrayList<>(Arrays.asList(
       "&a&l-------------------------------",
@@ -269,7 +278,8 @@ public class MainConfig {
   @Config(
       description = {
           "Message displayed when all beds are broken by the gen tiers system"
-      })
+      }
+  )
   public static boolean auto_bed_break_message_enabled = false;
   @Config public static List<String> auto_bed_break_message = new ArrayList<>(Arrays.asList(
       " ",
@@ -280,7 +290,8 @@ public class MainConfig {
   @Config(
       description = {
           "Titles displayed when a bed is broken. Overrides the MBedwars titles"
-      })
+      }
+  )
   public static boolean bed_destroy_title_enabled = false;
   @Config public static String bed_destroy_title = "&cBED DESTROYED";
   @Config public static String bed_destroy_subtitle = "&fYou will no longer respawn!";
@@ -288,7 +299,8 @@ public class MainConfig {
   @Config(
       description = {
           "You may want to disable the MBedwars team name actionbar in the config.yml"
-      })
+      }
+  )
   public static boolean custom_action_bar_in_lobby = false;
   @Config public static boolean custom_action_bar_in_game = false;
   @Config public static String custom_action_bar_message = "%tweaks_next-tier%";
@@ -299,7 +311,8 @@ public class MainConfig {
   @Config(
       description = {
           "Prevents player from opening a bases' chest if bases team is still alive"
-      })
+      }
+  )
   public static boolean lock_team_chest_enabled = true;
   @Config public static double lock_team_chest_range = 8;
   @Config public static String lock_team_chest_fail_open = "&cYou cannot open this chest until {team} &chas been eliminated.";
@@ -307,7 +320,8 @@ public class MainConfig {
   @Config(
       description = {
           "Personal Ender Chests. Overrides MBedwars Team Ender Chests"
-      })
+      }
+  )
   public static boolean personal_ender_chests_enabled = false;
   @Config public static String personal_ender_chests_name = "Ender Chest";
 
@@ -317,7 +331,8 @@ public class MainConfig {
   @Config(
       description = {
           "Remove items on use"
-      })
+      }
+  )
   public static boolean remove_empty_buckets = true;
   @Config public static boolean remove_empty_potions = true;
 
@@ -331,13 +346,15 @@ public class MainConfig {
   @Config(
       description = {
           "If enabled you still join a server even if the Player Limit is reached"
-      })
+      }
+  )
   public static boolean player_limit_bypass = false;
 
   @Config(
       description = {
           "Blocks stats from changing in certain arenas"
-      })
+      }
+  )
   public static boolean block_stat_change_enabled = false;
   @Config public static List<String> block_stat_change_arenas = new ArrayList<>();
 
@@ -345,7 +362,8 @@ public class MainConfig {
       description = {
           "Change default team chat colors",
           "Add teams like: \"DefaultTeamName: ChatColorName\"",
-      })
+      }
+  )
   public static boolean custom_team_colors_enabled = false;
   @Config public static HashMap<Team, ChatColor> custom_team_colors = new HashMap<Team, ChatColor>() {{
     put(Team.CYAN, ChatColor.DARK_AQUA);
@@ -356,7 +374,8 @@ public class MainConfig {
           "Permanent effects players have while playing",
           "ArenaName: PotionEffectName:time:amplifier",
           "Supports arena conditions"
-      })
+      }
+  )
   public static boolean permanent_effects_enabled = false;
   @Config public static HashMap<String, PotionEffect> permanent_effects_arenas = new HashMap<String, PotionEffect>() {{
     put("Ruins", new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
@@ -365,7 +384,8 @@ public class MainConfig {
   @Config(
       description = {
           "Removes invisibility on specified damage causes"
-      })
+      }
+  )
   public static boolean remove_invis_ondamage_enabled = true;
   @Config public static List<EntityDamageEvent.DamageCause> remove_invis_damge_causes = new ArrayList<>(Arrays.asList(
       EntityDamageEvent.DamageCause.ENTITY_ATTACK,
@@ -379,7 +399,8 @@ public class MainConfig {
           "rather than stay in one position. Their position will reset when the round ends",
           "Range is how close players must be for Friendly Villagers to activate",
           "If Check-Visibility is enabled, the npc will only look at a player if it has direct line of sight"
-      })
+      }
+  )
   public static boolean friendly_villagers_enabled = true;
   @Config public static int friendly_villagers_range = 20;
   @Config public static boolean friendly_villagers_check_visibility = true;
@@ -391,7 +412,8 @@ public class MainConfig {
       description = {
           "PAPI Placeholder: %tweaks_next-tier%",
           "Placeholders: {next-tier} {time} {sec} {min}"
-      })
+      }
+  )
   public static String papi_next_tier_lobby_starting = "&fStarting in &a{time}s";
   @Config public static String papi_next_tier_lobby_waiting = "&fWaiting...";
   @Config public static String papi_next_tier_lobby_end_lobby = "&rGame Over";
@@ -403,7 +425,8 @@ public class MainConfig {
       description = {
           "PAPI Placeholder: %tweaks_team-status-{name}%",
           "To be used on the scoreboard as is above"
-      })
+      }
+  )
   public static String papi_team_status_has_bed = "&a✔";
   @Config public static String papi_team_status_team_dead = "&c✘";
   @Config public static String papi_team_status_no_bed = "&a{player-amount}";
@@ -412,7 +435,8 @@ public class MainConfig {
   @Config(
       description = {
           "Whether to count spectators for the player count placeholders"
-      })
+      }
+  )
   public static boolean papi_count_spectators_as_players = false;
 
   @Config(
@@ -426,7 +450,8 @@ public class MainConfig {
       description = {
           "PAPI Placeholder: %tweaks_arena-{mode-name}%",
           "ArenaCondition:ModeName"
-      })
+      }
+  )
   public static HashMap<String, String> papi_arena_mode = new HashMap<String, String>() {{
     put("[players_per_team=1]", "Solos");
     put("[players_per_team=2]", "Doubles");
@@ -438,13 +463,15 @@ public class MainConfig {
       description = {
           "PAPI Placeholder: %tweaks_player-arena-running-time%",
           "Displays how long an arena has been running for"
-      })
+      }
+  )
   public static String papi_player_arena_running_time = "{min}:{sec}";
 
   @Config(
       description = {
           "If set to true, the scoreboard will be force updated to refresh PAPI placeholders"
-      })
+      }
+  )
   public static boolean scoreboard_updating_enabled_in_game = true;
   @Config public static boolean scoreboard_updating_enabled_in_lobby = true;
 
@@ -455,7 +482,8 @@ public class MainConfig {
       description = {
           "REQUIRED DEPENDENCY: PrestigesAddon (By WhoHarsh)",
           "Sets your prestiges bedwars level on experience bar during a game"
-      })
+      }
+  )
   public static boolean prestiges_level_on_exp_bar = false;
 
   // ===== UNSUPPORTED
@@ -465,7 +493,8 @@ public class MainConfig {
       description = {
           "Add a height cap for specific MBedwars arenas",
           "Add height cap like 'arenaName: 70' (supports arena conditions)"
-      })
+      }
+  )
   public static boolean custom_height_cap_enabled = false;
   @Config public static String custom_height_cap_warn = "&cYou cannot build any higher";
   @Config public static HashMap<String, Integer> custom_height_cap_arenas = new HashMap<String, Integer>() {{
