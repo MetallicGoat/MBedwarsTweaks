@@ -22,7 +22,7 @@ import org.bukkit.potion.PotionEffectType;
 public class MainConfig {
 
   @Getter
-  private static final List<Material> defaultMaterials = Arrays.asList(
+  private static final List<Material> defaultMaterials = new ArrayList<>(Arrays.asList(
       Helper.get().getMaterialByName("WOODEN_SWORD"),
       Helper.get().getMaterialByName("SHEARS"),
       Helper.get().getMaterialByName("WOODEN_PICKAXE"),
@@ -35,7 +35,7 @@ public class MainConfig {
       Helper.get().getMaterialByName("IRON_AXE"),
       Helper.get().getMaterialByName("GOLDEN_AXE"),
       Helper.get().getMaterialByName("DIAMOND_AXE")
-  );
+  ));
 
   // ===== GENERAL
   @SectionTitle(title = "GENERAL")
@@ -64,11 +64,11 @@ public class MainConfig {
       }
   )
   public static boolean gen_tiers_custom_holo_enabled = false;
-  @Config public static List<String> gen_tiers_custom_holo_titles = Arrays.asList(
+  @Config public static List<String> gen_tiers_custom_holo_titles = new ArrayList<>(Arrays.asList(
       "{spawner-color}{spawner}",
       "{tier}",
       "&eSpawning in &c{time} &eseconds!"
-  );
+  ));
 
   @Config(
       description = {
@@ -201,11 +201,11 @@ public class MainConfig {
           "Placeholders: {team-color} {team-name}"
       })
   public static boolean team_eliminate_message_enabled = true;
-  @Config public static List<String> team_eliminate_message = Arrays.asList(
+  @Config public static List<String> team_eliminate_message = new ArrayList<>(Arrays.asList(
       " ",
       "&f&lTEAM ELIMINATED > {team-color}{team-name} Team &chas been eliminated!",
       " "
-  );
+  ));
 
   @Config(
       description = {
@@ -227,20 +227,20 @@ public class MainConfig {
           "Top killer message displayed at the end of a round"
       })
   public static boolean top_killer_message_enabled = true;
-  @Config public static List<String> top_killer_pre_lines = Arrays.asList(
+  @Config public static List<String> top_killer_pre_lines = new ArrayList<>(Arrays.asList(
       "&a&l-------------------------------",
       "                &lBedWars",
       " "
-  );
+  ));
   @Config public static HashMap<Integer, String> top_killer_lines = new HashMap<Integer, String>() {{
     put(1, "    &e&l1st Killer &7- {killer-name} - {kill-amount}");
     put(2, "    &6&l2nd Killer &7- {killer-name} - {kill-amount}");
     put(3, "    &c&l3rd Killer &7- {killer-name} - {kill-amount}");
   }};
-  @Config public static List<String> top_killer_sub_lines = Arrays.asList(
+  @Config public static List<String> top_killer_sub_lines = new ArrayList<>(Arrays.asList(
       " ",
       "&a&l-------------------------------"
-  );
+  ));
 
   @Config(
       description = {
@@ -248,11 +248,11 @@ public class MainConfig {
       }
   )
   public static boolean no_top_killer_message_enabled = false;
-  @Config public static List<String> no_top_killer_message = Arrays.asList(
+  @Config public static List<String> no_top_killer_message = new ArrayList<>(Arrays.asList(
       " ",
       "&eNo Top Killers This Round",
       " "
-  );
+  ));
 
   @Config(
       description = {
@@ -260,22 +260,22 @@ public class MainConfig {
       }
   )
   public static boolean custom_bed_break_message_enabled = false;
-  @Config public static List<String> custom_bed_break_message = Arrays.asList(
+  @Config public static List<String> custom_bed_break_message = new ArrayList<>(Arrays.asList(
       " ",
       "&f&lBED DESTRUCTION > {team-color}{team-name} Bed &7was destroyed by {destroyer-color}{destroyer-name}",
       " "
-  );
+  ));
 
   @Config(
       description = {
           "Message displayed when all beds are broken by the gen tiers system"
       })
   public static boolean auto_bed_break_message_enabled = false;
-  @Config public static List<String> auto_bed_break_message = Arrays.asList(
+  @Config public static List<String> auto_bed_break_message = new ArrayList<>(Arrays.asList(
       " ",
       "&c&lALL BEDS HAVE BEEN DESTROYED",
       " "
-  );
+  ));
 
   @Config(
       description = {
@@ -367,11 +367,11 @@ public class MainConfig {
           "Removes invisibility on specified damage causes"
       })
   public static boolean remove_invis_ondamage_enabled = true;
-  @Config public static List<EntityDamageEvent.DamageCause> remove_invis_damge_causes = Arrays.asList(
+  @Config public static List<EntityDamageEvent.DamageCause> remove_invis_damge_causes = new ArrayList<>(Arrays.asList(
       EntityDamageEvent.DamageCause.ENTITY_ATTACK,
       EntityDamageEvent.DamageCause.BLOCK_EXPLOSION,
       EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
-  );
+  ));
 
   @Config(
       description = {
