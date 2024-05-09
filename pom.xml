@@ -36,12 +36,12 @@
             <version>2.11.3</version>
             <scope>provided</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>de.marcely.bedwars</groupId>-->
-<!--            <artifactId>API</artifactId>-->
-<!--            <version>5.3.3</version>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>de.marcely.bedwars</groupId>
+            <artifactId>API</artifactId>
+            <version>5.4.4</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>me.metallicgoat.hotbarmanageraddon</groupId>
             <artifactId>API</artifactId>
@@ -56,13 +56,13 @@
             <scope>system</scope>
             <systemPath>${basedir}/libs/public/PrestigeAddonAPI-1.2.0.jar</systemPath>
         </dependency>
-        <dependency>
-            <groupId>de.marcely.bedwars</groupId>
-            <artifactId>API</artifactId>
-            <version>5.3.3</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/libs/public/BedwarsAPI-5.3.3.jar</systemPath>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>de.marcely.bedwars</groupId>-->
+<!--            <artifactId>API</artifactId>-->
+<!--            <version>5.3.3</version>-->
+<!--            <scope>system</scope>-->
+<!--            <systemPath>${basedir}/libs/public/BedwarsAPI-5.3.3.jar</systemPath>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

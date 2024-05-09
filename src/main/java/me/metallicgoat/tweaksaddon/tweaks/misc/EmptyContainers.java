@@ -15,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class EmptyContainers implements Listener {
 
-  // Keep in mind 1.8 does not have an off-hand
   @EventHandler
   public void onBucketEmpty(PlayerBucketEmptyEvent event) {
     if (!MainConfig.remove_empty_buckets)
@@ -27,7 +26,9 @@ public class EmptyContainers implements Listener {
     if (arena == null)
       return;
 
-    event.getItemStack().setType(Material.AIR);
+    // Uses isSimilar to remove ItemStacks (weird but works)
+    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(MBedwarsTweaksPlugin.getInstance(), () ->
+        player.getInventory().removeItem(new ItemStack(Material.BUCKET)), 1);
   }
 
   @EventHandler
@@ -41,7 +42,8 @@ public class EmptyContainers implements Listener {
     if (arena == null)
       return;
 
+    // Uses isSimilar to remove ItemStacks (weird but works)
     Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(MBedwarsTweaksPlugin.getInstance(), () ->
-        event.getPlayer().getInventory().removeItem(new ItemStack(Material.GLASS_BOTTLE)), 1);
+        player.getInventory().removeItem(new ItemStack(Material.GLASS_BOTTLE)), 1);
   }
 }
