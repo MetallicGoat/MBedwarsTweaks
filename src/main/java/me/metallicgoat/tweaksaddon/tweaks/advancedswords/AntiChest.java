@@ -16,6 +16,9 @@ public class AntiChest implements Listener {
 
   @EventHandler
   public void onShiftClick(InventoryClickEvent e) {
+    if (!SwordsToolsConfig.anti_chest_enabled)
+      return;
+
     if (e.getInventory().getSize() > 26) {
       if (e.getClick().isShiftClick() && inArena((Player) e.getWhoClicked())) {
         final Inventory clicked = e.getClickedInventory();
@@ -35,6 +38,9 @@ public class AntiChest implements Listener {
 
   @EventHandler
   public void onInventoryClick(InventoryClickEvent e) {
+    if (!SwordsToolsConfig.anti_chest_enabled)
+      return;
+
     final Inventory clicked = e.getClickedInventory();
     if (!(e.getInventory().getSize() > 26))
       return;
@@ -72,6 +78,9 @@ public class AntiChest implements Listener {
 
   @EventHandler
   public void onInventoryDrag(InventoryDragEvent e) {
+    if (!SwordsToolsConfig.anti_chest_enabled)
+      return;
+
     final ItemStack dragged = e.getOldCursor();
     if (SwordsToolsConfig.anti_chest_materials.contains(dragged.getType())
         && inArena((Player) e.getWhoClicked())
