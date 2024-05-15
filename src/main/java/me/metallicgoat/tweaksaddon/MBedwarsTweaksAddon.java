@@ -4,6 +4,7 @@ import de.marcely.bedwars.api.BedwarsAddon;
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.message.DefaultMessageMappings;
 import de.marcely.bedwars.api.message.MessageAPI;
+import me.metallicgoat.tweaksaddon.config.ConfigLoader;
 import me.metallicgoat.tweaksaddon.gentiers.dragons.SuddenDeathUpgrade;
 import me.metallicgoat.tweaksaddon.integration.DependencyLoader;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.*;
@@ -92,6 +93,7 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     manager.registerEvents(new GenTiers(), plugin);
 
     // Server Events
+    manager.registerEvents(new ConfigLoader(), plugin);
     manager.registerEvents(new DependencyLoader(), plugin);
   }
 

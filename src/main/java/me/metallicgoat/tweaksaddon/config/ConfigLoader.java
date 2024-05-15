@@ -1,20 +1,30 @@
 package me.metallicgoat.tweaksaddon.config;
 
 import de.marcely.bedwars.api.arena.Team;
+import de.marcely.bedwars.api.event.ConfigsLoadEvent;
+import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
+import me.metallicgoat.tweaksaddon.config.ConfigManager.FileType;
+import me.metallicgoat.tweaksaddon.gentiers.GenTierLevel;
+import me.metallicgoat.tweaksaddon.gentiers.TierAction;
+import me.metallicgoat.tweaksaddon.utils.Console;
+import me.metallicgoat.tweaksaddon.utils.Util;
+import net.md_5.bungee.api.ChatColor;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import me.metallicgoat.tweaksaddon.utils.Console;
-import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
-import me.metallicgoat.tweaksaddon.utils.Util;
-import me.metallicgoat.tweaksaddon.config.ConfigManager.FileType;
-import me.metallicgoat.tweaksaddon.gentiers.GenTierLevel;
-import me.metallicgoat.tweaksaddon.gentiers.TierAction;
-import net.md_5.bungee.api.ChatColor;
 
-public class ConfigLoader {
+public class ConfigLoader implements Listener {
+
+  @EventHandler
+  public void onConfigLoad(ConfigsLoadEvent event) {
+    if (!event.isStartup())
+      MBedwarsTweaksPlugin.getInstance().loadTweaks(); // Reload tweaks
+
+  }
 
   public static void loadTweaksConfigs(MBedwarsTweaksPlugin plugin) {
     final long start = System.currentTimeMillis();
@@ -96,7 +106,7 @@ public class ConfigLoader {
     if (!MainConfig.custom_team_colors_enabled)
       return;
 
-    for(Entry<Team, ChatColor> entry : MainConfig.custom_team_colors.entrySet())
+    for (Entry<Team, ChatColor> entry : MainConfig.custom_team_colors.entrySet())
       entry.getKey().setBungeeChatColor(entry.getValue());
   }
 }

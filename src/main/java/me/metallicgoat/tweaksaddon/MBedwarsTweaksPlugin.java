@@ -50,6 +50,10 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
         "------------------------------"
     );
 
+    loadTweaks();
+  }
+
+  public void loadTweaks() {
     BedwarsAPI.onReady(() -> {
       DependencyLoader.loadAll();
       ConfigLoader.loadTweaksConfigs(this);
@@ -69,7 +73,7 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
 
       // Check Update Async
       if (MainConfig.check_update_on_load)
-        Bukkit.getScheduler().runTaskAsynchronously(this, () -> UpdateChecker.checkForUpdate(pdf.getVersion()));
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> UpdateChecker.checkForUpdate(this.getDescription().getVersion()));
 
     });
   }
