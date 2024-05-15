@@ -14,7 +14,7 @@ public class SwordsToolsConfig {
       }
   )
   public static boolean anti_chest_enabled = false;
-  @Config public static List<Material> anti_chest_materials = MainConfig.getDefaultMaterials();
+  @Config public static List<Material> anti_chest_materials = new ArrayList<>(MainConfig.getDefaultMaterials());
 
   @Config(
       description = {
@@ -22,7 +22,7 @@ public class SwordsToolsConfig {
       }
   )
   public static boolean anti_drop_enabled = true;
-  @Config public static List<Material> anti_drop_materials = MainConfig.getDefaultMaterials();
+  @Config public static List<Material> anti_drop_materials = new ArrayList<>(MainConfig.getDefaultMaterials());
 
   @Config(
       description = {
@@ -31,7 +31,7 @@ public class SwordsToolsConfig {
       }
   )
   public static boolean degrading_buygroups_enabled = false;
-  @Config public static List<String> degrading_buygroups = Arrays.asList("pickaxe", "axe");
+  @Config public static List<String> degrading_buygroups = new ArrayList<>(Arrays.asList("pickaxe", "axe"));
 
   @Config(
       description = {
@@ -43,7 +43,7 @@ public class SwordsToolsConfig {
   public static boolean advanced_tool_replacement_enabled = false;
   @Config public static boolean advanced_tool_replacement_force_ordered = false;
   @Config public static String advanced_tool_replacement_force_ordered_problem = "&cYou need to have a previous tier first";
-  @Config public static List<String> advanced_tool_replacement_buygroups = Arrays.asList("pickaxe", "axe");
+  @Config public static List<String> advanced_tool_replacement_buygroups = new ArrayList<>(Arrays.asList("pickaxe", "axe"));
 
   @Config(
       description = {

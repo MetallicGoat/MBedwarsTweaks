@@ -25,6 +25,7 @@ public class AntiDrop implements Listener {
 
     if (SwordsToolsConfig.anti_drop_materials.contains(event.getItemDrop().getItemStack().getType())
         && ToolSwordHelper.isNotToIgnore(event.getItemDrop().getItemStack())) {
+
       event.setCancelled(true);
     }
   }

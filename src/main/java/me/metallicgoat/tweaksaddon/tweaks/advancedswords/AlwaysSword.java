@@ -22,7 +22,7 @@ public class AlwaysSword implements Listener {
   // TODO keep track of running instances
   @EventHandler
   public void onClick(InventoryClickEvent e) {
-    if (!SwordsToolsConfig.always_sword_chest_enabled)
+    if (!SwordsToolsConfig.always_sword_drop_enabled)
       return;
 
     final Player player = (Player) e.getWhoClicked();
