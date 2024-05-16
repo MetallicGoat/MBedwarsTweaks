@@ -225,7 +225,6 @@ public class ConfigLegacyMigrator {
     MainConfig.lock_team_chest_fail_open = config.getString("Lock-Team-Chest.Fail-Open", MainConfig.lock_team_chest_fail_open);
 
     MainConfig.personal_ender_chests_enabled = config.getBoolean("Personal-Ender-Chests.Enabled", false);
-    MainConfig.personal_ender_chests_name = config.getString("Personal-Ender-Chests.Title", MainConfig.personal_ender_chests_name);
 
     MainConfig.player_limit_bypass = config.getBoolean("Bypass-PlayerLimit", false);
 
