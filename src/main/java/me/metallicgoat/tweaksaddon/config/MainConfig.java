@@ -317,14 +317,6 @@ public class MainConfig {
   @Config public static double lock_team_chest_range = 8;
   @Config public static String lock_team_chest_fail_open = "&cYou cannot open this chest until {team} &chas been eliminated.";
 
-  @Config(
-      description = {
-          "Personal Ender Chests. Overrides MBedwars Team Ender Chests"
-      }
-  )
-  public static boolean personal_ender_chests_enabled = false;
-  @Config public static String personal_ender_chests_name = "Ender Chest";
-
   // MISCELLANEOUS
   @SectionTitle(title = "MISCELLANEOUS")
 
@@ -488,6 +480,15 @@ public class MainConfig {
 
   // ===== UNSUPPORTED
   @SectionTitle(title = "UNSUPPORTED")
+
+  @Config(
+      description = {
+          "THIS WILL BE REMOVED IN THE FUTURE - USE MBedwars ENDER CHESTS",
+          "Personal Ender Chests. Overrides MBedwars Team Ender Chests",
+          "This config now simply enables the setting in MBedwars by modifying the config value"
+      }
+  )
+  public static boolean personal_ender_chests_enabled = false;
 
   @Config(
       description = {

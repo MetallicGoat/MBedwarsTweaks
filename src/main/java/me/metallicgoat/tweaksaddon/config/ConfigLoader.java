@@ -1,7 +1,9 @@
 package me.metallicgoat.tweaksaddon.config;
 
 import de.marcely.bedwars.api.arena.Team;
+import de.marcely.bedwars.api.configuration.ConfigurationAPI;
 import de.marcely.bedwars.api.event.ConfigsLoadEvent;
+import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.ConfigManager.FileType;
 import me.metallicgoat.tweaksaddon.gentiers.GenTierLevel;
@@ -9,6 +11,7 @@ import me.metallicgoat.tweaksaddon.gentiers.TierAction;
 import me.metallicgoat.tweaksaddon.utils.Console;
 import me.metallicgoat.tweaksaddon.utils.Util;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -56,6 +59,8 @@ public class ConfigLoader implements Listener {
     GenTiersConfig.load(); // We load gen tiers a special way
 
     applyCustomTeamColors();
+
+    overrideMBedwarsConfigs();
 
     final long end = System.currentTimeMillis();
 
@@ -108,5 +113,28 @@ public class ConfigLoader implements Listener {
 
     for (Entry<Team, ChatColor> entry : MainConfig.custom_team_colors.entrySet())
       entry.getKey().setBungeeChatColor(entry.getValue());
+  }
+
+  private static void overrideMBedwarsConfigs() {
+    // APPLY OUR OVERRIDES
+    if (MainConfig.personal_ender_chests_enabled) {
+      try {
+        final boolean teamchestEnabled = (boolean) ConfigurationAPI.get().getValue("teamchest-enabled");
+        final Material teamchestBlock = (Material) ConfigurationAPI.get().getValue("teamchest-block");
+
+        if (teamchestEnabled && teamchestBlock == Helper.get().getMaterialByName("ENDER_CHEST")) {
+          ConfigurationAPI.get().setValue("teamchest-enabled", false);
+          Console.printWarn(
+              "WARNING: You have \"personal-ender-chests-enabled\" enabled. This setting will be removed in the future, as it is already possible in MBedwars." ,
+              "Open your MBedwars config.yml, and either set \"teamchest-enabled\" to false, or set \"teamchest-block\" to CHEST.",
+              "Currently, we are using the MBedwars configuration api to override these values for you."
+          );
+        }
+
+      } catch (Exception e) {
+        Console.printWarn("Failed to apply personal ender chests. Try updating MBedwars, or disabling \"personal-ender-chests-enabled\"");
+        e.printStackTrace();
+      }
+    }
   }
 }
