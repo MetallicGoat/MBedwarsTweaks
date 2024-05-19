@@ -375,12 +375,14 @@ public class MainConfig {
 
   @Config(
       description = {
-          "Removes invisibility on specified damage causes"
+          "Removes invisibility on specified DamageCause. See the full list of DamageCauses here:",
+          "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/event/entity/EntityDamageEvent.DamageCause.html"
       }
   )
   public static boolean remove_invis_ondamage_enabled = true;
   @Config public static List<EntityDamageEvent.DamageCause> remove_invis_damge_causes = new ArrayList<>(Arrays.asList(
       EntityDamageEvent.DamageCause.ENTITY_ATTACK,
+      EntityDamageEvent.DamageCause.PROJECTILE,
       EntityDamageEvent.DamageCause.BLOCK_EXPLOSION,
       EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
   ));

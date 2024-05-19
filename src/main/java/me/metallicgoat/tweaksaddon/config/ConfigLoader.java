@@ -24,9 +24,9 @@ public class ConfigLoader implements Listener {
 
   @EventHandler
   public void onConfigLoad(ConfigsLoadEvent event) {
-    if (!event.isStartup())
+    if (!event.isStartup()) {
       MBedwarsTweaksPlugin.getInstance().loadTweaks(); // Reload tweaks
-
+    }
   }
 
   public static void loadTweaksConfigs(MBedwarsTweaksPlugin plugin) {
@@ -116,7 +116,7 @@ public class ConfigLoader implements Listener {
   }
 
   private static void overrideMBedwarsConfigs() {
-    // APPLY OUR OVERRIDES
+    // Configure MBedwars to work like our old feature did
     if (MainConfig.personal_ender_chests_enabled) {
       try {
         final boolean teamchestEnabled = (boolean) ConfigurationAPI.get().getValue("teamchest-enabled");
@@ -125,15 +125,14 @@ public class ConfigLoader implements Listener {
         if (teamchestEnabled && teamchestBlock == Helper.get().getMaterialByName("ENDER_CHEST")) {
           ConfigurationAPI.get().setValue("teamchest-enabled", false);
           Console.printWarn(
-              "WARNING: You have \"personal-ender-chests-enabled\" enabled. This setting will be removed in the future, as it is already possible in MBedwars." ,
+              "WARNING: You have \"personal-ender-chests-enabled\" enabled. This setting will be removed in the future, as it is already possible in MBedwars.",
               "Open your MBedwars config.yml, and either set \"teamchest-enabled\" to false, or set \"teamchest-block\" to CHEST.",
-              "Currently, we are using the MBedwars configuration api to override these values for you."
+              "Currently, we are using the MBedwars configuration api to override these values for you, but we may not do this in the future."
           );
         }
 
-      } catch (Exception e) {
+      } catch (IllegalArgumentException e) {
         Console.printWarn("Failed to apply personal ender chests. Try updating MBedwars, or disabling \"personal-ender-chests-enabled\"");
-        e.printStackTrace();
       }
     }
   }
