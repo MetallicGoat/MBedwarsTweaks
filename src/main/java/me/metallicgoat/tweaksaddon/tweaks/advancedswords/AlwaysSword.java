@@ -16,10 +16,15 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.scheduler.BukkitTask;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AlwaysSword implements Listener {
 
-  // TODO keep track of running instances
+  final Map<Player, BukkitTask> runningTasks = new HashMap<>();
+
   @EventHandler
   public void onClick(InventoryClickEvent e) {
     if (!SwordsToolsConfig.always_sword_drop_enabled)
@@ -32,7 +37,10 @@ public class AlwaysSword implements Listener {
         && arena.getStatus() == ArenaStatus.RUNNING
         && player.getGameMode() != GameMode.SPECTATOR) {
 
-      Bukkit.getServer().getScheduler().runTaskLater((MBedwarsTweaksPlugin.getInstance()), () -> {
+      if (runningTasks.containsKey(player))
+        runningTasks.get(player).cancel();
+
+      runningTasks.put(player, Bukkit.getServer().getScheduler().runTaskLater((MBedwarsTweaksPlugin.getInstance()), () -> {
         final Inventory pi = player.getInventory();
         final int i = ToolSwordHelper.getSwordsAmount(player);
 
@@ -54,9 +62,10 @@ public class AlwaysSword implements Listener {
             (e.getCursor() == null || e.getCursor() != null && !e.getCursor().getType().name().endsWith("SWORD") && ToolSwordHelper.isNotToIgnore(e.getCursor()))) {
 
           pi.addItem(ToolSwordHelper.getDefaultWoodSword(player, arena));
-
         }
-      }, 25L);
+
+        runningTasks.remove(player);
+      }, 25L));
     }
   }
 
