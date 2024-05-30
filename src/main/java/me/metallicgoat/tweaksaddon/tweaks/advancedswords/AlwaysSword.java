@@ -18,12 +18,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 public class AlwaysSword implements Listener {
 
-  final Map<Player, BukkitTask> runningTasks = new HashMap<>();
+  final Map<Player, BukkitTask> runningTasks = new IdentityHashMap<>();
 
   @EventHandler
   public void onClick(InventoryClickEvent e) {

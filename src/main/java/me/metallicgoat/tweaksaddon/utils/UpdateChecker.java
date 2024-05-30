@@ -1,7 +1,5 @@
 package me.metallicgoat.tweaksaddon.utils;
 
-import me.metallicgoat.tweaksaddon.utils.Console;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
