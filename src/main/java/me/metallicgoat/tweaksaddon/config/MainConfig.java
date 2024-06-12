@@ -417,28 +417,10 @@ public class MainConfig {
 
   @Config(
       description = {
-          "PAPI Placeholder: %tweaks_team-status-{name}%",
-          "To be used on the scoreboard as is above"
-      }
-  )
-  public static String papi_team_status_has_bed = "&a✔";
-  @Config public static String papi_team_status_team_dead = "&c✘";
-  @Config public static String papi_team_status_no_bed = "&a{player-amount}";
-  @Config public static String papi_team_status_your_team_suffix = " &7You";
-
-  @Config(
-      description = {
           "Whether to count spectators for the player count placeholders"
       }
   )
   public static boolean papi_count_spectators_as_players = false;
-
-  @Config(
-      description = {
-          "PAPI-Placeholder: %tweaks_team-you-{name}%",
-          "Displays specified value if the team in the placeholder matches the players current team"
-      })
-  public static String papi_team_you_placeholder = " &7You";
 
   @Config(
       description = {
@@ -485,15 +467,6 @@ public class MainConfig {
 
   @Config(
       description = {
-          "THIS WILL BE REMOVED IN THE FUTURE - USE MBedwars ENDER CHESTS",
-          "Personal Ender Chests. Overrides MBedwars Team Ender Chests",
-          "This config now simply enables the setting in MBedwars by modifying the config value"
-      }
-  )
-  public static boolean personal_ender_chests_enabled = false;
-
-  @Config(
-      description = {
           "Add a height cap for specific MBedwars arenas",
           "Add height cap like 'arenaName: 70' (supports arena conditions)"
       }
@@ -503,4 +476,33 @@ public class MainConfig {
   @Config public static HashMap<String, Integer> custom_height_cap_arenas = new HashMap<String, Integer>() {{
     put("ArenaName", 70);
   }};
+
+  @Config(
+      description = {
+          "THIS MAY BE REMOVED IN THE FUTURE - USE THE MBedwars {heart} PLACEHOLDER",
+          "PAPI Placeholder: %tweaks_team-status-{name}%",
+          "To be used on the scoreboard as is above"
+      }
+  )
+  public static String papi_team_status_has_bed = "&a✔";
+  @Config public static String papi_team_status_team_dead = "&c✘";
+  @Config public static String papi_team_status_no_bed = "&a{player-amount}";
+  @Config public static String papi_team_status_your_team_suffix = " &7You";
+
+  @Config(
+      description = {
+          "THIS MAY BE REMOVED IN THE FUTURE - USE THE MBedwars {team-indicator} PLACEHOLDER",
+          "PAPI-Placeholder: %tweaks_team-you-{name}%",
+          "Displays specified value if the team in the placeholder matches the players current team"
+      })
+  public static String papi_team_you_placeholder = " &7You";
+
+  @Config(
+      description = {
+          "THIS WILL BE REMOVED IN THE FUTURE - USE MBedwars ENDER CHESTS",
+          "Personal Ender Chests. Overrides MBedwars Team Ender Chests",
+          "This config now simply enables the setting in MBedwars by modifying the config value"
+      }
+  )
+  public static boolean personal_ender_chests_enabled = false;
 }
