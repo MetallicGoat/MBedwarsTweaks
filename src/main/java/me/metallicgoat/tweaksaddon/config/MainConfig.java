@@ -140,6 +140,14 @@ public class MainConfig {
   // ===== PARTICLE EFFECTS
   @SectionTitle(title = "PARTICLE EFFECTS")
 
+@Config(
+      description = {
+          "If a player has invis and is moving, footsteps particles will be played at their feet",
+          "Note: this is only supported on 1.8 -> 1.12, as the particle was removed in modern versions"
+      }
+  )
+  public static boolean play_footsteps_with_invis = true;
+
   @Config(
       description = {
           "Cool particle effect when you place a sponge"

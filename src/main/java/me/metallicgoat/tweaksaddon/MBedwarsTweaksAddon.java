@@ -56,6 +56,7 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     // Cosmetic
     manager.registerEvents(new FriendlyVillagers(), plugin);
     manager.registerEvents(new HealPoolParticles(), plugin);
+    manager.registerEvents(new InvisFootstepsParticles(), plugin);
     manager.registerEvents(new PlaceholderUpdating(), plugin);
     manager.registerEvents(new SpongeParticles(), plugin);
 
