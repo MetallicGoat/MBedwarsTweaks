@@ -1,6 +1,5 @@
 package me.metallicgoat.tweaksaddon.config;
 
-import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.VarParticle;
@@ -9,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import me.metallicgoat.tweaksaddon.utils.Console;
 import me.metallicgoat.tweaksaddon.utils.Util;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -244,30 +242,6 @@ public class ConfigLegacyMigrator {
         }
 
         MainConfig.remove_invis_damge_causes = damageCauses;
-      }
-    }
-
-    MainConfig.custom_team_colors_enabled = config.getBoolean("Custom-Team-Chat-Color.Enabled", false);
-    {
-      if (config.contains("Custom-Team-Chat-Color.Teams")) {
-
-        final HashMap<Team, ChatColor> map = new HashMap<>();
-
-        for (String string : config.getStringList("Custom-Team-Chat-Color.Teams")) {
-
-          if (!string.contains(":"))
-            continue;
-
-          final String[] strings = string.split(":");
-          final Team team = Team.getByName(strings[0]);
-          final ChatColor chatColor = ChatColor.getByChar(strings[1].charAt(0));
-
-          if (team != null && chatColor != null) {
-            map.put(team, chatColor);
-          }
-        }
-
-        MainConfig.custom_team_colors = map;
       }
     }
 
