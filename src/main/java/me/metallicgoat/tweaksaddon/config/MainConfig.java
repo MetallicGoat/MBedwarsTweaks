@@ -1,6 +1,5 @@
 package me.metallicgoat.tweaksaddon.config;
 
-import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.NMSHelper;
@@ -13,7 +12,6 @@ import java.util.List;
 import lombok.Getter;
 import me.metallicgoat.tweaksaddon.config.ConfigManager.Config;
 import me.metallicgoat.tweaksaddon.config.ConfigManager.SectionTitle;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
@@ -357,17 +355,6 @@ public class MainConfig {
   )
   public static boolean block_stat_change_enabled = false;
   @Config public static List<String> block_stat_change_arenas = new ArrayList<>();
-
-  @Config(
-      description = {
-          "Change default team chat colors",
-          "Add teams like: \"DefaultTeamName: ChatColorName\"",
-      }
-  )
-  public static boolean custom_team_colors_enabled = false;
-  @Config public static HashMap<Team, ChatColor> custom_team_colors = new HashMap<Team, ChatColor>() {{
-    put(Team.CYAN, ChatColor.DARK_AQUA);
-  }};
 
   @Config(
       description = {

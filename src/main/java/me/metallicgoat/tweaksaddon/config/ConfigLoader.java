@@ -1,6 +1,5 @@
 package me.metallicgoat.tweaksaddon.config;
 
-import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.configuration.ConfigurationAPI;
 import de.marcely.bedwars.api.event.ConfigsLoadEvent;
 import de.marcely.bedwars.tools.Helper;
@@ -10,7 +9,6 @@ import me.metallicgoat.tweaksaddon.gentiers.GenTierLevel;
 import me.metallicgoat.tweaksaddon.gentiers.TierAction;
 import me.metallicgoat.tweaksaddon.utils.Console;
 import me.metallicgoat.tweaksaddon.utils.Util;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,7 +16,6 @@ import org.bukkit.event.Listener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map.Entry;
 
 public class ConfigLoader implements Listener {
 
@@ -57,8 +54,6 @@ public class ConfigLoader implements Listener {
     ConfigManager.load(plugin, MainConfig.class, FileType.MAIN);
     ConfigManager.load(plugin, SwordsToolsConfig.class, FileType.SWORDS_TOOLS);
     GenTiersConfig.load(); // We load gen tiers a special way
-
-    applyCustomTeamColors();
 
     overrideMBedwarsConfigs();
 
@@ -105,14 +100,6 @@ public class ConfigLoader implements Listener {
       put(6, new GenTierLevel(6, "Sudden Death", TierAction.SUDDEN_DEATH, 10, null, null));
       put(7, new GenTierLevel(7, "Game Over", TierAction.GAME_OVER, 10, null, null));
     }};
-  }
-
-  private static void applyCustomTeamColors() {
-    if (!MainConfig.custom_team_colors_enabled)
-      return;
-
-    for (Entry<Team, ChatColor> entry : MainConfig.custom_team_colors.entrySet())
-      entry.getKey().setBungeeChatColor(entry.getValue());
   }
 
   private static void overrideMBedwarsConfigs() {
