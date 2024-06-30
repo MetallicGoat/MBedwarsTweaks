@@ -8,16 +8,16 @@ import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.arena.picker.ArenaPickerAPI;
 import de.marcely.bedwars.api.exception.ArenaConditionParseException;
 import de.marcely.bedwars.api.message.Message;
-
-import java.time.Duration;
-import java.util.Map;
+import de.marcely.bedwars.tools.Helper;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import me.metallicgoat.tweaksaddon.gentiers.GenTiers;
-import me.metallicgoat.tweaksaddon.utils.Util;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.time.Duration;
+import java.util.Map;
 
 public class Placeholders extends PlaceholderExpansion {
 
@@ -137,7 +137,8 @@ public class Placeholders extends PlaceholderExpansion {
             if (ArenaPickerAPI.get().getArenasByCondition(entries.getKey()).contains(arena)) {
               return Message.build(entries.getValue()).done();
             }
-          } catch (ArenaConditionParseException ignored) { }
+          } catch (ArenaConditionParseException ignored) {
+          }
         }
 
         return "";
@@ -182,16 +183,7 @@ public class Placeholders extends PlaceholderExpansion {
         if (duration == null)
           throw new RuntimeException("How tf is duration null if arena is running man");
 
-        final long millis = duration.toMillis();
-        final long minutes = (millis / 1000) / 60;
-        final long seconds = ((millis / 1000) % 60);
-
-        final String[] formatted = Util.formatMinSec((int) minutes, (int) seconds);
-
-        return Message.build(MainConfig.papi_player_arena_running_time)
-            .placeholder("min", formatted[0])
-            .placeholder("sec", formatted[1])
-            .done();
+        return Helper.get().formatDuration(duration);
       }
 
       // Player count placeholders

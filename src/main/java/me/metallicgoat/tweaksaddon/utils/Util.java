@@ -5,31 +5,18 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.arena.picker.ArenaPickerAPI;
 import de.marcely.bedwars.api.game.spawner.DropType;
-
-import java.lang.annotation.Target;
-import java.util.*;
-
 import de.marcely.bedwars.tools.location.XYZYP;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.Nullable;
 
-public class Util {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
-  // TODO make better
-  public static String[] formatMinSec(int minutes, int seconds) {
-    if (minutes + seconds > 0) {
-      if (seconds < 10) {
-        return new String[]{String.valueOf(minutes), "0" + seconds};
-      } else {
-        return new String[]{String.valueOf(minutes), String.valueOf(seconds)};
-      }
-    } else if (seconds == 0 && minutes > 0) {
-      return new String[]{String.valueOf(minutes), "00"};
-    } else {
-      return new String[]{"0", "00"};
-    }
-  }
+public class Util {
 
   public static Collection<Arena> parseArenas(String arenaKey) {
     if (arenaKey.equalsIgnoreCase("ALL-ARENAS")) {
