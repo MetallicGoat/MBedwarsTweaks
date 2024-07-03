@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 public class ReplaceToolOnBuy implements Listener {
 
@@ -29,8 +30,11 @@ public class ReplaceToolOnBuy implements Listener {
 
   private void clearOld(Material tool, Player p) {
     final boolean isClearingPickaxe = ToolSwordHelper.isPickaxe(tool);
+    final PlayerInventory inv = p.getInventory();
 
-    for (ItemStack itemStack : p.getInventory()) {
+    for (int i = 0; i < p.getInventory().getSize(); i++) {
+      final ItemStack itemStack = inv.getItem(i);
+
       if (itemStack == null ||
           !ToolSwordHelper.isTool(itemStack.getType()) ||
           !ToolSwordHelper.isNotToIgnore(itemStack))
@@ -40,7 +44,7 @@ public class ReplaceToolOnBuy implements Listener {
       final boolean match = (isCheckingPickaxe && isClearingPickaxe) || (!isCheckingPickaxe && !isClearingPickaxe);
 
       if (match && ToolSwordHelper.getSwordToolLevel(tool) > ToolSwordHelper.getSwordToolLevel(itemStack.getType()))
-        p.getInventory().remove(itemStack);
+        inv.setItem(i, null);
     }
   }
 }

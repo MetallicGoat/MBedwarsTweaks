@@ -5,9 +5,14 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.arena.picker.ArenaPickerAPI;
 import de.marcely.bedwars.api.game.spawner.DropType;
+import de.marcely.bedwars.tools.NMSHelper;
 import de.marcely.bedwars.tools.location.XYZYP;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -17,6 +22,19 @@ import java.util.Collections;
 import java.util.List;
 
 public class Util {
+
+  public static @Nullable ItemStack getItemInOffHand(HumanEntity player) {
+    if (NMSHelper.get().getVersion() == 8)
+      return null;
+
+    try {
+      return (ItemStack) PlayerInventory.class.getDeclaredMethod("getItemInOffHand", null).invoke(player.getInventory());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return null;
+  }
 
   public static Collection<Arena> parseArenas(String arenaKey) {
     if (arenaKey.equalsIgnoreCase("ALL-ARENAS")) {

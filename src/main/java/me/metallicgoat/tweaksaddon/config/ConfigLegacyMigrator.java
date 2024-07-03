@@ -138,8 +138,6 @@ public class ConfigLegacyMigrator {
 
     MainConfig.papi_team_you_placeholder = config.getString("Team-You-Placeholder", MainConfig.papi_team_you_placeholder);
 
-    MainConfig.papi_player_arena_running_time = config.getString("Running-Time-Placeholder", MainConfig.papi_player_arena_running_time);
-
     MainConfig.scoreboard_updating_enabled_in_game = config.getBoolean("Force-Scoreboard-Updating.Enabled-In-Game", false);
     MainConfig.scoreboard_updating_enabled_in_lobby = config.getBoolean("Force-Scoreboard-Updating.Enabled-In-Lobby", false);
 
