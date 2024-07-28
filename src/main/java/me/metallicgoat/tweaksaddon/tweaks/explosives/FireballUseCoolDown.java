@@ -47,7 +47,7 @@ public class FireballUseCoolDown implements Listener {
 
       try {
         HumanEntity.class.getMethod("setCooldown", Material.class, int.class)
-            .invoke(player, is.getType(), MainConfig.fireball_cooldown_time);
+            .invoke(player, is.getType(), (int) MainConfig.fireball_cooldown_time);
       } catch (Exception e) {
         e.printStackTrace();
       }
