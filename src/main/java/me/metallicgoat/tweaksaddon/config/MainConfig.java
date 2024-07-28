@@ -440,14 +440,6 @@ public class MainConfig {
 
   @Config(
       description = {
-          "PAPI Placeholder: %tweaks_player-arena-running-time%",
-          "Displays how long an arena has been running for"
-      }
-  )
-  public static String papi_player_arena_running_time = "{min}:{sec}";
-
-  @Config(
-      description = {
           "If set to true, the scoreboard will be force updated to refresh PAPI placeholders"
       }
   )

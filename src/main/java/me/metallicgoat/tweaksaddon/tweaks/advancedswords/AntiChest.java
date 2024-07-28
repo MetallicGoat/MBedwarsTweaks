@@ -2,6 +2,7 @@ package me.metallicgoat.tweaksaddon.tweaks.advancedswords;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import me.metallicgoat.tweaksaddon.config.SwordsToolsConfig;
+import me.metallicgoat.tweaksaddon.utils.Util;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -49,18 +50,21 @@ public class AntiChest implements Listener {
       final HumanEntity player = e.getWhoClicked();
       final Inventory inventory = player != null ? player.getInventory() : null;
 
-      if (inventory != null) {
+      if (inventory != null && clicked != inventory) {
         final int swapSlot = e.getHotbarButton();
+        ItemStack movingItem = null;
 
-        if (swapSlot >= 0) {
-          final ItemStack itemStack = inventory.getItem(swapSlot);
+        if (e.getClick().name().equals("SWAP_OFFHAND"))
+          movingItem = Util.getItemInOffHand(player);
 
-          if (itemStack != null
-              && SwordsToolsConfig.anti_chest_materials.contains(itemStack.getType())
-              && ToolSwordHelper.isNotToIgnore(itemStack)) {
-            e.setCancelled(true);
-            return;
-          }
+        else if (swapSlot >= 0)
+          movingItem = inventory.getItem(swapSlot);
+
+        if (movingItem != null
+            && SwordsToolsConfig.anti_chest_materials.contains(movingItem.getType())
+            && ToolSwordHelper.isNotToIgnore(movingItem)) {
+          e.setCancelled(true);
+          return;
         }
       }
     }
