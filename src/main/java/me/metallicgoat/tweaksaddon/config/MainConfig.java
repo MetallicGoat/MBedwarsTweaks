@@ -176,6 +176,14 @@ public class MainConfig {
 
   @Config(
       description = {
+          "Shows a visual cooldown in the player's hotbar (similar to ender pearls in vanilla)",
+          "1.12+ only"
+      }
+  )
+  public static boolean fireball_cooldown_visually = true;
+
+  @Config(
+      description = {
           "Effects given when a fireball is thrown (Default is like hypixel)",
           "Specify which potion effects the player shall gain after throwing a fireball",
           "Usage: <potion effect name>:<duration in ticks (20 ticks = 1 sec):<level>"
