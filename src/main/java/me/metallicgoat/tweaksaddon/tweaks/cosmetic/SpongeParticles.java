@@ -11,13 +11,14 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class SpongeParticles implements Listener {
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.HIGHEST)
   public void onSpongePlace(BlockPlaceEvent e) {
     final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(e.getPlayer());
     final Block block = e.getBlock();
