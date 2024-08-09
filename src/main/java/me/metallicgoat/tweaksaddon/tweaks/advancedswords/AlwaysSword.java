@@ -1,6 +1,7 @@
 package me.metallicgoat.tweaksaddon.tweaks.advancedswords;
 
 import de.marcely.bedwars.api.BedwarsAPI;
+import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
@@ -41,6 +42,13 @@ public class AlwaysSword implements Listener {
         runningTasks.get(player).cancel();
 
       runningTasks.put(player, Bukkit.getServer().getScheduler().runTaskLater((MBedwarsTweaksPlugin.getInstance()), () -> {
+        final Arena currArena = GameAPI.get().getArenaByPlayer(player);
+
+        if (currArena != arena || !arena.getPlayers().contains(player) || arena.getSpectators().contains(player)) {
+          runningTasks.remove(player);
+          return;
+        }
+
         final Inventory pi = player.getInventory();
         final int i = ToolSwordHelper.getSwordsAmount(player);
 
