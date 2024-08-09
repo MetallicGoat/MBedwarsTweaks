@@ -324,7 +324,8 @@ public class MainConfig {
 
   @Config(
       description = {
-          "Prevents player from opening a bases' chest if bases team is still alive"
+          "Prevents player from opening a bases' chest if bases team is still alive",
+          "Note: You may want to disable team chests in MBedwars, as it works like a shared team Ender Chest"
       }
   )
   public static boolean lock_team_chest_enabled = true;
