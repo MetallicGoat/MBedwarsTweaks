@@ -352,6 +352,13 @@ public class MainConfig {
 
   @Config(
       description = {
+          "Adds a use cooldown to special items (in seconds)"
+      }
+  )
+  public static double special_items_cooldown = 0;
+
+  @Config(
+      description = {
           "If enabled you still join a server even if the Player Limit is reached"
       }
   )
