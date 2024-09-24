@@ -5,6 +5,7 @@ import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.tools.Helper;
+import de.marcely.bedwars.tools.NMSHelper;
 import de.marcely.bedwars.tools.location.XYZ;
 import de.marcely.bedwars.tools.location.XYZYP;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
@@ -21,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityCreatePortalEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -159,8 +161,18 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
 
     // TODO Find a better way... There might not be
     //  (Possibly remove and use packet to send death effect)
-    // Hacky way to remove the dragon so the portal never gets created
-    Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), this::remove, 20L * 6);
+    // Hacky way to remove the dragon so the portal never gets created (gets created at tick 200)
+    if (NMSHelper.get().getVersion() >= 9)
+      Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), this::remove, 198L);
+  }
+
+  // This works for 1.8.8, but got broken with 1.9+
+  @EventHandler
+  public void onEntityCreatePortalEvent(EntityCreatePortalEvent event) {
+    if (event.getEntity() != dragon)
+      return;
+
+    event.setCancelled(true);
   }
 
   private void updateTarget() {
