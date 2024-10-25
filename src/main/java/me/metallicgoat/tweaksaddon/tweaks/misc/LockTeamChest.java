@@ -7,7 +7,6 @@ import de.marcely.bedwars.api.message.Message;
 import de.marcely.bedwars.tools.location.XYZYP;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,17 +17,18 @@ public class LockTeamChest implements Listener {
   // Many people will want team chests disabled, use this with only regular chests
   @EventHandler
   public void playerOpenArenaChest(PlayerOpenArenaChestEvent event) {
+    if (!MainConfig.lock_team_chest_enabled)
+      return;
 
-    // THIS IS NOT FOR MBEDWARS TEAM CHESTS
-    final boolean isStandardChest = !event.isTeamChest() && event.getChestBlock().getType() == Material.CHEST;
+    final Block block = event.getChestBlock();
 
-    if (!MainConfig.lock_team_chest_enabled || !isStandardChest)
+    if (!MainConfig.lock_team_chest_materials.contains(block.getType()))
       return;
 
     final Arena arena = event.getArena();
     final Player player = event.getPlayer();
     final Team playerTeam = event.getTeam();
-    final Team chestTeam = getChestTeam(arena, event.getChestBlock());
+    final Team chestTeam = getChestTeam(arena, block);
 
     if (chestTeam != null && !arena.getPlayersInTeam(chestTeam).isEmpty() && chestTeam != playerTeam) {
       Message.build(MainConfig.lock_team_chest_fail_open)

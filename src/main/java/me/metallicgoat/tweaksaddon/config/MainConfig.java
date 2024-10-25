@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import lombok.Getter;
 import me.metallicgoat.tweaksaddon.config.ConfigManager.Config;
 import me.metallicgoat.tweaksaddon.config.ConfigManager.SectionTitle;
@@ -324,11 +326,14 @@ public class MainConfig {
 
   @Config(
       description = {
-          "Prevents player from opening a bases' chest if bases team is still alive",
-          "Note: You may want to disable team chests in MBedwars, as it works like a shared team Ender Chest"
+          "Prevents player from opening an enemies' base chest if its team is still alive (has players)",
+          "Materials is a list of chest types to lock, you may use CHEST or ENDER_CHEST",
+          "Note: In case you want to lock ENDER_CHEST, make sure it's configured as a team chest within MBedwars' config.yml",
+          "Range is the radius around a team's spawn point in which the chest shall get locked"
       }
   )
   public static boolean lock_team_chest_enabled = true;
+  public static Set<Material> lock_team_chest_materials = new HashSet<>(Arrays.asList(Material.CHEST));
   @Config public static double lock_team_chest_range = 8;
   @Config public static String lock_team_chest_fail_open = "&cYou cannot open this chest until {team} &chas been eliminated.";
 
