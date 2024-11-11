@@ -1,6 +1,8 @@
 package me.metallicgoat.tweaksaddon.tweaks.misc;
 
+import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
+import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.player.PlayerOpenArenaChestEvent;
 import de.marcely.bedwars.api.message.Message;
@@ -11,23 +13,46 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.jetbrains.annotations.Nullable;
 
 public class LockTeamChest implements Listener {
 
-  // Many people will want team chests disabled, use this with only regular chests
   @EventHandler
   public void playerOpenArenaChest(PlayerOpenArenaChestEvent event) {
     if (!MainConfig.lock_team_chest_enabled)
       return;
 
-    final Block block = event.getChestBlock();
+    if (check(event.getPlayer(), event.getArena(), event.getTeam(), event.getChestBlock()))
+      event.setCancelled(true);
+  }
 
-    if (!MainConfig.lock_team_chest_materials.contains(block.getType()))
+  @EventHandler
+  public void playerInteract(PlayerInteractEvent event) {
+    // in case the given material was configured to not be a personal chest,
+    // but shall stil be locked
+    if (!MainConfig.lock_team_chest_enabled)
+      return;
+    if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
       return;
 
-    final Arena arena = event.getArena();
     final Player player = event.getPlayer();
-    final Team playerTeam = event.getTeam();
+    final Arena arena = GameAPI.get().getArenaByPlayer(player);
+
+    if (arena == null || arena.getStatus() != ArenaStatus.RUNNING)
+      return;
+
+    final Team playerTeam = arena.getPlayerTeam(player);
+
+    if (check(player, arena, playerTeam, event.getClickedBlock()))
+      event.setCancelled(true);
+  }
+
+  private boolean check(Player player, Arena arena, Team playerTeam, Block block) {
+    if (!MainConfig.lock_team_chest_materials.contains(block.getType()))
+      return false;
+
     final Team chestTeam = getChestTeam(arena, block);
 
     if (chestTeam != null && !arena.getPlayersInTeam(chestTeam).isEmpty() && chestTeam != playerTeam) {
@@ -35,11 +60,13 @@ public class LockTeamChest implements Listener {
           .placeholder("team-name", chestTeam.getDisplayName())
           .placeholder("team", chestTeam.getDisplayName())
           .send(player);
-
-      event.setCancelled(true);
+      return true;
     }
+
+    return false;
   }
 
+  @Nullable
   private Team getChestTeam(Arena arena, Block chest) {
     if (arena.getGameWorld() == chest.getWorld()) {
       for (Team team : arena.getEnabledTeams()) {

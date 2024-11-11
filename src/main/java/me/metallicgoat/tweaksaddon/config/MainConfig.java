@@ -333,7 +333,7 @@ public class MainConfig {
       }
   )
   public static boolean lock_team_chest_enabled = true;
-  public static Set<Material> lock_team_chest_materials = new HashSet<>(Arrays.asList(Material.CHEST));
+  @Config public static Set<Material> lock_team_chest_materials = new HashSet<>(Arrays.asList(Material.CHEST));
   @Config public static double lock_team_chest_range = 8;
   @Config public static String lock_team_chest_fail_open = "&cYou cannot open this chest until {team} &chas been eliminated.";
 
