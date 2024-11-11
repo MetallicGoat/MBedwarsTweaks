@@ -1,45 +1,72 @@
 package me.metallicgoat.tweaksaddon.tweaks.misc;
 
+import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
+import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.player.PlayerOpenArenaChestEvent;
 import de.marcely.bedwars.api.message.Message;
 import de.marcely.bedwars.tools.location.XYZYP;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.jetbrains.annotations.Nullable;
 
 public class LockTeamChest implements Listener {
 
-  // Many people will want team chests disabled, use this with only regular chests
   @EventHandler
   public void playerOpenArenaChest(PlayerOpenArenaChestEvent event) {
-
-    // THIS IS NOT FOR MBEDWARS TEAM CHESTS
-    final boolean isStandardChest = !event.isTeamChest() && event.getChestBlock().getType() == Material.CHEST;
-
-    if (!MainConfig.lock_team_chest_enabled || !isStandardChest)
+    if (!MainConfig.lock_team_chest_enabled)
       return;
 
-    final Arena arena = event.getArena();
+    if (check(event.getPlayer(), event.getArena(), event.getTeam(), event.getChestBlock()))
+      event.setCancelled(true);
+  }
+
+  @EventHandler
+  public void playerInteract(PlayerInteractEvent event) {
+    // in case the given material was configured to not be a personal chest,
+    // but shall stil be locked
+    if (!MainConfig.lock_team_chest_enabled)
+      return;
+    if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
+      return;
+
     final Player player = event.getPlayer();
-    final Team playerTeam = event.getTeam();
-    final Team chestTeam = getChestTeam(arena, event.getChestBlock());
+    final Arena arena = GameAPI.get().getArenaByPlayer(player);
+
+    if (arena == null || arena.getStatus() != ArenaStatus.RUNNING)
+      return;
+
+    final Team playerTeam = arena.getPlayerTeam(player);
+
+    if (check(player, arena, playerTeam, event.getClickedBlock()))
+      event.setCancelled(true);
+  }
+
+  private boolean check(Player player, Arena arena, Team playerTeam, Block block) {
+    if (!MainConfig.lock_team_chest_materials.contains(block.getType()))
+      return false;
+
+    final Team chestTeam = getChestTeam(arena, block);
 
     if (chestTeam != null && !arena.getPlayersInTeam(chestTeam).isEmpty() && chestTeam != playerTeam) {
       Message.build(MainConfig.lock_team_chest_fail_open)
           .placeholder("team-name", chestTeam.getDisplayName())
           .placeholder("team", chestTeam.getDisplayName())
           .send(player);
-
-      event.setCancelled(true);
+      return true;
     }
+
+    return false;
   }
 
+  @Nullable
   private Team getChestTeam(Arena arena, Block chest) {
     if (arena.getGameWorld() == chest.getWorld()) {
       for (Team team : arena.getEnabledTeams()) {
