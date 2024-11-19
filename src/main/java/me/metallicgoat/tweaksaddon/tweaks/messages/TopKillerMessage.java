@@ -15,10 +15,11 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -29,22 +30,7 @@ import org.bukkit.event.Listener;
 
 public class TopKillerMessage implements Listener {
 
-  public static Map<Arena, Collection<Player>> arenaPlayers = new IdentityHashMap<>();
-
-  public static LinkedHashMap<OfflinePlayer, Integer> sortHashMapByValue(Map<OfflinePlayer, Integer> hm) {
-    // creating list from elements of HashMap
-    final List<Map.Entry<OfflinePlayer, Integer>> list = new LinkedList<>(hm.entrySet());
-
-    // sorting list (Reverse order)
-    list.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
-
-    final LinkedHashMap<OfflinePlayer, Integer> sortedMap = new LinkedHashMap<>();
-
-    for (Map.Entry<OfflinePlayer, Integer> me : list)
-      sortedMap.put(me.getKey(), me.getValue());
-
-    return sortedMap;
-  }
+  public Map<Arena, Collection<UUID>> arenaPlayers = new IdentityHashMap<>();
 
   @EventHandler
   public void onRoundStart(RoundStartEvent event) {
@@ -52,8 +38,12 @@ public class TopKillerMessage implements Listener {
       return;
 
     final Arena arena = event.getArena();
+    final List<UUID> players = new ArrayList<>();
 
-    arenaPlayers.put(arena, arena.getPlayers());
+    for (Player player : arena.getPlayers())
+      players.add(player.getUniqueId());
+
+    arenaPlayers.put(arena, players);
   }
 
   @EventHandler
@@ -62,15 +52,15 @@ public class TopKillerMessage implements Listener {
       return;
 
     final Arena arena = event.getArena();
-    final Map<OfflinePlayer, Integer> nameIntMap = new HashMap<>();
+    final Map<UUID, Integer> nameIntMap = new HashMap<>();
 
     // Online Players
-    for (OfflinePlayer player : arenaPlayers.get(arena))
+    for (UUID player : arenaPlayers.get(arena))
       addStatsToMap(nameIntMap, player);
 
     // Offline Players
     for (QuitPlayerMemory memory : arena.getQuitPlayerMemories())
-      addStatsToMap(nameIntMap, Bukkit.getOfflinePlayer(memory.getUniqueId()));
+      addStatsToMap(nameIntMap, memory.getUniqueId());
 
     printMessage(arena, sortHashMapByValue(nameIntMap));
     arenaPlayers.remove(arena);
@@ -82,7 +72,7 @@ public class TopKillerMessage implements Listener {
   }
 
   // TODO this bad
-  private void printMessage(Arena arena, Map<OfflinePlayer, Integer> playerIntegerMap) {
+  private void printMessage(Arena arena, Map<UUID, Integer> playerIntegerMap) {
     final List<Message> formattedList = new ArrayList<>();
 
     // There is Killers
@@ -91,20 +81,18 @@ public class TopKillerMessage implements Listener {
         formattedList.add(Message.build(line));
 
       int place = 1;
-      for (OfflinePlayer player : playerIntegerMap.keySet()) {
+      for (UUID uuid : playerIntegerMap.keySet()) {
         final String text = MainConfig.top_killer_lines.get(place);
 
         if (text == null)
           continue;
 
+        final OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+
         formattedList.add(Message.build(text)
             .placeholder("killer-name", player.getName())
-            .placeholder("kill-amount", playerIntegerMap.get(player))
-            //.placeholder("%Winner-Members%", !event.getWinners().isEmpty() ? event.getWinners().stream().map(Player::getName).collect(Collectors.joining(", ")) : "")
-            //.placeholder("%Winner-Members-Colored%", event.getWinnerTeam() != null ? event.getWinnerTeam().getChatColor()+event.getWinners().stream().map(Player::getName).collect(Collectors.joining(ChatColor.WHITE+", "+event.getWinnerTeam().getChatColor())) : "")
-            //.placeholder("%Winner-Team-Name%", event.getWinnerTeam() != null ? event.getWinnerTeam().getDisplayName() : "")
-            //.placeholder("%Winner-Team-Color%", !event.getWinners().isEmpty() ? event.getWinnerTeam().getChatColor().toString() : "")
-            );
+            .placeholder("kill-amount", playerIntegerMap.get(uuid))
+        );
 
         place++;
       }
@@ -124,7 +112,19 @@ public class TopKillerMessage implements Listener {
     broadcast(arena, formattedList);
   }
 
-  private void addStatsToMap(Map<OfflinePlayer, Integer> nameIntMap, OfflinePlayer player) {
+  public LinkedHashMap<UUID, Integer> sortHashMapByValue(Map<UUID, Integer> hm) {
+    return hm.entrySet()
+        .stream()
+        .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+        .collect(Collectors.toMap(
+            Map.Entry::getKey,
+            Map.Entry::getValue,
+            (e1, e2) -> e1,
+            LinkedHashMap::new
+        ));
+  }
+
+  private void addStatsToMap(Map<UUID, Integer> nameIntMap, UUID player) {
     if (player == null)
       return;
 
