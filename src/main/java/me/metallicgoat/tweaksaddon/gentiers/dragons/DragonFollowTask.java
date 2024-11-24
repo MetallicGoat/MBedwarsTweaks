@@ -134,17 +134,13 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     return Collections.unmodifiableList(targets);
   }
 
-  // Allow dragon to break map blocks
+  // We handle this ourselves allow the dragon to break the 'End' blocks
   @EventHandler(priority = EventPriority.LOWEST)
   public void onBlockBreak(EntityExplodeEvent event) {
     if (event.getEntity() != this.dragon)
       return;
 
-    // NOTE: We do not have to worry about beds being destroyed, since they are already gone
-    for (Block block : event.blockList()) {
-      if (this.arena.isInside(block.getLocation()) && this.arena.canPlaceBlockAt(block))
-        block.setType(Material.AIR);
-    }
+    event.setCancelled(true);
   }
 
   // Kill dragon on round end
@@ -156,7 +152,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
 
   @EventHandler
   public void onDragonDeath(EntityDeathEvent event) {
-    if (event.getEntity() != dragon)
+    if (event.getEntity() != this.dragon)
       return;
 
     // TODO Find a better way... There might not be
@@ -169,7 +165,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
   // This works for 1.8.8, but got broken with 1.9+
   @EventHandler
   public void onEntityCreatePortalEvent(EntityCreatePortalEvent event) {
-    if (event.getEntity() != dragon)
+    if (event.getEntity() != this.dragon)
       return;
 
     event.setCancelled(true);
@@ -182,7 +178,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     // Try to target a random player
     if (!playerTargets.isEmpty() && chanceValue < Math.min(60, playerTargets.size() * 25)) {
       this.currPlayerTarget = playerTargets.get(random.nextInt(playerTargets.size()));
-      this.playerTargetLocation = currPlayerTarget.getLocation();
+      this.playerTargetLocation = this.currPlayerTarget.getLocation();
       this.distanceToTarget = this.playerTargetLocation.distance(this.dragon.getLocation()) + 50;
       this.targetingPlayer = true;
 
@@ -231,7 +227,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
       final double yBound = Math.abs(max.getY() - min.getY());
       final double zBound = Math.abs(max.getZ() - min.getZ());
 
-      // Dont go all the way to the border
+      // Don't go all the way to the border
       final double x = random.nextInt((int) (xBound * 0.8)) + (xBound * 0.1);
       final double y = random.nextInt((int) (yBound * 0.6)) + (yBound * 0.3); // Shift upwards
       final double z = random.nextInt((int) (zBound * 0.8)) + (zBound * 0.1);
@@ -295,6 +291,27 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
 
     // Only async on paper 1.14.4+
     Helper.get().teleportAsync(this.dragon, teleportLocation, null);
+
+    // normally the dragon would not destroy 'End' blocks
+    destroyNearbyBlocks(this.dragon.getLocation(), 2);
+  }
+
+  private void destroyNearbyBlocks(Location location, int radius) {
+    final int blockX = location.getBlockX();
+    final int blockY = location.getBlockY();
+    final int blockZ = location.getBlockZ();
+
+    for (int x = blockX - radius; x <= blockX + radius; x++) {
+      for (int y = blockY - radius; y <= blockY + radius; y++) {
+        for (int z = blockZ - radius; z <= blockZ + radius; z++) {
+          final Block block = new Location(location.getWorld(), x, y, z).getBlock();
+
+          if (block.getType() != Material.AIR) {
+            block.setType(Material.AIR);
+          }
+        }
+      }
+    }
   }
 
   private void remove() {

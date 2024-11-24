@@ -402,12 +402,12 @@ public class ConfigManager {
     return new String(chars);
   }
 
+  @Getter
   public enum FileType {
     MAIN("config.yml"),
     GEN_TIERS("gen-tiers.yml"),
     SWORDS_TOOLS("swords-tools.yml");
 
-    @Getter
     private final String fileName;
 
     FileType(String fileName) {
