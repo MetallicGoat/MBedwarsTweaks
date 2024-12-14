@@ -4,7 +4,7 @@ import de.marcely.bedwars.api.BedwarsAPI;
 import lombok.Getter;
 import me.metallicgoat.tweaksaddon.config.ConfigLoader;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
-import me.metallicgoat.tweaksaddon.gentiers.dragons.DragonFollowTask;
+import me.metallicgoat.tweaksaddon.gentiers.dragons.DragonUtil;
 import me.metallicgoat.tweaksaddon.integration.DependencyLoader;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.ToolSwordHelper;
 import me.metallicgoat.tweaksaddon.utils.Console;
@@ -80,7 +80,7 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
 
   @Override
   public void onDisable() {
-    DragonFollowTask.killAll();
+    DragonUtil.killAllDragons();
   }
 
   private boolean checkMBedwars() {

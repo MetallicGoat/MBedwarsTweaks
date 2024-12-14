@@ -82,7 +82,7 @@ public class MainConfig {
   @Config(
       description = {
           "If a default dragon should spawn in when the sudden death tier is reached",
-          "The default dragon will blong to no team, and could target any base or player",
+          "The default dragon will belong to no team, and could target any base or player",
           "To allow players to purchase a team dragon, ",
           "add the 'sudden-death' upgrade to your upgrade-shop.yml"
       }
@@ -103,6 +103,13 @@ public class MainConfig {
       }
   )
   public static double dragon_speed = 0.8;
+
+  @Config(
+      description = {
+          "How far the dragon can destroy blocks"
+      }
+  )
+  public static double dragon_block_destroy_radius = 2;
 
   // ===== SPAWNERS
   @SectionTitle(title = "SPAWNERS")
@@ -320,6 +327,7 @@ public class MainConfig {
   public static boolean custom_action_bar_in_lobby = false;
   @Config public static boolean custom_action_bar_in_game = false;
   @Config public static String custom_action_bar_message = "%tweaks_next-tier%";
+
 
   // ===== CHESTS
   @SectionTitle(title = "CHESTS")

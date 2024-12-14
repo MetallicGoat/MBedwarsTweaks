@@ -2,15 +2,15 @@ package me.metallicgoat.tweaksaddon.gentiers.dragons;
 
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
-import de.marcely.bedwars.api.event.arena.RoundEndEvent;
-import de.marcely.bedwars.api.game.spawner.Spawner;
+import de.marcely.bedwars.api.event.arena.ArenaStatusChangeEvent;
 import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.NMSHelper;
 import de.marcely.bedwars.tools.location.XYZ;
-import de.marcely.bedwars.tools.location.XYZYP;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
-import me.metallicgoat.tweaksaddon.utils.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,6 +21,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityCreatePortalEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -29,11 +30,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
 
 public class DragonFollowTask extends BukkitRunnable implements Listener {
 
-  private static final List<DragonFollowTask> runningDragons = new ArrayList<>();
   private static final Random random = new Random();
 
   private final Vector velocity = new Vector(0, 0, 0);
@@ -44,6 +43,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
   @Nullable
   private final Team team;
 
+  private Listener portalListener;
   private boolean targetingPlayer = false;
   private Player currPlayerTarget = null;
   private Location playerTargetLocation = null;
@@ -65,7 +65,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     if (world == null)
       throw new RuntimeException("Sudden death dragon tried to spawn in an arena with no game world?!?!?!? WTF how did we get here in life?");
 
-    Location location = getDragonSpawn(arena, world, team);
+    Location location = DragonUtil.getDragonSpawn(arena, world, team);
 
     // Just spawn at the middle otherwise
     if (location == null)
@@ -75,63 +75,25 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
 
     final DragonFollowTask task = new DragonFollowTask(
         dragon,
-        generateDefaultTargets(arena, team, world),
+        DragonUtil.getRelevantStaticTargets(arena, team, world),
         arena,
         world,
         team
     );
 
+    // Listeners to prevent dragons from creating portals (Changed after 1.8.8)
+    if (NMSHelper.get().getVersion() >= 9)
+      task.portalListener = new ModernPortalListener(task);
+    else
+      task.portalListener = new LegacyPortalListener(task);
+
     // Register events for this dragon
     Bukkit.getPluginManager().registerEvents(task, MBedwarsTweaksPlugin.getInstance());
+    Bukkit.getPluginManager().registerEvents(task.portalListener, MBedwarsTweaksPlugin.getInstance());
 
     task.runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 0L, 1L);
 
-    runningDragons.add(task);
-  }
-
-  public static void killAll() {
-    final Iterator<DragonFollowTask> it = runningDragons.iterator();
-
-    // DO NOT REPLACE (Like intellij says... It lies)
-    while (it.hasNext()) {
-      it.next().remove(false);
-      it.remove();
-    }
-  }
-
-  // Find optimal spot to spawn the dwwwagoon
-  private static @Nullable Location getDragonSpawn(Arena arena, World world, Team team) {
-    if (team != null) {
-      final XYZYP spawn = arena.getTeamSpawn(team);
-
-      if (spawn != null)
-        return spawn.toLocation(world).add(0, 30, 0);
-
-    } else {
-      final XYZYP spawn = arena.getSpectatorSpawn();
-
-      if (spawn != null && arena.isInside(spawn))
-        return spawn.toLocation(world);
-    }
-
-    return null;
-  }
-
-  private static List<Location> generateDefaultTargets(Arena arena, @Nullable Team team, World world) {
-    final XYZYP teamSpawn = team != null ? arena.getTeamSpawn(team) : null;
-    final List<Location> targets = new ArrayList<>(Util.getAllTeamSpawns(arena, world, team));
-
-    for (Spawner spawner : arena.getSpawners()) {
-      final Location location = spawner.getLocation().toLocation(world);
-
-      // ignore iron and gold spawners + spawners that are to close to the dragon's team's home base
-      if (!spawner.getDropType().getId().equals("iron") &&
-          !spawner.getDropType().getId().equals("gold") &&
-          (teamSpawn == null || spawner.getLocation().toLocation(world).distance(teamSpawn.toLocation(world)) > 20))
-        targets.add(location);
-    }
-
-    return Collections.unmodifiableList(targets);
+    DragonUtil.runningDragons.add(task);
   }
 
   // We handle this ourselves allow the dragon to break the 'End' blocks
@@ -145,35 +107,15 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
 
   // Kill dragon on round end
   @EventHandler
-  public void onRoundEnd(RoundEndEvent event) {
-    if (event.getArena() == this.arena)
-      remove();
-  }
-
-  @EventHandler
-  public void onDragonDeath(EntityDeathEvent event) {
-    if (event.getEntity() != this.dragon)
-      return;
-
-    // TODO Find a better way... There might not be
-    //  (Possibly remove and use packet to send death effect)
-    // Hacky way to remove the dragon so the portal never gets created (gets created at tick 200)
-    if (NMSHelper.get().getVersion() >= 9)
-      Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), this::remove, 198L);
-  }
-
-  // This works for 1.8.8, but got broken with 1.9+
-  @EventHandler
-  public void onEntityCreatePortalEvent(EntityCreatePortalEvent event) {
-    if (event.getEntity() != this.dragon)
-      return;
-
-    event.setCancelled(true);
+  public void onArenaStatusChange(ArenaStatusChangeEvent event) {
+    if (event.getArena() == this.arena) {
+      removeDragon();
+    }
   }
 
   private void updateTarget() {
     final int chanceValue = random.nextInt(100);
-    final List<Player> playerTargets = getPlayerTargets();
+    final List<Player> playerTargets = getCurrentPlayerTargets();
 
     // Try to target a random player
     if (!playerTargets.isEmpty() && chanceValue < Math.min(60, playerTargets.size() * 25)) {
@@ -184,7 +126,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
 
     } else {
       if (chanceValue < 90) // base or gen
-        this.currDefaultTarget = pickRandomDefaultTarget();
+        this.currDefaultTarget = pickRandomTarget();
       else // random cord
         this.currDefaultTarget = generateRandomLocation();
 
@@ -195,7 +137,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     this.distanceTraveled = 0;
   }
 
-  private List<Player> getPlayerTargets() {
+  private List<Player> getCurrentPlayerTargets() {
     final List<Player> locations = new ArrayList<>();
 
     for (Player player : this.arena.getPlayers())
@@ -205,7 +147,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     return locations;
   }
 
-  private Location pickRandomDefaultTarget() {
+  private Location pickRandomTarget() {
     final List<Location> targets = new ArrayList<>(this.defaultTargets);
 
     if (currDefaultTarget != null)
@@ -238,8 +180,9 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
           Math.min(max.getY(), min.getY()) + y,
           Math.min(max.getZ(), min.getZ()) + z
       );
+
     } else { // Find random spot based on arena locations
-      final Location target = pickRandomDefaultTarget();
+      final Location target = pickRandomTarget();
 
       target.add(random.nextInt(120) - 60, random.nextInt(50) - 10, random.nextInt(120) - 60);
 
@@ -277,7 +220,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     // simulate "gravity pull"
     this.velocity.add(gravity);
 
-    // Dont let dragon infinitely accelerate towards target
+    // Do not let dragon infinitely accelerate towards target
     final double maxSpeed = MainConfig.dragon_speed;
 
     if (this.velocity.length() > maxSpeed)
@@ -286,24 +229,25 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     final Location teleportLocation = dragonLocation.add(this.velocity);
     this.distanceTraveled += this.velocity.length(); // Track how far it has been taking to get to the target
 
-    // Move it move it move it
+    // Move it! Move it! Move it!
     teleportLocation.setDirection(this.dragon.getLocation().clone().subtract(teleportLocation).toVector());
 
     // Only async on paper 1.14.4+
     Helper.get().teleportAsync(this.dragon, teleportLocation, null);
 
     // normally the dragon would not destroy 'End' blocks
-    destroyNearbyBlocks(this.dragon.getLocation(), 2);
+    destroyNearbyBlocks(this.dragon.getLocation(), MainConfig.dragon_block_destroy_radius);
   }
 
-  private void destroyNearbyBlocks(Location location, int radius) {
-    final int blockX = location.getBlockX();
-    final int blockY = location.getBlockY();
-    final int blockZ = location.getBlockZ();
+  // The dragon does not break end blocks by default
+  private void destroyNearbyBlocks(Location location, double radius) {
+    final double blockX = location.getBlockX() + 0.5;
+    final double blockY = location.getBlockY() + 0.5;
+    final double blockZ = location.getBlockZ() + 0.5;
 
-    for (int x = blockX - radius; x <= blockX + radius; x++) {
-      for (int y = blockY - radius; y <= blockY + radius; y++) {
-        for (int z = blockZ - radius; z <= blockZ + radius; z++) {
+    for (double x = blockX - radius; x <= blockX + radius; x++) {
+      for (double y = blockY - radius; y <= blockY + radius; y++) {
+        for (double z = blockZ - radius; z <= blockZ + radius; z++) {
           final Block block = new Location(location.getWorld(), x, y, z).getBlock();
 
           if (block.getType() != Material.AIR) {
@@ -314,17 +258,58 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     }
   }
 
-  private void remove() {
-    remove(true);
+  public void removeDragon() {
+    removeDragon(true);
   }
 
-  private void remove(boolean removeFromList) {
+  public void removeDragon(boolean fromList) {
     if (this.dragon.isValid())
       this.dragon.remove();
 
-    if (removeFromList)
-      runningDragons.remove(this);
+    // Unregister listeners
+    HandlerList.unregisterAll(this.portalListener);
+    HandlerList.unregisterAll(this);
 
-    cancel();
+    if (fromList)
+      DragonUtil.runningDragons.remove(this);
+
+    // Stop Scheduler
+    super.cancel();
+  }
+
+  private static class ModernPortalListener implements Listener {
+    final DragonFollowTask task;
+
+    ModernPortalListener(DragonFollowTask task) {
+      this.task = task;
+    }
+
+    @EventHandler
+    public void onDragonDeath(EntityDeathEvent event) {
+      if (event.getEntity() != this.task.dragon)
+        return;
+
+      // TODO Find a better way... There might not be
+      //  (Possibly remove and use packet to send death effect)
+      // Hacky way to remove the dragon so the portal never gets created (gets created at tick 200)
+      Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), this.task::removeDragon, 198L);
+    }
+  }
+
+  private static class LegacyPortalListener implements Listener {
+    final DragonFollowTask task;
+
+    LegacyPortalListener(DragonFollowTask task) {
+      this.task = task;
+    }
+
+    // This works for 1.8.8, but got broken with 1.9+
+    @EventHandler
+    public void onEntityCreatePortalEvent(EntityCreatePortalEvent event) {
+      if (event.getEntity() != this.task.dragon)
+        return;
+
+      event.setCancelled(true);
+    }
   }
 }
