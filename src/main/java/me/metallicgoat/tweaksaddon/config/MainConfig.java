@@ -161,6 +161,7 @@ public class MainConfig {
       }
   )
   public static boolean sponge_particles_enabled = true;
+  @Config public static boolean sponge_particles_remove_sponge_after_complete = true;
 
   @Config(
       description = {

@@ -57,6 +57,17 @@ public class SpongeParticles implements Listener {
       radius++;
     }
 
+    @Override
+    public void cancel() {
+      if (MainConfig.sponge_particles_remove_sponge_after_complete
+          && block.getType().name().contains("SPONGE")) { // SPONGE or WET_SPONGE (also changes across versions)
+
+        block.setType(Material.AIR);
+      }
+
+      super.cancel();
+    }
+
     public List<Location> getParticles(Location start, int radius) {
       final List<Location> locations = new ArrayList<>();
 
