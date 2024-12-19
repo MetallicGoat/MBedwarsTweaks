@@ -37,6 +37,7 @@ MBedwarsTweaks offers a large amount extra configuration, here are just a few tw
 - Explosive fall damage multiplier
 - Fireball block break whitelist
 - Fireball throw cool down and effects
+- TNT Countdown Hologram
 
 #### 5. Spawner Configs
 - Prevent spawner pickup when AFK

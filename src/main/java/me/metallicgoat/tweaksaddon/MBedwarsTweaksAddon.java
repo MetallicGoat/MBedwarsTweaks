@@ -66,6 +66,7 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     manager.registerEvents(new FireballBlockBreakWhitelist(), plugin);
     manager.registerEvents(new FireballThrowEffects(), plugin);
     manager.registerEvents(new FireballUseCoolDown(), plugin);
+    manager.registerEvents(new TNTIgniteCountdown(), plugin);
 
     // Messages
     manager.registerEvents(new BuyMessage(), plugin);
@@ -84,6 +85,7 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     manager.registerEvents(new PlayerLimitBypass(), plugin);
     manager.registerEvents(new RemoveInvisOnDamage(), plugin);
     manager.registerEvents(new SpecialItemCooldown(), plugin);
+    //manager.registerEvents(new TieBreaker(), plugin);
 
     // Spawners
     manager.registerEvents(new AFKSpawners(), plugin);

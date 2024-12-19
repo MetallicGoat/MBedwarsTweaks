@@ -221,6 +221,15 @@ public class MainConfig {
   public static double tnt_fall_damage_multiplier = 1;
   @Config public static double fireball_fall_damage_multiplier = 1;
 
+  @Config(
+      description = {
+          "If enabled, TNT will display a countdown timer when ignited",
+      }
+  )
+  public static boolean tnt_ignite_timer_enabled = false;
+  @Config public static String tnt_ignite_timer_title = "&c{seconds}";
+
+
   // ===== MESSAGES
   @SectionTitle(title = "MESSAGES")
 
@@ -345,6 +354,7 @@ public class MainConfig {
   @Config public static Set<Material> lock_team_chest_materials = new HashSet<>(Arrays.asList(Material.CHEST));
   @Config public static double lock_team_chest_range = 8;
   @Config public static String lock_team_chest_fail_open = "&cYou cannot open this chest until {team} &chas been eliminated.";
+
 
   // MISCELLANEOUS
   @SectionTitle(title = "MISCELLANEOUS")
