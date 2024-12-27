@@ -369,6 +369,13 @@ public class MainConfig {
 
   @Config(
       description = {
+          "If enabled, the ender pearl sound will be broadcast to all arena players when a pearl lands"
+      }
+  )
+  public static boolean broadcast_ender_pearl_sound = false;
+
+  @Config(
+      description = {
           "Allows players to place blocks on a bed WITHOUT crouching"
       }
   )
