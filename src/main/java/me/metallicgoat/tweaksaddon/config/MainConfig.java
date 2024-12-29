@@ -230,6 +230,19 @@ public class MainConfig {
   @Config public static String tnt_ignite_timer_title = "&c{seconds}";
 
 
+  // ===== SPECIAL ITEMS
+  @SectionTitle(title = "SPECIAL ITEMS")
+
+  @Config(
+      description = {
+          "If enabled, trackers will display a message over the Hotbar when a player is being tracked",
+      }
+  )
+  public static boolean tracker_hotbar_message_enabled = true;
+  @Config public static String tracker_hotbar_message_no_enemies = "";
+  @Config public static String tracker_hotbar_message = "{team-color}{team}: &a{distance}m";
+
+
   // ===== MESSAGES
   @SectionTitle(title = "MESSAGES")
 

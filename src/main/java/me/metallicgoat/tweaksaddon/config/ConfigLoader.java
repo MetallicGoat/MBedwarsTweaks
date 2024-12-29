@@ -122,5 +122,22 @@ public class ConfigLoader implements Listener {
         Console.printWarn("Failed to apply personal ender chests. Try updating MBedwars, or disabling \"personal-ender-chests-enabled\"");
       }
     }
+
+    if (MainConfig.tracker_hotbar_message_enabled) {
+      try {
+        final boolean mbedwarsActionbarEnabled = (boolean) ConfigurationAPI.get().getValue("actionbar-enabled");
+
+        if (mbedwarsActionbarEnabled) {
+          ConfigurationAPI.get().setValue("actionbar-enabled", false);
+          Console.printWarn(
+              "NOTE: You have \"tracker-hotbar-message-enabled\" enabled. This setting will interfere with the MBedwars's \"actionbar-enabled\" config.",
+              "We have automatically disabled the MBedwars actionbar, however you may want to disable it yourself in the MBedwars config.yml."
+          );
+        }
+
+      } catch (IllegalArgumentException e) {
+        Console.printWarn("Failed to apply tracker hotbar message. Try updating MBedwars, or disabling \"tracker-hotbar-message-enabled\"");
+      }
+    }
   }
 }
