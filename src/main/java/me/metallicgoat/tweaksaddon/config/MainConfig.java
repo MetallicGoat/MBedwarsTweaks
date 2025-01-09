@@ -434,6 +434,18 @@ public class MainConfig {
   @Config public static int friendly_villagers_range = 20;
   @Config public static boolean friendly_villagers_check_visibility = true;
 
+  @Config(
+      description = {
+          "Resize the world border (scale = % of its original size) after a certain amount of time (in seconds) after the game starts",
+          "After start_time has passed, the border will resize for the given duration time (in seconds)",
+          "This only works if the arena has the type WORLD and if the match world has a vanilla world border (command: /minecraft:worldborder)"
+      }
+  )
+  public static boolean world_border_resize_enabled = false;
+  @Config public static int world_border_resize_start_time = 600;
+  @Config public static int world_border_resize_duration = 60;
+  @Config public static int world_border_resize_scale = 50;
+
   // ===== PLACEHOLDER API
   @SectionTitle(title = "PLACEHOLDER API")
 
