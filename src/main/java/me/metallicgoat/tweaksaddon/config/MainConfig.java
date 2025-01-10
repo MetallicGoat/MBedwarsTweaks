@@ -278,7 +278,8 @@ public class MainConfig {
 
   @Config(
       description = {
-          "Top killer message displayed at the end of a round"
+          "Top killer message displayed at the end of a round",
+          "Placeholders: {killer-name} {killer-display-name} {kill-amount}"
       }
   )
   public static boolean top_killer_message_enabled = true;
