@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 public class PearlSoundBroadcast implements Listener {
 
   @SuppressWarnings("ConstantConditions") // null warning for the sound
-  private final static VarSound PEARL_SOUND = VarSound.from(Helper.get().getSoundByName("ENTITY_ENDER_PEARL_THROW"));
+  private final static VarSound PEARL_SOUND = VarSound.from(Helper.get().getSoundByName("ENTITY_ENDERMAN_TELEPORT"));
 
   @EventHandler
   public void onEntityTeleportEvent(PlayerTeleportEvent event) {
