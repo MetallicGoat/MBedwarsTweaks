@@ -56,5 +56,6 @@ MBedwarsTweaks offers a large amount extra configuration, here are just a few tw
 - Permanent arena effects
 - Block stat tracking in certain arenas
 - Lock team chests
+- Broadcast ender pearl sounds
 
 #### 8. So much more!

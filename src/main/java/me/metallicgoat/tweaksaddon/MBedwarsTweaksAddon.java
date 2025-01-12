@@ -80,12 +80,13 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     manager.registerEvents(new EmptyContainers(), plugin);
     manager.registerEvents(new HeightCap(), plugin);
     manager.registerEvents(new LockTeamChest(), plugin);
+    manager.registerEvents(new PearlSoundBroadcast(), plugin);
     manager.registerEvents(new PermanentEffects(), plugin);
     manager.registerEvents(new PlaceBlocksOnBed(), plugin);
     manager.registerEvents(new PlayerLimitBypass(), plugin);
     manager.registerEvents(new RemoveInvisOnDamage(), plugin);
     manager.registerEvents(new SpecialItemCooldown(), plugin);
-    manager.registerEvents(new WorldBorderResize(), plugin);
+    manager.registerEvents(new TrackerDistance(), plugin);
     //manager.registerEvents(new TieBreaker(), plugin);
 
     // Spawners

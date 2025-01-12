@@ -230,6 +230,19 @@ public class MainConfig {
   @Config public static String tnt_ignite_timer_title = "&c{seconds}";
 
 
+  // ===== SPECIAL ITEMS
+  @SectionTitle(title = "SPECIAL ITEMS")
+
+  @Config(
+      description = {
+          "If enabled, trackers will display a message over the Hotbar when a player is being tracked",
+      }
+  )
+  public static boolean tracker_hotbar_message_enabled = true;
+  @Config public static String tracker_hotbar_message_no_enemies = "";
+  @Config public static String tracker_hotbar_message = "{team-color}{team}: &a{distance}m";
+
+
   // ===== MESSAGES
   @SectionTitle(title = "MESSAGES")
 
@@ -265,7 +278,8 @@ public class MainConfig {
 
   @Config(
       description = {
-          "Top killer message displayed at the end of a round"
+          "Top killer message displayed at the end of a round",
+          "Placeholders: {killer-name} {killer-display-name} {kill-amount}"
       }
   )
   public static boolean top_killer_message_enabled = true;
@@ -366,6 +380,13 @@ public class MainConfig {
   )
   public static boolean remove_empty_buckets = true;
   @Config public static boolean remove_empty_potions = true;
+
+  @Config(
+      description = {
+          "If enabled, the ender pearl sound will be broadcast to all arena players when a pearl lands"
+      }
+  )
+  public static boolean broadcast_ender_pearl_sound = false;
 
   @Config(
       description = {

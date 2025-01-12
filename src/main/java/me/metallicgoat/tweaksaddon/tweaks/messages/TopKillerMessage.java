@@ -91,6 +91,7 @@ public class TopKillerMessage implements Listener {
 
         formattedList.add(Message.build(text)
             .placeholder("killer-name", player.getName())
+            .placeholder("killer-display-name", player.getName())
             .placeholder("kill-amount", playerIntegerMap.get(uuid))
         );
 
