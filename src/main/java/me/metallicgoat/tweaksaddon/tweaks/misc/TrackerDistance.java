@@ -92,7 +92,7 @@ public class TrackerDistance implements Listener {
             // Send distance message
             sendHotbarMessage(player, Message.build(MainConfig.tracker_hotbar_message)
                 .placeholder("distance", DECIMAL_FORMAT.format(nearestEnemy.getValue()))
-                .placeholder("team-color", enemyTeam.getBukkitColor()) // TODO Bungee?
+                .placeholder("team-color", enemyTeam.getBungeeChatColor())
                 .placeholder("team", enemyTeam.getDisplayName(player)));
           }
         }
