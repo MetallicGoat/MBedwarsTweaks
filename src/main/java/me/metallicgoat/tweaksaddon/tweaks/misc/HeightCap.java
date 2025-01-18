@@ -24,7 +24,7 @@ public class HeightCap implements Listener {
       return;
 
     for (Map.Entry<String, Integer> arenaHeight : MainConfig.custom_height_cap_arenas.entrySet()) {
-      if (Util.parseArenas(arenaHeight.getKey()).contains(arena)) {
+      if (Util.parseArenas(arenaHeight.getKey()).contains(arena) && arenaHeight.getValue() != null) {
 
         if (e.getBlockPlaced().getY() > arenaHeight.getValue()) {
           player.sendMessage(Message.build(MainConfig.custom_height_cap_warn).done());

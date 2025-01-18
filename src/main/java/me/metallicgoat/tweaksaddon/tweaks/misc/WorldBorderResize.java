@@ -23,7 +23,7 @@ public class WorldBorderResize implements Listener {
 
   private static final String KEY_ORIGINAL_SIZE = "tweaks:world_border_original_size";
 
-  private Map<Arena, BukkitTask> activeTasks = new HashMap<>();
+  private final Map<Arena, BukkitTask> activeTasks = new HashMap<>();
 
   @EventHandler
   public void onRoundStart(RoundStartEvent event) {
@@ -52,7 +52,7 @@ public class WorldBorderResize implements Listener {
     final BukkitTask scheduler = Bukkit.getScheduler().runTaskLater(
         MBedwarsTweaksPlugin.getInstance(),
         () -> resize(arena),
-        20 * MainConfig.world_border_resize_start_time);
+        20L * MainConfig.world_border_resize_start_time);
 
     this.activeTasks.put(arena, scheduler);
   }
