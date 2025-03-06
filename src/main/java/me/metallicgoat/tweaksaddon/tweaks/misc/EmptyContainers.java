@@ -4,6 +4,7 @@ import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
+import me.metallicgoat.tweaksaddon.utils.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -28,7 +29,7 @@ public class EmptyContainers implements Listener {
 
     // Uses isSimilar to remove ItemStacks (weird but works)
     Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(MBedwarsTweaksPlugin.getInstance(), () ->
-        player.getInventory().removeItem(new ItemStack(Material.BUCKET)), 1);
+        Util.removePlayerItem(player, new ItemStack(Material.BUCKET)), 1);
   }
 
   @EventHandler
@@ -44,6 +45,6 @@ public class EmptyContainers implements Listener {
 
     // Uses isSimilar to remove ItemStacks (weird but works)
     Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(MBedwarsTweaksPlugin.getInstance(), () ->
-        player.getInventory().removeItem(new ItemStack(Material.GLASS_BOTTLE)), 1);
+        Util.removePlayerItem(player, new ItemStack(Material.GLASS_BOTTLE)), 1);
   }
 }
