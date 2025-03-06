@@ -7,10 +7,11 @@ import de.marcely.bedwars.api.arena.picker.ArenaPickerAPI;
 import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.tools.NMSHelper;
 import de.marcely.bedwars.tools.location.XYZYP;
+import java.lang.reflect.Method;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.Nullable;
@@ -23,6 +24,33 @@ import java.util.List;
 
 public class Util {
 
+  public static void removePlayerItem(HumanEntity player, ItemStack item) {
+    item = item == null ? new ItemStack(Material.AIR) : item;
+
+    // Try using papers method
+    if (NMSHelper.get().getVersion() == 8)
+      if (NMSHelper.get().isRunningPaper() && NMSHelper.get().getVersion() > 8) {
+      try {
+        final Method setItemMethod = PlayerInventory.class.getDeclaredMethod("removeItemAnySlot", ItemStack.class);
+
+        setItemMethod.invoke(player, item);
+
+        return;
+
+      } catch (Exception ignored) { }
+    }
+
+    // regular way
+    player.getInventory().removeItem(item);
+
+    // Check offhand too
+    final ItemStack offHand = getItemInOffHand(player);
+
+    if (offHand != null && offHand.isSimilar(item)) {
+      setItemInOffHand(player, new ItemStack(Material.AIR));
+    }
+  }
+
   public static @Nullable ItemStack getItemInOffHand(HumanEntity player) {
     if (NMSHelper.get().getVersion() == 8)
       return null;
@@ -34,6 +62,22 @@ public class Util {
     }
 
     return null;
+  }
+
+  public static void setItemInOffHand(HumanEntity player, @Nullable ItemStack itemInOffHand) {
+    if (NMSHelper.get().getVersion() == 8)
+      return;
+
+    itemInOffHand = itemInOffHand == null ? new ItemStack(Material.AIR) : itemInOffHand;
+
+    try {
+      final Method setItemMethod = PlayerInventory.class.getDeclaredMethod("setItemInOffHand", ItemStack.class);
+
+      setItemMethod.invoke(player, itemInOffHand);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   public static Collection<Arena> parseArenas(String arenaKey) {
