@@ -39,7 +39,7 @@
         <dependency>
             <groupId>de.marcely.bedwars</groupId>
             <artifactId>API</artifactId>
-            <version>5.4.14</version>
+            <version>5.5.1</version>
             <scope>provided</scope>
         </dependency>
 <!--        <dependency>-->

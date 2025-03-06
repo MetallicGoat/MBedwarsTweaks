@@ -1,5 +1,6 @@
 package me.metallicgoat.tweaksaddon.tweaks.explosives;
 
+import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.message.Message;
 import java.text.DecimalFormat;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
@@ -18,7 +19,9 @@ public class TNTIgniteCountdown implements Listener {
   // Place a countdown on TNT when it is ignited
   @EventHandler
   public void onEntitySpawnEvent(EntitySpawnEvent event) {
-    if (!MainConfig.tnt_ignite_timer_enabled || event.getEntity().getType() != EntityType.PRIMED_TNT)
+    if (!MainConfig.tnt_ignite_timer_enabled
+        || GameAPI.get().getArenaByLocation(event.getLocation()) == null
+        || event.getEntity().getType() != EntityType.PRIMED_TNT)
       return;
 
     final TNTPrimed entity = (TNTPrimed) event.getEntity();
