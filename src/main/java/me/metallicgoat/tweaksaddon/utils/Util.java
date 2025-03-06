@@ -28,8 +28,7 @@ public class Util {
     item = item == null ? new ItemStack(Material.AIR) : item;
 
     // Try using papers method
-    if (NMSHelper.get().getVersion() == 8)
-      if (NMSHelper.get().isRunningPaper() && NMSHelper.get().getVersion() > 8) {
+    if (NMSHelper.get().isRunningPaper() && NMSHelper.get().getVersion() > 8) {
       try {
         final Method setItemMethod = PlayerInventory.class.getDeclaredMethod("removeItemAnySlot", ItemStack.class);
 
