@@ -467,6 +467,21 @@ public class MainConfig {
   @Config public static int world_border_resize_duration = 60;
   @Config public static int world_border_resize_scale = 50;
 
+  @Config(
+          description = {
+                  "Allows the eliminated team's personal chest loot to drop at their base generator",
+                  "Toggle it to 'true' to enable this feature."
+          }
+  )
+  public static boolean personal_loot_drop = false;
+  @Config(
+          description = {
+                  "Strikes a lighting effect at the eliminated team's",
+                  "Base to signify their personal loot is dropped."
+          }
+  )
+  public static boolean strike_lighting_on_eliminated_base = false;
+
   // ===== PLACEHOLDER API
   @SectionTitle(title = "PLACEHOLDER API")
 

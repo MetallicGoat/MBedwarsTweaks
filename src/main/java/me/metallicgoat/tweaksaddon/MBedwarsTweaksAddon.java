@@ -88,6 +88,7 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     manager.registerEvents(new SpecialItemCooldown(), plugin);
     manager.registerEvents(new TrackerDistance(), plugin);
     manager.registerEvents(new WorldBorderResize(), plugin);
+    manager.registerEvents(new LootDropAtEliminatedTeamBase(), plugin);
     //manager.registerEvents(new TieBreaker(), plugin);
 
     // Spawners
