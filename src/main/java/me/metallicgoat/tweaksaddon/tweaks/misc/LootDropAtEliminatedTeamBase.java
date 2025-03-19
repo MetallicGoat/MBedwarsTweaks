@@ -20,7 +20,7 @@ public class LootDropAtEliminatedTeamBase implements Listener {
 
     @EventHandler
     public void onEliminate(TeamEliminateEvent event){
-        if (!MainConfig.personal_loot_drop || event.causesEnd())
+        if (!MainConfig.personal_team_loot_drop || event.causesEnd())
             return;
         final Team team = event.getTeam();
         final Arena arena = event.getArena();
@@ -40,7 +40,7 @@ public class LootDropAtEliminatedTeamBase implements Listener {
             // Not checking game world as it's not null always.
             gameWorld.dropItemNaturally(locationToDropItems, itemStack);
         }
-        if (MainConfig.strike_lighting_on_eliminated_base)
+        if (MainConfig.personal_team_loot_drop_strike_lightning_enabled)
             gameWorld.strikeLightningEffect(locationToDropItems);
     }
 

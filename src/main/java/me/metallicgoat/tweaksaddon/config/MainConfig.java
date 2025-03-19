@@ -473,14 +473,14 @@ public class MainConfig {
                   "Toggle it to 'true' to enable this feature."
           }
   )
-  public static boolean personal_loot_drop = false;
+  public static boolean personal_team_loot_drop = false;
   @Config(
           description = {
                   "Strikes a lighting effect at the eliminated team's",
                   "Base to signify their personal loot is dropped."
           }
   )
-  public static boolean strike_lighting_on_eliminated_base = false;
+  public static boolean personal_team_loot_drop_strike_lightning_enabled = false;
 
   // ===== PLACEHOLDER API
   @SectionTitle(title = "PLACEHOLDER API")
