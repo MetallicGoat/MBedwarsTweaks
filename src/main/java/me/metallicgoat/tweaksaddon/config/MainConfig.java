@@ -472,12 +472,16 @@ public class MainConfig {
                   "Allows the eliminated team's personal chest loot to drop at their base generator",
                   "Toggle it to 'true' to enable this feature.",
                   "",
+                  "Allows the eliminated player loot drop at base gen.",
+                  "",
                   "Lighting Effect",
                   "Strikes a lighting effect at the eliminated team's",
                   "Base to signify their personal loot is dropped."
           }
   )
   public static boolean personal_team_loot_drop = false;
+  @Config()
+  public static boolean personal_loot_drop = false;
   @Config()
   public static boolean personal_team_loot_drop_strike_lightning_enabled = false;
 
