@@ -484,6 +484,8 @@ public class MainConfig {
   public static boolean personal_loot_drop = false;
   @Config()
   public static boolean personal_team_loot_drop_strike_lightning_enabled = false;
+  @Config()
+  public static List<String> personal_loot_blocked_items = new ArrayList<>(Arrays.asList("FIRE_CHARGE", "IRON_SWORD"));
 
   // ===== PLACEHOLDER API
   @SectionTitle(title = "PLACEHOLDER API")

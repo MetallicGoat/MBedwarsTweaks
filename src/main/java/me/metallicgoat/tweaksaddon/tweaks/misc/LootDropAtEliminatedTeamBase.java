@@ -5,8 +5,10 @@ import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.arena.TeamEliminateEvent;
 import de.marcely.bedwars.api.event.player.PlayerKillPlayerEvent;
 import de.marcely.bedwars.api.game.spawner.Spawner;
+import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -47,6 +49,7 @@ public class LootDropAtEliminatedTeamBase implements Listener {
             if (inventory == null|| inventory.getContents() == null || inventory.getContents().length == 0)
                 return;
             dropItemsOnGen(arena, inventory, arena.getGameWorld(), team);
+
         }
     }
 
@@ -56,13 +59,24 @@ public class LootDropAtEliminatedTeamBase implements Listener {
             return;
         final Location locationToDropItems = closestSpawner.get().getLocation().toLocation(gameWorld);
         for (ItemStack itemStack : inventory.getContents()) {
-            if (itemStack == null)
+            if (itemStack == null || isBlocked(itemStack))
                 continue;
             // Not checking game world as it's not null always.
             gameWorld.dropItemNaturally(locationToDropItems, itemStack);
         }
         if (MainConfig.personal_team_loot_drop_strike_lightning_enabled)
             gameWorld.strikeLightningEffect(locationToDropItems);
+    }
+
+    private boolean isBlocked(ItemStack itemStack){
+        for (String personalLootBlockedItem : MainConfig.personal_loot_blocked_items) {
+            final Material personalMaterial = Helper.get().getMaterialByName(personalLootBlockedItem);
+            if (personalMaterial == null)
+                continue;
+            if (itemStack.getType() == personalMaterial)
+                return true;
+        }
+        return false;
     }
 
 }
