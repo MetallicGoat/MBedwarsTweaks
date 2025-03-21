@@ -472,8 +472,6 @@ public class MainConfig {
                   "Allows the eliminated team's personal chest loot to drop at their base generator",
                   "Toggle it to 'true' to enable this feature.",
                   "",
-                  "Allows the eliminated player loot drop at base gen.",
-                  "",
                   "Lighting Effect",
                   "Strikes a lighting effect at the eliminated team's",
                   "Base to signify their personal loot is dropped."
@@ -481,11 +479,16 @@ public class MainConfig {
   )
   public static boolean personal_team_loot_drop = false;
   @Config()
+  public static boolean personal_team_loot_drop_strike_lightning_enabled = false;
+
+  @Config(
+          description = {
+                  "Allows the eliminated player loot drop at base gen."
+          }
+  )
   public static boolean personal_loot_drop = false;
   @Config()
-  public static boolean personal_team_loot_drop_strike_lightning_enabled = false;
-  @Config()
-  public static List<String> personal_loot_blocked_items = new ArrayList<>(Arrays.asList("FIRE_CHARGE", "IRON_SWORD"));
+  public static Set<Material> personal_loot_blocked_items = new HashSet<>(Arrays.asList(Material.FIREWORK_CHARGE, Material.IRON_SWORD));
 
   // ===== PLACEHOLDER API
   @SectionTitle(title = "PLACEHOLDER API")
