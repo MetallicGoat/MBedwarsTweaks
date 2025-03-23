@@ -9,7 +9,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import lombok.Getter;
 import me.metallicgoat.tweaksaddon.config.ConfigManager.Config;
@@ -242,6 +244,18 @@ public class MainConfig {
   @Config public static String tracker_hotbar_message_no_enemies = "";
   @Config public static String tracker_hotbar_message = "{team-color}{team}: &a{distance}m";
 
+  @Config(
+      description = {
+          "             Cooldowns",
+          "",
+          "Allows you to customize the cooldown on",
+          "every special item globally or individually"
+      }
+  )
+  public static double special_items_cooldown = 0;
+  @Config()
+  public static Map<String, Integer> special_items_custom_cooldowns = new HashMap<>();
+
 
   // ===== MESSAGES
   @SectionTitle(title = "MESSAGES")
@@ -395,12 +409,6 @@ public class MainConfig {
   )
   public static boolean allow_block_place_on_bed = false;
 
-  @Config(
-      description = {
-          "Adds a use cooldown to special items (in seconds)"
-      }
-  )
-  public static double special_items_cooldown = 0;
 
   @Config(
       description = {
