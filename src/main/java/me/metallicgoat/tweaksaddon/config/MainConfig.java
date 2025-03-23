@@ -9,7 +9,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import lombok.Getter;
 import me.metallicgoat.tweaksaddon.config.ConfigManager.Config;
@@ -242,6 +244,22 @@ public class MainConfig {
   @Config public static String tracker_hotbar_message_no_enemies = "";
   @Config public static String tracker_hotbar_message = "{team-color}{team}: &a{distance}m";
 
+  @Config(
+      description = {
+          "Cooldowns",
+          "",
+          "Allows you to customize the cooldown on",
+          "every special item globally or individually"
+      }
+  )
+  public static double special_items_cooldown = 0;
+  @Config()
+  public static Map<String, Integer> special_items_custom_cooldowns = new HashMap<String, Integer>(){{
+    put("tower", 0);
+    put("YourFavSpecialItem", 0);
+  }
+  };
+
 
   // ===== MESSAGES
   @SectionTitle(title = "MESSAGES")
@@ -288,7 +306,7 @@ public class MainConfig {
       "                &lBedWars",
       " "
   ));
-  @Config public static HashMap<Integer, String> top_killer_lines = new HashMap<Integer, String>() {{
+  @Config public static Map<Integer, String> top_killer_lines = new HashMap<Integer, String>() {{
     put(1, "    &e&l1st Killer &7- {killer-name} - {kill-amount}");
     put(2, "    &6&l2nd Killer &7- {killer-name} - {kill-amount}");
     put(3, "    &c&l3rd Killer &7- {killer-name} - {kill-amount}");
@@ -397,12 +415,6 @@ public class MainConfig {
   )
   public static boolean allow_block_place_on_bed = false;
 
-  @Config(
-      description = {
-          "Adds a use cooldown to special items (in seconds)"
-      }
-  )
-  public static double special_items_cooldown = 0;
 
   @Config(
       description = {
@@ -427,7 +439,7 @@ public class MainConfig {
       }
   )
   public static boolean permanent_effects_enabled = false;
-  @Config public static HashMap<String, PotionEffect> permanent_effects_arenas = new HashMap<String, PotionEffect>() {{
+  @Config public static Map<String, PotionEffect> permanent_effects_arenas = new HashMap<String, PotionEffect>() {{
     put("Ruins", new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
   }};
 
@@ -524,7 +536,7 @@ public class MainConfig {
           "ArenaCondition:ModeName"
       }
   )
-  public static HashMap<String, String> papi_arena_mode = new HashMap<String, String>() {{
+  public static Map<String, String> papi_arena_mode = new HashMap<String, String>() {{
     put("[players_per_team=1]", "Solos");
     put("[players_per_team=2]", "Doubles");
     put("[players_per_team=3]", "Trios");
@@ -561,7 +573,7 @@ public class MainConfig {
   )
   public static boolean custom_height_cap_enabled = false;
   @Config public static String custom_height_cap_warn = "&cYou cannot build any higher";
-  @Config public static HashMap<String, Integer> custom_height_cap_arenas = new HashMap<String, Integer>() {{
+  @Config public static Map<String, Integer> custom_height_cap_arenas = new HashMap<String, Integer>() {{
     put("ArenaName", 70);
   }};
 
