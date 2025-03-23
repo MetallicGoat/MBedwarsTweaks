@@ -254,7 +254,7 @@ public class MainConfig {
   )
   public static double special_items_cooldown = 0;
   @Config()
-  public static Map<String, Integer> special_items_custom_cooldowns = new HashMap<>();
+  public static HashMap<String, Integer> special_items_custom_cooldowns = new HashMap<>();
 
 
   // ===== MESSAGES
