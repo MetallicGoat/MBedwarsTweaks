@@ -246,7 +246,7 @@ public class MainConfig {
 
   @Config(
       description = {
-          "             Cooldowns",
+          "Cooldowns",
           "",
           "Allows you to customize the cooldown on",
           "every special item globally or individually"
@@ -254,7 +254,11 @@ public class MainConfig {
   )
   public static double special_items_cooldown = 0;
   @Config()
-  public static HashMap<String, Integer> special_items_custom_cooldowns = new HashMap<>();
+  public static Map<String, Integer> special_items_custom_cooldowns = new HashMap<String, Integer>(){{
+    put("tower", 0);
+    put("YourFavSpecialItem", 0);
+  }
+  };
 
 
   // ===== MESSAGES
