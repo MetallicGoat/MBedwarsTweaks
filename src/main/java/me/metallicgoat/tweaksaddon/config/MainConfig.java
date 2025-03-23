@@ -379,7 +379,9 @@ public class MainConfig {
       }
   )
   public static boolean lock_team_chest_enabled = true;
-  @Config public static Set<Material> lock_team_chest_materials = new HashSet<>(Arrays.asList(Material.CHEST));
+  @Config public static Set<Material> lock_team_chest_materials = new HashSet<>(Arrays.asList(
+      Helper.get().getMaterialByName("CHEST")
+  ));
   @Config public static double lock_team_chest_range = 8;
   @Config public static String lock_team_chest_fail_open = "&cYou cannot open this chest until {team} &chas been eliminated.";
 
@@ -496,7 +498,10 @@ public class MainConfig {
   )
   public static boolean personal_loot_drop = false;
   @Config()
-  public static Set<Material> personal_loot_blocked_items = new HashSet<>(Arrays.asList(Material.FIREWORK_CHARGE, Material.IRON_SWORD));
+  public static Set<Material> personal_loot_blocked_items = new HashSet<>(Arrays.asList(
+      Helper.get().getMaterialByName("FIRE_CHARGE"),
+      Helper.get().getMaterialByName("IRON_SWORD")
+  ));
 
   // ===== PLACEHOLDER API
   @SectionTitle(title = "PLACEHOLDER API")
