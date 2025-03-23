@@ -3,14 +3,36 @@ package me.metallicgoat.tweaksaddon.config;
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.tools.Helper;
+import de.marcely.bedwars.tools.Pair;
 import de.marcely.bedwars.tools.VarParticle;
 import de.marcely.bedwars.tools.YamlConfigurationDescriptor;
+import java.io.File;
+import java.io.IOException;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.utils.Console;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -19,19 +41,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.io.IOException;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.*;
-import java.util.stream.Collectors;
 
 public class ConfigManager {
 
@@ -107,7 +116,7 @@ public class ConfigManager {
 
       try {
         // Load it
-        final Object deserialized = deserializeObject(field, field.getType(), configString, configValue);
+        final Object deserialized = deserializeObject(field, field.getGenericType(), configString, configValue, configAnno);
 
         if (deserialized == null) {
           Console.printConfigWarn("There seems to be an issue with the config \"" + configName + "\". Have a look in your config.yml", "Main");
@@ -164,7 +173,7 @@ public class ConfigManager {
         if (fieldObject == null)
           throw new NullPointerException("Config field is null '" + field.getName() + "' THIS IS A BUG, please report it to us.");
 
-        config.set(configName, serializeObject(field, field.getType(), fieldObject));
+        config.set(configName, serializeObject(field.getGenericType(), fieldObject, configAnno));
 
       } catch (Exception e) {
         Console.printConfigWarn("Failed to save field '" + field.getName() + "'. THIS IS A BUG, please report it to us.", "Main");
@@ -185,7 +194,109 @@ public class ConfigManager {
         .collect(Collectors.joining("-"));
   }
 
-  public static Object deserializeObject(Field field, Class<?> type, String stringObject, Object configObject) {
+  public static Object deserializeObject(
+      Field field,
+      Type type,
+      String stringObject,
+      Object configObject,
+      Config configAnno) {
+
+    // Nested generics
+    if (type instanceof ParameterizedType) {
+      final ParameterizedType paramType = (ParameterizedType) type;
+      final Class<?> rawClass = (Class<?>) paramType.getRawType();
+      final Type[] typeArgs = paramType.getActualTypeArguments();
+
+      // Lists + Sets
+      if (Collection.class.isAssignableFrom(rawClass)) {
+
+        if (!Collection.class.isAssignableFrom(configObject.getClass()))
+          return null;
+
+        final Collection<?> strings = (Collection<?>) configObject;
+        final Collection<Object> collection;
+
+        if (List.class.isAssignableFrom(rawClass))
+          collection = new ArrayList<>();
+        else if (Set.class.isAssignableFrom(rawClass)) {
+          if (Enum.class.isAssignableFrom((Class<?>) typeArgs[0]))
+            collection = EnumSet.noneOf((Class<? extends Enum>) typeArgs[0]);
+          else
+            collection = new HashSet<>();
+        } else
+          throw new IllegalStateException("Unable to deserialize " + field.getName());
+
+        // Any type of Set or List
+        for (Object rawChild : strings) {
+          if (rawChild == null)
+            continue;
+
+          final Object deserializedChild = deserializeObject(field, typeArgs[0], rawChild.toString(), rawChild, configAnno);
+
+          if (deserializedChild != null)
+            collection.add(deserializedChild);
+        }
+
+        return collection;
+
+        // Maps
+      } else if (Map.class.isAssignableFrom(rawClass)) {
+
+        // we did it wrong in the past
+        if (configObject instanceof List) {
+          final Map<String, String> map = new HashMap<>();
+          final Collection<String> list = (Collection<String>) configObject;
+
+          for (String entry : list) {
+            final String[] parts = entry.split(":");
+
+            if (parts.length >= 2)
+              map.put(parts[0], parts[1]);
+          }
+
+          return map;
+        }
+
+        // proper way...
+        if (!MemorySection.class.isAssignableFrom(configObject.getClass()))
+          return null;
+
+        final MemorySection section = (MemorySection) configObject;
+        Map<Object, Object> map;
+
+        if (ConcurrentMap.class.isAssignableFrom(rawClass))
+          map = new ConcurrentHashMap<>();
+        else
+          map = new HashMap<>();
+
+        for (String key : section.getKeys(false)) {
+          final Object desKey = deserializeObject(field, typeArgs[0], key, key, configAnno);
+
+          if (desKey == null)
+            continue;
+
+          final Object value = section.get(key);
+          final Object desValue = deserializeObject(field, typeArgs[1], value.toString(), value, configAnno);
+
+          if (desValue == null)
+            continue;
+
+          map.put(desKey, desValue);
+        }
+
+        return map;
+
+        // Pairs
+      } else if (rawClass == Pair.class) {
+
+        // No implementation for this
+        return null;
+      }
+
+      return null;
+    }
+
+
     // Primitives
     if (type == boolean.class || type == Boolean.class)
       return configObject instanceof Boolean ? configObject : null;
@@ -193,12 +304,19 @@ public class ConfigManager {
       return Helper.get().parseInt(stringObject);
     else if (type == double.class || type == Double.class)
       return Helper.get().parseDouble(stringObject);
+    else if (type == float.class || type == Float.class)
+      return Helper.get().parseDouble(stringObject); // TODO: Helper doesnt have float
     else if (type == long.class || type == Long.class)
       return Helper.get().parseLong(stringObject);
 
       // Strings
     else if (type == String.class) {
-      return stringObject != null ? ChatColor.translateAlternateColorCodes('&', stringObject) : null;
+      if (configAnno.autoLowerCase())
+        stringObject = stringObject.toLowerCase();
+      if (configAnno.formatChatColor())
+        stringObject = ChatColor.translateAlternateColorCodes('&', stringObject); // TODO - See MBedwars ColorUtil
+
+      return stringObject;
 
       // ItemStack
     } else if (type == ItemStack.class) {
@@ -224,6 +342,7 @@ public class ConfigManager {
         Console.printWarn("Failed to parse color \"" + stringObject + "\"");
       }
 
+      // DropType
     } else if (type == DropType.class) {
       return GameAPI.get().getDropTypeById(stringObject);
 
@@ -246,50 +365,17 @@ public class ConfigManager {
       } else
         Console.printConfigWarn(stringObject + "\" has " + parts.length + " :, but 3 are needed", "Main");
 
-      // Lists + Sets
-    } else if (field != null && Collection.class.isAssignableFrom(type)) {
-      final List<?> strings = (List<?>) configObject;
-      final Class<?> listType = (Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
-      final Collection<Object> collection;
-
-      if (type == List.class)
-        collection = new ArrayList<>();
-      else if (type == Set.class)
-        collection = new HashSet<>();
-      else
-        return null;
-
-      // Any type of Set or List
-      for (Object object : strings) {
-        final Object deserializeObject = deserializeObject(field, listType, (String) object, object);
-
-        if (deserializeObject != null)
-          collection.add(deserializeObject);
-        else
-          Console.printConfigWarn("Failed to deserialize object in list/set in the config, with the name of " + object, "Main");
-      }
-
-      return collection;
-
-      // Map<?, ?>
-    } else if (field != null && Map.class.isAssignableFrom(type) && configObject instanceof ConfigurationSection) {
-      final Type[] mapTypes = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();
-      final Class<?> keyType = (Class<?>) mapTypes[0];
-      final Class<?> valueType = (Class<?>) mapTypes[1];
-      final MemorySection section = (MemorySection) configObject;
-      final HashMap<Object, Object> map = new HashMap<>();
-
-      for (Map.Entry<String, Object> entry : section.getValues(false).entrySet())
-        map.put(deserializeObject(null, keyType, entry.getKey(), entry.getKey()), deserializeObject(null, valueType, entry.getValue().toString(), entry.getValue()));
-
-      return map;
-
       // Enums
-    } else if (type.isEnum()) {
-      for (Object enumVal : type.getEnumConstants()) {
-        if (enumVal.toString().equalsIgnoreCase(stringObject)) {
-          return enumVal;
-        }
+    } else if (Enum.class.isAssignableFrom((Class<?>) type)) {
+      stringObject = stringObject.replaceAll("[ \\-_]", "");
+
+      for (Object enumObj : ((Class<?>) type).getEnumConstants()) {
+        String name = ((Enum<?>) enumObj).name();
+
+        name = name.replaceAll("[ \\-_]", "");
+
+        if (name.equalsIgnoreCase(stringObject))
+          return enumObj;
       }
     }
 
@@ -298,7 +384,60 @@ public class ConfigManager {
 
   // NOTE: Cannot use a switch for classes in java 8, and names won't work because of obfuscation
   // Returning this as an Object just so it looks nicer in yml (for example ints dont need quotes)
-  public static @Nullable Object serializeObject(Field field, Class<?> type, Object fieldObject) {
+  public static @Nullable Object serializeObject(
+      Type type,
+      Object fieldObject,
+      Config configAnno) {
+
+    // Handle nested generics
+    if (type instanceof ParameterizedType) {
+      final ParameterizedType paramType = (ParameterizedType) type;
+      final Class<?> rawClass = (Class<?>) paramType.getRawType();
+      final Type[] typeArgs = paramType.getActualTypeArguments();
+
+      // Lists + Sets
+      if (Collection.class.isAssignableFrom(rawClass)) {
+        final List<Object> serializedList = new ArrayList<>();
+        final Collection<?> objectList = (Collection<?>) fieldObject;
+
+        // Any type of List or Set
+        for (Object object : objectList) {
+          final Object serializedObject = serializeObject(typeArgs[0], object, configAnno);
+
+          if (serializedObject != null) {
+            serializedList.add(serializedObject.toString());
+          }
+        }
+
+        return serializedList;
+
+        // Maps
+      } else if (Map.class.isAssignableFrom(rawClass)) {
+        final MemorySection section = new MemoryConfiguration();
+        final Map<?, ?> map = (Map<?, ?>) fieldObject;
+
+        for (Map.Entry<?, ?> e : map.entrySet()) {
+          final Object key = serializeObject(typeArgs[0], e.getKey(), configAnno);
+          final Object value = serializeObject(typeArgs[1], e.getValue(), configAnno);
+
+          if (key == null)
+            continue;
+
+          section.set(key.toString(), value);
+        }
+
+        return section;
+
+        // Pairs
+      } else if (rawClass == Pair.class) {
+
+        // No implementation for this
+        return null;
+      }
+
+      return null;
+    }
+
     // Primitives
     if (type == boolean.class || type == Boolean.class ||
         type == int.class || type == Integer.class ||
@@ -311,17 +450,24 @@ public class ConfigManager {
 
       // String
     } else if (type == String.class) {
-      return replaceChatColorString((String) fieldObject);
+      String str = fieldObject.toString();
+
+      if (configAnno.autoLowerCase())
+        str = str.toLowerCase();
+      if (configAnno.formatChatColor())
+        str = replaceChatColorString(str);
+
+      return str;
 
       // ItemStack
     } else if (type == ItemStack.class) {
       final ItemStack itemStack = (ItemStack) fieldObject;
       return Helper.get().composeItemStack(itemStack);
 
-      // ItemStack
-    } else if (type == Method.class) {
+      // Material
+    } else if (type == Material.class) {
       final Material material = (Material) fieldObject;
-      return material.name();
+      return material.name().toLowerCase();
 
       // Particle
     } else if (type == VarParticle.class) {
@@ -337,6 +483,7 @@ public class ConfigManager {
     } else if (type == PotionEffect.class) {
       final PotionEffect effect = (PotionEffect) fieldObject;
       final int time = effect.getDuration();
+
       return effect.getType().getName() + ":" + (time == Integer.MAX_VALUE ? "INFINITE" : time) + ":" + (effect.getAmplifier() + 1);
 
       // DropType
@@ -344,39 +491,13 @@ public class ConfigManager {
       final DropType dropType = (DropType) fieldObject;
       return dropType.getId();
 
-      // Lists + Sets
-    } else if (field != null && Collection.class.isAssignableFrom(type)) {
-      final List<String> lines = new ArrayList<>();
-      final Collection<?> objectList = (Collection<?>) fieldObject;
-      final Class<?> listType = (Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
-
-      // Any type of List or Set
-      for (Object object : objectList)
-        if (object != null)
-          lines.add((String) serializeObject(null, listType, object));
-
-      return lines;
-
-      // Maps
-    } else if (field != null && Map.class.isAssignableFrom(type)) {
-      final Map<?, ?> map = (Map<?, ?>) fieldObject;
-      final Type[] mapTypes = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();
-      final Class<?> keyType = (Class<?>) mapTypes[0];
-      final Class<?> valueType = (Class<?>) mapTypes[1];
-      final ConfigurationSection section = new YamlConfiguration();
-
-      for (Map.Entry<?, ?> entry : map.entrySet())
-        section.set(String.valueOf(serializeObject(null, keyType, entry.getKey())), String.valueOf(serializeObject(null, valueType, entry.getValue())));
-
-      return section;
-
       // Enums
-    } else if (type.isEnum()) {
+    } else if (Enum.class.isAssignableFrom((Class<?>) type)) {
       return fieldObject.toString();
     }
 
     // Fail
-    Console.printConfigWarn("Failed to save config type - " + type.getSimpleName(), "Main");
+    Console.printConfigWarn("Failed to save config type - " + ((Class<?>) type).getSimpleName(), "Main");
     return null;
   }
 
@@ -426,8 +547,16 @@ public class ConfigManager {
   @Target(ElementType.FIELD)
   public @interface Config {
 
-    String[] description() default {};
+    @Nullable String[] description() default {};
 
-    String[] oldNames() default {};
+    @Nullable String[] oldNames() default {};
+
+    boolean formatChatColor() default true;
+
+    boolean autoLowerCase() default false;
+
+    boolean priorityLoad() default false;
+
+    boolean appendMetrics() default false;
   }
 }
