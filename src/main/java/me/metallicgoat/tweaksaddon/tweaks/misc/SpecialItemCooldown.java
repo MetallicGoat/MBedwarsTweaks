@@ -72,21 +72,4 @@ public class SpecialItemCooldown implements Listener {
       }
     }
   }
-
-  // 帮助管理员在登录时查看所有特殊道具的 ID
-  // Helps admins to figure out special item id for the config.
-  @EventHandler
-  public void onJoin(PlayerJoinEvent event) {
-    final Player player = event.getPlayer();
-    final StringBuilder builder = new StringBuilder();
-
-    if (!player.isOp() || !MainConfig.special_items_send_id_on_join)
-      return;
-
-    GameAPI.get().getSpecialItems().forEach(specialItem ->
-            builder.append(specialItem.getId()).append(","));
-
-    final String message = builder.toString();
-    player.sendMessage(message);
-  }
 }
