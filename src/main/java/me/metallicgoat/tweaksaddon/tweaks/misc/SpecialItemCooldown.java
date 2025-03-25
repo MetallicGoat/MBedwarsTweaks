@@ -1,16 +1,19 @@
 package me.metallicgoat.tweaksaddon.tweaks.misc;
 
+import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import java.util.UUID;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public class SpecialItemCooldown implements Listener {
 
@@ -49,6 +52,21 @@ public class SpecialItemCooldown implements Listener {
 
     cooldownPlayers.put(uuid, itemId);
     removeFromMapAfter(cooldownPlayers, uuid, MainConfig.special_items_cooldown);
+  }
+
+  // Helps admins to figure out special item id for the config.
+  @EventHandler
+  public void onJoin(PlayerJoinEvent event) {
+    final Player player = event.getPlayer();
+    final StringBuilder builder = new StringBuilder();
+
+    if (!player.isOp() || MainConfig.special_items_send_id_on_join)
+      return;
+
+    GameAPI.get().getSpecialItems().forEach(specialItem -> builder.append(specialItem.getId()).append(","));
+
+    final String message = builder.toString();
+    player.sendMessage(message);
   }
 
   private void removeFromMapAfter(Map<UUID, String> map, UUID uuid, double seconds) {
