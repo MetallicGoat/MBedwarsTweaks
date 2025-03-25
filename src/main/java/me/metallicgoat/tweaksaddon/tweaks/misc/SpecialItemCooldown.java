@@ -60,7 +60,7 @@ public class SpecialItemCooldown implements Listener {
     final Player player = event.getPlayer();
     final StringBuilder builder = new StringBuilder();
 
-    if (!player.isOp() || MainConfig.special_items_send_id_on_join)
+    if (!player.isOp() || !MainConfig.special_items_send_id_on_join)
       return;
 
     GameAPI.get().getSpecialItems().forEach(specialItem -> builder.append(specialItem.getId()).append(","));
