@@ -4,6 +4,7 @@ import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.command.CommandHandler;
 import de.marcely.bedwars.api.command.SubCommand;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import org.bukkit.command.CommandSender;
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class SpecialItemCommand implements CommandHandler {
 
+  private SubCommand command;
 
   @Override
   public Plugin getPlugin() {
@@ -20,7 +22,10 @@ public class SpecialItemCommand implements CommandHandler {
 
   @Override
   public void onRegister(SubCommand subCommand) {
-
+    this.command = subCommand;
+    this.command.setOnlyForPlayers(false);
+    this.command.setUsage("");
+    this.command.setAliases("showids");
   }
 
   @Override
@@ -38,6 +43,9 @@ public class SpecialItemCommand implements CommandHandler {
 
   @Override
   public @Nullable List<String> onAutocomplete(CommandSender commandSender, String[] strings) {
-    return new ArrayList<>();
+    final List<String> tab = new ArrayList<>();
+    tab.add("showspecialitems");
+    tab.addAll(Arrays.asList(command.getAliases()));
+    return tab;
   }
 }
