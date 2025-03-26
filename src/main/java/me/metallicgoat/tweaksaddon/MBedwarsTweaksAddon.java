@@ -1,9 +1,13 @@
 package me.metallicgoat.tweaksaddon;
 
+import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.BedwarsAddon;
 import de.marcely.bedwars.api.GameAPI;
+import de.marcely.bedwars.api.command.CommandsCollection;
+import de.marcely.bedwars.api.command.SubCommand;
 import de.marcely.bedwars.api.message.DefaultMessageMappings;
 import de.marcely.bedwars.api.message.MessageAPI;
+import me.metallicgoat.tweaksaddon.commands.SpecialItemCommand;
 import me.metallicgoat.tweaksaddon.config.ConfigLoader;
 import me.metallicgoat.tweaksaddon.gentiers.dragons.SuddenDeathUpgrade;
 import me.metallicgoat.tweaksaddon.integration.DependencyLoader;
@@ -103,6 +107,18 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     manager.registerEvents(new ConfigLoader(), plugin);
     manager.registerEvents(new DependencyLoader(), plugin);
   }
+
+  public void registerCommands(){
+    final CommandsCollection commands = BedwarsAPI.getRootCommandsCollection();
+
+    // CONTRIBUTORS: PLEASE READ
+    // NOTE: Please keep the following categories and classes in alphabetical order
+
+    // Misc
+    commands.addCommand("showspecialitems").setHandler(new SpecialItemCommand());
+
+  }
+
 
   public void registerUpgrades() {
     GameAPI.get().registerUpgradeTriggerHandler(new SuddenDeathUpgrade());
