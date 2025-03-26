@@ -259,13 +259,6 @@ public class MainConfig {
     put("YourFavSpecialItem", 0);
   }
   };
-  @Config(
-      description = {
-          "Enable this to send the a list of special items (id)",
-          "once an admin joins the server."
-      }
-  )
-  public static boolean special_items_send_id_on_join = false;
 
 
   // ===== MESSAGES

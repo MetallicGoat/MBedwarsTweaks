@@ -39,6 +39,7 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
     addon.registerMessageMappings();
     addon.registerEvents();
     addon.registerUpgrades();
+    addon.registerCommands();
 
     final PluginDescriptionFile pdf = this.getDescription();
 
