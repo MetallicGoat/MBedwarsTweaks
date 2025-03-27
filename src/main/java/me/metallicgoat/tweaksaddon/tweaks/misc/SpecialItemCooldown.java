@@ -2,6 +2,8 @@ package me.metallicgoat.tweaksaddon.tweaks.misc;
 
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.tools.NMSHelper;
+import java.util.IdentityHashMap;
+import java.util.Map;
 import java.util.UUID;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
@@ -12,9 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-
-import java.util.IdentityHashMap;
-import java.util.Map;
 import org.bukkit.inventory.ItemStack;
 
 public class SpecialItemCooldown implements Listener {
@@ -26,48 +25,44 @@ public class SpecialItemCooldown implements Listener {
     final Player player = event.getPlayer();
     final UUID uuid = player.getUniqueId();
     final String itemId = event.getSpecialItem().getId();
-    final Map<String, Integer> customCooldownMap = MainConfig.special_items_custom_cooldowns;
 
+    // Try item specific value
+    Double customCooldown = MainConfig.special_items_custom_cooldowns.get(itemId);
 
-    if (customCooldownMap.containsKey(itemId)) {
-      for (String id : customCooldownMap.keySet()) {
-        if (itemId.equalsIgnoreCase(id)) {
+    // Fall back on default value
+    if (customCooldown == null)
+      customCooldown = MainConfig.special_items_cooldown;
 
-          if (cooldownPlayers.containsKey(uuid) && cooldownPlayers.get(uuid).equalsIgnoreCase(id)) {
-            event.setCancelled(true);
-            return;
-          }
-
-          cooldownPlayers.put(uuid, id);
-          removeFromMapAfter(cooldownPlayers, uuid, customCooldownMap.get(id));
-          setVisualCooldown(player, event.getSpecialItem().getItemStack(), 20 * customCooldownMap.get(id));
-        }
-      }
+    // No cooldown
+    if (MainConfig.special_items_cooldown == 0)
       return;
-    }
 
-    if (MainConfig.special_items_cooldown == 0) return;
-
-    if (cooldownPlayers.containsKey(uuid) && itemId.equals(cooldownPlayers.get(uuid))) {
+    // Cooldown active - Stop event
+    if (this.cooldownPlayers.containsKey(uuid) && itemId.equals(this.cooldownPlayers.get(uuid))) {
       event.setCancelled(true);
       return;
     }
 
-    cooldownPlayers.put(uuid, itemId);
-    removeFromMapAfter(cooldownPlayers, uuid, MainConfig.special_items_cooldown);
-    setVisualCooldown(player, event.getSpecialItem().getItemStack(), (int) (20 * MainConfig.special_items_cooldown));
+    // Apply cooldown
+    this.cooldownPlayers.put(uuid, itemId);
+    setVisualCooldown(player, event.getSpecialItem().getItemStack(), customCooldown);
+
+    Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () ->
+        this.cooldownPlayers.remove(uuid), (long) (20D * customCooldown)
+    );
   }
 
-
-  private void removeFromMapAfter(Map<UUID, String> map, UUID uuid, double seconds) {
-    Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> map.remove(uuid), (long) (20D * seconds));
-  }
-
-  private void setVisualCooldown(Player player, ItemStack itemStack, int cooldownSeconds) {
+  private void setVisualCooldown(Player player, ItemStack itemStack, double cooldownSeconds) {
     if (NMSHelper.get().getVersion() >= 12) {
       try {
-        int cooldownTicks = cooldownSeconds * 20;
-        HumanEntity.class.getMethod("setCooldown", Material.class, int.class).invoke(player, itemStack.getType(), cooldownTicks);
+        final int cooldownTicks = (int) (cooldownSeconds * 20);
+
+        HumanEntity.class.getMethod("setCooldown", Material.class, int.class).invoke(
+            player,
+            itemStack.getType(),
+            cooldownTicks
+        );
+
       } catch (Exception e) {
         e.printStackTrace();
       }
