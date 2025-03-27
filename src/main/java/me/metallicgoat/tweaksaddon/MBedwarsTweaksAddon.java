@@ -3,12 +3,14 @@ package me.metallicgoat.tweaksaddon;
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.BedwarsAddon;
 import de.marcely.bedwars.api.GameAPI;
+import de.marcely.bedwars.api.command.CommandHandler;
 import de.marcely.bedwars.api.command.CommandsCollection;
 import de.marcely.bedwars.api.command.SubCommand;
 import de.marcely.bedwars.api.message.DefaultMessageMappings;
 import de.marcely.bedwars.api.message.MessageAPI;
 import me.metallicgoat.tweaksaddon.commands.SpecialItemCommand;
 import me.metallicgoat.tweaksaddon.config.ConfigLoader;
+import me.metallicgoat.tweaksaddon.gentiers.GenTiers;
 import me.metallicgoat.tweaksaddon.gentiers.dragons.SuddenDeathUpgrade;
 import me.metallicgoat.tweaksaddon.integration.DependencyLoader;
 import me.metallicgoat.tweaksaddon.tweaks.advancedswords.*;
@@ -17,7 +19,7 @@ import me.metallicgoat.tweaksaddon.tweaks.explosives.*;
 import me.metallicgoat.tweaksaddon.tweaks.messages.*;
 import me.metallicgoat.tweaksaddon.tweaks.misc.*;
 import me.metallicgoat.tweaksaddon.tweaks.spawners.*;
-import me.metallicgoat.tweaksaddon.gentiers.GenTiers;
+import me.metallicgoat.tweaksaddon.utils.Console;
 import org.bukkit.plugin.PluginManager;
 
 public class MBedwarsTweaksAddon extends BedwarsAddon {
@@ -108,15 +110,25 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     manager.registerEvents(new DependencyLoader(), plugin);
   }
 
-  public void registerCommands(){
+  public void registerCommands() {
     final CommandsCollection commands = BedwarsAPI.getRootCommandsCollection();
 
     // CONTRIBUTORS: PLEASE READ
     // NOTE: Please keep the following categories and classes in alphabetical order
 
-    // Misc
-    commands.addCommand("showspecialitems").setHandler(new SpecialItemCommand());
+    // TODO - Move to tools Command Collection
+    registerCommand("showspecialitems", commands, new SpecialItemCommand());
+  }
 
+  public void registerCommand(String name, CommandsCollection collection, CommandHandler handler) {
+    final SubCommand command = collection.addCommand(name);
+
+    if (command == null) {
+      Console.printWarn("Failed to register command " + name + ". Possible interference with another plugin?");
+      return;
+    }
+
+    command.setHandler(handler);
   }
 
 

@@ -3,8 +3,6 @@ package me.metallicgoat.tweaksaddon.commands;
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.command.CommandHandler;
 import de.marcely.bedwars.api.command.SubCommand;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import org.bukkit.command.CommandSender;
@@ -25,7 +23,7 @@ public class SpecialItemCommand implements CommandHandler {
     this.command = subCommand;
     this.command.setOnlyForPlayers(false);
     this.command.setUsage("");
-    this.command.setAliases("showids");
+    this.command.setAliases("specialids", "showspecialitems", "specialitems");
   }
 
   @Override
@@ -36,16 +34,15 @@ public class SpecialItemCommand implements CommandHandler {
     if (strings.length > 0)
       return;
 
-    GameAPI.get().getSpecialItems().forEach(specialItem -> builder.append(specialItem.getId()).append(", "));
-    commandSender.sendMessage(builder.toString());
+    GameAPI.get().getSpecialItems().forEach(specialItem ->
+        builder.append(specialItem.getId()).append(", ")
+    );
 
+    commandSender.sendMessage(builder.toString());
   }
 
   @Override
   public @Nullable List<String> onAutocomplete(CommandSender commandSender, String[] strings) {
-    final List<String> tab = new ArrayList<>();
-    tab.add("showspecialitems");
-    tab.addAll(Arrays.asList(command.getAliases()));
-    return tab;
+    return null;
   }
 }
