@@ -31,7 +31,7 @@ public class LockTeamChest implements Listener {
   @EventHandler
   public void playerInteract(PlayerInteractEvent event) {
     // in case the given material was configured to not be a personal chest,
-    // but shall stil be locked
+    // but shall still be locked
     if (!MainConfig.lock_team_chest_enabled)
       return;
     if (event.getAction() != Action.RIGHT_CLICK_BLOCK)

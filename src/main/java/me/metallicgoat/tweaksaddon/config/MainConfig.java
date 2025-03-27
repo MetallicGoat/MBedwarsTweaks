@@ -254,11 +254,9 @@ public class MainConfig {
   )
   public static double special_items_cooldown = 0;
   @Config()
-  public static Map<String, Integer> special_items_custom_cooldowns = new HashMap<String, Integer>(){{
-    put("tower", 0);
-    put("YourFavSpecialItem", 0);
-  }
-  };
+  public static Map<String, Double> special_items_custom_cooldowns = new HashMap<String, Double>(){{
+    put("item-id", 0D);
+  }};
 
 
   // ===== MESSAGES

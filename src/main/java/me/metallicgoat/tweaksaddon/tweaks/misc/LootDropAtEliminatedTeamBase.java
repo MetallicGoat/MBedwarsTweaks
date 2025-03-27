@@ -5,6 +5,8 @@ import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.arena.TeamEliminateEvent;
 import de.marcely.bedwars.api.event.player.PlayerKillPlayerEvent;
 import de.marcely.bedwars.api.game.spawner.Spawner;
+import java.util.Comparator;
+import java.util.Optional;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -13,9 +15,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Comparator;
-import java.util.Optional;
 
 public class LootDropAtEliminatedTeamBase implements Listener {
 
@@ -59,6 +58,7 @@ public class LootDropAtEliminatedTeamBase implements Listener {
     for (ItemStack itemStack : inventory.getContents()) {
       if (itemStack == null || MainConfig.personal_loot_blocked_items.contains(itemStack.getType()))
         continue;
+
       // Naturally gives an authentic animation.
       gameWorld.dropItemNaturally(locationToDropItems, itemStack);
     }
@@ -66,6 +66,4 @@ public class LootDropAtEliminatedTeamBase implements Listener {
     if (MainConfig.personal_team_loot_drop_strike_lightning_enabled)
       gameWorld.strikeLightningEffect(locationToDropItems);
   }
-
-
 }
