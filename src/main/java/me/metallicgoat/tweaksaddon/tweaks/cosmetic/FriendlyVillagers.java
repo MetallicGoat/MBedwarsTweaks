@@ -152,7 +152,7 @@ public class FriendlyVillagers implements Listener {
             if (player.getWorld() != world ||
                 GameAPI.get().getArenaByPlayer(player) == null ||
                 GameAPI.get().getSpectatingPlayers().contains(player) ||
-                player.getLocation().distance(hologramEntity.getLocation()) > MainConfig.friendly_villagers_range)
+                player.getLocation().distanceSquared(hologramEntity.getLocation()) > MainConfig.friendly_villagers_range * MainConfig.friendly_villagers_range)
               continue;
 
             visiblePlayers.add(player);
@@ -172,7 +172,7 @@ public class FriendlyVillagers implements Listener {
             // Get the closest player
             final Optional<Player> optionalLookAtPlayer = visiblePlayers.stream()
                 .filter(p -> p.getWorld() == world)
-                .min(Comparator.comparingDouble(p -> p.getLocation().distance(hologramEntity.getLocation())));
+                .min(Comparator.comparingDouble(p -> p.getLocation().distanceSquared(hologramEntity.getLocation())));
 
             // Rare case, where player has changed worlds or something
             if (!optionalLookAtPlayer.isPresent())

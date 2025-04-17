@@ -207,7 +207,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     }
 
     // The dragon has reached its target + tricks so it does not get in an 'orbit' around the target
-    if (targetLocation == null || dragonLocation.distance(targetLocation) < 10 || this.distanceTraveled > this.distanceToTarget * 1.2) {
+    if (targetLocation == null || dragonLocation.distanceSquared(targetLocation) < 100 || this.distanceTraveled > this.distanceToTarget * 1.2) {
       updateTarget();
       return;
     }
