@@ -24,32 +24,6 @@ import java.util.List;
 
 public class Util {
 
-  public static void removePlayerItem(HumanEntity player, ItemStack item) {
-    item = item == null ? new ItemStack(Material.AIR) : item;
-
-    // Try using papers method
-    if (NMSHelper.get().isRunningPaper() && NMSHelper.get().getVersion() > 8) {
-      try {
-        final Method setItemMethod = PlayerInventory.class.getDeclaredMethod("removeItemAnySlot", ItemStack.class);
-
-        setItemMethod.invoke(player, item);
-
-        return;
-
-      } catch (Exception ignored) { }
-    }
-
-    // regular way
-    player.getInventory().removeItem(item);
-
-    // Check offhand too
-    final ItemStack offHand = getItemInOffHand(player);
-
-    if (offHand != null && offHand.isSimilar(item)) {
-      setItemInOffHand(player, new ItemStack(Material.AIR));
-    }
-  }
-
   public static @Nullable ItemStack getItemInOffHand(HumanEntity player) {
     if (NMSHelper.get().getVersion() == 8)
       return null;
