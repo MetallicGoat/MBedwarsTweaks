@@ -11,6 +11,7 @@ import me.metallicgoat.tweaksaddon.utils.Console;
 import me.metallicgoat.tweaksaddon.utils.Metrics;
 import me.metallicgoat.tweaksaddon.utils.NMSClass;
 import me.metallicgoat.tweaksaddon.utils.UpdateChecker;
+import me.metallicgoat.tweaksaddon.utils.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -35,6 +36,9 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
       return;
 
     new Metrics(this, 11928);
+
+    // Init Reflection
+    Util.init();
 
     addon.registerMessageMappings();
     addon.registerEvents();

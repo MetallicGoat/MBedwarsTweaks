@@ -19,6 +19,7 @@ import me.metallicgoat.tweaksaddon.tweaks.explosives.*;
 import me.metallicgoat.tweaksaddon.tweaks.messages.*;
 import me.metallicgoat.tweaksaddon.tweaks.misc.*;
 import me.metallicgoat.tweaksaddon.tweaks.spawners.*;
+import me.metallicgoat.tweaksaddon.tweaks.spectialitems.*;
 import me.metallicgoat.tweaksaddon.utils.Console;
 import org.bukkit.plugin.PluginManager;
 
@@ -91,8 +92,6 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     manager.registerEvents(new PlaceBlocksOnBed(), plugin);
     manager.registerEvents(new PlayerLimitBypass(), plugin);
     manager.registerEvents(new RemoveInvisOnDamage(), plugin);
-    manager.registerEvents(new SpecialItemCooldown(), plugin);
-    manager.registerEvents(new TrackerDistance(), plugin);
     manager.registerEvents(new WorldBorderResize(), plugin);
     manager.registerEvents(new LootDropAtEliminatedTeamBase(), plugin);
     //manager.registerEvents(new TieBreaker(), plugin);
@@ -101,6 +100,10 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     manager.registerEvents(new AFKSpawners(), plugin);
     manager.registerEvents(new DisableEmptyGenerators(), plugin);
     manager.registerEvents(new SpawnerUpgrade(), plugin);
+
+    // Special Items
+    manager.registerEvents(new SpecialItemCooldown(), plugin);
+    manager.registerEvents(new TrackerDistance(), plugin);
 
     // Gen Tiers
     manager.registerEvents(new GenTiers(), plugin);

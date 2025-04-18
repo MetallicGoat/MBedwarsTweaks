@@ -9,7 +9,6 @@ import de.marcely.bedwars.tools.NMSHelper;
 import de.marcely.bedwars.tools.location.XYZYP;
 import java.lang.reflect.Method;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
@@ -24,33 +23,30 @@ import java.util.List;
 
 public class Util {
 
-  public static @Nullable ItemStack getItemInOffHand(HumanEntity player) {
+  private static Method GET_ITEM_IN_OFF_HAND_METHOD = null;
+
+  public static void init() {
     if (NMSHelper.get().getVersion() == 8)
+      return;
+
+    try {
+      GET_ITEM_IN_OFF_HAND_METHOD = PlayerInventory.class.getDeclaredMethod("getItemInOffHand", null);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static @Nullable ItemStack getItemInOffHand(HumanEntity player) {
+    if (GET_ITEM_IN_OFF_HAND_METHOD == null)
       return null;
 
     try {
-      return (ItemStack) PlayerInventory.class.getDeclaredMethod("getItemInOffHand", null).invoke(player.getInventory());
+      return (ItemStack) GET_ITEM_IN_OFF_HAND_METHOD.invoke(player.getInventory());
     } catch (Exception e) {
       e.printStackTrace();
     }
 
     return null;
-  }
-
-  public static void setItemInOffHand(HumanEntity player, @Nullable ItemStack itemInOffHand) {
-    if (NMSHelper.get().getVersion() == 8)
-      return;
-
-    itemInOffHand = itemInOffHand == null ? new ItemStack(Material.AIR) : itemInOffHand;
-
-    try {
-      final Method setItemMethod = PlayerInventory.class.getDeclaredMethod("setItemInOffHand", ItemStack.class);
-
-      setItemMethod.invoke(player, itemInOffHand);
-
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
   }
 
   public static Collection<Arena> parseArenas(String arenaKey) {

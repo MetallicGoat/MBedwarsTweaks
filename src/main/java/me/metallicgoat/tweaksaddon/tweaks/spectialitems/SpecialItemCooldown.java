@@ -1,4 +1,4 @@
-package me.metallicgoat.tweaksaddon.tweaks.misc;
+package me.metallicgoat.tweaksaddon.tweaks.spectialitems;
 
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.tools.NMSHelper;

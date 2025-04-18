@@ -1,4 +1,4 @@
-package me.metallicgoat.tweaksaddon.tweaks.misc;
+package me.metallicgoat.tweaksaddon.tweaks.spectialitems;
 
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
@@ -60,7 +60,7 @@ public class TrackerDistance implements Listener {
     }
   }
 
-  private final void startTask() {
+  private void startTask() {
     if (task != null)
       task.cancel();
 
@@ -68,6 +68,10 @@ public class TrackerDistance implements Listener {
       @Override
       public void run() {
         for (Arena arena : tickingArenas) {
+
+          if (arena.getStatus() != ArenaStatus.RUNNING)
+            continue;
+
           for (Player player : arena.getPlayers()) {
             final boolean holdingTracker = isTracker(player.getItemInHand()) || isTracker(Util.getItemInOffHand(player));
 
