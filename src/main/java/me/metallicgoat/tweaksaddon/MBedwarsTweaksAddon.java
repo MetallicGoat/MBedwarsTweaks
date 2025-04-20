@@ -116,11 +116,19 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
   public void registerCommands() {
     final CommandsCollection commands = BedwarsAPI.getRootCommandsCollection();
 
-    // CONTRIBUTORS: PLEASE READ
-    // NOTE: Please keep the following categories and classes in alphabetical order
+    // Commands in tools commands collection
+    {
+      final SubCommand tools = commands.getCommand("tools");
 
-    // TODO - Move to tools Command Collection
-    registerCommand("showspecialitems", commands, new SpecialItemCommand());
+      if (tools instanceof CommandsCollection) {
+        final CommandsCollection toolsCollection = (CommandsCollection) tools;
+
+        registerCommand("showspecialitems", toolsCollection, new SpecialItemCommand());
+
+      } else {
+        Console.printWarn("Failed to register command showspecialitems in \"/bw tools\" commands collection. ");
+      }
+    }
   }
 
   public void registerCommand(String name, CommandsCollection collection, CommandHandler handler) {

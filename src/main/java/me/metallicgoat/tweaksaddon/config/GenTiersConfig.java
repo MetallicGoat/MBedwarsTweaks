@@ -55,7 +55,7 @@ public class GenTiersConfig {
 
       int i = 1;
       for (String levelNumString : tiersSection.getKeys(false)) {
-        final Integer levelNum = i++;
+        final int levelNum = i++;
 
         final ConfigurationSection section = tiersSection.getConfigurationSection(levelNumString);
 
