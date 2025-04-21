@@ -98,6 +98,7 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
 
     // Spawners
     manager.registerEvents(new AFKSpawners(), plugin);
+    manager.registerEvents(new DisableEliminatedTeamGenerators(), plugin);
     manager.registerEvents(new DisableEmptyGenerators(), plugin);
     manager.registerEvents(new SpawnerUpgrade(), plugin);
 
