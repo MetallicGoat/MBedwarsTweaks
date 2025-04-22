@@ -128,13 +128,9 @@ public class MainConfig {
   @Config(
       description = {
           "Disable generators after any team gets eliminated.",
-          "No of seconds after a team gets eliminated (set to -1 for no delay)",
-          "Whitelist type of spawners."
       }
   )
   public static boolean disable_eliminated_team_generators = false;
-  public static int disable_eliminated_team_generators_delay = -1;
-  public static List<String> disable_eliminated_team_generator_whitelist = new ArrayList<>(Collections.singletonList(""));
 
   @Config(
       description = {
