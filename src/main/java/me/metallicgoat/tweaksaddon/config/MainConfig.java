@@ -118,19 +118,16 @@ public class MainConfig {
   @Config(
       description = {
           "Disable generators in empty bases",
+          "Disable generators after team elimination",
           "Range = distance from team spawn to spawner"
       }
   )
   public static boolean disable_empty_generators = false;
+  @Config()
+  public static boolean disable_eliminated_team_generators = false;
   @Config public static double disable_empty_generators_range = 6;
   @Config public static List<DropType> disable_empty_generators_spawners = new ArrayList<>();
 
-  @Config(
-      description = {
-          "Disable generators after any team gets eliminated.",
-      }
-  )
-  public static boolean disable_eliminated_team_generators = false;
 
   @Config(
       description = {
