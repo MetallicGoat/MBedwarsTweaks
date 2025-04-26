@@ -124,8 +124,7 @@ public class MainConfig {
       }
   )
   public static boolean disable_empty_generators = false;
-  @Config()
-  public static boolean disable_eliminated_team_generators = false;
+  @Config public static boolean disable_eliminated_team_generators = false;
   @Config public static double disable_empty_generators_range = 6;
   @Config public static List<DropType> disable_empty_generators_spawners = new ArrayList<>();
 

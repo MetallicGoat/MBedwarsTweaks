@@ -10,7 +10,6 @@ import de.marcely.bedwars.api.game.spawner.SpawnerDurationModifier;
 import de.marcely.bedwars.tools.location.XYZYP;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,42 +25,42 @@ public class DisableEmptyGenerators implements Listener {
 
     for (Team team : arena.getEnabledTeams()) {
       if (arena.getPlayersInTeam(team).isEmpty()) {
-        final XYZYP spawnPoint = arena.getTeamSpawn(team);
-
-        if (spawnPoint != null)
-          disableGens(arena, spawnPoint.toLocation(arena.getGameWorld()), false);
+        disableGens(arena, team, false);
       }
     }
   }
+
   @EventHandler
   public void onEliminate(TeamEliminateEvent event){
     if (!MainConfig.disable_eliminated_team_generators)
       return;
 
     final Arena arena = event.getArena();
-    final XYZYP spawnXYZP = arena.getTeamSpawn(event.getTeam());
-    if (spawnXYZP == null) return;
-    final Location spawnLoc = spawnXYZP.toLocation(arena.getGameWorld());
 
-    if (MainConfig.disable_eliminated_team_generators_delay == -1)
-      disableGens(arena, spawnLoc, true);
-    else
-      Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> disableGens(arena, spawnLoc, true), 20L *MainConfig.disable_eliminated_team_generators_delay);
+    disableGens(arena, event.getTeam(), true);
   }
 
-  private void disableGens(Arena arena, Location spawnPoint, boolean teamElimination) {
+  private void disableGens(Arena arena, Team team, boolean teamElimination) {
+    final XYZYP spawnXYZP = arena.getTeamSpawn(team);
+
+    if (spawnXYZP == null)
+      return;
+
+    final Location spawnPoint = spawnXYZP.toLocation(arena.getGameWorld());
+
     for (Spawner spawner : arena.getSpawners()) {
 
-      // If the spawner is in the white list we DON'T disable it.
+      // If the spawner is in the whitelist, we do not disable it.
       if (!MainConfig.disable_empty_generators_spawners.contains(spawner.getDropType()))
         continue;
 
       final Location spawnerLoc = spawner.getLocation().toLocation(arena.getGameWorld());
 
-      if (spawnerLoc.distance(spawnPoint) < MainConfig.disable_empty_generators_range) {
+      if (spawnerLoc.distanceSquared(spawnPoint) < MainConfig.disable_empty_generators_range * MainConfig.disable_empty_generators_range) {
         spawner.addDropDurationModifier(
-            teamElimination ? "TEAM_ELIMINATED_TIMEOUT": "EMPTY_TEAM_DISABLED"
-            , MBedwarsTweaksPlugin.getInstance(), SpawnerDurationModifier.Operation.SET, 999999);
+            teamElimination ? "TEAM_ELIMINATED_DISABLED": "EMPTY_TEAM_DISABLED",
+            MBedwarsTweaksPlugin.getInstance(), SpawnerDurationModifier.Operation.SET, 999999
+        );
       }
     }
   }
