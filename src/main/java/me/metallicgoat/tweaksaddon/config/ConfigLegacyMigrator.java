@@ -6,6 +6,8 @@ import de.marcely.bedwars.tools.VarParticle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+import me.metallicgoat.tweaksaddon.utils.CachedArenaIdentifier;
 import me.metallicgoat.tweaksaddon.utils.Console;
 import me.metallicgoat.tweaksaddon.utils.Util;
 import org.bukkit.Material;
@@ -250,8 +252,9 @@ public class ConfigLegacyMigrator {
     {
       final List<String> blockedArenas = config.getStringList("Block-Stat-Change.Arenas");
 
-      if (blockedArenas != null)
-        MainConfig.block_stat_change_arenas = blockedArenas;
+      if (blockedArenas != null) {
+        MainConfig.block_stat_change_arenas = blockedArenas.stream().map(CachedArenaIdentifier::new).collect(Collectors.toList());
+      }
     }
 
     MainConfig.sponge_particles_enabled = config.getBoolean("Sponge-Particles", true);
@@ -282,7 +285,7 @@ public class ConfigLegacyMigrator {
     {
       if (config.contains("Height-Cap.Arenas")) {
 
-        final HashMap<String, Integer> map = new HashMap<>();
+        final HashMap<CachedArenaIdentifier, Integer> map = new HashMap<>();
 
         for (String string : config.getStringList("Height-Cap.Arenas")) {
           if (!string.contains(":"))
@@ -294,7 +297,7 @@ public class ConfigLegacyMigrator {
           if (capInt == null)
             continue;
 
-          map.put(strings[0], capInt);
+          map.put(new CachedArenaIdentifier(strings[0]), capInt);
         }
 
         MainConfig.custom_height_cap_arenas = map;
@@ -334,7 +337,7 @@ public class ConfigLegacyMigrator {
 
         final PotionEffect effect = new PotionEffect(type, Integer.MAX_VALUE, amplifier);
 
-        MainConfig.permanent_effects_arenas.put(arenaId, effect);
+        MainConfig.permanent_effects_arenas.put(new CachedArenaIdentifier(arenaId), effect);
       }
     }
   }

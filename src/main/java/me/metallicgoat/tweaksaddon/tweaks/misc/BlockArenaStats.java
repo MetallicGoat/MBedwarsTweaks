@@ -3,7 +3,7 @@ package me.metallicgoat.tweaksaddon.tweaks.misc;
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.event.player.PlayerStatChangeEvent;
-import me.metallicgoat.tweaksaddon.utils.Util;
+import me.metallicgoat.tweaksaddon.utils.CachedArenaIdentifier;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -23,8 +23,8 @@ public class BlockArenaStats implements Listener {
     if (playerArena == null)
       return;
 
-    for (String arenaName : MainConfig.block_stat_change_arenas) {
-      if (Util.parseArenas(arenaName).contains(playerArena)) {
+    for (CachedArenaIdentifier arenaIdentifier : MainConfig.block_stat_change_arenas) {
+      if (arenaIdentifier.includes(playerArena)) {
         event.setCancelled(true);
         return;
       }

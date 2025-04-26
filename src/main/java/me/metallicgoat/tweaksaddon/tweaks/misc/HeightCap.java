@@ -5,7 +5,7 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.message.Message;
 import java.util.Map;
-import me.metallicgoat.tweaksaddon.utils.Util;
+import me.metallicgoat.tweaksaddon.utils.CachedArenaIdentifier;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,8 +23,8 @@ public class HeightCap implements Listener {
     if (!MainConfig.custom_height_cap_enabled || arena == null || arena.getStatus() != ArenaStatus.RUNNING)
       return;
 
-    for (Map.Entry<String, Integer> arenaHeight : MainConfig.custom_height_cap_arenas.entrySet()) {
-      if (Util.parseArenas(arenaHeight.getKey()).contains(arena) && arenaHeight.getValue() != null) {
+    for (Map.Entry<CachedArenaIdentifier, Integer> arenaHeight : MainConfig.custom_height_cap_arenas.entrySet()) {
+      if (arenaHeight.getKey().includes(arena) && arenaHeight.getValue() != null) {
 
         if (e.getBlockPlaced().getY() > arenaHeight.getValue()) {
           player.sendMessage(Message.build(MainConfig.custom_height_cap_warn).done());

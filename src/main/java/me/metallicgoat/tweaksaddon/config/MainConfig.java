@@ -15,6 +15,7 @@ import java.util.Set;
 import lombok.Getter;
 import me.metallicgoat.tweaksaddon.config.ConfigManager.Config;
 import me.metallicgoat.tweaksaddon.config.ConfigManager.SectionTitle;
+import me.metallicgoat.tweaksaddon.utils.CachedArenaIdentifier;
 import org.bukkit.Material;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
@@ -430,7 +431,7 @@ public class MainConfig {
       }
   )
   public static boolean block_stat_change_enabled = false;
-  @Config public static List<String> block_stat_change_arenas = new ArrayList<>();
+  @Config public static List<CachedArenaIdentifier> block_stat_change_arenas = new ArrayList<>();
 
   @Config(
       description = {
@@ -440,8 +441,8 @@ public class MainConfig {
       }
   )
   public static boolean permanent_effects_enabled = false;
-  @Config public static Map<String, PotionEffect> permanent_effects_arenas = new HashMap<String, PotionEffect>() {{
-    put("Ruins", new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
+  @Config public static Map<CachedArenaIdentifier, PotionEffect> permanent_effects_arenas = new HashMap<CachedArenaIdentifier, PotionEffect>() {{
+    put(new CachedArenaIdentifier("Ruins"), new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
   }};
 
   @Config(
@@ -574,8 +575,8 @@ public class MainConfig {
   )
   public static boolean custom_height_cap_enabled = false;
   @Config public static String custom_height_cap_warn = "&cYou cannot build any higher";
-  @Config public static Map<String, Integer> custom_height_cap_arenas = new HashMap<String, Integer>() {{
-    put("ArenaName", 70);
+  @Config public static Map<CachedArenaIdentifier, Integer> custom_height_cap_arenas = new HashMap<CachedArenaIdentifier, Integer>() {{
+    put(new CachedArenaIdentifier("ArenaName"), 70);
   }};
 
   @Config(

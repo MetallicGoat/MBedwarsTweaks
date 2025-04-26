@@ -29,6 +29,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
+import me.metallicgoat.tweaksaddon.utils.CachedArenaIdentifier;
 import me.metallicgoat.tweaksaddon.utils.Console;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
@@ -346,6 +347,10 @@ public class ConfigManager {
     } else if (type == DropType.class) {
       return GameAPI.get().getDropTypeById(stringObject);
 
+      // CachedArenaIdentifier
+    } else if (type == CachedArenaIdentifier.class) {
+      return new CachedArenaIdentifier(stringObject);
+
       // PotionEffect
     } else if (type == PotionEffect.class) {
       final String[] parts = (stringObject).split(":");
@@ -490,6 +495,10 @@ public class ConfigManager {
     } else if (type == DropType.class) {
       final DropType dropType = (DropType) fieldObject;
       return dropType.getId();
+
+      // CachedArenaIdentifier
+    } else if (type == CachedArenaIdentifier.class) {
+      return  ((CachedArenaIdentifier) fieldObject).getOriginalString();
 
       // Enums
     } else if (Enum.class.isAssignableFrom((Class<?>) type)) {

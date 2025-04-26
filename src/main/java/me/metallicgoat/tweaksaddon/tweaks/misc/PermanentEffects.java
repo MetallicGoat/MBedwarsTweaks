@@ -3,10 +3,9 @@ package me.metallicgoat.tweaksaddon.tweaks.misc;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.event.player.PlayerIngameRespawnEvent;
-import java.util.Collection;
 import java.util.Map;
-import me.metallicgoat.tweaksaddon.utils.Util;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
+import me.metallicgoat.tweaksaddon.utils.CachedArenaIdentifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -39,12 +38,10 @@ public class PermanentEffects implements Listener {
   }
 
   public @Nullable PotionEffect getArenaEffects(Arena arena) {
-    for (Map.Entry<String, PotionEffect> entry : MainConfig.permanent_effects_arenas.entrySet()) {
-      final Collection<Arena> arenas = Util.parseArenas(entry.getKey());
-
-      if (arenas.contains(arena))
+    for (Map.Entry<CachedArenaIdentifier, PotionEffect> entry : MainConfig.permanent_effects_arenas.entrySet()) {
+      if (entry.getKey().includes(arena)) {
         return entry.getValue();
-
+      }
     }
 
     return null;
