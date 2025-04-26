@@ -36,6 +36,7 @@ public class FriendlyVillagers implements Listener {
       .collect(Collectors.toSet());
 
   // 6+ hours has been spent on this. Rewritten like 6 times
+  // Harsh: I am proud of you!
   private final MBedwarsTweaksPlugin plugin = MBedwarsTweaksPlugin.getInstance();
   private final Map<World, WorldState> worlds = new ConcurrentHashMap<>();
   private final BukkitTask[] tasks = new BukkitTask[2];

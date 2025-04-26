@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -119,12 +118,16 @@ public class MainConfig {
   @Config(
       description = {
           "Disable generators in empty bases",
+          "Disable generators after team elimination",
           "Range = distance from team spawn to spawner"
       }
   )
   public static boolean disable_empty_generators = false;
+  @Config()
+  public static boolean disable_eliminated_team_generators = false;
   @Config public static double disable_empty_generators_range = 6;
   @Config public static List<DropType> disable_empty_generators_spawners = new ArrayList<>();
+
 
   @Config(
       description = {
@@ -149,7 +152,7 @@ public class MainConfig {
   // ===== PARTICLE EFFECTS
   @SectionTitle(title = "PARTICLE EFFECTS")
 
-@Config(
+  @Config(
       description = {
           "If a player has invis and is moving, footsteps particles will be played at their feet",
           "Note: this is only supported on 1.8 -> 1.12, as the particle was removed in modern versions"
@@ -480,23 +483,23 @@ public class MainConfig {
   @Config public static int world_border_resize_scale = 50;
 
   @Config(
-          description = {
-                  "Allows the eliminated team's personal chest loot to drop at their base generator",
-                  "Toggle it to 'true' to enable this feature.",
-                  "",
-                  "Lighting Effect",
-                  "Strikes a lighting effect at the eliminated team's",
-                  "Base to signify their personal loot is dropped."
-          }
+      description = {
+          "Allows the eliminated team's personal chest loot to drop at their base generator",
+          "Toggle it to 'true' to enable this feature.",
+          "",
+          "Lighting Effect",
+          "Strikes a lighting effect at the eliminated team's",
+          "Base to signify their personal loot is dropped."
+      }
   )
   public static boolean personal_team_loot_drop = false;
   @Config()
   public static boolean personal_team_loot_drop_strike_lightning_enabled = false;
 
   @Config(
-          description = {
-                  "Allows the eliminated player loot drop at base gen."
-          }
+      description = {
+          "Allows the eliminated player loot drop at base gen."
+      }
   )
   public static boolean personal_loot_drop = false;
   @Config()
