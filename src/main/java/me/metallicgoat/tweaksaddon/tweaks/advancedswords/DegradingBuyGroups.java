@@ -3,7 +3,7 @@ package me.metallicgoat.tweaksaddon.tweaks.advancedswords;
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
-import de.marcely.bedwars.api.event.player.PlayerIngameRespawnEvent;
+import de.marcely.bedwars.api.event.player.PlayerIngamePostRespawnEvent;
 import de.marcely.bedwars.api.game.shop.BuyGroup;
 import de.marcely.bedwars.api.game.shop.ShopItem;
 import java.util.Collection;
@@ -15,7 +15,7 @@ import org.bukkit.event.Listener;
 public class DegradingBuyGroups implements Listener {
 
   @EventHandler
-  public void onRespawn(PlayerIngameRespawnEvent event) {
+  public void onPostRespawn(PlayerIngamePostRespawnEvent event) {
     if (!SwordsToolsConfig.degrading_buygroups_enabled)
       return;
 

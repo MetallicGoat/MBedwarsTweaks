@@ -1,8 +1,10 @@
 package me.metallicgoat.tweaksaddon.integration.hooks;
 
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
-import de.marcely.bedwars.api.event.player.PlayerIngameRespawnEvent;
+import de.marcely.bedwars.api.event.player.PlayerIngamePostRespawnEvent;
 import de.marcely.bedwars.tools.Helper;
+import java.util.Optional;
+import java.util.function.Consumer;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import me.tvhee.prestigesaddon.api.PrestigeAddonAPI;
 import me.tvhee.prestigesaddon.api.PrestigePlayer;
@@ -10,9 +12,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-
-import java.util.Optional;
-import java.util.function.Consumer;
 
 public class PrestigesLevelOnExperienceBar implements Listener {
 
@@ -31,7 +30,7 @@ public class PrestigesLevelOnExperienceBar implements Listener {
 
   // This will get called when the player rejoins too
   @EventHandler
-  public void onPlayerRespawn(PlayerIngameRespawnEvent event) {
+  public void onPlayerPostRespawn(PlayerIngamePostRespawnEvent event) {
     setPlayerLevel(event.getPlayer());
   }
 
