@@ -2,7 +2,7 @@ package me.metallicgoat.tweaksaddon.tweaks.misc;
 
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
-import de.marcely.bedwars.api.event.player.PlayerIngameRespawnEvent;
+import de.marcely.bedwars.api.event.player.PlayerIngamePostRespawnEvent;
 import java.util.Map;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import me.metallicgoat.tweaksaddon.utils.CachedArenaIdentifier;
@@ -27,7 +27,7 @@ public class PermanentEffects implements Listener {
   }
 
   @EventHandler
-  public void onRespawn(PlayerIngameRespawnEvent event) {
+  public void onPostRespawn(PlayerIngamePostRespawnEvent event) {
     final Arena arena = event.getArena();
     final PotionEffect effect = getArenaEffects(arena);
 
