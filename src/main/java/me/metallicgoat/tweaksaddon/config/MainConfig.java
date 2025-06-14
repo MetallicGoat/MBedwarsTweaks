@@ -294,6 +294,7 @@ public class MainConfig {
   )
   public static boolean buy_message_enabled = true;
   @Config public static String buy_message = "&aYou Purchased &6{product} x{amount}";
+  @Config public static String buy_message_amountless = "&aYou Purchased &6{product}";
 
   @Config(
       description = {
