@@ -21,12 +21,14 @@ public class BuyMessage implements Listener {
 
     final Player p = event.getPlayer();
     final String product = event.getItem().getDisplayName();
-    final String amount = Integer.toString(getAmount(event.getItem()));
-    final String message = Message.build(MainConfig.buy_message)
-        .placeholder("product", product)
-        .placeholder("amount", amount).done();
+    final int amount = getAmount(event.getItem());
+    final String strAmount = Integer.toString(getAmount(event.getItem()));
+    final String baseMessage = amount == 0 ? MainConfig.buy_message_amountless : MainConfig.buy_message; // e.g. if command is used as product, amount would be 0
 
-    p.sendMessage(message);
+    Message.build(baseMessage)
+        .placeholder("product", product)
+        .placeholder("amount", strAmount)
+        .send(p);
   }
 
   private int getAmount(ShopItem item) {

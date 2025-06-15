@@ -294,6 +294,12 @@ public class MainConfig {
   )
   public static boolean buy_message_enabled = true;
   @Config public static String buy_message = "&aYou Purchased &6{product} x{amount}";
+  @Config(
+      description = {
+          "Gets sent if the purchase doesn't have a concrete amount, e.g. when the products are only commands being executed"
+      }
+  )
+  public static String buy_message_amountless = "&aYou Purchased &6{product}";
 
   @Config(
       description = {
