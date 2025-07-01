@@ -6,7 +6,7 @@
 
     <groupId>me.metallicgoat</groupId>
     <artifactId>MBedwarsTweaks</artifactId>
-    <version>4.4.0</version>
+    <version>4.5.0</version>
 
     <repositories>
         <repository>
@@ -36,19 +36,19 @@
             <version>2.11.6</version>
             <scope>provided</scope>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>de.marcely.bedwars</groupId>-->
+<!--            <artifactId>API</artifactId>-->
+<!--            <version>5.5.3</version>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>de.marcely.bedwars</groupId>
             <artifactId>API</artifactId>
             <version>5.5.3</version>
-            <scope>provided</scope>
+            <scope>system</scope>
+            <systemPath>${basedir}/libs/public/API-5.5.3.jar</systemPath>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>de.marcely.bedwars</groupId>-->
-<!--            <artifactId>API</artifactId>-->
-<!--            <version>5.4.5</version>-->
-<!--            <scope>system</scope>-->
-<!--            <systemPath>${basedir}/libs/public/BedwarsAPI-5.4.5.jar</systemPath>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>me.metallicgoat.hotbarmanageraddon</groupId>
             <artifactId>API</artifactId>
