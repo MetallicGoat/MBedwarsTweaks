@@ -36,19 +36,19 @@
             <version>2.11.6</version>
             <scope>provided</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>de.marcely.bedwars</groupId>-->
-<!--            <artifactId>API</artifactId>-->
-<!--            <version>5.5.3</version>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
         <dependency>
+            <groupId>de.marcely.bedwars</groupId>
+            <artifactId>API</artifactId>
+            <version>5.5.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--<dependency>
             <groupId>de.marcely.bedwars</groupId>
             <artifactId>API</artifactId>
             <version>5.5.3</version>
             <scope>system</scope>
             <systemPath>${basedir}/libs/public/API-5.5.3.jar</systemPath>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>me.metallicgoat.hotbarmanageraddon</groupId>
             <artifactId>API</artifactId>

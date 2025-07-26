@@ -52,9 +52,7 @@ public class DragonUtil {
   }
 
   public static void killAllDragons() {
-    for (DragonFollowTask task : runningDragons)
+    for (DragonFollowTask task : new ArrayList<>(runningDragons))
       task.removeDragon();
-
-    runningDragons.clear();
   }
 }

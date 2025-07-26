@@ -3,6 +3,7 @@ package me.metallicgoat.tweaksaddon.gentiers.dragons;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.arena.ArenaStatusChangeEvent;
+import de.marcely.bedwars.api.event.arena.ArenaUnloadEvent;
 import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.NMSHelper;
 import de.marcely.bedwars.tools.location.XYZ;
@@ -108,9 +109,14 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
   // Kill dragon on round end
   @EventHandler
   public void onArenaStatusChange(ArenaStatusChangeEvent event) {
-    if (event.getArena() == this.arena) {
+    if (event.getArena() == this.arena)
       removeDragon();
-    }
+  }
+
+  @EventHandler
+  public void onArenaUnload(ArenaUnloadEvent event) {
+    if (event.getArena() == this.arena)
+      removeDragon();
   }
 
   private void updateTarget() {
@@ -250,32 +256,27 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
         for (double z = blockZ - radius; z <= blockZ + radius; z++) {
           final Block block = new Location(location.getWorld(), x, y, z).getBlock();
 
-          if (block.getType() != Material.AIR) {
-            block.setType(Material.AIR);
-          }
+          if (block.getType() != Material.AIR)
+            block.setType(Material.AIR, false);
         }
       }
     }
   }
 
   public void removeDragon() {
-    removeDragon(true);
-  }
-
-  public void removeDragon(boolean fromList) {
-    if (this.dragon.isValid())
-      this.dragon.remove();
+    this.dragon.remove();
 
     // Unregister listeners
     HandlerList.unregisterAll(this.portalListener);
     HandlerList.unregisterAll(this);
 
-    if (fromList)
-      DragonUtil.runningDragons.remove(this);
+    DragonUtil.runningDragons.remove(this);
 
     // Stop Scheduler
     super.cancel();
   }
+
+
 
   private static class ModernPortalListener implements Listener {
     final DragonFollowTask task;
