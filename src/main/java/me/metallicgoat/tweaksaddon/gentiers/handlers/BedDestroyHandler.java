@@ -4,8 +4,10 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.BedDestructionInfo;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.message.Message;
+import me.metallicgoat.tweaksaddon.api.gentiers.GenTierActionType;
+import me.metallicgoat.tweaksaddon.api.gentiers.GenTierHandler;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
-import me.metallicgoat.tweaksaddon.gentiers.GenTierLevel;
+import me.metallicgoat.tweaksaddon.api.gentiers.GenTierLevel;
 
 public class BedDestroyHandler extends GenTierHandler {
 
@@ -26,5 +28,15 @@ public class BedDestroyHandler extends GenTierHandler {
       
     for (String s : MainConfig.auto_bed_break_message)
       arena.broadcast(Message.build(s));
+  }
+
+  @Override
+  public String getId() {
+    return GenTierActionType.BED_DESTROY.getDefaultHandlerId();
+  }
+
+  @Override
+  public GenTierActionType getActionType() {
+    return GenTierActionType.BED_DESTROY;
   }
 }

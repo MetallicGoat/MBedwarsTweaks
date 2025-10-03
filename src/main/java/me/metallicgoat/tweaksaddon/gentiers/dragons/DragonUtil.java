@@ -7,6 +7,10 @@ import de.marcely.bedwars.tools.location.XYZYP;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
+
+import me.metallicgoat.tweaksaddon.api.gentiers.SuddenDeathDragon;
 import me.metallicgoat.tweaksaddon.utils.Util;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -14,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class DragonUtil {
 
-  public static final List<DragonFollowTask> runningDragons = new ArrayList<>();
+  public static final List<SuddenDeathDragonImpl> runningDragons = new CopyOnWriteArrayList<>();
 
   // Find optimal spot to spawn the dwwwagoon
   public static @Nullable Location getDragonSpawn(Arena arena, World world, Team team) {
@@ -51,8 +55,17 @@ public class DragonUtil {
     return Collections.unmodifiableList(targets);
   }
 
+  public static List<SuddenDeathDragon> getDragons(Arena arena, Team team) {
+    if (arena == null)
+      return Collections.unmodifiableList(runningDragons);
+
+    return Collections.unmodifiableList(runningDragons.stream().filter((dragon -> team == null || dragon.getTeam() == team)).collect(Collectors.toList()));
+  }
+
   public static void killAllDragons() {
-    for (DragonFollowTask task : new ArrayList<>(runningDragons))
-      task.removeDragon();
+    for (SuddenDeathDragonImpl task : new ArrayList<>(runningDragons))
+      task.remove();
+
+    runningDragons.clear();
   }
 }
