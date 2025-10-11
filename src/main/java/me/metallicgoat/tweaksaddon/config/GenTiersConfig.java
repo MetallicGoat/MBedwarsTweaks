@@ -98,6 +98,8 @@ public class GenTiersConfig {
         if (soundString != null)
           earnSound = Helper.get().getSoundByName(soundString);
 
+        final String earnMessage = message == null || message.isEmpty() ? null : message;
+
         if (handler.getActionType() == GenTierActionType.GEN_UPGRADE) {
 
           final GenTierLevel genTierLevel = new GenTierLevel(
@@ -109,7 +111,7 @@ public class GenTiersConfig {
               time,
               speed,
               limit > 0 ? limit : null,
-              message.isEmpty() ? null : message,
+              earnMessage,
               earnSound
           );
 
@@ -121,7 +123,7 @@ public class GenTiersConfig {
               tierName,
               handler,
               time,
-              message.isEmpty() ? null : message,
+              earnMessage,
               earnSound
           );
 
