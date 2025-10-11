@@ -113,6 +113,16 @@ public class MainConfig {
   )
   public static double dragon_block_destroy_radius = 2;
 
+  @Config(
+      description = {
+          "Block types that the sudden death dragon should not be able to destroy"
+      }
+  )
+  public static List<Material> dragon_block_destroy_blacklist = new ArrayList<>(Arrays.asList(
+      Helper.get().getMaterialByName("OBSIDIAN"),
+      Helper.get().getMaterialByName("END_STONE")
+  ));
+
   // ===== SPAWNERS
   @SectionTitle(title = "SPAWNERS")
 
