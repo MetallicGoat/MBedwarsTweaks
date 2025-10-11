@@ -5,8 +5,8 @@ import de.marcely.bedwars.api.event.ConfigsLoadEvent;
 import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.ConfigManager.FileType;
-import me.metallicgoat.tweaksaddon.gentiers.GenTierLevel;
-import me.metallicgoat.tweaksaddon.gentiers.TierAction;
+import me.metallicgoat.tweaksaddon.api.gentiers.GenTierLevel;
+import me.metallicgoat.tweaksaddon.api.gentiers.GenTierActionType;
 import me.metallicgoat.tweaksaddon.utils.Console;
 import me.metallicgoat.tweaksaddon.utils.Util;
 import org.bukkit.Material;
@@ -22,7 +22,7 @@ public class ConfigLoader implements Listener {
   @EventHandler
   public void onConfigLoad(ConfigsLoadEvent event) {
     if (!event.isStartup()) {
-      MBedwarsTweaksPlugin.getInstance().loadTweaks(); // Reload tweaks
+      MBedwarsTweaksPlugin.getInstance().loadTweaks(false); // Reload tweaks
     }
   }
 
@@ -68,7 +68,7 @@ public class ConfigLoader implements Listener {
           1,
           "Diamond II", "&eTier &cII",
           "diamond",
-          TierAction.GEN_UPGRADE, 6, 30D, null,
+          GenTierActionType.GEN_UPGRADE.getHandler(), 6, 30D, null,
           "&bDiamond Generators &ehave been upgraded to Tier &4II",
           null
       ));
@@ -76,7 +76,7 @@ public class ConfigLoader implements Listener {
           2,
           "Emerald II", "&eTier &cII",
           "emerald",
-          TierAction.GEN_UPGRADE, 6, 40D, null,
+          GenTierActionType.GEN_UPGRADE.getHandler(), 6, 40D, null,
           "&aEmerald Generators &ehave been upgraded to Tier &4II",
           null
       ));
@@ -84,7 +84,7 @@ public class ConfigLoader implements Listener {
           3,
           "Diamond III", "&eTier &cIII",
           "diamond",
-          TierAction.GEN_UPGRADE, 6, 20D, null,
+          GenTierActionType.GEN_UPGRADE.getHandler(), 6, 20D, null,
           "&bDiamond Generators &ehave been upgraded to Tier &4III",
           null
       ));
@@ -92,13 +92,13 @@ public class ConfigLoader implements Listener {
           4,
           "Emerald III", "&eTier &cIII",
           "emerald",
-          TierAction.GEN_UPGRADE, 6, 30D, null,
+          GenTierActionType.GEN_UPGRADE.getHandler(), 6, 30D, null,
           "&aEmerald Generators &ehave been upgraded to Tier &4III",
           null
       ));
-      put(5, new GenTierLevel(5, "Bed Destroy", TierAction.BED_DESTROY, 5, null, null));
-      put(6, new GenTierLevel(6, "Sudden Death", TierAction.SUDDEN_DEATH, 10, null, null));
-      put(7, new GenTierLevel(7, "Game Over", TierAction.GAME_OVER, 10, null, null));
+      put(5, new GenTierLevel(5, "Bed Destroy", GenTierActionType.BED_DESTROY.getHandler(), 5, null, null));
+      put(6, new GenTierLevel(6, "Sudden Death", GenTierActionType.SUDDEN_DEATH.getHandler(), 10, null, null));
+      put(7, new GenTierLevel(7, "Game Over", GenTierActionType.GAME_OVER.getHandler(), 10, null, null));
     }};
   }
 

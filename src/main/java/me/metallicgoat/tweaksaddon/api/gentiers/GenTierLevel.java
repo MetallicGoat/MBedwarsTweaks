@@ -1,4 +1,4 @@
-package me.metallicgoat.tweaksaddon.gentiers;
+package me.metallicgoat.tweaksaddon.api.gentiers;
 
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
@@ -20,7 +20,7 @@ public class GenTierLevel {
   private final String holoName; // Example '&eTier &cII'
   @Nullable
   private final String typeId; // Spawners with this drop-type should update
-  private final TierAction action; // Action (eg bed break or upgrade)
+  private final GenTierHandler handler; // Action (eg bed break or upgrade)
   private final double time; // Time until the update happens (After Last Event)
   @Nullable
   private final Double speed; // New drop speed
@@ -34,7 +34,7 @@ public class GenTierLevel {
   public GenTierLevel(
       int tier,
       String tierName,
-      TierAction action,
+      GenTierHandler handler,
       double time,
       @Nullable String earnMessage,
       @Nullable Sound earnSound) {
@@ -43,7 +43,7 @@ public class GenTierLevel {
         tierName,
         null,
         null,
-        action,
+        handler,
         time,
         null,
         null,
@@ -51,17 +51,29 @@ public class GenTierLevel {
         earnSound);
   }
 
-  public void broadcastEarn(Arena arena, boolean messageSupported) {
+  /**
+   * Plays the sound, and broadcasts the message of this gen tier.
+   * Used when this level becomes active
+   *
+   * @param arena where this level is active on
+   */
+  public void broadcastEarn(Arena arena) {
     if (this.earnSound != null) {
       for (Player p : arena.getPlayers())
         p.playSound(p.getLocation(), this.earnSound, 1F, 1F);
     }
 
-    if (messageSupported && this.earnMessage != null)
+    if (this.earnMessage != null)
       arena.broadcast(Message.build(this.earnMessage));
 
   }
 
+  /**
+   * Returns the DropType of the spawners this level will affect
+   * Will return <code>null</code> is level does not affect as spawner (i.e. Bread break tier)
+   *
+   * @return the DropType this level aims to affect if applicable
+   */
   public @Nullable DropType getType() {
     return GameAPI.get().getDropTypeById(this.typeId);
   }

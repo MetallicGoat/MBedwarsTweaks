@@ -2,6 +2,8 @@ package me.metallicgoat.tweaksaddon;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import lombok.Getter;
+import me.metallicgoat.tweaksaddon.api.events.PostConfigLoadEvent;
+import me.metallicgoat.tweaksaddon.api.events.PreConfigsLoadEvent;
 import me.metallicgoat.tweaksaddon.config.ConfigLoader;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import me.metallicgoat.tweaksaddon.gentiers.dragons.DragonUtil;
@@ -37,7 +39,6 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
 
     new Metrics(this, 11928);
 
-    // Init Reflection
     Util.init();
 
     addon.registerMessageMappings();
@@ -55,13 +56,23 @@ public class MBedwarsTweaksPlugin extends JavaPlugin {
         "------------------------------"
     );
 
-    loadTweaks();
+    loadTweaks(true);
   }
 
-  public void loadTweaks() {
+  public void loadTweaks(boolean firstLoad) {
     BedwarsAPI.onReady(() -> {
       DependencyLoader.loadAll();
-      ConfigLoader.loadTweaksConfigs(this);
+
+      {
+        final PreConfigsLoadEvent preConfigsLoadEvent = new PreConfigsLoadEvent(firstLoad);
+        Bukkit.getPluginManager().callEvent(preConfigsLoadEvent);
+
+        ConfigLoader.loadTweaksConfigs(this);
+
+        final PostConfigLoadEvent postConfigLoadEvent = new PostConfigLoadEvent(firstLoad);
+        Bukkit.getPluginManager().callEvent(postConfigLoadEvent);
+      }
+
       ToolSwordHelper.load();
 
       if (MainConfig.disable_dragon_death_sound) {

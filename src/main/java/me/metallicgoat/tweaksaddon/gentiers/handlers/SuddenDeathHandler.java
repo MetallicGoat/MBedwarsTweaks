@@ -4,10 +4,12 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.tools.location.XYZ;
+import me.metallicgoat.tweaksaddon.api.gentiers.GenTierActionType;
+import me.metallicgoat.tweaksaddon.api.gentiers.GenTierHandler;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
-import me.metallicgoat.tweaksaddon.gentiers.GenTierLevel;
+import me.metallicgoat.tweaksaddon.api.gentiers.GenTierLevel;
 import me.metallicgoat.tweaksaddon.gentiers.GenTiers;
-import me.metallicgoat.tweaksaddon.gentiers.dragons.DragonFollowTask;
+import me.metallicgoat.tweaksaddon.gentiers.dragons.SuddenDeathDragonImpl;
 import me.metallicgoat.tweaksaddon.utils.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -30,11 +32,11 @@ public class SuddenDeathHandler extends GenTierHandler {
 
       // Spawn Default Dragon
       if (MainConfig.default_sudden_death_dragon_enabled)
-        DragonFollowTask.createNewDragon(arena, team, middle);
+        SuddenDeathDragonImpl.createNewDragon(arena, team, middle);
 
       // Spawn extra dragon
       if (GenTiers.getState(arena).hasDragon(team))
-        DragonFollowTask.createNewDragon(arena, team, middle);
+        SuddenDeathDragonImpl.createNewDragon(arena, team, middle);
     }
 
     // Destroy all Generators
@@ -100,5 +102,15 @@ public class SuddenDeathHandler extends GenTierHandler {
         totalY / numberOfLocations,
         totalZ / numberOfLocations
     );
+  }
+
+  @Override
+  public String getId() {
+    return GenTierActionType.SUDDEN_DEATH.getDefaultHandlerId();
+  }
+
+  @Override
+  public GenTierActionType getActionType() {
+    return GenTierActionType.SUDDEN_DEATH;
   }
 }

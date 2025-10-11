@@ -8,6 +8,8 @@ import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.tools.NMSHelper;
 import de.marcely.bedwars.tools.location.XYZYP;
 import java.lang.reflect.Method;
+import me.metallicgoat.tweaksaddon.api.gentiers.GenTierActionType;
+import me.metallicgoat.tweaksaddon.api.gentiers.GenTierHandler;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.HumanEntity;
@@ -19,13 +21,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class Util {
 
+  private static final HashMap<String, GenTierHandler> handlersById = new HashMap<>();
+
   private static Method GET_ITEM_IN_OFF_HAND_METHOD = null;
 
   public static void init() {
+    GenTierActionType.initDefaults();
+
     if (NMSHelper.get().getVersion() == 8)
       return;
 
@@ -34,6 +41,26 @@ public class Util {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  public static void registerGenTierHandler(GenTierHandler handler) {
+    if (handlersById.containsKey(handler.getId())) {
+      throw new IllegalStateException("GenTierHandler already registered");
+    }
+
+    handlersById.put(handler.getId().toLowerCase(), handler);
+  }
+
+  public static void unregisterGenTierHandler(String id) {
+    handlersById.remove(id);
+  }
+
+  public static GenTierHandler getGenTierHandlerById(String id) {
+    return handlersById.get(id);
+  }
+
+  public static Collection<GenTierHandler> getGenTierHandlers() {
+    return handlersById.values();
   }
 
   public static @Nullable ItemStack getItemInOffHand(HumanEntity player) {

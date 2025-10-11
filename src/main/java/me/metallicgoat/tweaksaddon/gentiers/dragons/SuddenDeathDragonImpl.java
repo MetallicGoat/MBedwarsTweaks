@@ -6,11 +6,15 @@ import de.marcely.bedwars.api.event.arena.ArenaStatusChangeEvent;
 import de.marcely.bedwars.api.event.arena.ArenaUnloadEvent;
 import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.NMSHelper;
+import de.marcely.bedwars.tools.Validate;
 import de.marcely.bedwars.tools.location.XYZ;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import lombok.Getter;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
+import me.metallicgoat.tweaksaddon.api.events.gentiers.SuddenDeathDragonTargetEvent;
+import me.metallicgoat.tweaksaddon.api.gentiers.SuddenDeathDragon;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -18,6 +22,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EnderDragon;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,27 +37,32 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
 
-public class DragonFollowTask extends BukkitRunnable implements Listener {
+public class SuddenDeathDragonImpl extends BukkitRunnable implements SuddenDeathDragon, Listener {
 
   private static final Random random = new Random();
 
   private final Vector velocity = new Vector(0, 0, 0);
-  private final EnderDragon dragon;
   private final List<Location> defaultTargets;
-  private final Arena arena;
-  private final World world;
+
+  @Getter
+  final Arena arena;
+  @Getter
+  final World world;
+  @Getter
+  private final EnderDragon dragon;
   @Nullable
+  @Getter
   private final Team team;
 
   private Listener portalListener;
-  private boolean targetingPlayer = false;
-  private Player currPlayerTarget = null;
+  private boolean targetingEntity = false;
+  private Entity currEntityTarget = null;
   private Location playerTargetLocation = null;
   private Location currDefaultTarget = null;
   private double distanceToTarget = 0;
   private double distanceTraveled = 0;
 
-  private DragonFollowTask(EnderDragon dragon, List<Location> defaultTargets, Arena arena, World world, @Nullable Team team) {
+  private SuddenDeathDragonImpl(EnderDragon dragon, List<Location> defaultTargets, Arena arena, World world, @Nullable Team team) {
     this.dragon = dragon;
     this.defaultTargets = defaultTargets;
     this.arena = arena;
@@ -74,7 +84,7 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
 
     final EnderDragon dragon = (EnderDragon) world.spawnEntity(location, EntityType.ENDER_DRAGON);
 
-    final DragonFollowTask task = new DragonFollowTask(
+    final SuddenDeathDragonImpl task = new SuddenDeathDragonImpl(
         dragon,
         DragonUtil.getRelevantStaticTargets(arena, team, world),
         arena,
@@ -110,44 +120,70 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
   @EventHandler
   public void onArenaStatusChange(ArenaStatusChangeEvent event) {
     if (event.getArena() == this.arena)
-      removeDragon();
+      remove();
   }
 
   @EventHandler
   public void onArenaUnload(ArenaUnloadEvent event) {
     if (event.getArena() == this.arena)
-      removeDragon();
+      remove();
   }
 
   private void updateTarget() {
     final int chanceValue = random.nextInt(100);
     final List<Player> playerTargets = getCurrentPlayerTargets();
 
+    final boolean previouslyTargetingEntity = this.targetingEntity;
+    final Entity previousEntityTarget = previouslyTargetingEntity ? this.currEntityTarget : null;
+    final Location previousLocation = !previouslyTargetingEntity ? this.currDefaultTarget : null;
+
+    final double distanceToTarget;
+    final Entity newTargetEntity;
+    final Location newTargetLocation;
+    Location newEntityTargetLocation = null;
+
+
     // Try to target a random player
     if (!playerTargets.isEmpty() && chanceValue < Math.min(60, playerTargets.size() * 25)) {
-      this.currPlayerTarget = playerTargets.get(random.nextInt(playerTargets.size()));
-      this.playerTargetLocation = this.currPlayerTarget.getLocation();
-      this.distanceToTarget = this.playerTargetLocation.distance(this.dragon.getLocation()) + 50;
-      this.targetingPlayer = true;
+      newTargetEntity = playerTargets.get(random.nextInt(playerTargets.size()));
+      newEntityTargetLocation = newTargetEntity.getLocation();
+      distanceToTarget = newEntityTargetLocation.distance(this.dragon.getLocation()) + 50;
 
     } else {
       if (chanceValue < 90) // base or gen
-        this.currDefaultTarget = pickRandomTarget();
+        newTargetLocation = pickRandomTarget();
       else // random cord
-        this.currDefaultTarget = generateRandomLocation();
+        newTargetLocation = generateRandomLocation();
 
-      this.distanceToTarget = this.currDefaultTarget.distance(this.dragon.getLocation());
-      this.targetingPlayer = false;
+      distanceToTarget = newTargetLocation.distance(this.dragon.getLocation());
     }
 
-    this.distanceTraveled = 0;
+    final SuddenDeathDragonTargetEvent event = new SuddenDeathDragonTargetEvent(
+        this.arena,
+        this,
+        this.currEntityTarget,
+        this.currDefaultTarget,
+        previousLocation,
+        previousEntityTarget,
+        previouslyTargetingEntity
+    );
+
+    Bukkit.getPluginManager().callEvent(event);
+
+    if (!event.isCancelled()) {
+      this.distanceTraveled = 0;
+      this.distanceToTarget = distanceToTarget;
+      this.targetingEntity = event.getTargetEntity() != null;
+      this.currDefaultTarget = event.getTargetLocation();
+      this.playerTargetLocation = newEntityTargetLocation;
+    }
   }
 
   private List<Player> getCurrentPlayerTargets() {
     final List<Player> locations = new ArrayList<>();
 
     for (Player player : this.arena.getPlayers())
-      if (player != this.currPlayerTarget && this.arena.getPlayerTeam(player) != this.team && !this.arena.getSpectators().contains(player))
+      if (player != this.currEntityTarget && this.arena.getPlayerTeam(player) != this.team && !this.arena.getSpectators().contains(player))
         locations.add(player);
 
     return locations;
@@ -202,9 +238,13 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     final Location dragonLocation = this.dragon.getLocation().clone();
     Location targetLocation;
 
-    if (this.targetingPlayer) {
-      if (this.currPlayerTarget.isOnline() && arena.getPlayers().contains(this.currPlayerTarget) && !arena.getSpectators().contains(this.currPlayerTarget))
-        targetLocation = this.currPlayerTarget.getLocation();
+    if (this.targetingEntity) {
+      if (this.currEntityTarget.isValid() && this.currEntityTarget.getWorld() == this.world
+          && (this.currEntityTarget.getType() != EntityType.PLAYER
+          || (arena.getPlayers().contains((Player) this.currEntityTarget)
+          && !arena.getSpectators().contains((Player) this.currEntityTarget))))
+
+        targetLocation = this.currEntityTarget.getLocation();
       else
         targetLocation = this.playerTargetLocation;
 
@@ -263,7 +303,32 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
     }
   }
 
-  public void removeDragon() {
+  @Override
+  public Location getDragonTargetLocation() {
+    return this.currDefaultTarget;
+  }
+
+  @Override
+  public void setDragonTarget(Location location) {
+    Validate.notNull(location, "location");
+
+    this.targetingEntity = false;
+    this.currDefaultTarget = location;
+  }
+
+  @Override
+  public void setDragonTarget(Entity entity) {
+    Validate.notNull(entity, "entity");
+    Validate.isTrue(entity.isValid(), "Entity must be valid");
+    Validate.isTrue(entity.getWorld() == dragon.getWorld(), "Entity must be in the dragon's world");
+    Validate.isTrue(this.arena.isInside(entity.getLocation()), "Entity must be inside the arena");
+
+    this.targetingEntity = true;
+    this.currEntityTarget = entity;
+  }
+
+  @Override
+  public void remove() {
     this.dragon.remove();
 
     // Unregister listeners
@@ -277,11 +342,10 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
   }
 
 
-
   private static class ModernPortalListener implements Listener {
-    final DragonFollowTask task;
+    final SuddenDeathDragonImpl task;
 
-    ModernPortalListener(DragonFollowTask task) {
+    ModernPortalListener(SuddenDeathDragonImpl task) {
       this.task = task;
     }
 
@@ -293,14 +357,14 @@ public class DragonFollowTask extends BukkitRunnable implements Listener {
       // TODO Find a better way... There might not be
       //  (Possibly remove and use packet to send death effect)
       // Hacky way to remove the dragon so the portal never gets created (gets created at tick 200)
-      Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), this.task::removeDragon, 198L);
+      Bukkit.getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), this.task::remove, 198L);
     }
   }
 
   private static class LegacyPortalListener implements Listener {
-    final DragonFollowTask task;
+    final SuddenDeathDragonImpl task;
 
-    LegacyPortalListener(DragonFollowTask task) {
+    LegacyPortalListener(SuddenDeathDragonImpl task) {
       this.task = task;
     }
 

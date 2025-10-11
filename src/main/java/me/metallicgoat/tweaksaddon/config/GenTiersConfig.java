@@ -5,10 +5,12 @@ import de.marcely.bedwars.tools.YamlConfigurationDescriptor;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import me.metallicgoat.tweaksaddon.api.gentiers.GenTierHandler;
 import me.metallicgoat.tweaksaddon.utils.Console;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
-import me.metallicgoat.tweaksaddon.gentiers.GenTierLevel;
-import me.metallicgoat.tweaksaddon.gentiers.TierAction;
+import me.metallicgoat.tweaksaddon.api.gentiers.GenTierLevel;
+import me.metallicgoat.tweaksaddon.api.gentiers.GenTierActionType;
+import me.metallicgoat.tweaksaddon.utils.Util;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -60,38 +62,34 @@ public class GenTiersConfig {
         final ConfigurationSection section = tiersSection.getConfigurationSection(levelNumString);
 
         final String tierName = section.getString("Tier-Name");
-        final String actionString = section.getString("Action");
+        String genTierHandlerId = section.getString("Handler-Id");
         final String typeString = section.getString("Drop-Type");
         final double speed = section.getDouble("Drop-Speed");
         final int limit = section.getInt("Max-Nearby-Items", -1);
         final double time = section.getDouble("Time");
         final String message = section.getString("Message");
         final String soundString = section.getString("Earn-Sound");
-        String tierLevel = section.getString("Holo-Usage");
+        String holoName = section.getString("Holo-Usage");
 
         {
           // OLD VALUES
-          if (tierLevel == null)
-            tierLevel = section.getString("Tier-Level");
+          if (holoName == null)
+            holoName = section.getString("Tier-Level");
+
+          if (genTierHandlerId == null)
+            genTierHandlerId = section.getString("Action");
         }
 
         // TODO Validate other values not null
-        if (actionString == null) {
-          Console.printConfigWarn("Failed to load tier: [" + tierName + "]. Action is null", "gen-tiers");
+        if (genTierHandlerId == null) {
+          Console.printConfigWarn("Failed to load tier: [" + tierName + "]. Handler-Id is null", "gen-tiers");
           continue;
         }
 
-        TierAction action = null;
+        final GenTierHandler handler = Util.getGenTierHandlerById(genTierHandlerId.toLowerCase());
 
-        for (TierAction cAction : TierAction.values()) {
-          final String actionId = cAction.getId();
-
-          if (actionId.equalsIgnoreCase(actionString))
-            action = cAction;
-        }
-
-        if (action == null) {
-          Console.printConfigWarn("Failed to load tier: [" + tierName + "]. Action '" + actionString + "' is invalid.", "gen-tiers");
+        if (handler == null) {
+          Console.printConfigWarn("Failed to load tier: [" + tierName + "]. Handler-Id '" + genTierHandlerId + "' is invalid. Has it been registered?", "gen-tiers");
           continue;
         }
 
@@ -100,18 +98,18 @@ public class GenTiersConfig {
         if (soundString != null)
           earnSound = Helper.get().getSoundByName(soundString);
 
-        if (action == TierAction.GEN_UPGRADE) {
+        if (handler.getActionType() == GenTierActionType.GEN_UPGRADE) {
 
           final GenTierLevel genTierLevel = new GenTierLevel(
               levelNum,
               tierName,
-              tierLevel,
+              holoName,
               typeString,
-              action,
+              GenTierActionType.GEN_UPGRADE.getHandler(),
               time,
               speed,
               limit > 0 ? limit : null,
-              message,
+              message.isEmpty() ? null : message,
               earnSound
           );
 
@@ -121,9 +119,9 @@ public class GenTiersConfig {
           final GenTierLevel genTierLevel = new GenTierLevel(
               levelNum,
               tierName,
-              action,
+              handler,
               time,
-              null,
+              message.isEmpty() ? null : message,
               earnSound
           );
 
@@ -151,7 +149,7 @@ public class GenTiersConfig {
 
     config.addComment("PAPI-Usage (The value used in our PAPI Placeholders during this tier)");
     config.addComment("Holo-Usage (The values used in holos during this tier)");
-    config.addComment("Action (gen-upgrade, bed-destroy, game-over)");
+    config.addComment("Action (gen-upgrade, bed-destroy, sudden-death, game-over)");
     config.addComment("Time (time until action - NOTE time starts after the last action)");
     config.addComment("Message (chat message sent on trigger)");
     config.addComment("Earn-Sound (sound played on trigger) (You have to add this config if you want it)");
@@ -172,11 +170,11 @@ public class GenTiersConfig {
       final GenTierLevel level = entry.getValue();
       final String configKey = "Gen-Tiers." + (i++) + ".";
 
-      config.set(configKey + "Action", level.getAction().getId());
+      config.set(configKey + "Handler-Id", level.getHandler().getId());
       config.set(configKey + "Time", level.getTime());
       config.set(configKey + "Tier-Name", level.getTierName());
 
-      if (level.getAction() == TierAction.GEN_UPGRADE) {
+      if (level.getHandler().getActionType() == GenTierActionType.GEN_UPGRADE) {
         config.set(configKey + "Holo-Usage", level.getHoloName());
         config.set(configKey + "Drop-Type", level.getTypeId());
         config.set(configKey + "Drop-Speed", level.getSpeed());

@@ -86,7 +86,7 @@ public class Placeholders extends PlaceholderExpansion {
           case RESETTING:
             return Message.build(MainConfig.papi_next_tier_lobby_resetting).done();
           case RUNNING:
-            final GenTiers.GenTierState state = GenTiers.getState(arena);
+            final GenTiers.GenTierStateImpl state = GenTiers.getState(arena);
 
             if (state == null)
               return "";
@@ -114,7 +114,7 @@ public class Placeholders extends PlaceholderExpansion {
       }
       // Next tier name
       case "next-tier-name": {
-        final GenTiers.GenTierState state = GenTiers.getState(arena);
+        final GenTiers.GenTierStateImpl state = GenTiers.getState(arena);
 
         if (!MainConfig.gen_tiers_enabled || state == null)
           return "";
