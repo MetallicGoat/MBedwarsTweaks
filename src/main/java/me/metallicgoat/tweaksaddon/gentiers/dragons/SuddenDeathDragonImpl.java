@@ -341,6 +341,11 @@ public class SuddenDeathDragonImpl extends BukkitRunnable implements SuddenDeath
     super.cancel();
   }
 
+  @Override
+  public boolean exists() {
+    return this.dragon.isValid();
+  }
+
 
   private static class ModernPortalListener implements Listener {
     final SuddenDeathDragonImpl task;

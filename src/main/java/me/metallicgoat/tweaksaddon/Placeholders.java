@@ -91,8 +91,13 @@ public class Placeholders extends PlaceholderExpansion {
             if (state == null)
               return "";
 
+            final Duration remaining = state.getRemainingNextTier();
+
+            if (remaining == null)
+              return "";
+
             final String nextTierName = state.getNextTierName();
-            final int totalSeconds = state.getSecondsToNextTier();
+            final int totalSeconds = (int) remaining.getSeconds();
             final int min = totalSeconds / 60;
             String sec = String.valueOf(totalSeconds - (min * 60));
 

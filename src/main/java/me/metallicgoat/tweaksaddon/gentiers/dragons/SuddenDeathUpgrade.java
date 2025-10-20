@@ -3,15 +3,12 @@ package me.metallicgoat.tweaksaddon.gentiers.dragons;
 import de.marcely.bedwars.api.event.player.PlayerTriggerUpgradeEvent;
 import de.marcely.bedwars.api.game.upgrade.UpgradeTriggerHandler;
 import de.marcely.bedwars.api.message.Message;
-import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
-import me.metallicgoat.tweaksaddon.config.MainConfig;
-import me.metallicgoat.tweaksaddon.gentiers.GenTiers;
-import me.metallicgoat.tweaksaddon.utils.Util;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-
 import java.util.ArrayList;
 import java.util.List;
+import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
+import me.metallicgoat.tweaksaddon.gentiers.GenTiers;
+import me.metallicgoat.tweaksaddon.utils.Util;
+import org.bukkit.command.CommandSender;
 
 public class SuddenDeathUpgrade extends UpgradeTriggerHandler {
   public SuddenDeathUpgrade() {
@@ -23,7 +20,7 @@ public class SuddenDeathUpgrade extends UpgradeTriggerHandler {
     if (event.isCancelled())
       return;
 
-    GenTiers.getState(event.getArena()).addDragonTeam(event.getTeam());
+    GenTiers.getState(event.getArena()).setDragonBought(event.getTeam(), true);
   }
 
   @Override

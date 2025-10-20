@@ -42,13 +42,17 @@ public enum GenTierActionType {
     this.handler = handler;
   }
 
+  /**
+   * @deprecated Not a part of the public API
+   */
+  @Deprecated
   public static void initDefaults() {
     if (init) return;
 
     for (GenTierActionType type : GenTierActionType.values()) {
       if (type == PLUGIN) continue;
 
-      GenTiersAPI.registerGenTierHandler(type.handler);
+      GenTiersAPI.registerHandler(type.handler);
     }
 
     init = true;
