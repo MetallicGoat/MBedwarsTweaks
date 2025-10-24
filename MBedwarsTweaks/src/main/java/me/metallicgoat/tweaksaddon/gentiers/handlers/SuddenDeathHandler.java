@@ -1,0 +1,115 @@
+package me.metallicgoat.tweaksaddon.gentiers.handlers;
+
+import de.marcely.bedwars.api.arena.Arena;
+import de.marcely.bedwars.api.arena.Team;
+import de.marcely.bedwars.api.game.spawner.Spawner;
+import de.marcely.bedwars.tools.location.XYZ;
+import java.util.List;
+import me.metallicgoat.tweaksaddon.api.gentiers.GenTierActionType;
+import me.metallicgoat.tweaksaddon.api.gentiers.GenTierLevel;
+import me.metallicgoat.tweaksaddon.config.MainConfig;
+import me.metallicgoat.tweaksaddon.gentiers.GenTiers;
+import me.metallicgoat.tweaksaddon.gentiers.dragons.SuddenDeathDragonImpl;
+import me.metallicgoat.tweaksaddon.utils.Util;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+
+public class SuddenDeathHandler extends BaseGenTierHandler {
+
+  @Override
+  public void run(GenTierLevel level, Arena arena) {
+    final Location middle = getArenaMid(arena);
+
+    if (!arena.isInside(middle))
+      throw new RuntimeException("Failed to find the center of an Arena!");
+
+    // Spawn Team Dragons
+    for (Team team : arena.getEnabledTeams()) {
+      if (arena.getPlayersInTeam(team).isEmpty())
+        continue;
+
+      // Spawn Default Dragon
+      if (MainConfig.default_sudden_death_dragon_enabled)
+        SuddenDeathDragonImpl.createNewDragon(arena, team, middle);
+
+      // Spawn extra dragon
+      if (GenTiers.getState(arena).hasBoughtDragon(team))
+        SuddenDeathDragonImpl.createNewDragon(arena, team, middle);
+    }
+
+    // Destroy all Generators
+    for (Spawner spawner : arena.getSpawners()) {
+      final Location location = spawner.getLocation().toLocation(arena.getGameWorld()).add(0, 3, 0);
+
+      int i = 5;
+
+      while (location.subtract(0, 1, 0).getBlock().getType() != Material.AIR || i > 0){
+        location.getBlock().setType(Material.AIR);
+        i--;
+      }
+    }
+  }
+
+  private Location getArenaMid(Arena arena) {
+    final World world = arena.getGameWorld();
+
+    if (world == null)
+      throw new RuntimeException("Cannot spawn a dragon in an arena with no world!?!?!?!");
+
+    final XYZ max = arena.getMaxRegionCorner();
+    final XYZ min = arena.getMinRegionCorner();
+
+    Location location = null;
+
+    if (min != null && max != null) {
+      location = new Location(
+          world,
+          (max.getX() + min.getX()) / 2,
+          (max.getY() + min.getY()) / 2,
+          (max.getZ() + min.getZ()) / 2
+      );
+    }
+
+    if (location == null)
+      location = findAverageLocation(Util.getAllTeamSpawns(arena, world, null), world);
+
+    return location;
+  }
+
+  // Find the middle using a bunch of points in the arena
+  public Location findAverageLocation(List<Location> locations, World world) {
+    if (locations == null || locations.isEmpty()) {
+      return null;
+    }
+
+    double totalX = 0;
+    double totalY = 0;
+    double totalZ = 0;
+
+    for (Location loc : locations) {
+      totalX += loc.getX();
+      totalY += loc.getY();
+      totalZ += loc.getZ();
+    }
+
+    int numberOfLocations = locations.size();
+
+    return new Location(
+        world,
+        totalX / numberOfLocations,
+        totalY / numberOfLocations,
+        totalZ / numberOfLocations
+    );
+  }
+
+  @Override
+  public String getId() {
+    return GenTierActionType.SUDDEN_DEATH.getDefaultHandlerId();
+  }
+
+  @Override
+  public GenTierActionType getActionType() {
+    return GenTierActionType.SUDDEN_DEATH;
+  }
+}

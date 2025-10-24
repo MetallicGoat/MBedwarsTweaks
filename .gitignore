@@ -1,5 +1,7 @@
 # Project exclude paths
 /target/
-/libs/private
+/MBedwarsTweaks/libs/private
 /.idea/
 MBedwarsTweaks.iml
+/MBedwarsTweaks/target/
+/API/target/
