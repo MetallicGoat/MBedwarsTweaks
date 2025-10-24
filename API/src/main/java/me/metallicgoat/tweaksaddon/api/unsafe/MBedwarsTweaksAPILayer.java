@@ -3,6 +3,7 @@ package me.metallicgoat.tweaksaddon.api.unsafe;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierHandler;
+import me.metallicgoat.tweaksaddon.api.gentiers.GenTierLevel;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierState;
 import me.metallicgoat.tweaksaddon.api.gentiers.SuddenDeathDragon;
 import java.util.Collection;
@@ -32,5 +33,11 @@ public abstract class MBedwarsTweaksAPILayer {
   public abstract GenTierHandler getGenTierHandlerById(String id);
 
   public abstract Collection<GenTierHandler> getGenTierHandlers();
+
+  public abstract Collection<GenTierLevel> getGenTierLevels();
+
+  public abstract GenTierLevel getGenTierLevel(int lvl);
+
+  public abstract void reloadGenTierConfig();
 
 }

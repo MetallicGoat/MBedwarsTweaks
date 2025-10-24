@@ -7,6 +7,9 @@ import org.bukkit.Location;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
 
+/**
+ * Represents a Sudden Death Dragon spawned by the Gen Tier system.
+ */
 public interface SuddenDeathDragon {
 
   /**
@@ -56,4 +59,10 @@ public interface SuddenDeathDragon {
    */
   void remove();
 
+  /**
+   * Check if this dragon is still active
+   *
+   * @return <code>true</code> if the dragon is still active, <code>false</code> otherwise
+   */
+  boolean exists();
 }

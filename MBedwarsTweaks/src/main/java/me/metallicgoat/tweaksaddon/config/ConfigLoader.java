@@ -3,6 +3,7 @@ package me.metallicgoat.tweaksaddon.config;
 import de.marcely.bedwars.api.configuration.ConfigurationAPI;
 import de.marcely.bedwars.api.event.ConfigsLoadEvent;
 import de.marcely.bedwars.tools.Helper;
+import java.time.Duration;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.api.GenTiersAPI;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierHandler;
@@ -65,14 +66,14 @@ public class ConfigLoader implements Listener {
   }
 
   public static HashMap<Integer, GenTierLevel> getDefaultGenTiers() {
-    final GenTierHandler genUpgradeHandler = GenTiersAPI.getGenTierHandlerById(GenTierActionType.GEN_UPGRADE.getDefaultHandlerId());
+    final GenTierHandler genUpgradeHandler = GenTiersAPI.getHandlerById(GenTierActionType.GEN_UPGRADE.getDefaultHandlerId());
 
     return new HashMap<Integer, GenTierLevel>() {{
       put(1, new GenTierLevel(
           1,
           "Diamond II", "&eTier &cII",
           "diamond",
-          genUpgradeHandler, 6, 30D, null,
+          genUpgradeHandler, Duration.ofMinutes(6), 30D, null,
           "&bDiamond Generators &ehave been upgraded to Tier &4II",
           null
       ));
@@ -80,7 +81,7 @@ public class ConfigLoader implements Listener {
           2,
           "Emerald II", "&eTier &cII",
           "emerald",
-          genUpgradeHandler, 6, 40D, null,
+          genUpgradeHandler, Duration.ofMinutes(6), 40D, null,
           "&aEmerald Generators &ehave been upgraded to Tier &4II",
           null
       ));
@@ -88,7 +89,7 @@ public class ConfigLoader implements Listener {
           3,
           "Diamond III", "&eTier &cIII",
           "diamond",
-          genUpgradeHandler, 6, 20D, null,
+          genUpgradeHandler, Duration.ofMinutes(6), 20D, null,
           "&bDiamond Generators &ehave been upgraded to Tier &4III",
           null
       ));
@@ -96,13 +97,13 @@ public class ConfigLoader implements Listener {
           4,
           "Emerald III", "&eTier &cIII",
           "emerald",
-          genUpgradeHandler, 6, 30D, null,
+          genUpgradeHandler, Duration.ofMinutes(6), 30D, null,
           "&aEmerald Generators &ehave been upgraded to Tier &4III",
           null
       ));
-      put(5, new GenTierLevel(5, "Bed Destroy", GenTiersAPI.getGenTierHandlerById(GenTierActionType.BED_DESTROY.getDefaultHandlerId()), 5, null, null));
-      put(6, new GenTierLevel(6, "Sudden Death", GenTiersAPI.getGenTierHandlerById(GenTierActionType.SUDDEN_DEATH.getDefaultHandlerId()), 10, null, null));
-      put(7, new GenTierLevel(7, "Game Over", GenTiersAPI.getGenTierHandlerById(GenTierActionType.GAME_OVER.getDefaultHandlerId()), 10, null, null));
+      put(5, new GenTierLevel(5, "Bed Destroy", GenTiersAPI.getHandlerById(GenTierActionType.BED_DESTROY.getDefaultHandlerId()), Duration.ofMinutes(5), null, null));
+      put(6, new GenTierLevel(6, "Sudden Death", GenTiersAPI.getHandlerById(GenTierActionType.SUDDEN_DEATH.getDefaultHandlerId()), Duration.ofMinutes(10), null, null));
+      put(7, new GenTierLevel(7, "Game Over", GenTiersAPI.getHandlerById(GenTierActionType.GAME_OVER.getDefaultHandlerId()), Duration.ofMinutes(10), null, null));
     }};
   }
 

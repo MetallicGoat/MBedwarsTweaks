@@ -8,10 +8,21 @@ import de.marcely.bedwars.api.event.arena.ArenaStatusChangeEvent;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.api.message.Message;
+import de.marcely.bedwars.tools.Validate;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
-import me.metallicgoat.tweaksaddon.api.events.gentiers.GenTiersInitiateEvent;
-import me.metallicgoat.tweaksaddon.api.events.gentiers.GenTiersPreformActionEvent;
+import me.metallicgoat.tweaksaddon.api.events.gentiers.GenTiersScheduleEvent;
+import me.metallicgoat.tweaksaddon.api.events.gentiers.GenTiersActionEvent;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierActionType;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierLevel;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierState;
@@ -22,13 +33,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
 
 public class GenTiers implements Listener {
 
@@ -40,12 +47,9 @@ public class GenTiers implements Listener {
       return;
 
     final Arena arena = event.getArena();
+    final GenTierLevel firstLevel = GenTiersConfig.gen_tier_levels.get(1);
 
-    final GenTiersInitiateEvent initiateEvent = new GenTiersInitiateEvent(arena, 1);
-
-    Bukkit.getPluginManager().callEvent(initiateEvent);
-
-    if (initiateEvent.isCancelled())
+    if (firstLevel == null)
       return;
 
     if (MainConfig.gen_tiers_custom_holo_enabled) {
@@ -57,8 +61,10 @@ public class GenTiers implements Listener {
       }
     }
 
-    arenaStates.put(arena, new GenTierStateImpl());
-    scheduleNextTier(arena, initiateEvent.getInitialTierLevel());
+    final GenTierStateImpl state = new GenTierStateImpl(arena);
+
+    arenaStates.put(arena, state);
+    scheduleNextTier(state, firstLevel);
   }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -85,49 +91,71 @@ public class GenTiers implements Listener {
   }
 
   private static void cancelTask(GenTierStateImpl state) {
-    if (state != null && state.genTierTask != null)
+    if (state != null && state.genTierTask != null) {
       state.genTierTask.cancel();
-  }
-
-  // Accessed by PrivateGamesAddon
-  public static void scheduleNextTier(Arena arena, GenTierLevel level, double time) {
-    final GenTierStateImpl state = getState(arena);
-
-    if (state == null)
-      return;
-
-    state.updateState(level, time);
-
-    cancelTask(state); // Cancel existing tasks
-
-    if (level.getHandler().getActionType() == GenTierActionType.GAME_OVER) {
-      arena.setIngameTimeRemaining((int) (time * 60));
-
-    } else {
-      state.genTierTask = Bukkit.getServer().getScheduler().runTaskLater(MBedwarsTweaksPlugin.getInstance(), () -> {
-        final GenTiersPreformActionEvent event = new GenTiersPreformActionEvent(arena, level, true, true);
-
-        Bukkit.getPluginManager().callEvent(event);
-
-        if (event.isBroadcastingEarn())
-          level.broadcastEarn(arena);
-
-        if (event.isExecutingHandlers())
-          level.getHandler().run(level, arena);
-
-        scheduleNextTier(arena, level.getTier() + 1);
-
-      }, (long) (time * 20 * 60));
+      state.genTierTask = null;
     }
   }
 
-  public static void scheduleNextTier(Arena arena, int tier) {
-    final GenTierLevel level = GenTiersConfig.gen_tier_levels.get(tier);
+  // Accessed by PrivateGamesAddon
+  public static void scheduleNextTier(GenTierStateImpl state, GenTierLevel level) {
+    // Cancel existing tasks
+    cancelTask(state);
 
-    if (level == null)
+    // ask api
+    final GenTiersScheduleEvent event = new GenTiersScheduleEvent(state, level, level.getTime());
+
+    Bukkit.getPluginManager().callEvent(event);
+
+    if (event.isCancelled())
       return;
 
-    scheduleNextTier(arena, level, level.getTime());
+    // ok apply
+    level = event.getNextTier();
+    final Duration time = event.getDelay();
+
+    state.updateState(level, time);
+
+    if (level.getHandler().getActionType() == GenTierActionType.GAME_OVER) {
+      state.getArena().setIngameTimeRemaining((int) time.get(ChronoUnit.SECONDS));
+
+    } else {
+      // run periodically since TPS might not be constantly 20
+      // otherwise, remaining time will print negative when server lags
+      state.genTierTask = new BukkitRunnable() {
+        public void run() {
+          if (!state.getRemainingNextTier().isNegative())
+            return;
+
+          cancel();
+          state.genTierTask = null;
+
+          runTier(state, event.getNextTier());
+        }
+      }.runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 40, 40);
+    }
+  }
+
+  private static void runTier(GenTierStateImpl state, GenTierLevel level) {
+    state.currentTier = level;
+
+    final GenTiersActionEvent event = new GenTiersActionEvent(state, level,true, true);
+
+    Bukkit.getPluginManager().callEvent(event);
+
+    if (event.isBroadcastingEarn())
+      level.broadcastEarn(state.getArena());
+
+    if (event.isExecutingHandlers())
+      level.getHandler().run(level, state.getArena());
+
+    // schedule next
+    final GenTierLevel nextLevel = level.getNextLevel();
+
+    if (nextLevel != null)
+      scheduleNextTier(state, nextLevel);
+    else
+      state.updateState(null, null);
   }
 
   // Custom format for hologram titles
@@ -151,40 +179,82 @@ public class GenTiers implements Listener {
     spawner.setOverridingHologramLines(formatted.toArray(new String[0]));
   }
 
-  public static class GenTierStateImpl implements GenTierState  {
+
+
+  @RequiredArgsConstructor
+  public static class GenTierStateImpl implements GenTierState {
 
     @Getter
-    private GenTierLevel nextGenTierLevel = null;
+    private final Arena arena;
     @Getter
-    private GenTierLevel currentGenTierLevel = null;
-    private long nextUpdateTime = 0;
-    private final List<Team> dragonTeams = new ArrayList<>();
+    private GenTierLevel nextTier, currentTier;
+    @Getter
+    private Instant nextTierTime;
+    private final Set<Team> dragonTeams = EnumSet.noneOf(Team.class);
     private BukkitTask genTierTask = null;
 
-    public boolean hasDragon(Team team) {
+    @Override
+    public boolean isValid() {
+      return GenTiers.getState(this.arena) == this;
+    }
+
+    @Override
+    public boolean hasBoughtDragon(Team team) {
+      Validate.notNull(team, "team");
+
       return this.dragonTeams.contains(team);
     }
 
+    @Override
+    public void setDragonBought(Team team, boolean state) {
+      Validate.notNull(team, "team");
+
+      if (state)
+        this.dragonTeams.add(team);
+      else
+        this.dragonTeams.remove(team);
+    }
+
+    @Override
+    public Duration getRemainingNextTier() {
+      if (this.nextTierTime == null)
+        return null;
+
+      return Duration.between(Instant.now(), this.nextTierTime);
+    }
+
+    @Override
+    public void setRemainingNextTier(Duration duration) {
+      Validate.notNull(duration, "duration");
+      Validate.isTrue(this.nextTierTime != null, "There is no next gen tier level to set the remaining time for");
+
+      this.nextTierTime = Instant.now().plus(duration);
+    }
+
+    @Override
+    public void scheduleNextTier(GenTierLevel level) {
+      Validate.notNull(level, "level");
+
+      GenTiers.scheduleNextTier(this, level);
+    }
+
+    @Override
+    public void cancelTiers() {
+      GenTiers.cancelTask(this);
+      this.updateState(null, null);
+    }
+
     public String getNextTierName() {
-      return this.nextGenTierLevel != null ? this.nextGenTierLevel.getTierName() : "";
+      return this.nextTier != null ? this.nextTier.getTierName() : "";
     }
 
-    public void addDragonTeam(Team team) {
-      this.dragonTeams.add(team);
-    }
+    private void updateState(@Nullable GenTierLevel newNextLevel, @Nullable Duration time) {
+      this.nextTier = newNextLevel;
 
-    public int getSecondsToNextTier() {
-      return (int) (this.nextUpdateTime - System.currentTimeMillis()) / 1000;
-    }
-
-    public long getNextTierTime() {
-      return this.nextUpdateTime;
-    }
-
-    private void updateState(GenTierLevel newNextLevel, double seconds) {
-      this.currentGenTierLevel = this.nextGenTierLevel;
-      this.nextGenTierLevel = newNextLevel;
-      this.nextUpdateTime = System.currentTimeMillis() + (long) (seconds * 60 * 1000);
+      if (newNextLevel != null)
+        this.nextTierTime = Instant.now().plus(time);
+      else
+        this.nextTierTime = null;
     }
   }
 }

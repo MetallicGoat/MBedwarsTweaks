@@ -3,6 +3,7 @@ package me.metallicgoat.tweaksaddon.config;
 import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.YamlConfigurationDescriptor;
 import java.io.File;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierHandler;
@@ -18,7 +19,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class GenTiersConfig {
 
-  public static HashMap<Integer, GenTierLevel> gen_tier_levels = new HashMap<>();
+  public static Map<Integer, GenTierLevel> gen_tier_levels = new HashMap<>();
 
   public static void load() {
     synchronized (ConfigLoader.class) {
@@ -98,8 +99,6 @@ public class GenTiersConfig {
         if (soundString != null)
           earnSound = Helper.get().getSoundByName(soundString);
 
-        final String earnMessage = message == null || message.isEmpty() ? null : message;
-
         if (handler.getActionType() == GenTierActionType.GEN_UPGRADE) {
 
           final GenTierLevel genTierLevel = new GenTierLevel(
@@ -108,22 +107,22 @@ public class GenTiersConfig {
               holoName,
               typeString,
               handler,
-              time,
+              Duration.ofSeconds((long) (time * 60D)),
               speed,
               limit > 0 ? limit : null,
-              earnMessage,
+              message.isEmpty() ? null : message,
               earnSound
           );
 
           gen_tier_levels.put(levelNum, genTierLevel);
-        } else {
 
+        } else {
           final GenTierLevel genTierLevel = new GenTierLevel(
               levelNum,
               tierName,
               handler,
-              time,
-              earnMessage,
+              Duration.ofSeconds((long) (time * 60D)),
+              message.isEmpty() ? null : message,
               earnSound
           );
 
