@@ -296,9 +296,8 @@ public class SuddenDeathDragonImpl extends BukkitRunnable implements SuddenDeath
         for (double z = blockZ - radius; z <= blockZ + radius; z++) {
           final Block block = new Location(location.getWorld(), x, y, z).getBlock();
 
-          if (block.getType() != Material.AIR && !MainConfig.dragon_block_destroy_blacklist.contains(block.getType())) {
+          if (block.getType() != Material.AIR)
             block.setType(Material.AIR, false);
-          }
         }
       }
     }
@@ -340,6 +339,11 @@ public class SuddenDeathDragonImpl extends BukkitRunnable implements SuddenDeath
 
     // Stop Scheduler
     super.cancel();
+  }
+
+  @Override
+  public boolean exists() {
+    return this.dragon.isValid();
   }
 
 

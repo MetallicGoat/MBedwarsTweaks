@@ -5,11 +5,10 @@ import de.marcely.bedwars.api.arena.BedDestructionInfo;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.message.Message;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierActionType;
-import me.metallicgoat.tweaksaddon.api.gentiers.GenTierHandler;
-import me.metallicgoat.tweaksaddon.config.MainConfig;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierLevel;
+import me.metallicgoat.tweaksaddon.config.MainConfig;
 
-public class BedDestroyHandler extends GenTierHandler {
+public class BedDestroyHandler extends BaseGenTierHandler {
 
   @Override
   public void run(GenTierLevel level, Arena arena) {

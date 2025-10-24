@@ -5,12 +5,12 @@ import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.api.game.spawner.SpawnerDurationModifier;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierActionType;
-import me.metallicgoat.tweaksaddon.api.gentiers.GenTierHandler;
-import me.metallicgoat.tweaksaddon.config.MainConfig;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierLevel;
+import me.metallicgoat.tweaksaddon.config.MainConfig;
 import me.metallicgoat.tweaksaddon.gentiers.GenTiers;
 
-public class SpawnerUpgradeHandler extends GenTierHandler {
+public class SpawnerUpgradeHandler extends BaseGenTierHandler {
+
   @Override
   public void run(GenTierLevel level, Arena arena) {
     // For all spawners

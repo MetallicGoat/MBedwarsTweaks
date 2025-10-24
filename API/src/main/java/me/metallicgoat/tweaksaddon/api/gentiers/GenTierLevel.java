@@ -4,8 +4,10 @@ import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.api.message.Message;
+import java.time.Duration;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import me.metallicgoat.tweaksaddon.api.unsafe.MBedwarsTweaksAPILayer;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
@@ -21,7 +23,7 @@ public class GenTierLevel {
   @Nullable
   private final String typeId; // Spawners with this drop-type should update
   private final GenTierHandler handler; // Action (eg bed break or upgrade)
-  private final double time; // Time until the update happens (After Last Event)
+  private final Duration time; // Time until the update happens (After Last Event)
   @Nullable
   private final Double speed; // New drop speed
   @Nullable
@@ -35,7 +37,7 @@ public class GenTierLevel {
       int tier,
       String tierName,
       GenTierHandler handler,
-      double time,
+      Duration time,
       @Nullable String earnMessage,
       @Nullable Sound earnSound) {
 
@@ -74,7 +76,28 @@ public class GenTierLevel {
    *
    * @return the DropType this level aims to affect if applicable
    */
-  public @Nullable DropType getType() {
+  @Nullable
+  public DropType getType() {
     return GameAPI.get().getDropTypeById(this.typeId);
+  }
+
+  /**
+   * Gets the next level after this one has been reached.
+   *
+   * @return the next GenTierLevel, or <code>null</code> if this is the highest level
+   */
+  @Nullable
+  public GenTierLevel getNextLevel() {
+    return MBedwarsTweaksAPILayer.INSTANCE.getGenTierLevel(this.tier + 1);
+  }
+
+  /**
+   * Gets the previous level before this one has been reached.
+   *
+   * @return the previous GenTierLevel, or <code>null</code> if this is the first level
+   */
+  @Nullable
+  public GenTierLevel getPreviousLevel() {
+    return MBedwarsTweaksAPILayer.INSTANCE.getGenTierLevel(this.tier - 1);
   }
 }

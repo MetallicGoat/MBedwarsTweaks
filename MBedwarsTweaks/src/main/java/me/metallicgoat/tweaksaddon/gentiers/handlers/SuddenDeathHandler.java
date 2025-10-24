@@ -4,10 +4,10 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.tools.location.XYZ;
+import java.util.List;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierActionType;
-import me.metallicgoat.tweaksaddon.api.gentiers.GenTierHandler;
-import me.metallicgoat.tweaksaddon.config.MainConfig;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierLevel;
+import me.metallicgoat.tweaksaddon.config.MainConfig;
 import me.metallicgoat.tweaksaddon.gentiers.GenTiers;
 import me.metallicgoat.tweaksaddon.gentiers.dragons.SuddenDeathDragonImpl;
 import me.metallicgoat.tweaksaddon.utils.Util;
@@ -15,9 +15,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 
-import java.util.List;
+public class SuddenDeathHandler extends BaseGenTierHandler {
 
-public class SuddenDeathHandler extends GenTierHandler {
   @Override
   public void run(GenTierLevel level, Arena arena) {
     final Location middle = getArenaMid(arena);
@@ -35,7 +34,7 @@ public class SuddenDeathHandler extends GenTierHandler {
         SuddenDeathDragonImpl.createNewDragon(arena, team, middle);
 
       // Spawn extra dragon
-      if (GenTiers.getState(arena).hasDragon(team))
+      if (GenTiers.getState(arena).hasBoughtDragon(team))
         SuddenDeathDragonImpl.createNewDragon(arena, team, middle);
     }
 

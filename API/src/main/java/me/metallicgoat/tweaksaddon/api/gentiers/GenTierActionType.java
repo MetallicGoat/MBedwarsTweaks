@@ -1,5 +1,8 @@
 package me.metallicgoat.tweaksaddon.api.gentiers;
 
+/**
+ * Represents the different types of Gen Tier Actions
+ */
 public enum GenTierActionType {
 
   /**
@@ -33,6 +36,12 @@ public enum GenTierActionType {
     this.defaultHandlerId = GenTierActionType.this.name().toLowerCase().replace("_", "-");
   }
 
+  /**
+   * Get the default handler Id for this action type
+   *
+   * @return The default handler Id
+   * @throws UnsupportedOperationException if this action type is PLUGIN
+   */
   public String getDefaultHandlerId() {
     if (this == GenTierActionType.PLUGIN)
       throw new UnsupportedOperationException("PLUGIN does not have a default handler Id!");

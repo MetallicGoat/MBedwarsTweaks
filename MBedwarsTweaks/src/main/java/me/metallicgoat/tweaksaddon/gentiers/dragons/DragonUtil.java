@@ -55,7 +55,7 @@ public class DragonUtil {
     return Collections.unmodifiableList(targets);
   }
 
-  public static List<SuddenDeathDragon> getDragons(Arena arena, Team team) {
+  public static List<SuddenDeathDragon> getDragons(@Nullable Arena arena, @Nullable Team team) {
     if (arena == null)
       return Collections.unmodifiableList(runningDragons);
 
