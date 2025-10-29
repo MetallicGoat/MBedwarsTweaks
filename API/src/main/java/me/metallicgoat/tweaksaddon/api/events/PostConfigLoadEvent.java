@@ -1,18 +1,29 @@
 package me.metallicgoat.tweaksaddon.api.events;
 
-import lombok.Getter;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+
+/**
+ * Called after the plugin configuration files have been loaded or reloaded.
+ */
 public class PostConfigLoadEvent extends Event {
 
   private static final HandlerList HANDLERS = new HandlerList();
 
-  @Getter
   private final boolean firstLoad;
 
   public PostConfigLoadEvent(boolean firstLoad) {
     this.firstLoad = firstLoad;
+  }
+
+  /**
+   * Whether this event represents the first time the configuration has been loaded.
+   *
+   * @return {@code true} if it was the first time the config was loaded (Plugin just enabled)
+   */
+  public boolean isFirstLoad() {
+    return this.firstLoad;
   }
 
   @Override
