@@ -18,6 +18,10 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+        <repository>
             <id>mbedwars-repo</id>
             <url>https://repo.marcely.de/repository/maven-public/</url>
         </repository>
@@ -46,6 +50,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.21.10-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
             <version>2.11.6</version>
@@ -54,7 +64,7 @@
         <dependency>
             <groupId>de.marcely.bedwars</groupId>
             <artifactId>API</artifactId>
-            <version>5.5.4</version>
+            <version>5.5.5</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

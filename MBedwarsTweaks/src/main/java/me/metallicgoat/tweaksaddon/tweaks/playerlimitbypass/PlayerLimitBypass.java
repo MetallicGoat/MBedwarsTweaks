@@ -1,4 +1,4 @@
-package me.metallicgoat.tweaksaddon.tweaks.misc;
+package me.metallicgoat.tweaksaddon.tweaks.playerlimitbypass;
 
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.event.EventHandler;
