@@ -23,7 +23,7 @@ public class ImplMBedwarsTweaksAPILayer extends MBedwarsTweaksAPILayer {
   }
 
   @Override
-  public GenTierState getGenTierStates(Arena arena) {
+  public GenTierState getGenTierState(Arena arena) {
     return GenTiers.getState(arena);
   }
 

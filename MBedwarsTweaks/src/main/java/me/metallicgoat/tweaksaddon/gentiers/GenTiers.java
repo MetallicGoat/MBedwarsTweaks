@@ -82,8 +82,7 @@ public class GenTiers implements Listener {
     return arenaStates.get(arena);
   }
 
-  // Accessed by PrivateGamesAddon
-  public static void removeArena(Arena arena) {
+  private static void removeArena(Arena arena) {
     final GenTierStateImpl state = arenaStates.remove(arena);
 
     if (state != null)
@@ -97,13 +96,16 @@ public class GenTiers implements Listener {
     }
   }
 
-  // Accessed by PrivateGamesAddon
   public static void scheduleNextTier(GenTierStateImpl state, GenTierLevel level) {
+    scheduleNextTier(state, level, level.getTime());
+  }
+
+  public static void scheduleNextTier(GenTierStateImpl state, GenTierLevel level, Duration time) {
     // Cancel existing tasks
     cancelTask(state);
 
     // ask api
-    final GenTiersScheduleEvent event = new GenTiersScheduleEvent(state, level, level.getTime());
+    final GenTiersScheduleEvent event = new GenTiersScheduleEvent(state, level, time);
 
     Bukkit.getPluginManager().callEvent(event);
 
@@ -112,7 +114,7 @@ public class GenTiers implements Listener {
 
     // ok apply
     level = event.getNextTier();
-    final Duration time = event.getDelay();
+    time = event.getDelay();
 
     state.updateState(level, time);
 
@@ -236,6 +238,14 @@ public class GenTiers implements Listener {
       Validate.notNull(level, "level");
 
       GenTiers.scheduleNextTier(this, level);
+    }
+
+    @Override
+    public void scheduleNextTier(GenTierLevel level, Duration time) {
+      Validate.notNull(level, "level");
+      Validate.notNull(time, "time");
+
+      GenTiers.scheduleNextTier(this, level, time);
     }
 
     @Override

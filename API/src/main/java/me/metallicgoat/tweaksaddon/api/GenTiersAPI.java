@@ -66,7 +66,7 @@ public class GenTiersAPI {
   public static GenTierState getState(Arena arena) {
     Validate.notNull(arena, "arena");
 
-    return MBedwarsTweaksAPILayer.INSTANCE.getGenTierStates(arena);
+    return MBedwarsTweaksAPILayer.INSTANCE.getGenTierState(arena);
   }
 
   /**

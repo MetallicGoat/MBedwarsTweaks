@@ -25,7 +25,7 @@ public abstract class MBedwarsTweaksAPILayer {
 
   public abstract List<SuddenDeathDragon> getDragons(Arena arena, Team team);
 
-  public abstract GenTierState getGenTierStates(Arena arena);
+  public abstract GenTierState getGenTierState(Arena arena);
 
   public abstract void registerGenTierHandler(GenTierHandler handler);
 
