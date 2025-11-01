@@ -18,6 +18,8 @@ import me.metallicgoat.tweaksaddon.tweaks.cosmetic.*;
 import me.metallicgoat.tweaksaddon.tweaks.explosives.*;
 import me.metallicgoat.tweaksaddon.tweaks.messages.*;
 import me.metallicgoat.tweaksaddon.tweaks.misc.*;
+import me.metallicgoat.tweaksaddon.tweaks.playerlimitbypass.PlayerLimitBypass;
+import me.metallicgoat.tweaksaddon.tweaks.playerlimitbypass.PlayerLimitBypassPaper;
 import me.metallicgoat.tweaksaddon.tweaks.spawners.*;
 import me.metallicgoat.tweaksaddon.tweaks.spectialitems.*;
 import me.metallicgoat.tweaksaddon.utils.Console;
@@ -90,7 +92,6 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     manager.registerEvents(new PearlSoundBroadcast(), plugin);
     manager.registerEvents(new PermanentEffects(), plugin);
     manager.registerEvents(new PlaceBlocksOnBed(), plugin);
-    manager.registerEvents(new PlayerLimitBypass(), plugin);
     manager.registerEvents(new RemoveInvisOnDamage(), plugin);
     manager.registerEvents(new WorldBorderResize(), plugin);
     manager.registerEvents(new LootDropAtEliminatedTeamBase(), plugin);
@@ -111,6 +112,14 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     // Server Events
     manager.registerEvents(new ConfigLoader(), plugin);
     manager.registerEvents(new DependencyLoader(), plugin);
+
+    // Version Specific Events
+    try {
+      Class.forName("io.papermc.paper.event.player.PlayerServerFullCheckEvent");
+      manager.registerEvents(new PlayerLimitBypass(), plugin);
+    } catch (ClassNotFoundException ignored) {
+      manager.registerEvents(new PlayerLimitBypassPaper(), plugin);
+    }
   }
 
   public void registerCommands() {

@@ -5,6 +5,7 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.arena.picker.ArenaPickerAPI;
 import de.marcely.bedwars.api.game.spawner.DropType;
+import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.NMSHelper;
 import de.marcely.bedwars.tools.location.XYZYP;
 import java.lang.reflect.Method;
@@ -17,6 +18,7 @@ import me.metallicgoat.tweaksaddon.gentiers.handlers.SpawnerUpgradeHandler;
 import me.metallicgoat.tweaksaddon.gentiers.handlers.SuddenDeathHandler;
 import me.metallicgoat.tweaksaddon.impl.api.ImplMBedwarsTweaksAPILayer;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
@@ -135,6 +137,19 @@ public class Util {
     }
 
     return targets;
+  }
+
+  public static List<Material> buildMaterialList(String... materials) {
+    final List<Material> materialList = new ArrayList<>();
+
+    for (String material : materials) {
+      final Material mat = Helper.get().getMaterialByName(material);
+
+      if (mat != null)
+        materialList.add(mat);
+    }
+
+    return materialList;
   }
 
   public static List<String> getLines(String string) {

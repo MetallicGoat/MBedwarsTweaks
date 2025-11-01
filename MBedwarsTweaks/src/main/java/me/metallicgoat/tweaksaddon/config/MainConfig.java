@@ -16,6 +16,7 @@ import lombok.Getter;
 import me.metallicgoat.tweaksaddon.config.ConfigManager.Config;
 import me.metallicgoat.tweaksaddon.config.ConfigManager.SectionTitle;
 import me.metallicgoat.tweaksaddon.utils.CachedArenaIdentifier;
+import me.metallicgoat.tweaksaddon.utils.Util;
 import org.bukkit.Material;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
@@ -24,20 +25,24 @@ import org.bukkit.potion.PotionEffectType;
 public class MainConfig {
 
   @Getter
-  private static final List<Material> defaultMaterials = new ArrayList<>(Arrays.asList(
-      Helper.get().getMaterialByName("WOODEN_SWORD"),
-      Helper.get().getMaterialByName("SHEARS"),
-      Helper.get().getMaterialByName("WOODEN_PICKAXE"),
-      Helper.get().getMaterialByName("STONE_PICKAXE"),
-      Helper.get().getMaterialByName("IRON_PICKAXE"),
-      Helper.get().getMaterialByName("GOLDEN_PICKAXE"),
-      Helper.get().getMaterialByName("DIAMOND_PICKAXE"),
-      Helper.get().getMaterialByName("WOODEN_AXE"),
-      Helper.get().getMaterialByName("STONE_AXE"),
-      Helper.get().getMaterialByName("IRON_AXE"),
-      Helper.get().getMaterialByName("GOLDEN_AXE"),
-      Helper.get().getMaterialByName("DIAMOND_AXE")
-  ));
+  private static final List<Material> defaultMaterials = Util.buildMaterialList(
+      "WOODEN_SWORD",
+      "SHEARS",
+      "WOODEN_PICKAXE",
+      "COPPER_PICKAXE",
+      "STONE_PICKAXE",
+      "IRON_PICKAXE",
+      "GOLDEN_PICKAXE",
+      "DIAMOND_PICKAXE",
+      "NETHERITE_PICKAXE",
+      "WOODEN_AXE",
+      "COPPER_AXE",
+      "STONE_AXE",
+      "IRON_AXE",
+      "GOLDEN_AXE",
+      "DIAMOND_AXE",
+      "NETHERITE_AXE"
+  );
 
   // ===== GENERAL
   @SectionTitle(title = "GENERAL")
