@@ -147,7 +147,7 @@ public class GenTiersAPI {
    *
    * @return The singletone UpgradeTriggerHandler instance for the sudden death upgrade
    */
-  public UpgradeTriggerHandler getSuddenDeathUpgrade() {
+  public static UpgradeTriggerHandler getSuddenDeathUpgrade() {
     return MBedwarsTweaksAPILayer.INSTANCE.getSuddenDeathUpgrade();
   }
 
