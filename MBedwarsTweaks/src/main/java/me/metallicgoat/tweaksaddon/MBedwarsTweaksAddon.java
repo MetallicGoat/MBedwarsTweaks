@@ -144,7 +144,7 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
 
 
   public void registerUpgrades() {
-    GameAPI.get().registerUpgradeTriggerHandler(new SuddenDeathUpgrade());
+    GameAPI.get().registerUpgradeTriggerHandler(SuddenDeathUpgrade.INSTANCE);
   }
 
   @Override

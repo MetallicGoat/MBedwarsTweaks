@@ -9,6 +9,7 @@ import de.marcely.bedwars.api.event.arena.ArenaStatusChangeEvent;
 import de.marcely.bedwars.api.event.player.PlayerBuyUpgradeEvent;
 import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.api.game.spawner.Spawner;
+import de.marcely.bedwars.api.game.upgrade.UpgradeLevel;
 import de.marcely.bedwars.api.game.upgrade.UpgradeTriggerHandler;
 import de.marcely.bedwars.api.game.upgrade.UpgradeTriggerHandlerType;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
@@ -30,11 +31,12 @@ public class SpawnerUpgrade implements Listener {
 
   public static Map<Arena, List<BukkitTask>> runningTasks = new ConcurrentHashMap<>();
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR)
   public void onPlayerBuyUpgrade(PlayerBuyUpgradeEvent event) {
     final Arena arena = event.getArena();
     final Team team = event.getTeam();
-    final UpgradeTriggerHandler handler = event.getUpgradeLevel().getTriggerHandler();
+    final UpgradeLevel level = event.getUpgradeLevel();
+    final UpgradeTriggerHandler handler = level.getTriggerHandler();
 
     // Check enable
     if (!MainConfig.advanced_forge_enabled || arena == null || team == null || handler == null || !event.getProblems().isEmpty())
@@ -44,18 +46,27 @@ public class SpawnerUpgrade implements Listener {
     if (handler.getType() != UpgradeTriggerHandlerType.SPAWNER_MULTIPLIER)
       return;
 
-    // Start upgrade
-    if (event.getUpgradeLevel().getLevel() == MainConfig.advanced_forge_level) {
-      final BukkitTask task = (new SpawnerUpgradeTask(arena, team)).runTaskTimer(MBedwarsTweaksPlugin.getInstance(), 80, 20L * MainConfig.advanced_forge_drop_rate);
-      final List<BukkitTask> arenaTasks = runningTasks.get(arena);
+    // Check whether he reached the required level
+    final UpgradeLevel oldLevel = event.getUpgradeState().getCurrentUpgradeLevel(level.getUpgrade());
 
-      if (arenaTasks != null)
-        arenaTasks.add(task);
-      else {
-        final List<BukkitTask> list = new CopyOnWriteArrayList<>();
-        list.add(task);
-        runningTasks.put(arena, list);
-      }
+    if (oldLevel != null && oldLevel.getLevel() >= MainConfig.advanced_forge_level)
+      return;
+    if (level.getLevel() < MainConfig.advanced_forge_level)
+      return;
+
+    // Start upgrade
+    final BukkitTask task = (new SpawnerUpgradeTask(arena, team)).runTaskTimer(
+        MBedwarsTweaksPlugin.getInstance(),
+        80,
+        20L * MainConfig.advanced_forge_drop_rate);
+    final List<BukkitTask> arenaTasks = runningTasks.get(arena);
+
+    if (arenaTasks != null)
+      arenaTasks.add(task);
+    else {
+      final List<BukkitTask> list = new CopyOnWriteArrayList<>();
+      list.add(task);
+      runningTasks.put(arena, list);
     }
   }
 

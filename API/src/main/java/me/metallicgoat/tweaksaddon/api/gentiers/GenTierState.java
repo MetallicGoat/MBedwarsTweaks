@@ -86,6 +86,14 @@ public interface GenTierState {
   void scheduleNextTier(GenTierLevel level);
 
   /**
+   * Schedule the next gen tier level to be reached.
+   *
+   * @param level the next gen tier level to be reached
+   * @param time the duration until the next gen tier level is reached
+   */
+  void scheduleNextTier(GenTierLevel level, Duration time);
+
+  /**
    * Cancel the current gen tier progression and stops any further.
    */
   void cancelTiers();

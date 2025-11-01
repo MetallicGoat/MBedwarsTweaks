@@ -2,6 +2,7 @@ package me.metallicgoat.tweaksaddon.api;
 
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
+import de.marcely.bedwars.api.game.upgrade.UpgradeTriggerHandler;
 import de.marcely.bedwars.tools.Validate;
 import java.util.Collections;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierHandler;
@@ -65,7 +66,7 @@ public class GenTiersAPI {
   public static GenTierState getState(Arena arena) {
     Validate.notNull(arena, "arena");
 
-    return MBedwarsTweaksAPILayer.INSTANCE.getGenTierStates(arena);
+    return MBedwarsTweaksAPILayer.INSTANCE.getGenTierState(arena);
   }
 
   /**
@@ -139,6 +140,15 @@ public class GenTiersAPI {
    */
   public static Collection<GenTierHandler> getHandlers() {
     return MBedwarsTweaksAPILayer.INSTANCE.getGenTierHandlers();
+  }
+
+  /**
+   * Get the trigger handler used for the sudden death team upgrade.
+   *
+   * @return The singletone UpgradeTriggerHandler instance for the sudden death upgrade
+   */
+  public static UpgradeTriggerHandler getSuddenDeathUpgrade() {
+    return MBedwarsTweaksAPILayer.INSTANCE.getSuddenDeathUpgrade();
   }
 
   /**

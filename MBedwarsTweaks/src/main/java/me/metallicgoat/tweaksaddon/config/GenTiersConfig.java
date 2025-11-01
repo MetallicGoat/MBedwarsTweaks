@@ -4,6 +4,7 @@ import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.YamlConfigurationDescriptor;
 import java.io.File;
 import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierHandler;
@@ -151,7 +152,7 @@ public class GenTiersConfig {
     config.addComment("PAPI-Usage (The value used in our PAPI Placeholders during this tier)");
     config.addComment("Holo-Usage (The values used in holos during this tier)");
     config.addComment("Action (gen-upgrade, bed-destroy, sudden-death, game-over)");
-    config.addComment("Time (time until action - NOTE time starts after the last action)");
+    config.addComment("Time (time in minutes until action - NOTE time starts after the last action)");
     config.addComment("Message (chat message sent on trigger)");
     config.addComment("Earn-Sound (sound played on trigger) (You have to add this config if you want it)");
     config.addEmptyLine();
@@ -172,7 +173,7 @@ public class GenTiersConfig {
       final String configKey = "Gen-Tiers." + (i++) + ".";
 
       config.set(configKey + "Handler-Id", level.getHandler().getId());
-      config.set(configKey + "Time", level.getTime());
+      config.set(configKey + "Time", level.getTime().get(ChronoUnit.SECONDS)/60D);
       config.set(configKey + "Tier-Name", level.getTierName());
 
       if (level.getHandler().getActionType() == GenTierActionType.GEN_UPGRADE) {
