@@ -2,6 +2,7 @@ package me.metallicgoat.tweaksaddon.api.unsafe;
 
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
+import de.marcely.bedwars.api.game.upgrade.UpgradeTriggerHandler;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierHandler;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierLevel;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierState;
@@ -37,6 +38,8 @@ public abstract class MBedwarsTweaksAPILayer {
   public abstract Collection<GenTierLevel> getGenTierLevels();
 
   public abstract GenTierLevel getGenTierLevel(int lvl);
+
+  public abstract UpgradeTriggerHandler getSuddenDeathUpgrade();
 
   public abstract void reloadGenTierConfig();
 

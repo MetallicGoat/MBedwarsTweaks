@@ -11,7 +11,10 @@ import me.metallicgoat.tweaksaddon.utils.Util;
 import org.bukkit.command.CommandSender;
 
 public class SuddenDeathUpgrade extends UpgradeTriggerHandler {
-  public SuddenDeathUpgrade() {
+
+  public static final UpgradeTriggerHandler INSTANCE = new SuddenDeathUpgrade();
+
+  SuddenDeathUpgrade() {
     super("sudden-death", false, MBedwarsTweaksPlugin.getInstance());
   }
 

@@ -2,6 +2,7 @@ package me.metallicgoat.tweaksaddon.impl.api;
 
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
+import de.marcely.bedwars.api.game.upgrade.UpgradeTriggerHandler;
 import java.util.Collection;
 import java.util.List;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierHandler;
@@ -12,6 +13,7 @@ import me.metallicgoat.tweaksaddon.api.unsafe.MBedwarsTweaksAPILayer;
 import me.metallicgoat.tweaksaddon.config.GenTiersConfig;
 import me.metallicgoat.tweaksaddon.gentiers.GenTiers;
 import me.metallicgoat.tweaksaddon.gentiers.dragons.DragonUtil;
+import me.metallicgoat.tweaksaddon.gentiers.dragons.SuddenDeathUpgrade;
 import me.metallicgoat.tweaksaddon.utils.Util;
 
 public class ImplMBedwarsTweaksAPILayer extends MBedwarsTweaksAPILayer {
@@ -53,6 +55,11 @@ public class ImplMBedwarsTweaksAPILayer extends MBedwarsTweaksAPILayer {
   @Override
   public GenTierLevel getGenTierLevel(int lvl) {
     return GenTiersConfig.gen_tier_levels.get(lvl);
+  }
+
+  @Override
+  public UpgradeTriggerHandler getSuddenDeathUpgrade() {
+    return SuddenDeathUpgrade.INSTANCE;
   }
 
   @Override
