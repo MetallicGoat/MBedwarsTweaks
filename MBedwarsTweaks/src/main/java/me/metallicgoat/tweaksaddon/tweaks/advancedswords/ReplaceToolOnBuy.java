@@ -1,9 +1,10 @@
 package me.metallicgoat.tweaksaddon.tweaks.advancedswords;
 
+import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.event.player.PlayerBuyInShopEvent;
 import de.marcely.bedwars.api.game.shop.BuyGroup;
+import de.marcely.bedwars.api.game.shop.product.ItemShopProduct;
 import me.metallicgoat.tweaksaddon.config.SwordsToolsConfig;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,33 +25,26 @@ public class ReplaceToolOnBuy implements Listener {
         && event.getProblems().isEmpty()
         && SwordsToolsConfig.advanced_tool_replacement_buygroups.contains(group.getName())) {
 
-      clearOld(ToolSwordHelper.getToolInShopProduct(event.getItem()), event.getPlayer());
+      clearOld(group, event.getItem().getBuyGroupLevel(), event.getPlayer());
     }
   }
 
-  private void clearOld(Material tool, Player p) {
-    final boolean isClearingPickaxe = ToolSwordHelper.isPickaxe(tool);
-    final PlayerInventory inv = p.getInventory();
+  private void clearOld(BuyGroup purchasedGroup, int level, Player player) {
+    final PlayerInventory inv = player.getInventory();
 
-    for (int i = 0; i < p.getInventory().getSize(); i++) {
+    for (int i = 0; i < player.getInventory().getSize(); i++) {
       final ItemStack itemStack = inv.getItem(i);
+      final ItemShopProduct invProduct = GameAPI.get().getItemShopProduct(itemStack);
+      final BuyGroup checkingGroup = invProduct != null ? invProduct.getItem().getBuyGroup() : null;
 
-      // HACK - Auto replace shears
-      if (tool == Material.SHEARS && itemStack != null && itemStack.getType() == Material.SHEARS) {
-        inv.setItem(i, null);
-        continue;
-      }
-
-      if (itemStack == null ||
-          !ToolSwordHelper.isTool(itemStack.getType()) ||
-          !ToolSwordHelper.isNotToIgnore(itemStack))
+      // Check names, not instance (cloneable). Names are unique
+      if (checkingGroup == null || !checkingGroup.getName().equals(purchasedGroup.getName()))
         continue;
 
-      final boolean isCheckingPickaxe = ToolSwordHelper.isPickaxe(itemStack.getType());
-      final boolean match = (isCheckingPickaxe && isClearingPickaxe) || (!isCheckingPickaxe && !isClearingPickaxe);
-
-      if (match && ToolSwordHelper.getSwordToolLevel(tool) > ToolSwordHelper.getSwordToolLevel(itemStack.getType()))
+      // Remove lower tier items
+      if (invProduct.getItem().getBuyGroupLevel() < level)
         inv.setItem(i, null);
+
     }
   }
 }
