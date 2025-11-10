@@ -33,18 +33,24 @@ public class ReplaceToolOnBuy implements Listener {
     final PlayerInventory inv = player.getInventory();
 
     for (int i = 0; i < player.getInventory().getSize(); i++) {
-      final ItemStack itemStack = inv.getItem(i);
-      final ItemShopProduct invProduct = GameAPI.get().getItemShopProduct(itemStack);
-      final BuyGroup checkingGroup = invProduct != null ? invProduct.getItem().getBuyGroup() : null;
+      final ItemStack is = inv.getItem(i);
+
+      if (is == null)
+        continue;
+
+      final ItemShopProduct invProduct = GameAPI.get().getItemShopProduct(is);
+
+      if (invProduct == null || invProduct.getItem().getBuyGroupLevel() < level)
+        continue;
+
+      final BuyGroup checkingGroup = invProduct.getItem().getBuyGroup();
 
       // Check names, not instance (cloneable). Names are unique
       if (checkingGroup == null || !checkingGroup.getName().equals(purchasedGroup.getName()))
         continue;
 
-      // Remove lower tier items
-      if (invProduct.getItem().getBuyGroupLevel() < level)
-        inv.setItem(i, null);
-
+      // Remove items
+      inv.setItem(i, null);
     }
   }
 }
