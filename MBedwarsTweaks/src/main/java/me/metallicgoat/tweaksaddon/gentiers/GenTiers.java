@@ -126,7 +126,7 @@ public class GenTiers implements Listener {
       // otherwise, remaining time will print negative when server lags
       state.genTierTask = new BukkitRunnable() {
         public void run() {
-          if (!state.getRemainingNextTier().isNegative())
+          if (!state.getRemainingNextTier().isZero())
             return;
 
           cancel();
@@ -222,7 +222,12 @@ public class GenTiers implements Listener {
       if (this.nextTierTime == null)
         return null;
 
-      return Duration.between(Instant.now(), this.nextTierTime);
+      final Duration diff = Duration.between(Instant.now(), this.nextTierTime);
+
+      if (diff.isNegative()) // avoid negative numbers because scheduler didn't catch up yet
+        return Duration.ZERO;
+
+      return diff;
     }
 
     @Override
