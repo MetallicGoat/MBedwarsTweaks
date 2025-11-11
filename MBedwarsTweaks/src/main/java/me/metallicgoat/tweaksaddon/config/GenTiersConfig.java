@@ -69,9 +69,11 @@ public class GenTiersConfig {
         final double speed = section.getDouble("Drop-Speed");
         final int limit = section.getInt("Max-Nearby-Items", -1);
         final double time = section.getDouble("Time");
-        final String message = section.getString("Message");
+        String message = section.getString("Message");
         final String soundString = section.getString("Earn-Sound");
         String holoName = section.getString("Holo-Usage");
+
+        message = message == null || message.isEmpty() ? null : message;
 
         {
           // OLD VALUES
@@ -111,7 +113,7 @@ public class GenTiersConfig {
               Duration.ofSeconds((long) (time * 60D)),
               speed,
               limit > 0 ? limit : null,
-              message.isEmpty() ? null : message,
+              message,
               earnSound
           );
 
@@ -123,7 +125,7 @@ public class GenTiersConfig {
               tierName,
               handler,
               Duration.ofSeconds((long) (time * 60D)),
-              message.isEmpty() ? null : message,
+              message,
               earnSound
           );
 
