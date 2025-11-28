@@ -52,7 +52,7 @@ public class SpecialItemCooldown implements Listener {
     );
   }
 
-  private void setVisualCooldown(Player player, ItemStack itemStack, double cooldownSeconds) {
+  private static void setVisualCooldown(Player player, ItemStack itemStack, double cooldownSeconds) {
     if (NMSHelper.get().getVersion() >= 12) {
       try {
         final int cooldownTicks = (int) (cooldownSeconds * 20);

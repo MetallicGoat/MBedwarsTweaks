@@ -10,6 +10,7 @@ import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.world.WorldStorage;
 import de.marcely.bedwars.api.world.hologram.HologramControllerType;
 import de.marcely.bedwars.api.world.hologram.HologramEntity;
+import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Bukkit;
@@ -32,8 +33,8 @@ import java.util.stream.Collectors;
 public class FriendlyVillagers implements Listener {
 
   private static final Set<Material> TRANSPARENT_MATERIALS = Arrays.stream(Material.values())
-      .filter(material -> material.isTransparent() || material.name().contains("SLAB"))
-      .collect(Collectors.toSet());
+      .filter(material -> Helper.get().isTransparent(material) || material.name().contains("SLAB"))
+      .collect(Collectors.toCollection(() -> EnumSet.noneOf(Material.class)));
 
   // 6+ hours has been spent on this. Rewritten like 6 times
   // Harsh: I am proud of you!
