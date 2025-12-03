@@ -48,6 +48,10 @@ public interface GenTierState {
 
   /**
    * Get the remaining time until the next gen tier level is reached.
+   * <p>
+   *   Doesn't go below {@link Duration#ZERO}. Might stay at zero for a very short
+   *   time (max a few seconds) if the server is lagging and the scheduler didn't catch up yet.
+   * </p>
    *
    * @return The remaining time until the next gen tier level is reached, or <code>null</code> if there is no next gen tier level.
    */

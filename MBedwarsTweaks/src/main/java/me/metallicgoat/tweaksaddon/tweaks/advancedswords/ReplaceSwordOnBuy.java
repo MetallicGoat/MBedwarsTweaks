@@ -26,10 +26,10 @@ public class ReplaceSwordOnBuy implements Listener {
       if (!(rawProduct instanceof ItemShopProduct))
         continue;
 
-      final ItemStack[] is = ((ItemShopProduct) rawProduct).getItemStacks();
+      final ItemStack[] givenAll = ((ItemShopProduct) rawProduct).getItemStacks();
 
-      for (ItemStack item : is) {
-        if (!ToolSwordHelper.isSword(item.getType()) || !ToolSwordHelper.isNotToIgnore(item))
+      for (ItemStack given : givenAll) {
+        if (!ToolSwordHelper.isSword(given.getType()) || !ToolSwordHelper.isNotToIgnore(given))
           continue;
 
         // Clear Wooden Swords
@@ -40,14 +40,17 @@ public class ReplaceSwordOnBuy implements Listener {
         }
 
         final ItemStack[] contents = pi.getContents();
-        for (ItemStack itemStack : contents) {
-          if (itemStack == null
-              || !ToolSwordHelper.isSword(itemStack.getType())
-              || !ToolSwordHelper.isNotToIgnore(itemStack))
+
+        for (int i=0; i<contents.length; i++) {
+          final ItemStack is = contents[i];
+
+          if (is == null
+              || !ToolSwordHelper.isSword(is.getType())
+              || !ToolSwordHelper.isNotToIgnore(is))
             continue;
 
-          if (ToolSwordHelper.getSwordToolLevel(itemStack.getType()) < ToolSwordHelper.getSwordToolLevel(item.getType()))
-            pi.remove(itemStack);
+          if (ToolSwordHelper.getSwordToolLevel(is.getType()) < ToolSwordHelper.getSwordToolLevel(given.getType()))
+            pi.setItem(i, null);
         }
       }
     }
