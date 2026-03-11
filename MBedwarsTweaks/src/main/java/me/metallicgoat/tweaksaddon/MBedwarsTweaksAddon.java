@@ -116,9 +116,9 @@ public class MBedwarsTweaksAddon extends BedwarsAddon {
     // Version Specific Events
     try {
       Class.forName("io.papermc.paper.event.player.PlayerServerFullCheckEvent");
-      manager.registerEvents(new PlayerLimitBypass(), plugin);
-    } catch (ClassNotFoundException ignored) {
       manager.registerEvents(new PlayerLimitBypassPaper(), plugin);
+    } catch (ClassNotFoundException ignored) {
+      manager.registerEvents(new PlayerLimitBypass(), plugin);
     }
   }
 
