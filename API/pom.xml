@@ -9,7 +9,7 @@
   <parent>
     <groupId>me.metallicgoat.tweaksaddon</groupId>
     <artifactId>MBedwarsTweaksParent</artifactId>
-    <version>5.0.0</version>
+    <version>5.0.1</version>
   </parent>
 
   <dependencies>
