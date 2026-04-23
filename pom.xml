@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.metallicgoat.tweaksaddon</groupId>
     <artifactId>MBedwarsTweaksParent</artifactId>
-    <version>5.0.1</version>
+    <version>5.0.2</version>
     <packaging>pom</packaging>
 
     <modules>
