@@ -39,6 +39,7 @@ public class SuddenDeathHandler extends BaseGenTierHandler {
     }
 
     // Destroy all Generators
+    if (MainConfig.destroy_generators_on_sudden_death) {
     for (Spawner spawner : arena.getSpawners()) {
       final Location location = spawner.getLocation().toLocation(arena.getGameWorld()).add(0, 3, 0);
 
@@ -50,7 +51,7 @@ public class SuddenDeathHandler extends BaseGenTierHandler {
       }
     }
   }
-
+}
   private Location getArenaMid(Arena arena) {
     final World world = arena.getGameWorld();
 
