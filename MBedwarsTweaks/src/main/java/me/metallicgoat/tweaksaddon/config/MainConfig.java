@@ -95,11 +95,11 @@ public class MainConfig {
       }
   )
   public static boolean default_sudden_death_dragon_enabled = true;
-  
+
   @Config(
-          description = {
-                  "Disable Generator Destruction on sudden death"
-          }
+      description = {
+          "When enabled, wholes will be drilled though the bottom of spawners to the void on sudden death"
+      }
   )
   public static boolean destroy_generators_on_sudden_death = true;
   
