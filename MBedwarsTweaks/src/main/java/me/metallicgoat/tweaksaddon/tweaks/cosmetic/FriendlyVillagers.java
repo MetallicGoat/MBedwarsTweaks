@@ -4,13 +4,18 @@ import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
-import de.marcely.bedwars.api.event.arena.ArenaDeleteEvent;
 import de.marcely.bedwars.api.event.arena.ArenaStatusChangeEvent;
+import de.marcely.bedwars.api.event.arena.ArenaUnloadEvent;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.world.WorldStorage;
 import de.marcely.bedwars.api.world.hologram.HologramControllerType;
 import de.marcely.bedwars.api.world.hologram.HologramEntity;
 import de.marcely.bedwars.tools.Helper;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Bukkit;
@@ -23,12 +28,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.BlockIterator;
-
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
+import org.bukkit.util.Vector;
 
 public class FriendlyVillagers implements Listener {
 
@@ -83,8 +83,8 @@ public class FriendlyVillagers implements Listener {
     removeArena(e.getArena());
   }
 
-  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onArenaDeleteEvent(ArenaDeleteEvent e) {
+  @EventHandler
+  public void onArenaUnloadEvent(ArenaUnloadEvent e) {
     removeArena(e.getArena());
   }
 
@@ -180,8 +180,19 @@ public class FriendlyVillagers implements Listener {
             if (!optionalLookAtPlayer.isPresent())
               continue;
 
-            final Player lookAtPlayer = optionalLookAtPlayer.get(); // The player to look at
-            final Location moveTo = hologramEntity.getLocation().setDirection(lookAtPlayer.getLocation().subtract(hologramEntity.getLocation()).toVector()); // final location
+            final Location moveTo; // final location
+
+            { // include height difference of dealer and player
+              final Player lookAtPlayer = optionalLookAtPlayer.get(); // The player to look at
+              final double heightDiff = hologramEntity.getSkin().getHeight() - 1.8; // e.g. enderman shall look down instead of straight
+              final Location src = hologramEntity.getLocation();
+              final Location target = lookAtPlayer.getLocation();
+              final Vector dir = target.subtract(src).toVector();
+              dir.setY(dir.getY() - heightDiff);
+
+              moveTo = src.setDirection(dir);
+            }
+
             final float currentYaw = hologramEntity.getLocation().getYaw(); // where the villager is currently facing
             final float targetYaw = moveTo.getYaw(); // Where we eventually want to end up
             final float difference = targetYaw - currentYaw; // How many degrees the npc needs to turn
