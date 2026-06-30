@@ -3,8 +3,8 @@ package me.metallicgoat.tweaksaddon.gentiers;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.arena.Team;
-import de.marcely.bedwars.api.event.arena.ArenaDeleteEvent;
 import de.marcely.bedwars.api.event.arena.ArenaStatusChangeEvent;
+import de.marcely.bedwars.api.event.arena.ArenaUnloadEvent;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.api.message.Message;
@@ -21,8 +21,8 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
-import me.metallicgoat.tweaksaddon.api.events.gentiers.GenTiersScheduleEvent;
 import me.metallicgoat.tweaksaddon.api.events.gentiers.GenTiersActionEvent;
+import me.metallicgoat.tweaksaddon.api.events.gentiers.GenTiersScheduleEvent;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierActionType;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierLevel;
 import me.metallicgoat.tweaksaddon.api.gentiers.GenTierState;
@@ -73,8 +73,8 @@ public class GenTiers implements Listener {
       removeArena(event.getArena());
   }
 
-  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onArenaDeleteEvent(ArenaDeleteEvent event) {
+  @EventHandler
+  public void onArenaUnloadEvent(ArenaUnloadEvent event) {
     removeArena(event.getArena());
   }
 

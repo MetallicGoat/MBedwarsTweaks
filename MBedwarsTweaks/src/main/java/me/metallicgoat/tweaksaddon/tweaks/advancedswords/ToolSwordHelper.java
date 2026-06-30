@@ -1,11 +1,10 @@
 package me.metallicgoat.tweaksaddon.tweaks.advancedswords;
 
-import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.arena.Team;
-import de.marcely.bedwars.api.event.arena.ArenaDeleteEvent;
 import de.marcely.bedwars.api.event.arena.ArenaStatusChangeEvent;
+import de.marcely.bedwars.api.event.arena.ArenaUnloadEvent;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.event.player.PlayerBuyInShopEvent;
 import de.marcely.bedwars.api.game.shop.BuyGroup;
@@ -16,9 +15,9 @@ import de.marcely.bedwars.tools.Helper;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import me.metallicgoat.hotbarmanageraddon.HotbarManagerTools;
-import me.metallicgoat.tweaksaddon.integration.DependType;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.SwordsToolsConfig;
+import me.metallicgoat.tweaksaddon.integration.DependType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -73,8 +72,8 @@ public class ToolSwordHelper implements Listener {
       removeArena(event.getArena());
   }
 
-  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onArenaDeleteEvent(ArenaDeleteEvent event) {
+  @EventHandler
+  public void onArenaUnloadEvent(ArenaUnloadEvent event) {
     removeArena(event.getArena());
   }
 
