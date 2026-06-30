@@ -5,6 +5,7 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.player.PlayerOpenArenaChestEvent;
+import de.marcely.bedwars.api.event.player.PlayerOpenArenaChestEvent.ChestType;
 import de.marcely.bedwars.api.message.Message;
 import de.marcely.bedwars.tools.location.XYZYP;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
@@ -42,6 +43,17 @@ public class LockTeamChest implements Listener {
 
     if (arena == null || arena.getStatus() != ArenaStatus.RUNNING)
       return;
+
+    final Block block = event.getClickedBlock();
+
+    // already handled with PlayerOpenArenaChestEvent?
+    // avoid sending warning msg twice
+    {
+      final ChestType type = arena.getChestType(block);
+
+      if (type != null)
+        return;
+    }
 
     final Team playerTeam = arena.getPlayerTeam(player);
 
