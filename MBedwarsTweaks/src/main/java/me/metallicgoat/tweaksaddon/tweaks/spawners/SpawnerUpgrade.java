@@ -4,14 +4,19 @@ import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.arena.Team;
-import de.marcely.bedwars.api.event.arena.ArenaDeleteEvent;
 import de.marcely.bedwars.api.event.arena.ArenaStatusChangeEvent;
+import de.marcely.bedwars.api.event.arena.ArenaUnloadEvent;
 import de.marcely.bedwars.api.event.player.PlayerBuyUpgradeEvent;
 import de.marcely.bedwars.api.game.spawner.DropType;
 import de.marcely.bedwars.api.game.spawner.Spawner;
 import de.marcely.bedwars.api.game.upgrade.UpgradeLevel;
 import de.marcely.bedwars.api.game.upgrade.UpgradeTriggerHandler;
 import de.marcely.bedwars.api.game.upgrade.UpgradeTriggerHandlerType;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import me.metallicgoat.tweaksaddon.MBedwarsTweaksPlugin;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Location;
@@ -20,12 +25,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class SpawnerUpgrade implements Listener {
 
@@ -77,8 +76,8 @@ public class SpawnerUpgrade implements Listener {
       removeArena(event.getArena());
   }
 
-  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onArenaDeleteEvent(ArenaDeleteEvent event) {
+  @EventHandler
+  public void onArenaUnloadEvent(ArenaUnloadEvent event) {
     removeArena(event.getArena());
   }
 

@@ -2,30 +2,20 @@ package me.metallicgoat.tweaksaddon.tweaks.messages;
 
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.QuitPlayerMemory;
-import de.marcely.bedwars.api.event.arena.ArenaDeleteEvent;
+import de.marcely.bedwars.api.event.arena.ArenaUnloadEvent;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.event.arena.RoundStartEvent;
 import de.marcely.bedwars.api.message.Message;
 import de.marcely.bedwars.api.player.DefaultPlayerStatSet;
 import de.marcely.bedwars.api.player.PlayerDataAPI;
 import de.marcely.bedwars.api.player.PlayerStats;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.IdentityHashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 public class TopKillerMessage implements Listener {
@@ -53,9 +43,13 @@ public class TopKillerMessage implements Listener {
 
     final Arena arena = event.getArena();
     final Map<UUID, Integer> nameIntMap = new HashMap<>();
+    final Collection<UUID> players = arenaPlayers.remove(arena);
+
+    if (players == null)
+      return;
 
     // Online Players
-    for (UUID player : arenaPlayers.get(arena))
+    for (UUID player : players)
       addStatsToMap(nameIntMap, player);
 
     // Offline Players
@@ -63,11 +57,10 @@ public class TopKillerMessage implements Listener {
       addStatsToMap(nameIntMap, memory.getUniqueId());
 
     printMessage(arena, sortHashMapByValue(nameIntMap));
-    arenaPlayers.remove(arena);
   }
 
-  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onArenaDeleteEvent(ArenaDeleteEvent event) {
+  @EventHandler
+  public void onArenaUnloadEvent(ArenaUnloadEvent event) {
     arenaPlayers.remove(event.getArena());
   }
 
