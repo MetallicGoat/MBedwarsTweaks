@@ -233,11 +233,13 @@ public class MainConfig {
 
   @Config(
       description = {
-          "Blocks that fireballs will not destroy (Overrides MBedwars' BlackList)"
+          "Blocks that fireballs or TNT will not destroy (extends MBedwars' blacklist configs)"
       }
   )
   public static boolean fireball_whitelist_enabled = false;
   @Config public static List<Material> fireball_whitelist_blocks = Collections.singletonList(Helper.get().getMaterialByName("END_STONE"));
+  @Config public static boolean tnt_whitelist_enabled = false;
+  @Config public static List<Material> tnt_whitelist_blocks = Collections.emptyList();
 
   @Config(
       description = {
