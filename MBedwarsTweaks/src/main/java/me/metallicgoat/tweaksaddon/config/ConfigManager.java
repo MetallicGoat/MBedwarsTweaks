@@ -238,6 +238,9 @@ public class ConfigManager {
             collection.add(deserializedChild);
         }
 
+        if (configAnno.addAllColorMaterials())
+          Helper.get().addAllColors((Set<Material>) (Collection<?>) collection);
+
         return collection;
 
         // Maps
@@ -567,5 +570,7 @@ public class ConfigManager {
     boolean priorityLoad() default false;
 
     boolean appendMetrics() default false;
+
+    boolean addAllColorMaterials() default false;
   }
 }

@@ -128,9 +128,10 @@ public class MainConfig {
   @Config(
       description = {
           "Block types that the sudden death dragon should not be able to destroy"
-      }
+      },
+      addAllColorMaterials = true
   )
-  public static List<Material> dragon_block_destroy_blacklist = new ArrayList<>(Arrays.asList(
+  public static Set<Material> dragon_block_destroy_blacklist = new HashSet<>(Arrays.asList(
       Helper.get().getMaterialByName("OBSIDIAN"),
       Helper.get().getMaterialByName("END_STONE")
   ));
@@ -237,9 +238,11 @@ public class MainConfig {
       }
   )
   public static boolean fireball_whitelist_enabled = false;
-  @Config public static List<Material> fireball_whitelist_blocks = Collections.singletonList(Helper.get().getMaterialByName("END_STONE"));
+  @Config(addAllColorMaterials = true)
+  public static Set<Material> fireball_whitelist_blocks = Collections.singleton(Helper.get().getMaterialByName("END_STONE"));
   @Config public static boolean tnt_whitelist_enabled = false;
-  @Config public static List<Material> tnt_whitelist_blocks = Collections.emptyList();
+  @Config(addAllColorMaterials = true)
+  public static Set<Material> tnt_whitelist_blocks = Collections.emptySet();
 
   @Config(
       description = {
@@ -414,7 +417,8 @@ public class MainConfig {
       }
   )
   public static boolean lock_team_chest_enabled = true;
-  @Config public static Set<Material> lock_team_chest_materials = new HashSet<>(Arrays.asList(
+  @Config(addAllColorMaterials = true)
+  public static Set<Material> lock_team_chest_materials = new HashSet<>(Arrays.asList(
       Helper.get().getMaterialByName("CHEST")
   ));
   @Config public static double lock_team_chest_range = 8;
@@ -532,7 +536,7 @@ public class MainConfig {
       }
   )
   public static boolean personal_loot_drop = false;
-  @Config()
+  @Config(addAllColorMaterials = true)
   public static Set<Material> personal_loot_blocked_items = new HashSet<>(Arrays.asList(
       Helper.get().getMaterialByName("FIRE_CHARGE"),
       Helper.get().getMaterialByName("IRON_SWORD")
