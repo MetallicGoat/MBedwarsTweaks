@@ -5,7 +5,9 @@ import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.VarParticle;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import me.metallicgoat.tweaksaddon.utils.CachedArenaIdentifier;
 import me.metallicgoat.tweaksaddon.utils.Console;
@@ -147,7 +149,7 @@ public class ConfigLegacyMigrator {
     {
       if (config.contains("FireballWhitelist.Blocks")) {
 
-        final List<Material> mats = new ArrayList<>();
+        final Set<Material> mats = new HashSet<>();
 
         for (String blockName : config.getStringList("FireballWhitelist.Blocks")) {
 
