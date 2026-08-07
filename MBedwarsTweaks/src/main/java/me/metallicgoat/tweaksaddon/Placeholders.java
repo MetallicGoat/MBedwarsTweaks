@@ -208,7 +208,6 @@ public class Placeholders extends PlaceholderExpansion {
     if (params.toLowerCase().startsWith("team-status-")) {
 
       if (arena != null && (arena.getStatus() == ArenaStatus.RUNNING || arena.getStatus() == ArenaStatus.END_LOBBY)) {
-
         String output;
         final String teamName = params.replace("team-status-", "");
         final Team playerTeam = arena.getPlayerTeam(player);
@@ -217,11 +216,11 @@ public class Placeholders extends PlaceholderExpansion {
         if (scoreTeam == null)
           return null;
 
-        final int playerAmount = arena.getPlayersInTeam(scoreTeam).size();
+        final int playerAmount = arena.getNonEliminatedCountInTeam(scoreTeam);
 
-        if (!arena.isBedDestroyed(scoreTeam) && !arena.getPlayersInTeam(scoreTeam).isEmpty())
+        if (!arena.isBedDestroyed(scoreTeam) && playerAmount >= 1)
           output = MainConfig.papi_team_status_has_bed;
-        else if (arena.getPlayersInTeam(scoreTeam).isEmpty())
+        else if (playerAmount == 0)
           output = MainConfig.papi_team_status_team_dead;
         else
           output = MainConfig.papi_team_status_no_bed;
