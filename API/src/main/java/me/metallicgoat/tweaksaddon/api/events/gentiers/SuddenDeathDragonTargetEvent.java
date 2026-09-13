@@ -52,19 +52,24 @@ public class SuddenDeathDragonTargetEvent extends Event implements ArenaEvent, C
     this.previousTargetLocation = previousTargetLocation;
     this.previousTargetEntity = previousTargetEntity;
     this.previouslyTargetingEntity = previouslyTargetingEntity;
+    this.targetingEntity = targetEntity != null;
   }
 
   /**
    * Change the entity which the dragon is targeting
    * NOTE: The entity must be in the same world as the dragon
+   * Passing <code>null</code> makes the dragon fly to {@link #getTargetLocation()} instead
    *
    * @param targetEntity to target
    */
-  public void setTargetEntity(Entity targetEntity) {
+  public void setTargetEntity(@Nullable Entity targetEntity) {
     Validate.isTrue(targetEntity == null || (targetEntity.isValid() && targetEntity.getWorld() == this.dragon.getDragon().getWorld()), "Target entity must be in the same world as the dragon");
 
     this.targetEntity = targetEntity;
-    this.targetLocation = targetEntity.getLocation();
+    this.targetingEntity = targetEntity != null;
+
+    if (targetEntity != null)
+      this.targetLocation = targetEntity.getLocation();
   }
 
   /**

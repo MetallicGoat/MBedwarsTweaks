@@ -138,16 +138,15 @@ public class SuddenDeathDragonImpl extends BukkitRunnable implements SuddenDeath
     final Location previousLocation = !previouslyTargetingEntity ? this.currDefaultTarget : null;
 
     final double distanceToTarget;
-    final Entity newTargetEntity;
-    final Location newTargetLocation;
-    Location newEntityTargetLocation = null;
+    Entity newTargetEntity = null;
+    Location newTargetLocation = null;
 
 
     // Try to target a random player
     if (!playerTargets.isEmpty() && chanceValue < Math.min(60, playerTargets.size() * 25)) {
       newTargetEntity = playerTargets.get(random.nextInt(playerTargets.size()));
-      newEntityTargetLocation = newTargetEntity.getLocation();
-      distanceToTarget = newEntityTargetLocation.distance(this.dragon.getLocation()) + 50;
+      newTargetLocation = newTargetEntity.getLocation();
+      distanceToTarget = newTargetLocation.distance(this.dragon.getLocation()) + 50;
 
     } else {
       if (chanceValue < 90) // base or gen
@@ -161,8 +160,8 @@ public class SuddenDeathDragonImpl extends BukkitRunnable implements SuddenDeath
     final SuddenDeathDragonTargetEvent event = new SuddenDeathDragonTargetEvent(
         this.arena,
         this,
-        this.currEntityTarget,
-        this.currDefaultTarget,
+        newTargetEntity,
+        newTargetLocation,
         previousLocation,
         previousEntityTarget,
         previouslyTargetingEntity
@@ -174,8 +173,9 @@ public class SuddenDeathDragonImpl extends BukkitRunnable implements SuddenDeath
       this.distanceTraveled = 0;
       this.distanceToTarget = distanceToTarget;
       this.targetingEntity = event.getTargetEntity() != null;
+      this.currEntityTarget = event.getTargetEntity();
       this.currDefaultTarget = event.getTargetLocation();
-      this.playerTargetLocation = newEntityTargetLocation;
+      this.playerTargetLocation = this.targetingEntity ? event.getTargetEntity().getLocation() : null;
     }
   }
 
