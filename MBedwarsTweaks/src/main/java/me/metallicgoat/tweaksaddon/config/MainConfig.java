@@ -88,21 +88,27 @@ public class MainConfig {
 
   @Config(
       description = {
-          "If a default dragon should spawn in when the sudden death tier is reached",
-          "The default dragon will belong to no team, and could target any base or player",
-          "To allow players to purchase a team dragon, ",
-          "add the 'sudden-death' upgrade to your upgrade-shop.yml"
-      }
-  )
-  public static boolean default_sudden_death_dragon_enabled = true;
-
-  @Config(
-      description = {
           "When enabled, wholes will be drilled though the bottom of spawners to the void on sudden death"
       }
   )
   public static boolean destroy_generators_on_sudden_death = true;
-  
+
+  // ===== SUDDEN DEATH DRAGONS
+  @SectionTitle(title = "SUDDEN DEATH DRAGONS")
+  @Config(
+      description = {
+          "Spawn a dragon for every team when the 'sudden-death' gen tier is reached. Teams can buy another via the 'sudden-death' upgrade in upgrade-shop.yml",
+          "",
+          "Suggested values for the keys below ('hunter' and up counter sky bases):",
+          "             Speed  Agility  Player-Chance  Prefer-High-Players  Chase-Duration  Block-Destroy-Radius  Fireballs  Knockback",
+          "  gentle      0.6    0.04         30              false                0                  2              false      false",
+          "  default     0.8    0.05         60              false                0                  2              false      false",
+          "  hunter      1.0    0.12         75              true                12                  3              true       true",
+          "  nightmare   1.3    0.18         90              true                20                  4              true       true"
+      }
+  )
+  public static boolean default_sudden_death_dragon_enabled = true;
+
   @Config(
       description = {
           "Tries to disable the dragon death sound by overriding the value set in the spigot.yml",
@@ -113,17 +119,52 @@ public class MainConfig {
 
   @Config(
       description = {
-          "The speed of the dragons spawned at sudden death"
+          "Top speed in blocks per tick (0.8 = 16 blocks/s)"
       }
   )
   public static double dragon_speed = 0.8;
 
   @Config(
       description = {
-          "How far the dragon can destroy blocks"
+          "How sharply dragons turn. 0.02 = wide arcs, 0.2 = snaps onto targets"
+      }
+  )
+  public static double dragon_agility = 0.05;
+
+  @Config(
+      description = {
+          "Percent chance that the next target is an enemy player rather than a base, generator or random spot"
+      }
+  )
+  public static int dragon_player_chance = 60;
+
+  @Config(
+      description = {
+          "Prefer players high up or standing on their own blocks. Counters sky bases"
+      }
+  )
+  public static boolean dragon_prefer_high_players = false;
+
+  @Config(
+      description = {
+          "Seconds to keep circling and diving at a chosen player. 0 = fly past once"
+      }
+  )
+  public static int dragon_chase_duration = 0;
+
+  @Config(
+      description = {
+          "Block destruction radius around the head. 0 disables it"
       }
   )
   public static double dragon_block_destroy_radius = 2;
+
+  @Config(
+      description = {
+          "Only destroy blocks placed by players during the game"
+      }
+  )
+  public static boolean dragon_block_destroy_only_player_placed = false;
 
   @Config(
       description = {
@@ -134,6 +175,20 @@ public class MainConfig {
       Helper.get().getMaterialByName("OBSIDIAN"),
       Helper.get().getMaterialByName("END_STONE")
   ));
+
+  @Config(
+      description = {
+          "Shoot fireballs at players out of reach. Needs 1.9+"
+      }
+  )
+  public static boolean dragon_fireballs = false;
+
+  @Config(
+      description = {
+          "Push nearby enemy players away as the dragon passes"
+      }
+  )
+  public static boolean dragon_knockback = false;
 
   // ===== SPAWNERS
   @SectionTitle(title = "SPAWNERS")
