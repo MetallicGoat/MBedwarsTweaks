@@ -14,7 +14,10 @@ public class NMSClass {
     final Class<?> spigotConfigClass = Class.forName("org.spigotmc.SpigotWorldConfig");
     final Class<?> nmsWorldClass;
 
-    if (serverVersion > 16) {
+    if (serverVersion > 18) {
+      nmsWorldClass = Class.forName("net.minecraft.world.level.Level");
+
+    } else if (serverVersion > 16) {
       nmsWorldClass = Class.forName("net.minecraft.world.level.World");
 
     } else {
