@@ -109,8 +109,10 @@ public class ConfigManager {
       if (configValue == null) {
         if (!isUpdating)
           Console.printConfigWarn("Your config seems to be missing the config called " + configName + "'. Have a look in your config.yml", "Main");
-        else
-          Console.printConfigWarn("New config added during update to " + pluginVer + ": '" + configName + "'", "Main");
+
+        // Config version is null in the MBedwars template files
+        else if (configVersion != null)
+          Console.printConfigWarn("New config added during update (" + configVersion + " -> " + pluginVer + "): '" + configName + "'", "Main");
 
         continue;
       }
