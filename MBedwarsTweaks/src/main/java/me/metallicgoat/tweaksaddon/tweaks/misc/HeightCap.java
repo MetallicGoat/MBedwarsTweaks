@@ -45,7 +45,7 @@ public class HeightCap implements Listener {
       return;
 
     for (Map.Entry<CachedArenaIdentifier, Integer> arenaHeight : MainConfig.custom_height_cap_arenas.entrySet()) {
-      if (includesArena(arenaHeight.getKey(), arena) && arenaHeight.getValue() != null) {
+      if (arenaHeight.getKey().includes(arena, true) && arenaHeight.getValue() != null) {
 
         if (location.getY() > arenaHeight.getValue()) {
           player.sendMessage(Message.build(MainConfig.custom_height_cap_warn).done());
@@ -54,10 +54,5 @@ public class HeightCap implements Listener {
         }
       }
     }
-  }
-
-  private boolean includesArena(CachedArenaIdentifier identifier, Arena arena) {
-    return identifier.includes(arena)
-        || arena.getName().matches(Pattern.quote(identifier.getOriginalString()) + "#[0-9]+");
   }
 }

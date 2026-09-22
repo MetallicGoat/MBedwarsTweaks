@@ -603,8 +603,9 @@ public class MainConfig {
 
   @Config(
       description = {
-          "Add a height cap for specific MBedwars arenas",
-          "Add height cap like 'arenaName: 70' (supports arena conditions)"
+          "Add a height cap (limit) for specific MBedwars arenas",
+          "Add height cap like 'arenaName: 70' (supports arena conditions)",
+          "Note: Cloned arenas will be compared as if they were the parent arena"
       }
   )
   public static boolean custom_height_cap_enabled = false;
