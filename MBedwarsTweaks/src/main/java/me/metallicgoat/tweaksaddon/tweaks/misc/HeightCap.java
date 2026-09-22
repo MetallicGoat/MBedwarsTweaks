@@ -5,6 +5,7 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.message.Message;
 import java.util.Map;
+import java.util.regex.Pattern;
 import me.metallicgoat.tweaksaddon.utils.CachedArenaIdentifier;
 import me.metallicgoat.tweaksaddon.config.MainConfig;
 import org.bukkit.Location;
@@ -44,7 +45,7 @@ public class HeightCap implements Listener {
       return;
 
     for (Map.Entry<CachedArenaIdentifier, Integer> arenaHeight : MainConfig.custom_height_cap_arenas.entrySet()) {
-      if (arenaHeight.getKey().includes(arena) && arenaHeight.getValue() != null) {
+      if (includesArena(arenaHeight.getKey(), arena) && arenaHeight.getValue() != null) {
 
         if (location.getY() > arenaHeight.getValue()) {
           player.sendMessage(Message.build(MainConfig.custom_height_cap_warn).done());
@@ -53,5 +54,10 @@ public class HeightCap implements Listener {
         }
       }
     }
+  }
+
+  private boolean includesArena(CachedArenaIdentifier identifier, Arena arena) {
+    return identifier.includes(arena)
+        || arena.getName().matches(Pattern.quote(identifier.getOriginalString()) + "#[0-9]+");
   }
 }
