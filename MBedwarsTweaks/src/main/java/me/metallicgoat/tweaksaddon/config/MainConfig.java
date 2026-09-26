@@ -88,21 +88,42 @@ public class MainConfig {
 
   @Config(
       description = {
-          "If a default dragon should spawn in when the sudden death tier is reached",
-          "The default dragon will belong to no team, and could target any base or player",
-          "To allow players to purchase a team dragon, ",
-          "add the 'sudden-death' upgrade to your upgrade-shop.yml"
-      }
-  )
-  public static boolean default_sudden_death_dragon_enabled = true;
-
-  @Config(
-      description = {
           "When enabled, wholes will be drilled though the bottom of spawners to the void on sudden death"
       }
   )
   public static boolean destroy_generators_on_sudden_death = true;
-  
+
+  // ===== SUDDEN DEATH DRAGONS
+  @SectionTitle(title = "SUDDEN DEATH DRAGONS")
+  @Config(
+      description = {
+          "Spawn a dragon for every team when the 'sudden-death' gen tier is reached. Teams can buy another via the 'sudden-death' upgrade in upgrade-shop.yml",
+          "",
+          "Example Presets:",
+          "             Speed  Agility  Player-Chance  Prefer-High-Players  Chase-Duration  Block-Destroy-Radius  Fireballs  Knockback",
+          "  gentle      0.6    0.04         30              false                0                  2              false      false",
+          "  default     0.8    0.05         60              false                0                  2              false      false",
+          "  hunter      1.0    0.12         75              true                12                  3              true       true",
+          "  nightmare   1.3    0.18         90              true                20                  4              true       true"
+      }
+  )
+  public static boolean default_sudden_death_dragon_enabled = true;
+  @Config public static double dragon_speed = 0.8;
+  @Config public static double dragon_agility = 0.05;
+  @Config public static int dragon_player_chance = 60;
+  @Config public static boolean dragon_prefer_high_players = false;
+  @Config public static int dragon_chase_duration = 0;
+  @Config public static double dragon_block_destroy_radius = 2;
+  @Config public static boolean dragon_fireballs = false;
+  @Config public static boolean dragon_knockback = false;
+
+  @Config(
+      description = {
+          "Only destroy blocks placed by players during the game"
+      }
+  )
+  public static boolean dragon_block_destroy_only_player_placed = false;
+
   @Config(
       description = {
           "Tries to disable the dragon death sound by overriding the value set in the spigot.yml",
@@ -110,20 +131,6 @@ public class MainConfig {
       }
   )
   public static boolean disable_dragon_death_sound = true;
-
-  @Config(
-      description = {
-          "The speed of the dragons spawned at sudden death"
-      }
-  )
-  public static double dragon_speed = 0.8;
-
-  @Config(
-      description = {
-          "How far the dragon can destroy blocks"
-      }
-  )
-  public static double dragon_block_destroy_radius = 2;
 
   @Config(
       description = {
@@ -602,8 +609,9 @@ public class MainConfig {
 
   @Config(
       description = {
-          "Add a height cap for specific MBedwars arenas",
-          "Add height cap like 'arenaName: 70' (supports arena conditions)"
+          "Add a height cap (limit) for specific MBedwars arenas",
+          "Add height cap like 'arenaName: 70' (supports arena conditions)",
+          "Note: Cloned arenas will be compared as if they were the parent arena"
       }
   )
   public static boolean custom_height_cap_enabled = false;

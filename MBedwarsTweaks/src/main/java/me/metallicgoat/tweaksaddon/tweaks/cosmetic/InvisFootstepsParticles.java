@@ -53,7 +53,6 @@ public class InvisFootstepsParticles implements Listener {
     stopTaskIfEmpty();
   }
 
-  @SuppressWarnings("deprecation") // Player#playEffect()
   private void startTaskIfNeeded() {
     if (this.task != null)
       return;
@@ -71,7 +70,7 @@ public class InvisFootstepsParticles implements Listener {
           final Location loc = getSuitableParticleLocation(player);
 
           if (loc != null)
-            player.playEffect(loc, Effect.FOOTSTEP, 1);
+            loc.getWorld().playEffect(loc, Effect.FOOTSTEP, 1);
 
         }
 

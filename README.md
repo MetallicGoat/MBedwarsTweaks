@@ -26,7 +26,7 @@ MBedwarsTweaks offers a large amount extra configuration, here are just a few tw
 - PAPI placeholders for tiers
 - Allows you to create custom generator tiers (Including with custom spawners)
 - Automatic bed destruction
-- 'Sudden Death' dragons
+- 'Sudden Death' dragons (configurable targeting, chase, fireballs, knockback)
 
 #### 3. Cosmetic Features
 - Friendly Villagers (They look at you!)

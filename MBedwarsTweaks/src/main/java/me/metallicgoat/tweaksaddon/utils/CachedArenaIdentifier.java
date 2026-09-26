@@ -31,7 +31,19 @@ public class CachedArenaIdentifier {
   }
 
   public boolean includes(Arena arena) {
+    return includes(arena, false);
+  }
+
+  public boolean includes(Arena arena, boolean compareAgainstCloneParent) {
     cacheIfNeeded();
+
+    if (compareAgainstCloneParent && arena.isCloned()) {
+      final Arena clonedArena = arena.getCloneParent();
+
+      if (clonedArena != null)
+        arena = clonedArena;
+      
+    }
 
     return this.allArenas || (this.arena != null && this.arena == arena) || (this.arenaCondition != null && this.arenaCondition.check(arena));
   }
