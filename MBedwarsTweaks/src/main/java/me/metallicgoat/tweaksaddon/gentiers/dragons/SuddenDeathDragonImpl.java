@@ -240,8 +240,7 @@ public class SuddenDeathDragonImpl extends BukkitRunnable implements SuddenDeath
         newTargetEntity,
         newTargetLocation,
         previousLocation,
-        previousEntityTarget,
-        previousEntityTarget != null
+        previousEntityTarget
     );
 
     Bukkit.getPluginManager().callEvent(event);
