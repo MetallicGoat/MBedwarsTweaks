@@ -7,13 +7,14 @@ import de.marcely.bedwars.api.game.shop.product.ItemShopProduct;
 import me.metallicgoat.tweaksaddon.config.SwordsToolsConfig;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 public class ReplaceToolOnBuy implements Listener {
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.HIGH)
   public void onToolBuy(PlayerBuyInShopEvent event) {
     if (!SwordsToolsConfig.advanced_tool_replacement_enabled)
       return;

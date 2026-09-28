@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class BuyMessage implements Listener {
 
-  @EventHandler(priority = EventPriority.HIGH)
+  @EventHandler(priority = EventPriority.MONITOR)
   public void onBuyEvent(PlayerBuyInShopEvent event) {
     if (!MainConfig.buy_message_enabled || !event.getProblems().isEmpty())
       return;

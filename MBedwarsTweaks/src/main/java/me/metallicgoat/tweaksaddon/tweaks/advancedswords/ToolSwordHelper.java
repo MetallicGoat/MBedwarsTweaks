@@ -105,23 +105,14 @@ public class ToolSwordHelper implements Listener {
   }
 
   public static boolean isSword(Material material) {
-    return material.name().contains("SWORD");
+    return Helper.get().isSword(material);
   }
 
   public static boolean isTool(Material material) {
-    return material.name().contains("AXE");
-  }
-
-  public static boolean isAxe(Material material) {
-    return isTool(material) && !material.name().contains("_AXE");
-  }
-
-  public static boolean isPickaxe(Material material) {
-    return material.name().contains("_PICKAXE");
+    return Helper.get().isAxe(material) || Helper.get().isPickaxe(material);
   }
 
   public static int getSwordToolLevel(Material tool) {
-
     final String toolName = tool.name();
 
     if (toolName.contains("WOOD")) {
