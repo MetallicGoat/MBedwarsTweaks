@@ -101,10 +101,10 @@ public class MainConfig {
           "",
           "Example Presets:",
           "             Speed  Agility  Player-Chance  Prefer-High-Players  Chase-Duration  Block-Destroy-Radius  Fireballs  Knockback",
-          "  gentle      0.6    0.04         30              false                0                  2              false      false",
-          "  default     0.8    0.05         60              false                0                  2              false      false",
-          "  hunter      1.0    0.12         75              true                12                  3              true       true",
-          "  nightmare   1.3    0.18         90              true                20                  4              true       true"
+          "  gentle      0.6    0.04         30              false                0                  2              false        0",
+          "  default     0.8    0.05         60              false                0                  2              false        0",
+          "  hunter      1.0    0.12         75              true                12                  3              true        1.1",
+          "  nightmare   1.3    0.18         90              true                20                  4              true        1.5"
       }
   )
   public static boolean default_sudden_death_dragon_enabled = true;
@@ -115,7 +115,17 @@ public class MainConfig {
   @Config public static int dragon_chase_duration = 0;
   @Config public static double dragon_block_destroy_radius = 2;
   @Config public static boolean dragon_fireballs = false;
-  @Config public static boolean dragon_knockback = false;
+
+  @Config(
+      description = {
+          "Push enemy players away from the dragon's head. Knockback is the push strength, 0 disables it (1.1 is a good start)",
+          "Upward is the vertical push, Radius is in blocks, Cooldown is ticks before the same player can be pushed again"
+      }
+  )
+  public static double dragon_knockback = 0;
+  @Config public static double dragon_knockback_upward = 0.45;
+  @Config public static double dragon_knockback_radius = 4;
+  @Config public static int dragon_knockback_cooldown = 30;
 
   @Config(
       description = {
