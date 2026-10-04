@@ -74,6 +74,7 @@ public class SuddenDeathDragonImpl extends BukkitRunnable implements SuddenDeath
   private final List<Location> defaultTargets;
   private final double arenaFloorY;
   private final Map<UUID, Integer> knockbackCooldowns = new HashMap<>();
+  private final Map<UUID, Integer> damageCooldowns = new HashMap<>();
 
   @Getter
   final Arena arena;
@@ -187,6 +188,33 @@ public class SuddenDeathDragonImpl extends BukkitRunnable implements SuddenDeath
 
     if (isOwnTeam((Player) event.getEntity()))
       event.setCancelled(true);
+    else
+      handleDamage(event, (Player) event.getEntity());
+  }
+
+  // Applies the damage cooldown and multiplier. Also used for breath clouds, see DragonFireballAttack
+  void handleDamage(EntityDamageByEntityEvent event, Player player) {
+    final double multiplier = MainConfig.dragon_damage_multiplier;
+
+    if (multiplier <= 0) {
+      event.setCancelled(true);
+      return;
+    }
+
+    if (MainConfig.dragon_damage_cooldown > 0) {
+      final int now = this.dragon.getTicksLived();
+      final Integer until = this.damageCooldowns.get(player.getUniqueId());
+
+      if (until != null && until > now) {
+        event.setCancelled(true);
+        return;
+      }
+
+      this.damageCooldowns.put(player.getUniqueId(), now + MainConfig.dragon_damage_cooldown);
+    }
+
+    if (multiplier != 1)
+      event.setDamage(event.getDamage() * multiplier);
   }
 
   // Kill dragon on round end
