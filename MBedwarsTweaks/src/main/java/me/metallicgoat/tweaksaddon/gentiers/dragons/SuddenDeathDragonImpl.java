@@ -584,6 +584,9 @@ public class SuddenDeathDragonImpl extends BukkitRunnable implements SuddenDeath
 
     DragonUtil.runningDragons.remove(this);
 
+    this.knockbackCooldowns.clear();
+    this.damageCooldowns.clear();
+
     // Stop Scheduler
     super.cancel();
   }
