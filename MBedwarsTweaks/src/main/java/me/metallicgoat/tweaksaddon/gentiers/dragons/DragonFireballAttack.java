@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.AreaEffectCloudApplyEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
@@ -125,6 +126,18 @@ public class DragonFireballAttack {
         return;
 
       event.getAffectedEntities().removeIf(entity -> entity instanceof Player && owner.isOwnTeam((Player) entity));
+    }
+
+    // Breath cloud damage arrives with the cloud as the damager
+    @EventHandler(ignoreCancelled = true)
+    public void onCloudDamage(EntityDamageByEntityEvent event) {
+      if (!(event.getDamager() instanceof AreaEffectCloud) || !(event.getEntity() instanceof Player))
+        return;
+
+      final SuddenDeathDragonImpl owner = ownerOf(((AreaEffectCloud) event.getDamager()).getSource());
+
+      if (owner != null)
+        owner.handleDamage(event, (Player) event.getEntity());
     }
   }
 }

@@ -70,16 +70,11 @@ public class SuddenDeathDragonImpl extends BukkitRunnable implements SuddenDeath
   private static final int FLOATING_CHECK_DEPTH = 6; // blocks to look down for solid ground
   private static final double FLOATING_WEIGHT = 2.0;
 
-  // Knockback
-  private static final double KNOCKBACK_RADIUS_SQUARED = 16;
-  private static final double KNOCKBACK_STRENGTH = 1.1;
-  private static final double KNOCKBACK_UPWARD = 0.45;
-  private static final int KNOCKBACK_COOLDOWN_TICKS = 30;
-
   private final Vector velocity = new Vector(0, 0, 0);
   private final List<Location> defaultTargets;
   private final double arenaFloorY;
   private final Map<UUID, Integer> knockbackCooldowns = new HashMap<>();
+  private final Map<UUID, Integer> damageCooldowns = new HashMap<>();
 
   @Getter
   final Arena arena;
@@ -193,6 +188,33 @@ public class SuddenDeathDragonImpl extends BukkitRunnable implements SuddenDeath
 
     if (isOwnTeam((Player) event.getEntity()))
       event.setCancelled(true);
+    else
+      handleDamage(event, (Player) event.getEntity());
+  }
+
+  // Applies the damage cooldown and multiplier. Also used for breath clouds, see DragonFireballAttack
+  void handleDamage(EntityDamageByEntityEvent event, Player player) {
+    final double multiplier = MainConfig.dragon_damage_multiplier;
+
+    if (multiplier <= 0) {
+      event.setCancelled(true);
+      return;
+    }
+
+    if (MainConfig.dragon_damage_cooldown > 0) {
+      final int now = this.dragon.getTicksLived();
+      final Integer until = this.damageCooldowns.get(player.getUniqueId());
+
+      if (until != null && until > now) {
+        event.setCancelled(true);
+        return;
+      }
+
+      this.damageCooldowns.put(player.getUniqueId(), now + MainConfig.dragon_damage_cooldown);
+    }
+
+    if (multiplier != 1)
+      event.setDamage(event.getDamage() * multiplier);
   }
 
   // Kill dragon on round end
@@ -431,7 +453,7 @@ public class SuddenDeathDragonImpl extends BukkitRunnable implements SuddenDeath
     // normally the dragon would not destroy 'End' blocks
     destroyNearbyBlocks(teleportLocation, MainConfig.dragon_block_destroy_radius);
 
-    if (MainConfig.dragon_knockback)
+    if (MainConfig.dragon_knockback > 0)
       knockbackNearbyPlayers(teleportLocation);
 
     if (this.fireballAttack != null && entityTarget != null)
@@ -503,7 +525,7 @@ public class SuddenDeathDragonImpl extends BukkitRunnable implements SuddenDeath
 
       final Location location = player.getLocation();
 
-      if (location.distanceSquared(head) > KNOCKBACK_RADIUS_SQUARED)
+      if (location.distanceSquared(head) > MainConfig.dragon_knockback_radius * MainConfig.dragon_knockback_radius)
         continue;
 
       final Integer until = this.knockbackCooldowns.get(player.getUniqueId());
@@ -511,7 +533,7 @@ public class SuddenDeathDragonImpl extends BukkitRunnable implements SuddenDeath
       if (until != null && until > now)
         continue;
 
-      this.knockbackCooldowns.put(player.getUniqueId(), now + KNOCKBACK_COOLDOWN_TICKS);
+      this.knockbackCooldowns.put(player.getUniqueId(), now + MainConfig.dragon_knockback_cooldown);
 
       Vector push = location.toVector().subtract(head.toVector());
       push.setY(0);
@@ -523,7 +545,7 @@ public class SuddenDeathDragonImpl extends BukkitRunnable implements SuddenDeath
       if (push.lengthSquared() < 0.01)
         push = new Vector(1, 0, 0);
 
-      player.setVelocity(push.normalize().multiply(KNOCKBACK_STRENGTH).setY(KNOCKBACK_UPWARD));
+      player.setVelocity(push.normalize().multiply(MainConfig.dragon_knockback).setY(MainConfig.dragon_knockback_upward));
     }
   }
 
@@ -561,6 +583,9 @@ public class SuddenDeathDragonImpl extends BukkitRunnable implements SuddenDeath
     HandlerList.unregisterAll(this);
 
     DragonUtil.runningDragons.remove(this);
+
+    this.knockbackCooldowns.clear();
+    this.damageCooldowns.clear();
 
     // Stop Scheduler
     super.cancel();
